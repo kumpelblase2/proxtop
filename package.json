@@ -23,7 +23,10 @@
   },
   "homepage": "https://github.com/kumpelblase2/proxtop#readme",
   "devDependencies": {
-    "electron-prebuilt": "^0.30.7"
+    "chai": "^3.3.0",
+    "chai-as-promised": "^5.1.0",
+    "electron-prebuilt": "^0.30.7",
+    "mocha": "^2.3.3"
   },
   "dependencies": {
     "bluebird": "^2.10.1",

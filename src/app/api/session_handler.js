@@ -3,8 +3,8 @@ var cookieStore = require('tough-cookie-filestore');
 var path = require('path');
 var global = require('../global');
 var utils = require('../utils');
-var cheerio = require('cheerio');
 var pageUtils = require('./page_utils');
+var loginParser = require('../../page_parser').login;
 
 function SessionHandler(app) {
     this.lastLogin = -1;
@@ -18,7 +18,6 @@ SessionHandler.prototype.loadState = function() {
     return utils.createIfNotExists(self.cookiePath).then(function() {
         self.cookieJar = request.jar(new cookieStore(self.cookiePath));
         self.app.log.verbose('Loaded cookies from ' + self.cookiePath);
-        self.app.log.verbose(self.cookieJar);
         request = request.defaults({
             jar: self.cookieJar,
             headers: pageUtils.headers()
@@ -41,12 +40,15 @@ SessionHandler.prototype.login = function(username, password, keepLogin) {
 
     var self = this;
     return request(global.PROXER_BASE_URL + global.PROXER_PATHS.ROOT)
-        .then(cheerio.load)
-        .then(function(page) {
-            if(!pageUtils.isLoggedIn(page)) {
+        .then(loginParser.parseLogin)
+        .then(function(result) {
+            if(result.status === 'logged-in') {
+                self.app.log.verbose('Already logged in.');
+                return { success: true, reason: 'already-logged-in' };
+            } else if(result.status === 'logged-out'){
                 self.app.log.verbose('Not logged in yet, sending login');
                 return Promise.resolve().then(function() {
-                    return pageUtils.fillLogin(page, {
+                    return pageUtils.fillLogin(result.data, {
                         username: username,
                         password: password,
                         remember: keepLogin ? 'yes' : 'no'
@@ -71,8 +73,7 @@ SessionHandler.prototype.login = function(username, password, keepLogin) {
                     }
                 });
             } else {
-                self.app.log.verbose('Already logged in.');
-                return { success: true, reason: 'already-logged-in' };
+                return { success: false, reason: 'error' };
             }
         });
 }

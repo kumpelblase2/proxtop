@@ -1,16 +1,8 @@
 var _ = require('lodash');
 
 module.exports = {
-    isLoggedIn: function($) {
-        return $('#uname').length != 0;
-    },
-
-    fillLogin: function($, data) {
-        var form = $('#login-form');
-        var formData = _.merge(_.reduce(form.serializeArray(), function(result, info) {
-            result[info.name] = info.value;
-            return result;
-        }, {}), data);
+    fillLogin: function(form, data) {
+        var formData = _.merge(form, data);
         return formData;
     },
 
