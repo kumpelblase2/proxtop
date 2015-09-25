@@ -1,0 +1,27 @@
+{
+  "name": "proxer-desktop",
+  "version": "0.1.0",
+  "authors": [
+    "Tim Hagemann <tim@infinityblade.de>"
+  ],
+  "description": "A desktop application for proxer.me",
+  "keywords": [
+    "electron",
+    "desktop",
+    "anime",
+    "proxer"
+  ],
+  "license": "MIT",
+  "homepage": "http://github.com/kumpelblase2/proxtop",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "~0.11.0",
+    "angular-ui-router": "~0.2.15"
+  }
+}

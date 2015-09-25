@@ -1,0 +1,18 @@
+<div layout="row">
+    <div layout-fill layout-align="center center" class="form">
+        <md-content>
+            <md-input-container>
+                <label>Username</label>
+                <input ng-model="user.username" value="">
+            </md-input-container>
+            <md-input-container>
+                <label>Password</label>
+                <input ng-model="user.password" type="password">
+            </md-input-container>
+            <md-checkbox ng-model="keepLogin" aria-label="Keep Login">
+                Keep Login
+            </md-checkbox>
+            <md-button class="md-primary" ng-click="login()" aria-label="Login">Login</md-button>
+        </md-content>
+    </div>
+</div>
