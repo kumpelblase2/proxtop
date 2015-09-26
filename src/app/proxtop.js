@@ -2,23 +2,16 @@ var Promise = require('bluebird');
 var Settings = require('./settings');
 var winston = require('winston');
 var path = require("path");
-var logger = require('./logger');
 var api = require('./api');
 
 function Proxtop() {
-    this.log = logger;
     this.baseURL = PROXER_BASE_URL;
 }
 
-Proxtop.prototype.init = function(inConfigPath) {
-    this.configPath = inConfigPath;
+Proxtop.prototype.init = function() {
+    this.configPath = APP_DIR;
     this.api = new api(this);
     Proxtop.instance = this;
-    var logFile = path.join(this.configPath, "app.log");
-    console.log('Setting logfile to ' + logFile);
-    this.log.add(winston.transports.File, {
-        filename: logFile
-    });
 
     var self = this;
     return this.loadSettings().then(this.saveSettings.bind(this)).then(function() {

@@ -9,14 +9,14 @@ function SessionHandler(app) {
     this.lastLogin = -1;
     this.sessionValid = -1;
     this.app = app;
-    this.cookiePath = path.join(app.configPath, "cookie.json");
+    this.cookiePath = path.join(APP_DIR, "cookie.json");
 }
 
 SessionHandler.prototype.loadState = function() {
     var self = this;
     return utils.createIfNotExists(self.cookiePath).then(function() {
         self.cookieJar = request.jar(new cookieStore(self.cookiePath));
-        self.app.log.verbose('Loaded cookies from ' + self.cookiePath);
+        LOG.verbose('Loaded cookies from ' + self.cookiePath);
         request = request.defaults({
             jar: self.cookieJar,
             headers: pageUtils.headers()
@@ -42,10 +42,10 @@ SessionHandler.prototype.login = function(username, password, keepLogin) {
         .then(loginParser.parseLogin)
         .then(function(result) {
             if(result.status === 'logged-in') {
-                self.app.log.verbose('Already logged in.');
+                LOG.verbose('Already logged in.');
                 return { success: true, reason: 'already-logged-in' };
             } else if(result.status === 'logged-out'){
-                self.app.log.verbose('Not logged in yet, sending login');
+                LOG.verbose('Not logged in yet, sending login');
                 return Promise.resolve().then(function() {
                     return pageUtils.fillLogin(result.data, {
                         username: username,
@@ -66,8 +66,8 @@ SessionHandler.prototype.login = function(username, password, keepLogin) {
                             return { success: false, reason: 'invalid' };
                         }
                     } else {
-                        self.app.log.warn('There was an issue with logging in:');
-                        self.app.log.warn(error);
+                        LOG.warn('There was an issue with logging in:');
+                        LOG.warn(error);
                         return { success: false, reason: 'error'};
                     }
                 });
