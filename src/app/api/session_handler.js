@@ -1,7 +1,6 @@
 var request = require('request-promise');
 var cookieStore = require('tough-cookie-filestore');
 var path = require('path');
-var global = require('../global');
 var utils = require('../utils');
 var pageUtils = require('./page_utils');
 var loginParser = require('../../page_parser').login;
@@ -39,7 +38,7 @@ SessionHandler.prototype.login = function(username, password, keepLogin) {
     }
 
     var self = this;
-    return request(global.PROXER_BASE_URL + global.PROXER_PATHS.ROOT)
+    return request(PROXER_BASE_URL + PROXER_PATHS.ROOT)
         .then(loginParser.parseLogin)
         .then(function(result) {
             if(result.status === 'logged-in') {
@@ -55,7 +54,7 @@ SessionHandler.prototype.login = function(username, password, keepLogin) {
                     });
                 }).then(function(formData) {
                     return request.post({
-                        url: global.PROXER_BASE_URL + global.PROXER_PATHS.LOGIN,
+                        url: PROXER_BASE_URL + PROXER_PATHS.LOGIN,
                         form: formData
                     });
                 }).catch(function(error) {

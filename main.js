@@ -1,7 +1,7 @@
+require('./src/app/global');
 var app = require('app');
 var BrowserWindow = require('browser-window');
 var settings = require('./src/app/settings');
-var global = require('./src/app/global');
 var path = require("path");
 var logger = require('./src/app/logger');
 var winston = require("winston");
@@ -11,10 +11,10 @@ var proxApp = new Proxtop();
 
 var mainWindow = null;
 var appData = {
-    name: global.NAME,
+    name: APP_NAME,
     getWindow: function() { return mainWindow; },
     proxtop: proxApp,
-    appdir: path.join(app.getPath("appData"), global.NAME)
+    appdir: path.join(app.getPath("appData"), APP_NAME)
 };
 
 app.on('window-all-closed', function() {
@@ -35,7 +35,7 @@ function createWindow() {
         'auto-hide-menu-bar': true
     });
 
-    mainWindow.loadUrl('file://' + global.INDEX_LOCATION);
+    mainWindow.loadUrl('file://' + INDEX_LOCATION);
     mainWindow.on('closed', function() {
         mainWindow = null;
     });

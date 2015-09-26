@@ -5,8 +5,6 @@ var path = require("path");
 var logger = require('./logger');
 var api = require('./api');
 
-var PROXER_BASE_URL = 'https://proxer.me/';
-
 function Proxtop() {
     this.log = logger;
     this.baseURL = PROXER_BASE_URL;
