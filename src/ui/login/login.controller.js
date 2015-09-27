@@ -10,11 +10,14 @@ angular.module('proxtop').controller('LoginController', ['$scope', 'settings', '
     var loaded = _.omit(settings.get('account'), 'type');
 
     $scope.login = function() {
-        var newSettings = loaded;
-        newSettings.user = $scope.user;
-        newSettings.keep_login = $scope.keepLogin;
-        newSettings.store_password = $scope.storePassword;
-        settings.set('account', newSettings);
+        settings.set('account', {
+            keep_login: $scope.keepLogin,
+            store_password: $scope.storePassword,
+            user: {
+                username: $scope.user.username,
+                password: ($scope.storePassword ? $scope.user.password : "")
+            }
+        });
         ipc.send('login', $scope.user, $scope.keepLogin);
     };
 
