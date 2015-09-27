@@ -8,8 +8,14 @@ describe('profile parser', function() {
 
     describe('data parsers', function() {
         it('should parse the name', function() {
-            profileParser.parseUserName($('#name1')).should.eql('kumpelblase2');
-            profileParser.parseUserName($('#name2')).should.eql('genesis');
+            profileParser.parseUserInfo($('#name1')).should.eql({
+                name: 'kumpelblase2',
+                id: 137974
+            });
+            profileParser.parseUserInfo($('#name2')).should.eql({
+                name: 'genesis',
+                id: 62
+            });
         });
 
         it('should parse ranking info' ,function() {
@@ -72,6 +78,7 @@ describe('profile parser', function() {
         return result.should.eventually.eql({
             self: true,
             name: 'kumpelblase2',
+            id: 137974,
             picture: '/images/comprofiler/137974_54fa117610568.jpg',
             ranking: {
                 title: 'Spezial-Anbu',
@@ -100,6 +107,7 @@ describe('profile parser', function() {
         return result.should.eventually.eql({
             self: false,
             name: 'genesis',
+            id: 62,
             picture: '/images/comprofiler/62_55e0bab8915f5.jpg',
             ranking: {
                 title: 'Otaku no sensei',
@@ -128,6 +136,7 @@ describe('profile parser', function() {
         return result.should.eventually.eql({
             self: false,
             name: 'Butts',
+            id: 1,
             picture: '/images/comprofiler/123.jpg',
             ranking: {
                 title: 'Ninja Meister',

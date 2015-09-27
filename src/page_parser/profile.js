@@ -56,8 +56,12 @@ var parser = {
         return info;
     },
 
-    parseUserName: function(title) {
-        return title.find('a').text();
+    parseUserInfo: function(title) {
+        var elem = title.find('a');
+        return {
+            name: elem.text(),
+            id: parseInt(/(\d+)/.exec(elem.attr('href'))[1])
+        };
     },
 
     parseMemberSinceColumn: function(row) {
@@ -124,11 +128,12 @@ var parser = {
 
 parser.parseProfile = function(page) {
     return Promise.resolve(page).then(cheerio.load).then(function($) {
-        var name = parser.parseUserName($('.inner h3'));
+        var userinfo = parser.parseUserInfo($('.inner h3'));
         var self = parser.parseSelf($('#profileTop'));
         var info = parser.parseProfileTable($('.profile'));
         var image = parser.parseProfilePicture($('.inner table').first());
-        info.name = name;
+        info.name = userinfo.name;
+        info.id = userinfo.id;
         info.picture = image;
         info.self = self;
         return info;
