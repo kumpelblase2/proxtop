@@ -16,7 +16,8 @@ var appData = {
 
 app.on('window-all-closed', function() {
     if(process.platform != 'darwin') {
-        proxApp.finish().then(app.quit);
+        proxApp.finish()
+        app.quit();
     }
 });
 

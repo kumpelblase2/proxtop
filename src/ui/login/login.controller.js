@@ -7,16 +7,18 @@ angular.module('proxtop').controller('LoginController', ['$scope', 'settings', '
         }
     });
 
-    var loaded = settings.get();
+    var loaded = _.omit(settings.get('account'), 'type');
 
     $scope.login = function() {
         var newSettings = loaded;
         newSettings.user = $scope.user;
-        newSettings.store_password = $scope.keepLogin;
-        ipc.send('settings', 'set', newSettings);
+        newSettings.keep_login = $scope.keepLogin;
+        newSettings.store_password = $scope.storePassword;
+        settings.set('account', newSettings);
         ipc.send('login', $scope.user, $scope.keepLogin);
     };
 
     $scope.user = loaded.user;
-    $scope.keepLogin = loaded.store_password;
+    $scope.keepLogin = loaded.keep_login;
+    $scope.storePassword = loaded.store_password;
 }]);
