@@ -10,7 +10,7 @@ function Proxtop() {
 
 Proxtop.prototype.init = function() {
     this.configPath = APP_DIR;
-    this.api = new api(this);
+    this.api = new api(path.join(this.configPath, 'cookies.json'));
     Proxtop.instance = this;
     return this.api.init();
 };
