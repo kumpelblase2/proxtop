@@ -7,7 +7,8 @@ global.INDEX_LOCATION = __dirname + "../../index.html";
 global.PROXER_PATHS = {
     ROOT: '/',
     LOGIN: '/component/user/?task=user.login',
-    WATCHLIST: '/ucp?s=reminder'
+    WATCHLIST: '/ucp?s=reminder',
+    OWN_PROFILE: '/user'
 };
 try {
     global.APP_DIR = path.join(require("app").getPath("appData"), APP_NAME);
