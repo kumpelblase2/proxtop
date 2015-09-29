@@ -4,6 +4,7 @@
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
         <title>Proxtop</title>
         <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css" />
+        <link rel="stylesheet" href="assets/style.css" />
     </head>
     <body>
         <script src="../bower_components/angular/angular.js"></script>
@@ -15,10 +16,29 @@
         <script src="ui/app.js"></script>
         <script src="ui/providers/electron.provider.js"></script>
         <script src="ui/settings/settings.provider.js"></script>
+        <script src="ui/main/main.js"></script>
         <script src="ui/main/main.controller.js"></script>
         <script src="ui/login/login.js"></script>
         <script src="ui/login/login.controller.js"></script>
+        <script src="ui/profile/profile.js"></script>
+        <script src="ui/profile/profile.controller.js"></script>
+        <script src="ui/watchlist/watchlist.js"></script>
+        <script src="ui/watchlist/watchlist.controller.js"></script>
 
-        <div ui-view class="container"></div>
+        <div class="menu">
+            <md-menu-bar>
+                <md-menu>
+                    <button ng-click="$mdOpenMenu()">
+                        Menu
+                    </button>
+                    <md-menu-content>
+                        <md-menu-item><md-button ui-sref="profile">Profile</md-button></md-menu-item>
+                        <md-menu-item><md-button ui-sref="messages">Messages</md-button></md-menu-item>
+                        <md-menu-item><md-button ui-sref="watchlist">Watchlist</md-button>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+        <md-content ui-view class="container" class="md-body-2"></div>
     </body>
 </html>
