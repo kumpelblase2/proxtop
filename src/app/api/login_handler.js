@@ -51,11 +51,22 @@ LoginHandler.prototype.login = function(username, password, keepLogin) {
         });
 };
 
+LoginHandler.prototype.checkLogin = function() {
+    return this.session_handler.getRequest()(PROXER_BASE_URL + PROXER_PATHS.ROOT)
+        .then(loginParser.checkLogin);
+}
+
 LoginHandler.prototype.register = function() {
     var self = this;
     ipc.on('login', function(event, user, keepLogin) {
         self.login(user.username, user.password, keepLogin).then(function(result) {
             event.sender.send('login', result);
+        });
+    });
+
+    ipc.on('check-login', function(event) {
+        self.checkLogin().then(function(result) {
+            event.sender.send('check-login', result);
         });
     });
 };
