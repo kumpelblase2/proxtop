@@ -3,7 +3,7 @@ Proxtop is an experimental attempt to create a desktop client for the popular ge
 
 This is considered experimental because there's no official API in place so this app parses the site itself to provide the content. Thus, the application might be less responsive as expected or even unusable. Another problem with this route is that UI changes _may_ break this application entirely.
 
-Please not that currently user data is stored on disk in plain text, use at own risk.
+Please note that currently user data is stored on disk in plain text, use at own risk.
 
 ## Goals
 
@@ -38,9 +38,9 @@ You might say that and you wouldn't be wrong. However, until the API is out, whi
 
 > Why do you need an app on desktop if you have the browser?
 
-Well yes, but let me tell you this:
+This is a reasonable question, so let me tell you this:
 
-1. In the browser the page is fixed, meaning the layout, menu and style are not really modifyable by me. If I don't like the style or if I want to make certain workflows faster, how would I do that? I don'T want to end up with millions of lines of injected js code to change the site and get totally thrown off once the design changes.
+1. In the browser the page is fixed, meaning the layout, menu and style are not really modifyable by me. If I don't like the style or if I want to make certain workflows faster, how would I do that? I don't want to end up with millions of lines of injected js code to change the site and get totally thrown off once the design changes.
 2. I cannot easily embed the content of the web page into other things, like a video player. There's no nice way for example to open the video in my local media player. Why would I want this? Better video controls, less memory footprint (some of the player are just ... ugh, shitty. Do you remember flash?) and brings more flexibility.
 3. I can easily add new functionality without, again, fiddling with content scripts.
 
