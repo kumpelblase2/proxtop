@@ -8,7 +8,8 @@ global.PROXER_PATHS = {
     ROOT: '/',
     LOGIN: '/component/user/?task=user.login',
     WATCHLIST: '/ucp?s=reminder',
-    OWN_PROFILE: '/user'
+    OWN_PROFILE: '/user',
+    NEWS: '/news'
 };
 try {
     global.APP_DIR = path.join(require("app").getPath("appData"), APP_NAME);

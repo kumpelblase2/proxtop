@@ -2,22 +2,87 @@
 .main {
     height: 90vh;
 }
+
+#profile {
+    margin: 5px;
+}
+
+#avatar-exp {
+    padding-top: 5px;
+    height: 270px;
+}
+
+.avatar {
+    width: 150px;
+    position: relative;
+    top: 10px;
+    left: 10px;
+}
+
+.avatar img {
+    border-radius: 50%;
+}
+
+.exp-arc {
+    position: absolute;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.1s linear;
+}
+
+#stats {
+    width: 270px;
+}
+
+#news {
+    margin: 5px;
+    max-height: 70vh;
+    overflow-y: scroll;
+}
+
+#news p {
+    max-width: 65vh;
+    text-overflow: ellipsis;
+    max-height: 300px;
+}
+
+.long-text-list {
+    height: auto !important;
+}
 </style>
 
-<div class="main" ng-if="profile" layout="column" layout-align="start center">
-    <div layout="row" class="md-whiteframe-2dp">
-        <img ng-bind="profile" src="{{'http://proxer.me/' + profile.picture}}" alt="Profile picture" />
-        <md-content layout-padding>
-            <p ng-if="profile.self">This is you!</p>
-            <p>Name: {{profile.name}}</p>
-            <p>Titel: {{profile.ranking.title}}</p>
-            <p>Punkte: {{profile.ranking.total}}</p>
-        </md-content>
+<div class="main" ng-if="profile" layout="row" layout-align="center start">
+    <div id="profile" layout="column">
+        <div id="avatar-exp">
+            <progress-arc class="exp-arc" size="270" complete="profile.progress" stroke="#736DAB" stroke-width="10">
+            </progress-arc>
+            <div class="avatar">
+                <img ng-src="{{'http://proxer.me/' + profile.picture}}" alt="Profile picture"/>
+            </div>
+        </div>
+        <div id="stats" class="md-whiteframe-4dp">
+            <md-content layout-padding>
+                <center><p ng-if="profile.self">This is you!</p></center>
+                <p>Name: {{profile.name}}</p>
+                <p>Titel: {{profile.ranking.title}}</p>
+                <p>Punkte: {{profile.ranking.total}}</p>
+                <p>Anime: {{profile.ranking.anime}}</p>
+                <p>Manga: {{profile.ranking.manga}}</p>
+            </md-content>
+        </div>
     </div>
-    <md-button ui-sref="messages" class="md-raised md-primary">
-        View messages
-    </md-button>
-    <md-button ui-sref="watchlist" class="md-raised md-primary">
-        View watchlist
-    </md-button>
+    <div layout="column">
+        <div ng-if="news" class="md-whiteframe-4dp">
+            <h2>News<h2>
+            <md-list id="news">
+                <md-list-item class="md-3-line long-text-list" ng-repeat="newsItem in news" ng-click="openNews(newsItem);">
+                    <img ng-src="{{newsItem.image}}" class="md-avatar" alt="image" />
+                    <div class="md-list-item-text" layout="column">
+                        <h3>{{newsItem.title.text}}</h3>
+                        <h4>{{newsItem.author.name}}</h4>
+                        <p>{{newsItem.content}}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </div>
+    </div>
 </div>
