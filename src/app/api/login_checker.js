@@ -30,3 +30,5 @@ LoginChecker.prototype.getLoginDetails = function() {
 
     return _.pick(settings, 'keep_login', 'user');
 };
+
+module.exports = LoginChecker;
