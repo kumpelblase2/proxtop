@@ -13,6 +13,6 @@ module.exports = {
     },
 
     checkUnauthorized: function(page) {
-
+        return /Du bist nicht eingeloggt/.test(page);
     }
 };
