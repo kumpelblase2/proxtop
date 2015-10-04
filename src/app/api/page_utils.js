@@ -10,5 +10,9 @@ module.exports = {
         return {
             'User-Agent': 'Chrome/' + process.versions['chrome'] + ' Electron/' + process.versions['electron']
         };
+    },
+
+    checkUnauthorized: function(page) {
+
     }
 };
