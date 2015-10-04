@@ -7,6 +7,7 @@ global.INDEX_LOCATION = __dirname + "../../index.html";
 global.PROXER_PATHS = {
     ROOT: '/',
     LOGIN: '/component/user/?task=user.login',
+    API_LOGIN: '/login?format=json&action=login',
     WATCHLIST: '/ucp?s=reminder',
     OWN_PROFILE: '/user',
     NEWS: '/news'
