@@ -1,9 +1,12 @@
 require('./src/app/global');
 var app = require('app');
 var BrowserWindow = require('browser-window');
-var settings = require('./src/app/settings');
 var winston = require("winston");
 var Proxtop = require('./src/app/proxtop');
+var utils = require('./src/app/utils');
+
+utils.createDirIfNotExists(APP_DIR);
+var settings = require('./src/app/settings');
 
 var proxApp = new Proxtop();
 
