@@ -75,11 +75,11 @@
             <h2>News<h2>
             <md-list id="news">
                 <md-list-item class="md-3-line long-text-list" ng-repeat="newsItem in news" ng-click="openNews(newsItem);">
-                    <img ng-src="{{newsItem.image}}" class="md-avatar" alt="image" />
+                    <img ng-src="{{ createNewsImage(newsItem) }}" class="md-avatar" alt="image" />
                     <div class="md-list-item-text" layout="column">
-                        <h3>{{newsItem.title.text}}</h3>
-                        <h4>{{newsItem.author.name}}</h4>
-                        <p>{{newsItem.content}}</p>
+                        <h3>{{newsItem.subject}}</h3>
+                        <h4>{{newsItem.uname}}</h4>
+                        <p>{{newsItem.description}}</p>
                     </div>
                 </md-list-item>
             </md-list>

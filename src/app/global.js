@@ -10,7 +10,8 @@ global.PROXER_PATHS = {
     API_LOGIN: '/login?format=json&action=login',
     WATCHLIST: '/ucp?s=reminder',
     OWN_PROFILE: '/user',
-    NEWS: '/news'
+    NEWS: '/news',
+    NEWS_API: '/notifications?format=json&s=news&p=1'
 };
 try {
     global.APP_DIR = path.join(require("app").getPath("appData"), APP_NAME);

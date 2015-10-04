@@ -8,7 +8,7 @@ function NewsHandler(sessionHandler) {
 
 NewsHandler.prototype.loadNews = function() {
     var self = this;
-    return this.session_handler.getRequest()(PROXER_BASE_URL + PROXER_PATHS.NEWS)
+    return this.session_handler.getRequest()(PROXER_BASE_URL + PROXER_PATHS.NEWS_API)
         .then(newsParser.parseNewsPage);
 };
 
