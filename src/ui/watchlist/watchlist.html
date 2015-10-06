@@ -1,3 +1,16 @@
-<div ng-repeat="anime in watchlist.anime">
-    <p>Name: {{anime.name}}</p>
+<div layout="row">
+    <md-list id="watchlist-anime">
+        <md-list-item ng-repeat="anime in watchlist.anime" class="md-1-line" ng-click="clickWatchlistEntry(anime)">
+            <div class="md-list-item-text">
+                <h3>{{anime.name}} - {{anime.episode}}</h3>
+            </div>
+        </md-list-item>
+    </md-list>
+    <md-list id="watchlist-manga">
+        <md-list-item ng-repeat="manga in watchlist.manga" class="md-1-line" ng-click="clickWatchlistEntry(manga)">
+            <div class="md-list-item-text">
+                <h3>{{manga.name}} - {{manga.episode}}</h3>
+            </div>
+        </md-list-item>
+    </md-list>
 </div>

@@ -5,5 +5,9 @@ angular.module('proxtop').controller('WatchlistController', ['$scope', 'ipc', '$
         });
     });
 
+    $scope.clickWatchlistEntry = function(entry) {
+        require('shell').openExternal('https://proxer.me' + entry.url);
+    };
+
     ipc.send('watchlist');
 }]);
