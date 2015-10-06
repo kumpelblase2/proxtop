@@ -1,7 +1,4 @@
 <style scoped>
-.main {
-    height: 90vh;
-}
 
 #profile {
     margin: 5px;
@@ -35,8 +32,8 @@
 
 #news {
     margin: 5px;
-    max-height: 70vh;
-    overflow-y: scroll;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 #news p {
@@ -48,9 +45,20 @@
 .long-text-list {
     height: auto !important;
 }
+
+.long-text-list button {
+    height: auto !important;
+}
+
+.news-image {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+
 </style>
 
-<div class="main" ng-if="profile" layout="row" layout-align="center start">
+<div ng-if="profile" layout="row" layout-align="center start">
     <div id="profile" layout="column">
         <div id="avatar-exp">
             <progress-arc class="exp-arc" size="270" complete="profile.progress" stroke="#736DAB" stroke-width="10">
@@ -71,11 +79,11 @@
         </div>
     </div>
     <div layout="column">
-        <div ng-if="news" class="md-whiteframe-4dp">
+        <div ng-if="news">
             <h2>News<h2>
             <md-list id="news">
                 <md-list-item class="md-3-line long-text-list" ng-repeat="newsItem in news" ng-click="openNews(newsItem);">
-                    <img ng-src="{{ createNewsImage(newsItem) }}" class="md-avatar" alt="image" />
+                    <img ng-src="{{ createNewsImage(newsItem) }}" class="news-image" alt="image" />
                     <div class="md-list-item-text" layout="column">
                         <h3>{{newsItem.subject}}</h3>
                         <h4>{{newsItem.uname}}</h4>
