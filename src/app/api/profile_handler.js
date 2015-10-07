@@ -9,15 +9,10 @@ function ProfileHandler(sessionHandler, loginChecker) {
 }
 
 ProfileHandler.prototype.loadProfile = function() {
-    var self = this;
-    return this.createRequest()
+    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.OWN_PROFILE)
         .then(this.login_checker.checkLogin(this.createRequest.bind(this)))
         .then(profileParser.parseProfile);
 };
-
-ProfileHandler.prototype.createRequest = function() {
-    return this.session_handler.getRequest()(PROXER_BASE_URL + PROXER_PATHS.OWN_PROFILE);
-}
 
 ProfileHandler.prototype.register = function() {
     var self = this;

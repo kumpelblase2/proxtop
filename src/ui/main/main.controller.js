@@ -6,5 +6,10 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
             $state.go('login');
         }
     });
+
+    ipc.on('error', function(severity, message) {
+        console.log(severity);
+        console.log(message);
+    })
     ipc.send('check-login');
 }]);

@@ -11,7 +11,7 @@ LoginHandler.prototype.login = function(username, password, keepLogin) {
     keepLogin = keepLogin || false;
 
     var self = this;
-    return this.session_handler.getRequest()(PROXER_BASE_URL + PROXER_PATHS.ROOT)
+    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.ROOT)
         .then(loginParser.parseLogin)
         .then(function(result) {
             if(result.status === 'logged-in') {
@@ -26,10 +26,12 @@ LoginHandler.prototype.login = function(username, password, keepLogin) {
                         remember: keepLogin ? 'yes' : 'no'
                     });
                 }).then(function(formData) {
-                    return self.session_handler.getRequest().post({
-                        url: PROXER_BASE_URL + PROXER_PATHS.LOGIN,
-                        form: formData
-                    });
+                    return self.session_handler.openRequest(function(request) {
+                        return request.post({
+                            url: PROXER_BASE_URL + PROXER_PATHS.LOGIN,
+                            form: formData
+                        });
+                    })
                 }).catch(function(error) {
                     if(error.statusCode === 303) {
                         if(error.response.headers.location === '/') {
@@ -52,7 +54,9 @@ LoginHandler.prototype.login = function(username, password, keepLogin) {
 };
 
 LoginHandler.prototype.checkLogin = function() {
-    return this.session_handler.getRequest()(PROXER_BASE_URL + PROXER_PATHS.API_LOGIN)
+    return this.session_handler.openRequest(function(request) {
+            return request(PROXER_BASE_URL + PROXER_PATHS.API_LOGIN);
+        })
         .then(function(result) {
             var response = JSON.parse(result);
             return response.error == 0;

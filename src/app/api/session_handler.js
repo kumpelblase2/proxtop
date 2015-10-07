@@ -5,6 +5,7 @@ var pageUtils = require('./page_utils');
 
 function SessionHandler(cookiePath) {
     this.cookiePath = cookiePath;
+    this.app = require('../../../main');
 }
 
 SessionHandler.prototype.loadState = function() {
@@ -20,8 +21,24 @@ SessionHandler.prototype.loadState = function() {
     }).return(self);
 }
 
-SessionHandler.prototype.getRequest = function() {
-    return this.request;
+SessionHandler.prototype.openRequest = function(doRequest) {
+    var self = this;
+    if(typeof(doRequest) == 'string') {
+        return this.request(doRequest);
+    } else {
+        return Promise.resolve(this.request).then(doRequest)
+            .catch(function(error) {
+                if(error.statusCode == 525) {
+                    self.app.getWindow().send('error', 'severe', 'Website is down.');
+                } else if(error.statusCode == 500) {
+                    self.app.getWindow().send('error', 'severe', 'MySQL error.');
+                } else if(error.statusCode == 503) {
+                    self.app.getWindow().send('error', 'severe', 'CloudFlare DDoS protection, currently can\'t handle this.');
+                } else {
+                    throw error;
+                }
+            });
+    }
 }
 
 module.exports = SessionHandler;
