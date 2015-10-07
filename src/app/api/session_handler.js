@@ -14,7 +14,7 @@ SessionHandler.prototype.loadState = function() {
         LOG.verbose('Loaded cookies from ' + self.cookiePath);
         request = request.defaults({
             jar: self.cookieJar,
-            headers: pageUtils.headers()
+            headers: pageUtils.headers
         });
         self.request = request;
     }).return(self);

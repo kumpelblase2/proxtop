@@ -6,10 +6,8 @@ module.exports = {
         return formData;
     },
 
-    headers: function() {
-        return {
-            'User-Agent': 'Chrome/' + process.versions['chrome'] + ' Electron/' + process.versions['electron']
-        };
+    headers: {
+        'User-Agent': 'Chrome/' + process.versions['chrome'] + ' Electron/' + process.versions['electron']
     },
 
     checkUnauthorized: function(page) {
