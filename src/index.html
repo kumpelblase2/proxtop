@@ -31,22 +31,19 @@
         <script src="ui/settings/settings.controller.js"></script>
 
     	<md-content layout-fill>
-            	<div class="menu">
-            	    <md-menu-bar>
-            	        <md-menu>
-            	            <button ng-click="$mdOpenMenu()">
-            	                Menu
-            	            </button>
-            	            <md-menu-content>
-            	                <md-menu-item><md-button ui-sref="profile">Profile</md-button></md-menu-item>
-            	                <md-menu-item><md-button ui-sref="messages">Messages</md-button></md-menu-item>
-            	                <md-menu-item><md-button ui-sref="watchlist">Watchlist</md-button></md-menu-item>
-            	                <md-menu-item><md-button ui-sref="settings">Settings</md-button></md-menu-item>
-            	            </md-menu-content>
-            	        </md-menu>
-            	    </md-menu-bar>
-            	</div>
-            	<div ui-view class="container md-body-2" layout="column" layout-align="center center"></div>
+            <md-fab-toolbar md-direction="right">
+                <md-fab-trigger class="align-with-text">
+                    <md-button aria-label="Menu" class="md-fab md-primary">Menu</md-button>
+                </md-fab-trigger>
+                <md-toolbar>
+                    <md-fab-actions class="md-toolbar-tools">
+                        <md-button ui-sref="profile">Profile</md-button>
+                        <md-button ui-sref="watchlist">Watchlist</md-button>
+                        <md-button ui-sref="settings">Settings</md-button>
+                    </md-fab-actions>
+                </md-toolbar>
+            </md-fab-toolbar>
+        	<div ui-view class="container md-body-2" layout="column" layout-align="center center"></div>
     	</md-content>
     </body>
 </html>
