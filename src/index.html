@@ -15,6 +15,7 @@
         <script src="../bower_components/lodash/lodash.js"></script>
         <script src="../bower_components/angular-progress-arc/angular-progress-arc.js"></script>
         <script src="ui/app.js"></script>
+	<script src="ui/themes.js"></script>
         <script src="ui/providers/electron.provider.js"></script>
         <script src="ui/settings/settings.provider.js"></script>
         <script src="ui/providers/progress.provider.js"></script>
@@ -28,22 +29,24 @@
         <script src="ui/watchlist/watchlist.controller.js"></script>
         <script src="ui/settings/settings.js"></script>
         <script src="ui/settings/settings.controller.js"></script>
-
-        <div class="menu">
-            <md-menu-bar>
-                <md-menu>
-                    <button ng-click="$mdOpenMenu()">
-                        Menu
-                    </button>
-                    <md-menu-content>
-                        <md-menu-item><md-button ui-sref="profile">Profile</md-button></md-menu-item>
-                        <md-menu-item><md-button ui-sref="messages">Messages</md-button></md-menu-item>
-                        <md-menu-item><md-button ui-sref="watchlist">Watchlist</md-button></md-menu-item>
-                        <md-menu-item><md-button ui-sref="settings">Settings</md-button></md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-            </md-menu-bar>
-        </div>
-        <div ui-view class="container md-body-2" layout="column" layout-align="center center"></div>
+	
+	<md-content layout-fill>
+        	<div class="menu">
+        	    <md-menu-bar>
+        	        <md-menu>
+        	            <button ng-click="$mdOpenMenu()">
+        	                Menu
+        	            </button>
+        	            <md-menu-content>
+        	                <md-menu-item><md-button ui-sref="profile">Profile</md-button></md-menu-item>
+        	                <md-menu-item><md-button ui-sref="messages">Messages</md-button></md-menu-item>
+        	                <md-menu-item><md-button ui-sref="watchlist">Watchlist</md-button></md-menu-item>
+        	                <md-menu-item><md-button ui-sref="settings">Settings</md-button></md-menu-item>
+        	            </md-menu-content>
+        	        </md-menu>
+        	    </md-menu-bar>
+        	</div>
+        	<div ui-view class="container md-body-2" layout="column" layout-align="center center"></div>
+	</md-content>
     </body>
 </html>
