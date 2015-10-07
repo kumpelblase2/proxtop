@@ -8,9 +8,13 @@ function WatchlistHandler(sessionHandler, loginChecker) {
 }
 
 WatchlistHandler.prototype.loadWatchlist = function() {
-    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.WATCHLIST)
+    return this.createRequest()
         .then(this.login_checker.checkLogin(this.createRequest.bind(this)))
         .then(watchlistParser.parseWatchlist);
+};
+
+WatchlistHandler.prototype.createRequest = function() {
+    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.WATCHLIST);
 };
 
 WatchlistHandler.prototype.register = function() {
