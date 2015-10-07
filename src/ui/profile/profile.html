@@ -32,7 +32,6 @@
 
 #news {
     margin: 5px;
-    max-height: 90vh;
     overflow-y: auto;
 }
 
@@ -79,7 +78,7 @@
         </div>
     </div>
     <div layout="column">
-        <div ng-if="news">
+        <md-content ng-if="news" layout-fill>
             <h2>News<h2>
             <md-list id="news">
                 <md-list-item class="md-3-line long-text-list" ng-repeat="newsItem in news" ng-click="openNews(newsItem);">
@@ -91,6 +90,6 @@
                     </div>
                 </md-list-item>
             </md-list>
-        </div>
+        </md-content>
     </div>
 </div>
