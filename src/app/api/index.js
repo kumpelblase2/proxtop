@@ -8,10 +8,10 @@ var db = require('../db');
 
 function API(cookiePath) {
     this.session_handler = new SessionHandler(cookiePath);
-    this.login_checker = new LoginChecker(this.session_handler, db);
     this.login_handler = new LoginHandler(this.session_handler);
-    this.profile_handler = new ProfileHandler(this.session_handler, this.login_checker);
-    this.watchlist_handler = new WatchlistHandler(this.session_handler, this.login_checker);
+    this.login_checker = new LoginChecker(this.session_handler, this.login_handler, db);
+    this.profile_handler = new ProfileHandler(this.session_handler);
+    this.watchlist_handler = new WatchlistHandler(this.session_handler);
     this.news_handler = new NewsHandler(this.session_handler);
 }
 

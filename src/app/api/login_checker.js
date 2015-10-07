@@ -2,10 +2,24 @@ var pageUtils = require('./page_utils');
 var Promise = require('bluebird');
 var _ = require('lodash');
 
-function LoginChecker(loginHandler, db) {
+function LoginChecker(sessionHandler, loginHandler, db) {
     this.login_handler = loginHandler;
     this.db = db;
     this.app = require('../../../main');
+
+    sessionHandler._openRequest = sessionHandler.openRequest;
+    var login = this;
+    sessionHandler.openRequest = (function(doRequest, checkLogin) {
+        var request = this._openRequest(doRequest);
+        var self = this;
+        if(checkLogin) {
+            request = request.then(login.checkLogin(function() {
+                return self._openRequest(doRequest);
+            }));
+        }
+
+        return request;
+    }).bind(sessionHandler);
 }
 
 LoginChecker.prototype.checkLogin = function(doRequest) {

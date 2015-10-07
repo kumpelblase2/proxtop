@@ -2,19 +2,13 @@ var ipc = require('ipc');
 var watchlistParser = require('../../page_parser').watchlist;
 var Promise = require('bluebird');
 
-function WatchlistHandler(sessionHandler, loginChecker) {
+function WatchlistHandler(sessionHandler) {
     this.session_handler = sessionHandler;
-    this.login_checker = loginChecker;
 }
 
 WatchlistHandler.prototype.loadWatchlist = function() {
-    return this.createRequest()
-        .then(this.login_checker.checkLogin(this.createRequest.bind(this)))
+    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.WATCHLIST, true)
         .then(watchlistParser.parseWatchlist);
-};
-
-WatchlistHandler.prototype.createRequest = function() {
-    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.WATCHLIST);
 };
 
 WatchlistHandler.prototype.register = function() {

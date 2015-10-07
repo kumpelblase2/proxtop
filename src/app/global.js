@@ -13,6 +13,7 @@ global.PROXER_PATHS = {
     NEWS: '/news',
     NEWS_API: '/notifications?format=json&s=news&p=1'
 };
+
 try {
     global.APP_DIR = path.join(require("app").getPath("appData"), APP_NAME);
 } catch(e) {

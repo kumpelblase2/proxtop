@@ -3,19 +3,13 @@ var pageUtils = require('./page_utils');
 var profileParser = require('../../page_parser').profile;
 var Promise = require('bluebird');
 
-function ProfileHandler(sessionHandler, loginChecker) {
+function ProfileHandler(sessionHandler) {
     this.session_handler = sessionHandler;
-    this.login_checker = loginChecker;
 }
 
 ProfileHandler.prototype.loadProfile = function() {
-    return this.createRequest()
-        .then(this.login_checker.checkLogin(this.createRequest.bind(this)))
+    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.OWN_PROFILE, true)
         .then(profileParser.parseProfile);
-};
-
-ProfileHandler.prototype.createRequest = function() {
-    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.OWN_PROFILE);
 };
 
 ProfileHandler.prototype.register = function() {
