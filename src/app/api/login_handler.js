@@ -1,6 +1,7 @@
 var ipc = require('ipc');
 var loginParser = require('../../page_parser').login;
 var Promise = require('bluebird');
+var _ = require('lodash');
 var pageUtils = require('./page_utils');
 
 function LoginHandler(sessionHandler) {
@@ -20,7 +21,7 @@ LoginHandler.prototype.login = function(username, password, keepLogin) {
             } else if(result.status === 'logged-out'){
                 LOG.verbose('Not logged in yet, sending login');
                 return Promise.resolve(result.data).then(function(data) {
-                    return pageUtils.fillLogin(data, {
+                    return _.merge(data, {
                         username: username,
                         password: password,
                         remember: keepLogin ? 'yes' : 'no'
