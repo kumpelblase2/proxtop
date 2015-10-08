@@ -30,6 +30,10 @@ Goals that I would like to implement afterwards, if I have interest in continuin
 - Electron
 - Angularjs
 
+## What this application is and is not
+- It is _not_ a complete frontend/replacement for proxer.me, it is just an alternative frontend for searching and viewing animes/mangas with some small additional features.
+- It is so far _not_ officially supported and thus just a community effort.
+
 ## FAQ
 
 > This seems like a hard and terrible way to do it!
