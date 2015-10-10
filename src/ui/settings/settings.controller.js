@@ -1,4 +1,22 @@
 angular.module('proxtop').controller('SettingsController', ['$scope', 'settings', function($scope, settings) {
+    $scope.providers = [
+        "Proxer-Stream",
+        "Dailymotion",
+        "MP4Upload",
+        "videobam",
+        "Crunchyroll",
+        "YourUpload",
+        "Daisuki.Net",
+        "Viewster",
+        "Faststream",
+        "Hellsmedia",
+        "Kiwi",
+        "Myvi",
+        "Novamov",
+        "Veoh",
+        "VideoWeed"
+    ];
+
     $scope.settings = {
         anime: settings.get('anime'),
         account: settings.get('account'),

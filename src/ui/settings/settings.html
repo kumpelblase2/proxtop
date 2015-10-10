@@ -33,6 +33,12 @@
                             <input ng-model="settings.anime.external_path" />
                         </div>
                     </md-input-container>
+                    <md-input-container>
+                        Preferred Stream Provider:
+                        <md-select ng-model="settings.anime.preferred_stream" aria-label="Preferred Stream Provider">
+                            <md-option ng-repeat="provider in providers" value="{{provider.toLowerCase()}}">{{provider}}</md-option>
+                        </md-select>
+                    </md-input-container>
                 </md-content>
             </md-tab>
             <md-tab id="watchlist" label="Watchlist">
