@@ -1,0 +1,12 @@
+<md-content>
+    <md-list>
+        <md-list-item ng-repeat="message in messages" class="md-3-line long-text-list">
+            <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
+            <div class="md-list-item-text">
+                <h3>{{message.username}}</h3>
+                <h4>{{message.timestamp * 1000 | date}}</h4>
+                <p>{{message.message}}</p>
+            </div>
+        </md-list-item>
+    </md-list>
+</md-content>

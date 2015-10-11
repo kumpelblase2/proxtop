@@ -11,7 +11,9 @@ global.PROXER_PATHS = {
     WATCHLIST: '/ucp?s=reminder',
     OWN_PROFILE: '/user',
     NEWS: '/news',
-    NEWS_API: '/notifications?format=json&s=news&p=1'
+    NEWS_API: '/notifications?format=json&s=news&p=1',
+    CONVERSATIONS_API: '/messages?format=json&json=conferences',
+    MESSAGE_API: '/messages?format=json&json=messages&id='
 };
 
 try {

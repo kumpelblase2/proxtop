@@ -1,0 +1,13 @@
+<div>
+    <md-content>
+        <md-list>
+            <md-list-item ng-repeat="conversation in conversations" class="md-2-line" ng-click="openConversation(conversation)">
+                <img ng-src="{{getImage(conversation.image)}}" class="md-avatar" />
+                <div class="md-list-item-text">
+                    <h3>{{conversation.topic}}</h3>
+                    <p>Last message at: {{conversation.timestamp_end * 1000 | date}}</p>
+                </div>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>
