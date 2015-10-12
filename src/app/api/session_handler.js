@@ -23,22 +23,27 @@ SessionHandler.prototype.loadState = function() {
 
 SessionHandler.prototype.openRequest = function(doRequest) {
     var self = this;
+
+    var handleError = function(error) {
+        if(error.statusCode == 525) {
+            self.app.getWindow().send('error', 'severe', 'Website is down.');
+        } else if(error.statusCode == 500) {
+            self.app.getWindow().send('error', 'severe', 'MySQL error.');
+        } else if(error.statusCode == 503) {
+            self.app.getWindow().send('error', 'severe', 'CloudFlare DDoS protection, currently can\'t handle this.');
+        } else {
+            self.app.getWindow().send('error', 'severe', 'Unknown error occured: ' + error);
+        }
+    };
+
+    var promise;
     if(typeof(doRequest) == 'string') {
-        return this.request(doRequest);
+        promise = this.request(doRequest);
     } else {
-        return Promise.resolve(this.request).then(doRequest)
-            .catch(function(error) {
-                if(error.statusCode == 525) {
-                    self.app.getWindow().send('error', 'severe', 'Website is down.');
-                } else if(error.statusCode == 500) {
-                    self.app.getWindow().send('error', 'severe', 'MySQL error.');
-                } else if(error.statusCode == 503) {
-                    self.app.getWindow().send('error', 'severe', 'CloudFlare DDoS protection, currently can\'t handle this.');
-                } else {
-                    throw error;
-                }
-            });
+        promise = Promise.resolve(this.request).then(doRequest);
     }
+
+    return promise.catch(handleError);
 }
 
 module.exports = SessionHandler;
