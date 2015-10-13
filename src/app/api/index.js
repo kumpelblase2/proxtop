@@ -11,18 +11,17 @@ function API(cookiePath) {
     this.session_handler = new SessionHandler(cookiePath);
     this.login_handler = new LoginHandler(this.session_handler);
     this.login_checker = new LoginChecker(this.session_handler, this.login_handler, db);
-    this.profile_handler = new ProfileHandler(this.session_handler);
-    this.watchlist_handler = new WatchlistHandler(this.session_handler);
-    this.news_handler = new NewsHandler(this.session_handler);
-    this.message_handler = new MessageHandler(this.session_handler);
+    this.handers = [
+        new ProfileHandler(this.session_handler),
+        new WatchlistHandler(this.session_handler),
+        new NewsHandler(this.session_handler),
+        new MessageHandler(this.session_handler)
+    ];
 }
 
 API.prototype.init = function() {
     this.login_handler.register();
-    this.profile_handler.register();
-    this.watchlist_handler.register();
-    this.news_handler.register();
-    this.message_handler.register();
+    this.handers.forEach(function(elem) { elem.register(); });
     return this.session_handler.loadState();
 }
 
