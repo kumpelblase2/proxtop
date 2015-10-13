@@ -10,3 +10,10 @@
 .long-text-list {
     height: unset !important;
 }
+
+#mainWindow {
+    position:inherit;
+    top: -75px;
+    margin-left: 70px;
+    margin-right: 70px;
+}
