@@ -16,7 +16,7 @@ var DEFAULT_ACCOUNT_SETTINGS = {
 
 var DEFAULT_ANIME_SETTINGS = {
     type: 'anime',
-    open_with: 'browser',
+    open_with: 'system',
     external_path: 'proxer-mpv'
 };
 

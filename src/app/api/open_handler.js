@@ -22,7 +22,7 @@ OpenHandler.prototype.open = function(type, id, ep, sub) {
     var url = this.buildUrl(type, id, ep, sub);
     if(openSettings.open_with == 'external') {
         shell.exec([openSettings.external_path, url]);
-    } else if(openSettings.open_with == 'browser') {
+    } else if(openSettings.open_with == 'system') {
         shell.openExternal(url);
     }
 };
