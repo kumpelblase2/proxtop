@@ -8,8 +8,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
     });
 
     ipc.on('error', function(severity, message) {
-        console.log(severity);
-        console.log(message);
+        //alert(severity, message);
     })
     ipc.send('check-login');
 }]);

@@ -13,7 +13,9 @@ global.PROXER_PATHS = {
     NEWS: '/news',
     NEWS_API: '/notifications?format=json&s=news&p=1',
     CONVERSATIONS_API: '/messages?format=json&json=conferences',
-    MESSAGE_API: '/messages?format=json&json=messages&id='
+    MESSAGE_API: '/messages?format=json&json=messages&id=',
+    WATCH_ANIME: '/watch/%d/%d/%s',
+    VIEW_MANGA: '/chapter/%d/%d/%s'
 };
 
 try {

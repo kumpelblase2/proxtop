@@ -2,27 +2,23 @@
 .online {
     color: green;
 }
-
-.offline {
-    color: red;
-}
 </style>
 
 <div layout="row">
-    <md-list id="watchlist-anime" class="md-whiteframe-4dp">
-        <md-list-item ng-repeat="anime in watchlist.anime" class="md-1-line" ng-click="clickWatchlistEntry(anime)">
+    <md-list id="watchlist-anime" class="md-whiteframe-4dp" layout-margin>
+        <md-list-item ng-repeat="anime in watchlist.anime" class="md-1-line" ng-click="clickAnime(anime)">
             <div class="md-list-item-text">
                 <h3>{{anime.name}} - {{anime.episode}}</h3>
             </div>
-            <md-icon class="fa fa-play-circle-o fa-lg md-secondary" ng-class="[{online: anime.status}, {offline: !anime.status}]"></md-icon>
+            <md-icon class="fa fa-play-circle-o fa-lg md-secondary" ng-class="{online: anime.status}"></md-icon>
         </md-list-item>
     </md-list>
-    <md-list id="watchlist-manga" class="md-whiteframe-4dp">
-        <md-list-item ng-repeat="manga in watchlist.manga" class="md-1-line" ng-click="clickWatchlistEntry(manga)">
+    <md-list id="watchlist-manga" class="md-whiteframe-4dp" layout-margin>
+        <md-list-item ng-repeat="manga in watchlist.manga" class="md-1-line" ng-click="clickManga(manga)">
             <div class="md-list-item-text">
                 <h3>{{manga.name}} - {{manga.episode}}</h3>
             </div>
-            <md-icon class="fa fa-play-circle-o fa-lg md-secondary" ng-class="[{online: manga.status}, {offline: !manga.status}]"></md-icon>
+            <md-icon class="fa fa-play-circle-o fa-lg md-secondary" ng-class="{online: manga.status}"></md-icon>
         </md-list-item>
     </md-list>
 </div>
