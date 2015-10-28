@@ -2,6 +2,7 @@ var Promise = require('bluebird');
 var Settings = require('./settings');
 var winston = require('winston');
 var path = require("path");
+var proxerapi = require('./proxerapi');
 var api = require('./api');
 
 function Proxtop() {
@@ -10,9 +11,10 @@ function Proxtop() {
 
 Proxtop.prototype.init = function() {
     this.configPath = APP_DIR;
-    this.api = new api(path.join(this.configPath, 'cookies.json'));
+    this.api = new api();
+    this.proxerapi = new proxerapi(path.join(this.configPath, 'cookies.json'));
     Proxtop.instance = this;
-    return this.api.init();
+    return this.proxerapi.init().then(api.init);
 };
 
 Proxtop.prototype.finish = function() {

@@ -19,5 +19,19 @@ module.exports = {
 
     capizalizeFirstLetter: function(word) {
         return word.charAt(0).toUpperCase() + word.slice(1);
+    },
+
+    getOnlineDiff: function(oldEntries, newEntries) {
+        var updates = [];
+        newEntries.forEach(function(entry) {
+            var oldEntry = _.find(oldEntries, { id: entry.id });
+            if(oldEntry) {
+                if(entry.online && !oldEntry.online) {
+                    updates.push(entry);
+                }
+            }
+        });
+
+        return updates;
     }
 };
