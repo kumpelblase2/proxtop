@@ -2,6 +2,9 @@ var cheerio = require('cheerio');
 var moment = require('moment');
 
 function proxerDateToTimestamp(time) {
+    if(time === 'Jetzt') {
+        return moment().unix();
+    }
     var match = /(\d+) (\w+)/.exec(time);
     var time = parseInt(match[1]);
     var unit = toEnglishUnit(match[2]);
