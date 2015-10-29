@@ -27,6 +27,11 @@ SessionHandler.prototype.openRequest = function(doRequest) {
     var self = this;
 
     var handleError = function(error) {
+        if(error.statusCode == 303) { // Just rethrow to let login handle it.
+            LOG.debug('Received 303 error, rethrowing for login handler.');
+            throw error;
+        }
+
         LOG.warn("Error when requesting " + error.options.uri);
         if(error.statusCode == 525) {
             self.app.getWindow().send('error', 'warning', 'Website is down.');

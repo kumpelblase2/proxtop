@@ -10,6 +10,6 @@ function API(cookiePath) {
 
 API.prototype.init = function() {
     this.handers.forEach(function(elem) { elem.register(); });
-}
+};
 
 module.exports = API;
