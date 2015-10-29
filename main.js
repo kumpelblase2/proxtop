@@ -2,10 +2,10 @@ require('./src/app/global');
 var app = require('app');
 var BrowserWindow = require('browser-window');
 var winston = require("winston");
-var Proxtop = require('./src/app/proxtop');
 var utils = require('./src/app/utils');
 
 utils.createDirIfNotExists(APP_DIR);
+var Proxtop = require('./src/app/proxtop');
 var settings = require('./src/app/settings');
 
 var proxApp = new Proxtop();
@@ -19,7 +19,7 @@ var appData = {
 
 app.on('window-all-closed', function() {
     if(process.platform != 'darwin') {
-        proxApp.finish()
+        proxApp.finish();
         app.quit();
     }
 });
