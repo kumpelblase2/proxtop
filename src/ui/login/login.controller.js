@@ -1,9 +1,11 @@
-angular.module('proxtop').controller('LoginController', ['$scope', 'settings', 'ipc', function($scope, settings, ipc) {
+angular.module('proxtop').controller('LoginController', ['$scope', 'settings', 'ipc', '$state', '$mdToast', function($scope, settings, ipc, $state, $mdToast) {
     ipc.on('login', function(result) {
         if(result.success) {
             console.log('LOGGED IN');
+            $state.go('profile');
         } else {
             console.log('COULD NOT LOGIN - ' + result.reason);
+            $mdToast.show($mdToast.simple().content('Could not login: ' + result.reason));
         }
     });
 
