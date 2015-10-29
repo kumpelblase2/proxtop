@@ -51,11 +51,7 @@ parser.checkLogin = function(page) {
     var self = this;
     return Promise.resolve(page).then(cheerio.load)
         .then(function(page) {
-            if(isLoggedIn(page)) {
-                return true;
-            } else {
-                return false;
-            }
+            return !!isLoggedIn(page);
         });
 };
 

@@ -36,7 +36,7 @@ LoginHandler.prototype.login = function(username, password, keepLogin) {
                 }).catch(function(error) {
                     if(error.statusCode === 303) {
                         if(error.response.headers.location === '/') {
-                            console.log("Logged in");
+                            LOG.info("Logged in");
                             return { success: true, reason: null };
                         } else {
                             return { success: false, reason: 'invalid' };
@@ -60,7 +60,7 @@ LoginHandler.prototype.checkLogin = function() {
             var response = JSON.parse(result);
             return response.error == 0;
         });
-}
+};
 
 LoginHandler.prototype.register = function() {
     var self = this;
