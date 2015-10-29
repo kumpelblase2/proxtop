@@ -44,9 +44,9 @@ You might say that and you wouldn't be wrong. However, until the API is out, whi
 
 This is a reasonable question, so let me tell you this:
 
-1. In the browser the page is fixed, meaning the layout, menu and style are not really modifyable by me. If I don't like the style or if I want to make certain workflows faster, how would I do that? I don't want to end up with millions of lines of injected js code to change the site and get totally thrown off once the design changes.
+1. In the browser the page is fixed, meaning the layout, menu and style are not really modifyable by me. If I don't like the style or if I want to make certain workflows faster, how would I do that? I don't want to end up with millions of lines of injected js code to change the site and get totally thrown off once the design changes. I'll probably end up with the same thing here, but in a separate app it's far easier to manage than a hacky script that ends up getting injected.
 2. I cannot easily embed the content of the web page into other things, like a video player. There's no nice way for example to open the video in my local media player. Why would I want this? Better video controls, less memory footprint (some of the player are just ... ugh, shitty. Do you remember flash?) and brings more flexibility.
-3. I can easily add new functionality without, again, fiddling with content scripts.
+3. I can easily add new functionality without, again, fiddling with content scripts or maybe even doing things totally different.
 
 TL;DR: Convenience, because I like to do things differently.
 
