@@ -2,6 +2,7 @@ var request = require('request-promise');
 var cookieStore = require('tough-cookie-filestore');
 var utils = require('../utils');
 var pageUtils = require('./page_utils');
+var Cloudscraper = require('../cloudscraper');
 
 function SessionHandler(cookiePath) {
     this.cookiePath = cookiePath;
@@ -20,6 +21,7 @@ SessionHandler.prototype.loadState = function() {
             resolveWithFullResponse: true
         });
         self.request = request;
+        self.cloudscraper = new Cloudscraper(request);
     }).return(self);
 };
 
@@ -39,6 +41,7 @@ SessionHandler.prototype.openRequest = function(doRequest) {
             self.app.getWindow().send('error', 'warning', 'MySQL error.');
         } else if(error.statusCode == 503) {
             self.app.getWindow().send('error', 'warning', 'CloudFlare DDoS protection, currently can\'t handle this.');
+            return self.cloudscraper.handle(error.response, error.response.body);
         } else {
             self.app.getWindow().send('error', 'severe', 'Unknown error occured: ' + error);
         }
