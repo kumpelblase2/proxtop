@@ -1,9 +1,10 @@
-angular.module('proxtop').service('notification', ['ipc', function(ipc) {
+angular.module('proxtop').service('notification', ['notifier', function(notifier) {
     this.displayNotification = function(title, message, image, callback) {
-        ipc.send('notify', {
+        notifier.notify({
             title: title,
             message: message,
-            icon: image
-        });
+            icon: image,
+            callback: callback
+        })
     };
 }]);
