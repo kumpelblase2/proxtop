@@ -1,0 +1,53 @@
+{
+  "GENERAL": {
+    "ANIME": "Anime",
+    "MANGA": "Manga",
+    "PROXTOP": "Proxtop"
+  },
+
+  "USER": {
+    "USERNAME": "Benutzername",
+    "PASSWORD": "Passwort",
+    "ACCOUNT": "Konto"
+  },
+  "LOGIN": {
+    "LOGIN": "Einloggen",
+    "KEEP_LOGIN": "Eingeloggt bleiben",
+    "SAVE_PASSWORD": "Passwort speichern"
+  },
+  "PROFILE": {
+    "SELF": "Das bist du!",
+    "NAME": "Name",
+    "TITLE": "Titel",
+    "POINTS": "Punkte",
+    "ANIME": "@:GENERAL.ANIME",
+    "MANGA": "@:GENERAL.MANGA",
+    "NEWS": "Neuigkeiten"
+  },
+  "MENU": {
+    "PROFILE": "Profil",
+    "WATCHLIST": "Lesezeichen",
+    "MESSAGES": "Nachrichten",
+    "SETTINGS": "Einstellungen"
+  },
+  "SETTINGS": {
+    "SAVE": "Speichern",
+    "ANIME": {
+      "ANIME": "@:GENERAL.ANIME",
+      "OPEN_IN": "Öffnen mit",
+      "SYSTEM_BROWSER": "System (Browser)",
+      "EXTERNAL": "Extern",
+      "PREFERRED_PROVIDER": "Bevorzugter Stream-Provider",
+      "APPLICATION": "Anwendung"
+    },
+    "WATCHLIST": {
+      "WATCHLIST": "@:MENU.WATCHLIST",
+      "CHECK": "Checkintervall",
+      "MINUTE_INTERVAL": "Intervall in Minuten",
+      "DISPLAY_NOTIFICATION": "Benachrichtigung anzeigen"
+    }
+  },
+  "MESSAGES": {
+    "LAST_MESSAGE": "Letzte Nachricht"
+  }
+}

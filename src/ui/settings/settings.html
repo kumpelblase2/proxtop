@@ -1,59 +1,59 @@
 <md-content class="md-padding" layout-fill layout-margin>
     <div class="md-whiteframe-4dp" layout="row" flex>
         <md-tabs flex md-dynamic-height md-border-bottom>
-            <md-tab id="account" label="Account">
+            <md-tab id="account" label="{{ 'USER.ACCOUNT' | translate }}">
                 <md-content layout-padding>
                     <md-input-container>
-                        <label>Username</label>
+                        <label>{{ 'USER.USERNAME' | translate }}</label>
                         <input ng-model="settings.account.user.username">
                     </md-input-container>
                     <md-input-container>
-                        <label>Password</label>
+                        <label>{{ 'USER.PASSWORD' | translate }}</label>
                         <input ng-model="settings.account.user.password" type="password">
                     </md-input-container>
                     <md-checkbox ng-model="settings.account.keep_login" aria-label="Keep Login">
-                        Keep Login
+                        {{ 'LOGIN.KEEP_LOGIN' | translate }}
                     </md-checkbox>
                     <md-checkbox ng-model="settings.account.store_password" aria-label="Save Password">
-                        Save Password
+                        {{ 'LOGIN.SAVE_PASSWORD' | translate }}
                     </md-checkbox>
                 </md-content>
             </md-tab>
-            <md-tab id="anime" label="Anime">
+            <md-tab id="anime" label="{{ 'SETTINGS.ANIME.ANIME' | translate }}">
                 <md-content layout-padding>
                     <md-input-container>
-                        Open in:
+                        {{ 'SETTINGS.ANIME.OPEN_IN' | translate }}:
                         <md-radio-group ng-model="settings.anime.open_with" layout="row">
-                            <md-radio-button value="internal">Proxtop</md-radio-button>
-                            <md-radio-button value="system">System (Browser)</md-radio-button>
-                            <md-radio-button value="external">External</md-radio-button>
+                            <md-radio-button value="internal">{{ 'GENERAL.PROXTOP' | translate }}</md-radio-button>
+                            <md-radio-button value="system">{{ 'SETTINGS.ANIME.SYSTEM_BROWSER' | translate }}</md-radio-button>
+                            <md-radio-button value="external">{{ 'SETTINGS.ANIME.EXTERNAL' | translate }}</md-radio-button>
                         </md-radio-group>
                         <div ng-if="settings.anime.open_with == 'external'">
-                            <label>Application</label>
+                            <label>{{ 'SETTINGS.ANIME.APPLICATION' | translate }}</label>
                             <input ng-model="settings.anime.external_path" />
                         </div>
                     </md-input-container>
                     <md-input-container>
-                        Preferred Stream Provider:
+                        {{ 'SETTINGS.ANIME.PREFERRED_PROVIDER' | translate }}:
                         <md-select ng-model="settings.anime.preferred_stream" aria-label="Preferred Stream Provider">
                             <md-option ng-repeat="provider in providers" value="{{provider.toLowerCase()}}">{{provider}}</md-option>
                         </md-select>
                     </md-input-container>
                 </md-content>
             </md-tab>
-            <md-tab id="watchlist" label="Watchlist">
+            <md-tab id="watchlist" label="{{ 'SETTINGS.WATCHLIST.WATCHLIST' | translate }}">
                 <md-content layout-padding>
                     <md-input-container>
-                        Check every:
-                        <label>Interval in minutes</label>
+                        {{ 'SETTINGS.WATCHLIST.CHECK' | translate }}:
+                        <label>{{ 'SETTINGS.WATCHLIST.MINUTE_INTERVAL' | translate }}</label>
                         <input ng-model="settings.watchlist.check_interval" type="number" step="5" min="1"/>
                     </md-input-container>
                     <md-checkbox ng-model="settings.watchlist.display_notification" aria-label="Display Notification">
-                        Display Notification
+                        {{ 'SETTINGS.WATCHLIST.DISPLAY_NOTIFICATION' | translate }}
                     </md-checkbox>
                 </md-content>
             </md-tab>
         </md-tabs>
     </div>
-    <md-button class="md-raised md-primary pull-right" ng-click="saveSettings()">Save</md-button>
+    <md-button class="md-raised md-primary pull-right" ng-click="saveSettings()">{{ 'SETTINGS.SAVE' | translate }}</md-button>
 </md-content>
