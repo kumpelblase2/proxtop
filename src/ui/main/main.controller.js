@@ -14,11 +14,11 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
 
     var displayNotification = function(type) {
         return function(update) {
-            notification.displayNotification('Proxtop', 'Episode ' + update.ep + ' of ' + update.name + ' is now available', '', function() {
+            notification.displayNotification('Proxtop', 'Episode ' + update.episode + ' of ' + update.name + ' is now available', '', function() {
                 if(type == 'anime') {
-                    open.openAnime(update.id, update.ep, update.sub);
+                    open.openAnime(update.id, update.episode, update.sub);
                 } else {
-                    open.openManga(update.id, update.ep, update.sub);
+                    open.openManga(update.id, update.episode, update.sub);
                 }
             });
         };
