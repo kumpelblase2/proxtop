@@ -1,0 +1,61 @@
+{
+  "GENERAL": {
+    "ANIME": "Anime",
+    "MANGA": "Manga",
+    "PROXTOP": "Proxtop"
+  },
+
+  "USER": {
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "ACCOUNT": "Account"
+  },
+  "LOGIN": {
+    "LOGIN": "Login",
+    "KEEP_LOGIN": "Keep login",
+    "SAVE_PASSWORD": "Save password"
+  },
+  "PROFILE": {
+    "SELF": "This is you!",
+    "NAME": "Name",
+    "TITLE": "Title",
+    "POINTS": "Points",
+    "ANIME": "@:GENERAL.ANIME",
+    "MANGA": "@:GENERAL.MANGA",
+    "NEWS": "News"
+  },
+  "MENU": {
+    "PROFILE": "Profile",
+    "WATCHLIST": "Watchlist",
+    "MESSAGES": "Messages",
+    "SETTINGS": "Settings"
+  },
+  "SETTINGS": {
+    "SAVE": "Save",
+    "ANIME": {
+      "ANIME": "@:GENERAL.ANIME",
+      "OPEN_IN": "Open with",
+      "SYSTEM_BROWSER": "System (Browser)",
+      "EXTERNAL": "External",
+      "PREFERRED_PROVIDER": "Preferred stream provider",
+      "APPLICATION": "Application"
+    },
+    "WATCHLIST": {
+      "WATCHLIST": "@:MENU.WATCHLIST",
+      "CHECK": "Check interval",
+      "MINUTE_INTERVAL": "Intervall in minutes",
+      "DISPLAY_NOTIFICATION": "Display notification"
+    },
+    "GENERAL": {
+      "GENERAL": "General",
+      "LANGUAGE": {
+        "LANGUAGE": "Language",
+        "EN": "English",
+        "DE": "German"
+      }
+    }
+  },
+  "MESSAGES": {
+    "LAST_MESSAGE": "Last message"
+  }
+}

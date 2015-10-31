@@ -15,6 +15,8 @@
         <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
         <script src="../bower_components/lodash/lodash.js"></script>
         <script src="../bower_components/angular-progress-arc/angular-progress-arc.js"></script>
+        <script src="../bower_components/angular-translate/angular-translate.js"></script>
+        <script src="../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
         <script src="ui/app.js"></script>
         <script src="ui/themes.js"></script>
         <script src="ui/providers/electron.provider.js"></script>
@@ -43,10 +45,10 @@
                 </md-fab-trigger>
                 <md-toolbar>
                     <md-fab-actions class="md-toolbar-tools">
-                        <md-button ui-sref="profile">Profile</md-button>
-                        <md-button ui-sref="watchlist">Watchlist</md-button>
-                        <md-button ui-sref="messages">Messages</md-button>
-                        <md-button ui-sref="settings">Settings</md-button>
+                        <md-button ui-sref="profile">{{ 'MENU.PROFILE' | translate }}</md-button>
+                        <md-button ui-sref="watchlist">{{ 'MENU.WATCHLIST' | translate }}</md-button>
+                        <md-button ui-sref="messages">{{ 'MENU.MESSAGES' | translate }}</md-button>
+                        <md-button ui-sref="settings">{{ 'MENU.SETTINGS' | translate }}</md-button>
                     </md-fab-actions>
                 </md-toolbar>
             </md-fab-toolbar>
