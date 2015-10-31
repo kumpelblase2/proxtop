@@ -1,6 +1,7 @@
-angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', 'settings', function($scope, ipc, $state, notification, $mdToast, settings) {
+angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', function($scope, ipc, $state, notification, $mdToast) {
     ipc.on('check-login', function(result) {
         if(result) {
+            ipc.send('watchlist-update');
             $state.go('profile');
         } else {
             $state.go('login');
@@ -11,23 +12,20 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
         $mdToast.show($mdToast.simple().content(severity + ':' + message));
     });
 
-    ipc.on('new-anime-ep', function(update) {
-        var settings = settings.get('watchlist');
-        if(settings.display_notification) {
+    var displayNotification = function(type) {
+        return function(update) {
             notification.displayNotification('Proxtop', 'Episode ' + update.ep + ' of ' + update.name + ' is now available', '', function() {
-                open.openAnime(update.id, update.ep, update.sub);
+                if(type == 'anime') {
+                    open.openAnime(update.id, update.ep, update.sub);
+                } else {
+                    open.openManga(update.id, update.ep, update.sub);
+                }
             });
-        }
-    });
+        };
+    };
 
-    ipc.on('new-manga-ep', function(update) {
-        var settings = settings.get('watchlist');
-        if(settings.display_notification) {
-            notification.displayNotification('Proxtop', 'Episode ' + update.ep + ' of ' + update.name + ' is now available', '', function() {
-                open.openManga(update.id, update.ep, update.sub);
-            });
-        }
-    });
+    ipc.on('new-anime-ep', displayNotification('anime'));
+    ipc.on('new-manga-ep', displayNotification('manga'));
 
     ipc.send('check-login');
 }]);
