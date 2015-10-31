@@ -1,5 +1,6 @@
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
+var _ = require('lodash');
 
 module.exports = {
     createIfNotExists: function(inPath) {
