@@ -45,6 +45,14 @@
       "CHECK": "Checkintervall",
       "MINUTE_INTERVAL": "Intervall in Minuten",
       "DISPLAY_NOTIFICATION": "Benachrichtigung anzeigen"
+    },
+    "GENERAL": {
+      "GENERAL": "Allgemein",
+      "LANGUAGE": {
+        "LANGUAGE": "Sprache",
+        "EN": "Englisch",
+        "DE": "Deutsch"
+      }
     }
   },
   "MESSAGES": {
