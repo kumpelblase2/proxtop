@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', function($scope, ipc, $state, notification, $mdToast) {
+angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', '$translate', function($scope, ipc, $state, notification, $mdToast, $translate) {
     ipc.on('check-login', function(result) {
         if(result) {
             ipc.send('watchlist-update');
@@ -14,12 +14,14 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
 
     var displayNotification = function(type) {
         return function(update) {
-            notification.displayNotification('Proxtop', 'Episode ' + update.episode + ' of ' + update.name + ' is now available', '', function() {
-                if(type == 'anime') {
-                    open.openAnime(update.id, update.episode, update.sub);
-                } else {
-                    open.openManga(update.id, update.episode, update.sub);
-                }
+            $translate('WATCHLIST.NEW_' + type.toUpperCase(), { episode: update.episode, name: update.name}).then(function(translations) {
+                notification.displayNotification('Proxtop', translations, 'assets/proxer_logo_64.png', function() {
+                    if(type == 'anime') {
+                        open.openAnime(update.id, update.episode, update.sub);
+                    } else {
+                        open.openManga(update.id, update.episode, update.sub);
+                    }
+                });
             });
         };
     };

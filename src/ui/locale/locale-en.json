@@ -30,6 +30,10 @@
     "MESSAGES": "Messages",
     "SETTINGS": "Settings"
   },
+  "WATCHLIST": {
+    "NEW_ANIME": "Episode {{episode}} from {{name}} is now available!",
+    "NEW_MANGA": "Chapter {{episode}} from {{name}} is now available!"
+  },
   "SETTINGS": {
     "SAVE": "Save",
     "ANIME": {
