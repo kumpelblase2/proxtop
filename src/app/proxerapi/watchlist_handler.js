@@ -7,6 +7,7 @@ function WatchlistHandler(sessionHandler) {
     this.session_handler = sessionHandler;
     this.cache = require('../db')('watchlist-cache');
     this.app = require('../../../main');
+    this.settings = require('../settings');
 }
 
 WatchlistHandler.prototype.loadWatchlist = function() {
@@ -16,6 +17,8 @@ WatchlistHandler.prototype.loadWatchlist = function() {
 
 WatchlistHandler.prototype.checkUpdates = function() {
     var self = this;
+    LOG.info("Checking for new watchlist updates");
+    this.lastCheck = new Date().getTime();
     this.loadWatchlist().then(function(result) {
         var old = self.cache.find({ type: 'watchlist-cache' });
         if(!old) {
@@ -52,6 +55,20 @@ WatchlistHandler.prototype.register = function() {
     ipc.on('watchlist-update', function(event) {
         self.checkUpdates();
     });
+
+    this.watchLoop();
+};
+
+WatchlistHandler.prototype.watchLoop = function() {
+    var self = this;
+    setTimeout(function() {
+        var time = self.settings.getWatchlistSettings().check_interval;
+        if(new Date().getTime() - self.lastCheck > time * 55000) {
+            self.checkUpdates();
+        }
+
+        self.watchLoop();
+    }, 30000);
 };
 
 module.exports = WatchlistHandler;
