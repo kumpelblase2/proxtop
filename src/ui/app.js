@@ -7,5 +7,5 @@ angular.module('proxtop', ['ngMaterial', 'ui.router', 'angular-progress-arc', 'p
         });
 
         $translateProvider.preferredLanguage('de');
-        $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+        $translateProvider.useSanitizeValueStrategy('escape');
     }]);
