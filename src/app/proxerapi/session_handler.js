@@ -7,7 +7,10 @@ function SessionHandler(cookiePath) {
     this.cookiePath = cookiePath;
     this.app = require('../../../main');
     this.db = require('../db');
+    this.online = true;
 }
+
+SessionHandler.prototype.isOnline = function() { return this.online; };
 
 SessionHandler.prototype.loadState = function() {
     var self = this;
@@ -36,9 +39,14 @@ SessionHandler.prototype.openRequest = function(doRequest) {
         if(error.statusCode == 525) {
             self.app.getWindow().send('error', 'warning', 'Website is down.');
         } else if(error.statusCode == 500) {
-            self.app.getWindow().send('error', 'warning', 'MySQL error.');
+            self.app.getWindow().send('error', 'warning', 'MySQL error. Refresh to retry.');
         } else if(error.statusCode == 503) {
             self.app.getWindow().send('error', 'warning', 'CloudFlare DDoS protection, currently can\'t handle this.');
+        } else if(/getaddr/.test(error.message)) {
+            if(self.isOnline()) {
+                self.online = false;
+                self.app.getWindow().send('error', 'severe', 'You appear to be offline. Using only cached responses.');
+            }
         } else {
             self.app.getWindow().send('error', 'severe', 'Unknown error occured: ' + error);
         }
@@ -70,6 +78,7 @@ SessionHandler.prototype.openRequest = function(doRequest) {
 SessionHandler.prototype.cacheResponse = function(response) {
     var url = response.request.path;
     var body = response.body;
+    this.online = true;
     if(this.db('cache').find({ url: url })) {
         this.db('cache').chain().find({ url: url }).merge({ body: body }).value();
     } else {
