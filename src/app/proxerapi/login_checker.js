@@ -31,7 +31,7 @@ LoginChecker.prototype.checkLogin = function(doRequest) {
                 self.app.getWindow().send('check-login', false);
                 throw new Error('No details saved, login manually.');
             }
-            return this.login_handler.login(details.user.username, details.user.password, details.keep_login)
+            return self.login_handler.login(details.user.username, details.user.password, details.keep_login)
                     .then(doRequest);
         } else {
             return body;
