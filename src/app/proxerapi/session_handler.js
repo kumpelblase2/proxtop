@@ -37,18 +37,24 @@ SessionHandler.prototype.openRequest = function(doRequest) {
 
         LOG.warn("Error when requesting " + error.options.uri);
         if(error.statusCode == 525) {
-            self.app.getWindow().send('error', 'warning', 'Website is down.');
+            LOG.error('Received error 525 on request');
+            self.app.getWindow().send('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.OFFLINE);
         } else if(error.statusCode == 500) {
-            self.app.getWindow().send('error', 'warning', 'MySQL error. Refresh to retry.');
+            LOG.error('Received 500 error, probably MySQL down');
+            self.app.getWindow().send('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.MYSQL_DOWN);
         } else if(error.statusCode == 503) {
-            self.app.getWindow().send('error', 'warning', 'CloudFlare DDoS protection, currently can\'t handle this.');
+            LOG.error('Received 503 error, attempting cloudlfare circumvention');
+            self.app.getWindow().send('error', ERRORS.SEVERITY.SEVERE, ERRORS.PROXER.CLOUDFLARE);
         } else if(/getaddr/.test(error.message)) {
+            LOG.error('Other error but contained "getaddr" so it\'s probably no network:');
+            LOG.error(error.message);
             if(self.isOnline()) {
                 self.online = false;
-                self.app.getWindow().send('error', 'severe', 'You appear to be offline. Using only cached responses.');
+                self.app.getWindow().send('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_NETWORK);
             }
         } else {
-            self.app.getWindow().send('error', 'severe', 'Unknown error occured: ' + error);
+            LOG.error('Unknown error occurred: ' + error.message);
+            self.app.getWindow().send('error', ERRORS.SEVERITY.SEVERE, ERRORS.OTHER.UNKNOWN);
         }
 
         LOG.verbose("Trying response cache");
@@ -60,7 +66,7 @@ SessionHandler.prototype.openRequest = function(doRequest) {
             return cached.body;
         } else {
             LOG.error('No cached version found for uri ' + realUri);
-            self.app.getWindow().send('error', 'severe', 'No cached version found.');
+            self.app.getWindow().send('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_CACHE);
             return "";
         }
     };

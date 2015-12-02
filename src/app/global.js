@@ -18,6 +18,8 @@ global.PROXER_PATHS = {
     VIEW_MANGA: '/chapter/%d/%d/%s'
 };
 
+global.ERRORS = require('./errors');
+
 try {
     global.APP_DIR = path.join(require("app").getPath("appData"), APP_NAME);
 } catch(e) {

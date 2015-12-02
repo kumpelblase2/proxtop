@@ -9,7 +9,13 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
     });
 
     ipc.on('error', function(severity, message) {
-        $mdToast.show($mdToast.simple().content(severity + ':' + message));
+        var severityTranslation = "ERROR_SEVERITY." + severity;
+        var messageTranslation = "ERROR." + message;
+        severity = $translate([severityTranslation, messageTranslation]).then(function(translations) {
+            severity = translations[severityTranslation];
+            message = translations[messageTranslation];
+            $mdToast.show($mdToast.simple().content(severity + ':' + message));
+        });
     });
 
     var displayNotification = function(type) {
