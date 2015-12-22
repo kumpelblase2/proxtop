@@ -1,5 +1,6 @@
 var ipc = require('ipc');
-var shell = require('shell');
+var childProcess = require('child_process');
+var opener = require('opener');
 var util = require('util');
 
 function OpenHandler() {
@@ -21,9 +22,17 @@ OpenHandler.prototype.open = function(type, id, ep, sub) {
 
     var url = this.buildUrl(type, id, ep, sub);
     if(openSettings.open_with == 'external') {
-        shell.exec([openSettings.external_path, url]);
+        childProcess.execFile(openSettings.external_path, [url], function(err, stdout, stderr) {
+            if(err) {
+                console.log("error spawning command.");
+                return;
+            }
+
+            console.log(stdout);
+            console.log(stderr);
+        });
     } else if(openSettings.open_with == 'system') {
-        shell.openExternal(url);
+        opener(url);
     }
 };
 
