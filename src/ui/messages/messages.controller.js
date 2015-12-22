@@ -15,7 +15,7 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipc', '$s
         if(image == null || image == "") {
             return "";
         } else {
-            return "https://proxer.me/images/comprofiler/" + image;
+            return "https://cdn.proxer.me/avatar/tn/" + image;
         }
     };
 
