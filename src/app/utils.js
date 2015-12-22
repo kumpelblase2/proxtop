@@ -27,7 +27,7 @@ module.exports = {
         newEntries.forEach(function(entry) {
             var oldEntry = _.find(oldEntries, { id: entry.id });
             if(oldEntry) {
-                if(entry.online && !oldEntry.online) {
+                if(entry.status && !oldEntry.status) {
                     updates.push(entry);
                 }
             }
