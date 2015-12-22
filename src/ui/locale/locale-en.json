@@ -30,6 +30,10 @@
     "MESSAGES": "Messages",
     "SETTINGS": "Settings"
   },
+  "WATCHLIST": {
+    "NEW_ANIME": "Episode {{episode}} from {{name}} is now available!",
+    "NEW_MANGA": "Chapter {{episode}} from {{name}} is now available!"
+  },
   "SETTINGS": {
     "SAVE": "Save",
     "ANIME": {
@@ -57,5 +61,23 @@
   },
   "MESSAGES": {
     "LAST_MESSAGE": "Last message"
+  },
+  "ERROR": {
+    "CONNECTION_NO_NETWORK": "Could not perform request, no network available.",
+    "CONNECTION_NO_RESOLVE": "Could not resolve host to perform request.",
+    "CONNECTION_TIMEOUT": "Request timed out.",
+    "CONNECTION_NOT_FOUND": "Requested resource was not found.",
+    "CONNECTION_NO_CACHE_AVAILABLE": "Neither online nor offline versions were available.",
+    "PROXER_OFFLINE": "Could not perform request, Proxer is currently offline.",
+    "PROXER_INVALID_CREDENTIALS": "The provided credentials were invalid.",
+    "PROXER_NO_DETAILS": "No details provided to login. Please login manually.",
+    "PROXER_MYSQL_ERROR": "Proxer has thrown a database error.",
+    "PROXER_CLOUDFLARE_PROTECTION": "Proxer is experiencing heavy load and cloudflare is mitigating this.",
+    "UNKNOWN_ERROR": "Unknown error occurred: "
+  },
+  "ERROR_SEVERITY": {
+    "severe": "Severe",
+    "warn": "Warning",
+    "info": "Information"
   }
 }

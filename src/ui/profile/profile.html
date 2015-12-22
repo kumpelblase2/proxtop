@@ -54,12 +54,12 @@
             <progress-arc class="exp-arc" size="270" complete="profile.progress" stroke="#736DAB" stroke-width="10">
             </progress-arc>
             <div class="avatar">
-                <img ng-src="{{'http://proxer.me/' + profile.picture}}" alt="Profile picture"/>
+                <img ng-src="{{'https:' + profile.picture}}" alt="Profile picture"/>
             </div>
         </div>
         <div id="stats" class="md-whiteframe-4dp">
             <md-content layout-padding translate-namespace="PROFILE">
-                <center><p ng-if="profile.self">{{ 'PROFILE.SELF' | translate }}</p></center>
+                <p ng-if="profile.self" style="text-align: center;">{{ 'PROFILE.SELF' | translate }}</p>
                 <p>{{ 'PROFILE.NAME' | translate }}: {{profile.name}}</p>
                 <p>{{ 'PROFILE.TITLE' | translate }}: {{profile.ranking.title}}</p>
                 <p>{{ 'PROFILE.POINTS' | translate }}: {{profile.ranking.total}}</p>
@@ -70,7 +70,7 @@
     </div>
     <div layout="column">
         <md-content ng-if="news" layout-fill>
-            <h2>{{ 'PROFILE.NEWS' | translate }}<h2>
+            <h2>{{ 'PROFILE.NEWS' | translate }}</h2>
             <md-list id="news">
                 <md-list-item class="md-3-line long-text-list" ng-repeat="newsItem in news" ng-click="openNews(newsItem);">
                     <img ng-src="{{ createNewsImage(newsItem) }}" class="news-image" alt="image" />

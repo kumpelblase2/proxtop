@@ -47,6 +47,11 @@ parser.parseLogin = function(page) {
         });
 };
 
+parser.parseLoginCheck = function(body) {
+    var parsed = JSON.parse(body);
+    return parsed.error == 0;
+};
+
 parser.checkLogin = function(page) {
     var self = this;
     return Promise.resolve(page).then(cheerio.load)

@@ -1,9 +1,11 @@
-angular.module('proxtop').service('notification', ['ipc', function(ipc) {
+angular.module('proxtop').service('notification', ['notifier', function(notifier) {
     this.displayNotification = function(title, message, image, callback) {
-        ipc.send('notify', {
+        current_loc = window.location.pathname;
+        notifier.notify({
             title: title,
             message: message,
-            icon: image
-        });
+            icon: current_loc.substring(0, current_loc.lastIndexOf('/')) + '/' + image,
+            callback: callback
+        })
     };
 }]);
