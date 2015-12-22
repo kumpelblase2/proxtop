@@ -56,10 +56,7 @@ LoginHandler.prototype.login = function(username, password, keepLogin) {
 
 LoginHandler.prototype.checkLogin = function() {
     return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.API_LOGIN)
-        .then(function(result) {
-            var response = JSON.parse(result);
-            return response.error == 0;
-        });
+        .then(loginParser.parseLoginCheck);
 };
 
 LoginHandler.prototype.register = function() {

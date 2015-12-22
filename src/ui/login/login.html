@@ -2,20 +2,20 @@
     <div layout-fill layout-align="center center" class="form" layout="column">
         <md-content>
             <md-input-container>
-                <label>Username</label>
+                <label translate>USER.USERNAME</label>
                 <input ng-model="user.username">
             </md-input-container>
             <md-input-container>
-                <label>Password</label>
+                <label translate>USER.PASSWORD</label>
                 <input ng-model="user.password" type="password">
             </md-input-container>
             <md-checkbox ng-model="keepLogin" aria-label="Keep Login">
-                Keep Login
+                {{ 'LOGIN.KEEP_LOGIN' | translate }}
             </md-checkbox>
             <md-checkbox ng-model="storePassword" aria-label="Save Password">
-                Save Password
+                {{ 'LOGIN.SAVE_PASSWORD' | translate }}
             </md-checkbox>
-            <md-button class="md-primary" ng-click="login()" aria-label="Login">Login</md-button>
+            <md-button class="md-primary" ng-click="login()" aria-label="Login">{{'LOGIN.LOGIN' | translate}}</md-button>
         </md-content>
     </div>
 </div>

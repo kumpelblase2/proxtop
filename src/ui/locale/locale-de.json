@@ -1,0 +1,83 @@
+{
+  "GENERAL": {
+    "ANIME": "Anime",
+    "MANGA": "Manga",
+    "PROXTOP": "Proxtop"
+  },
+
+  "USER": {
+    "USERNAME": "Benutzername",
+    "PASSWORD": "Passwort",
+    "ACCOUNT": "Konto"
+  },
+  "LOGIN": {
+    "LOGIN": "Einloggen",
+    "KEEP_LOGIN": "Eingeloggt bleiben",
+    "SAVE_PASSWORD": "Passwort speichern"
+  },
+  "PROFILE": {
+    "SELF": "Das bist du!",
+    "NAME": "Name",
+    "TITLE": "Titel",
+    "POINTS": "Punkte",
+    "ANIME": "@:GENERAL.ANIME",
+    "MANGA": "@:GENERAL.MANGA",
+    "NEWS": "Neuigkeiten"
+  },
+  "MENU": {
+    "PROFILE": "Profil",
+    "WATCHLIST": "Lesezeichen",
+    "MESSAGES": "Nachrichten",
+    "SETTINGS": "Einstellungen"
+  },
+  "WATCHLIST": {
+    "NEW_ANIME": "Die Episode {{episode}} von {{name}} ist nun verfügbar!",
+    "NEW_MANGA": "Das Chapter {{episode}} von {{name}} ist nun verfügbar!"
+  },
+  "SETTINGS": {
+    "SAVE": "Speichern",
+    "ANIME": {
+      "ANIME": "@:GENERAL.ANIME",
+      "OPEN_IN": "Öffnen mit",
+      "SYSTEM_BROWSER": "System (Browser)",
+      "EXTERNAL": "Extern",
+      "PREFERRED_PROVIDER": "Bevorzugter Stream-Provider",
+      "APPLICATION": "Anwendung"
+    },
+    "WATCHLIST": {
+      "WATCHLIST": "@:MENU.WATCHLIST",
+      "CHECK": "Checkintervall",
+      "MINUTE_INTERVAL": "Intervall in Minuten",
+      "DISPLAY_NOTIFICATION": "Benachrichtigung anzeigen"
+    },
+    "GENERAL": {
+      "GENERAL": "Allgemein",
+      "LANGUAGE": {
+        "LANGUAGE": "Sprache",
+        "EN": "Englisch",
+        "DE": "Deutsch"
+      }
+    }
+  },
+  "MESSAGES": {
+    "LAST_MESSAGE": "Letzte Nachricht"
+  },
+  "ERROR": {
+    "CONNECTION_NO_NETWORK": "Fehler bei der Anfrage; Konnte keine Verbindung zum Netzwerk herstellen.",
+    "CONNECTION_NO_RESOLVE": "Fehler bei der Anfrage; Konnte den Host nicht auflösen.",
+    "CONNECTION_TIMEOUT": "Die Abfrage konnte in der gegebenen Zeit nicht vollendet werden.",
+    "CONNECTION_NOT_FOUND": "Die gewünschte REsource wurde nicht gefunden.",
+    "CONNECTION_NO_CACHE_AVAILABLE": "Weder die online noch offline Version sind vorhanden.",
+    "PROXER_OFFLINE": "Proxer ist im Moment offline, die Anfrage konnte nicht vollzogen werden.",
+    "PROXER_INVALID_CREDENTIALS": "Angegebene Zugangsdaten sind nicht richtig.",
+    "PROXER_NO_DETAILS": "Keine Zugangsdaten angegeben, bitte manuell neu einloggen.",
+    "PROXER_MYSQL_ERROR": "Proxer hatte einen Datenbankfehler, bitte erneut versuchen.",
+    "PROXER_CLOUDFLARE_PROTECTION": "Proxer unter starker Last und Cloudflare ist eingeschaltet.",
+    "UNKNOWN_ERROR": "Unbekannter Fehler: "
+  },
+  "ERROR_SEVERITY": {
+    "severe":"Schwerwiegend",
+    "warn": "Warnung",
+    "info": "Information"
+  }
+}

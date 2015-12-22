@@ -1,5 +1,6 @@
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
+var _ = require('lodash');
 
 module.exports = {
     createIfNotExists: function(inPath) {
@@ -26,7 +27,7 @@ module.exports = {
         newEntries.forEach(function(entry) {
             var oldEntry = _.find(oldEntries, { id: entry.id });
             if(oldEntry) {
-                if(entry.online && !oldEntry.online) {
+                if(entry.status && !oldEntry.status) {
                     updates.push(entry);
                 }
             }

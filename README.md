@@ -9,12 +9,12 @@ Please note that currently user data is stored on disk in plain text, use at own
 
 These goals are features/use cases that I want this app to provide to the user. All of them should be implemented until I consider this experiment 'done'.
 
-- Use your existing proxer.me account
-- View watchlist
-- Watch proxer HD streams
-- Update watchlist
-- Watch streams with favorite video player (prefered: MPV)
-- Get notifications on new watchlist releases
+- [X] Use your existing proxer.me account
+- [X] View watchlist
+- [ ] Watch proxer HD streams
+- [ ] Update watchlist
+- [ ] Watch streams with favorite video player (prefered: MPV)
+- [X] Get notifications on new watchlist releases
 
 ## Optional Goals
 

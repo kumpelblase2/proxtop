@@ -5,7 +5,7 @@
                 <img ng-src="{{getImage(conversation.image)}}" class="md-avatar" />
                 <div class="md-list-item-text">
                     <h3>{{conversation.topic}}</h3>
-                    <p>Last message at: {{conversation.timestamp_end * 1000 | date}}</p>
+                    <p>{{ 'MESSAGES.LAST_MESSAGE' | translate }}: {{conversation.timestamp_end * 1000 | date}}</p>
                 </div>
             </md-list-item>
         </md-list>

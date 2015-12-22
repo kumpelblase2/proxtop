@@ -26,6 +26,11 @@ var DEFAULT_WATCHLIST_SETTINGS = {
     display_notification: true
 };
 
+var DEFAULT_GENERAL_SETTINGS = {
+    language: 'de',
+    type: 'general'
+};
+
 var settings = {
     getAccountSettings: function() {
         var result = db('settings').find({ type: 'account' });
@@ -62,6 +67,18 @@ var settings = {
     },
     setWatchlistSettings: function(settings) {
         return db('settings').chain().find({ type: 'watchlist' }).merge(settings).value();
+    },
+    getGeneralSettings: function() {
+        var result = db('settings').find({ type: 'general' });
+        if(!result) {
+            db('settings').push(DEFAULT_GENERAL_SETTINGS);
+            return DEFAULT_GENERAL_SETTINGS;
+        } else {
+            return result;
+        }
+    },
+    setGeneralSettings: function(settings) {
+        return db('settings').chain().find({ type: 'general' }).merge(settings).value();
     }
 };
 
