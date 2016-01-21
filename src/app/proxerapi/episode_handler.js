@@ -1,6 +1,6 @@
 var ipc = require('ipc');
 var episodeParser = require('../../page_parser').episode;
-var Promise = require('bluebird');
+var streamParser = require('../../page_parser').stream;
 var util = require('util');
 
 function EpisodeHandler(sessionHandler) {
@@ -12,11 +12,28 @@ EpisodeHandler.prototype.loadEpisode = function(id, ep, sub) {
         .then(episodeParser.parseEpisode);
 };
 
+EpisodeHandler.prototype.extractStream = function(stream) {
+    var url = stream.replace.replace('#', stream.code);
+    return this.session_handler.openRequest(url).then(function(content) {
+        return {
+            page: content,
+            stream: stream
+        };
+    }).then(streamParser.parseVideo);
+};
+
 EpisodeHandler.prototype.register = function() {
     var self = this;
-    ipc.on('watch', function(event, id, ep, sub) {
+    ipc.on('streams', function(event, id, ep, sub) {
         self.loadEpisode(id, ep, sub).then(function(result) {
-            event.sender.send('watch', result);
+            event.sender.send('streams', result);
+        });
+    });
+
+
+    ipc.on('watch', function(event, stream) {
+        self.extractStream(stream).then(function(video) {
+            event.sender.send('watch', video);
         });
     });
 };

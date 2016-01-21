@@ -1,12 +1,14 @@
 angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$stateParams', '$sce', function($scope, ipc, $stateParams, $sce) {
-    ipc.on('watch', function(result) {
+    ipc.on('streams', function(result) {
+        ipc.send('watch', _.find(result.streams, {type:'proxer-stream'}));
+    });
+
+    ipc.on('watch', function(video) {
         $scope.$apply(function() {
-            $scope.episode = result;
-            var stream = _.find(result.streams, {type:'proxer-stream'});
-            stream.url = $sce.trustAsResourceUrl(stream.replace.replace('#', stream.code));
-            $scope.stream = stream;
+            video.url = $sce.trustAsResourceUrl(video.url);
+            $scope.video = video;
         });
     });
 
-    ipc.send('watch', $stateParams.id, $stateParams.ep, $stateParams.sub);
+    ipc.send('streams', $stateParams.id, $stateParams.ep, $stateParams.sub);
 }]);

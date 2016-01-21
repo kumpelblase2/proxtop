@@ -1,3 +1,5 @@
-<div ng-if="stream" layout="row">
-    <iframe src="{{stream.url}}" ng-bind="stream" layout-fill/>
+<div ng-if="video && video.type == 'mp4'" layout="row">
+    <video autoplay controls>
+        <source ng-attr-src="{{video.url}}" type="video/mp4">
+    </video>
 </div>

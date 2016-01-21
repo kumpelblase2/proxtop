@@ -5,5 +5,6 @@ module.exports = {
     details: require('./detail'),
     news: require('./news'),
     message: require('./message'),
-    episode: require('./episode')
+    episode: require('./episode'),
+    stream: require('./stream')
 };
