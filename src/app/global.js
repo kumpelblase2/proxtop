@@ -15,7 +15,8 @@ global.PROXER_PATHS = {
     CONVERSATIONS_API: '/messages?format=json&json=conferences',
     MESSAGE_API: '/messages?format=json&json=messages&id=',
     WATCH_ANIME: '/watch/%d/%d/%s',
-    VIEW_MANGA: '/chapter/%d/%d/%s'
+    VIEW_MANGA: '/chapter/%d/%d/%s',
+    LOGOUT: '/component/users/?task=user.logout'
 };
 
 global.ERRORS = require('./errors');

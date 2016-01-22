@@ -37,21 +37,25 @@
         <script src="ui/messages/messages.js"></script>
         <script src="ui/messages/messages.controller.js"></script>
         <script src="ui/messages/message.controller.js"></script>
+        <script src="ui/menu/menu.controller.js"></script>
 
     	<md-content layout-fill>
-            <md-fab-toolbar md-direction="right">
-                <md-fab-trigger class="align-with-text">
-                    <md-button aria-label="menu" class="md-fab md-primary"><md-icon class="fa fa-lg fa-bars"></md-icon></md-button>
-                </md-fab-trigger>
-                <md-toolbar>
-                    <md-fab-actions class="md-toolbar-tools">
-                        <md-button ui-sref="profile">{{ 'MENU.PROFILE' | translate }}</md-button>
-                        <md-button ui-sref="watchlist">{{ 'MENU.WATCHLIST' | translate }}</md-button>
-                        <md-button ui-sref="messages">{{ 'MENU.MESSAGES' | translate }}</md-button>
-                        <md-button ui-sref="settings">{{ 'MENU.SETTINGS' | translate }}</md-button>
-                    </md-fab-actions>
-                </md-toolbar>
-            </md-fab-toolbar>
+            <div class="menu" ng-controller="MenuController">
+                <md-fab-toolbar md-direction="right">
+                    <md-fab-trigger class="align-with-text">
+                        <md-button aria-label="menu" class="md-fab md-primary"><md-icon class="fa fa-lg fa-bars"></md-icon></md-button>
+                    </md-fab-trigger>
+                    <md-toolbar>
+                        <md-fab-actions class="md-toolbar-tools">
+                            <md-button ui-sref="profile">{{ 'MENU.PROFILE' | translate }}</md-button>
+                            <md-button ui-sref="watchlist">{{ 'MENU.WATCHLIST' | translate }}</md-button>
+                            <md-button ui-sref="messages">{{ 'MENU.MESSAGES' | translate }}</md-button>
+                            <md-button ui-sref="settings">{{ 'MENU.SETTINGS' | translate }}</md-button>
+                            <md-button ng-click="logout()">{{ 'MENU.LOGOUT' | translate }}</md-button>
+                        </md-fab-actions>
+                    </md-toolbar>
+                </md-fab-toolbar>
+            </div>
         	<div ui-view id="mainWindow" class="container md-body-2" layout="column" layout-align="center center"></div>
     	</md-content>
     </body>
