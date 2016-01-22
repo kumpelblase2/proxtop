@@ -13,7 +13,7 @@
 
 #mainWindow {
     position:inherit;
-    top: -75px;
-    margin-left: 70px;
-    margin-right: 70px;
+    margin-top: -70px;
+    margin-left: 25px;
+    margin-right: 25px;
 }
