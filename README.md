@@ -34,6 +34,23 @@ Goals that I would like to implement afterwards, if I have interest in continuin
 - It is _not_ a complete frontend/replacement for proxer.me, it is just an alternative frontend for doing the most common tasks on the site, such as watching anime.
 - It is so far _not_ officially supported and thus just a community/personal effort.
 
+## How to run
+
+First get all required dependencies:
+```
+npm install && bower install
+```
+
+Run tests via:
+```
+npm test
+```
+
+Run the application via:
+```
+npm start
+```
+
 ## FAQ
 
 > This seems like a hard and terrible way to do it!

@@ -4,7 +4,7 @@
   "description": "A desktop application for proxer.me",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Tests are not done yet\"",
+    "test": "node_modules/.bin/mocha --opts mocha.opts",
     "start": "node_modules/.bin/electron main.js"
   },
   "repository": {
