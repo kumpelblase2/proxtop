@@ -13,7 +13,24 @@
 
 #mainWindow {
     position:inherit;
-    margin-top: -70px;
-    margin-left: 25px;
-    margin-right: 25px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+.menu {
+    display: flex;
+    justify-content: center;
+    height: 75px;
+}
+
+.menu-item {
+    width: 100%;
+    justify-content: space-around;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: white;
 }

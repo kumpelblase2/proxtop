@@ -2,18 +2,20 @@
 
 #profile {
     margin: 5px;
+    align-items: center;
 }
 
 #avatar-exp {
     padding-top: 5px;
     height: 270px;
+    width: 270px;
 }
 
 .avatar {
     width: 150px;
     position: relative;
-    top: 10px;
-    left: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
 }
 
 .avatar img {
@@ -27,11 +29,10 @@
 }
 
 #stats {
-    width: 270px;
+    min-width: 270px;
 }
 
 #news {
-    margin: 5px;
     overflow-y: auto;
     max-height: 90vh;
 }
@@ -48,8 +49,8 @@
 
 </style>
 
-<div ng-if="profile" layout="row" layout-align="center start">
-    <div id="profile" layout="column">
+<div ng-if="profile" layout="row" layout-align="center start" layout-fill>
+    <div id="profile" layout="column" flex="25">
         <div id="avatar-exp">
             <progress-arc class="exp-arc" size="270" complete="profile.progress" stroke="#736DAB" stroke-width="10">
             </progress-arc>
@@ -68,8 +69,8 @@
             </md-content>
         </div>
     </div>
-    <div layout="column">
-        <md-content ng-if="news" layout-fill>
+    <div layout="column" flex="75">
+        <md-content ng-if="news">
             <h2>{{ 'PROFILE.NEWS' | translate }}</h2>
             <md-list id="news">
                 <md-list-item class="md-3-line long-text-list" ng-repeat="newsItem in news" ng-click="openNews(newsItem);">
