@@ -40,12 +40,12 @@
         <script src="ui/menu/menu.controller.js"></script>
 
     	<md-content layout-fill>
-            <nav class="menu">
+            <nav class="menu" ng-controller="MenuController">
                 <a ui-sref="profile" class="menu-item md-whiteframe-1dp"><i class="fa fa-user fa-3x menu-icon"></i>{{ 'MENU.PROFILE' | translate }}</a>
                 <a ui-sref="watchlist" class="menu-item md-whiteframe-1dp"><i class="fa fa-bookmark fa-3x"></i>{{ 'MENU.WATCHLIST' | translate }}</a>
                 <a ui-sref="messages" class="menu-item md-whiteframe-1dp"><i class="fa fa-envelope fa-3x"></i>{{ 'MENU.MESSAGES' | translate }}</a>
                 <a ui-sref="settings" class="menu-item md-whiteframe-1dp"><i class="fa fa-gears fa-3x"></i>{{ 'MENU.SETTINGS' | translate }}</a>
-                <a href="#" ng-click="logout(); $event.preventDefault(); $event.stopPropagation();" class="menu-item md-whiteframe-1dp"><i class="fa fa-sign-out fa-3x"></i>{{ 'MENU.LOGOUT' | translate }}</a>
+                <a href ng-click="logout();" class="menu-item md-whiteframe-1dp"><i class="fa fa-sign-out fa-3x"></i>{{ 'MENU.LOGOUT' | translate }}</a>
             </nav>
         	<div ui-view id="mainWindow" class="container md-body-2" layout="column" layout-align="center center" md-padding></div>
     	</md-content>
