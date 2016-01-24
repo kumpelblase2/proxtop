@@ -22,7 +22,8 @@
     "POINTS": "Points",
     "ANIME": "@:GENERAL.ANIME",
     "MANGA": "@:GENERAL.MANGA",
-    "NEWS": "News"
+    "NEWS": "News",
+    "WRITTEN_BY": "written by"
   },
   "MENU": {
     "PROFILE": "Profile",

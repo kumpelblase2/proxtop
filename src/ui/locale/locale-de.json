@@ -22,7 +22,8 @@
     "POINTS": "Punkte",
     "ANIME": "@:GENERAL.ANIME",
     "MANGA": "@:GENERAL.MANGA",
-    "NEWS": "Neuigkeiten"
+    "NEWS": "Neuigkeiten",
+    "WRITTEN_BY": "geschrieben von"
   },
   "MENU": {
     "PROFILE": "Profil",

@@ -32,19 +32,14 @@
     min-width: 270px;
 }
 
-#news {
-    overflow-y: auto;
-    max-height: 90vh;
-}
-
-#news p {
-    max-width: 65vh;
-}
-
 .news-image {
     height: 100px;
     width: 100px;
     border-radius: 50%;
+}
+
+.news-item button {
+    height: 100px !important;
 }
 
 </style>
@@ -73,11 +68,11 @@
         <md-content ng-if="news">
             <h2>{{ 'PROFILE.NEWS' | translate }}</h2>
             <md-list id="news">
-                <md-list-item class="md-3-line long-text-list" ng-repeat="newsItem in news" ng-click="openNews(newsItem);">
+                <md-list-item class="md-3-line long-text-list news-item" ng-repeat="newsItem in news" ng-click="openNews(newsItem);" layout="row">
                     <img ng-src="{{ createNewsImage(newsItem) }}" class="news-image" alt="image" />
                     <div class="md-list-item-text" layout="column">
                         <h3>{{newsItem.subject}}</h3>
-                        <h4>{{newsItem.uname}}</h4>
+                        <h4><i>{{ 'PROFILE.WRITTEN_BY' | translate }} {{newsItem.uname}}</i></h4>
                         <p>{{newsItem.description}}</p>
                     </div>
                 </md-list-item>
