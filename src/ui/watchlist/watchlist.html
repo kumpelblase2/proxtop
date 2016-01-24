@@ -4,21 +4,21 @@
 }
 </style>
 
-<div layout="row">
-    <md-list id="watchlist-anime" class="md-whiteframe-4dp" layout-margin>
-        <md-list-item ng-repeat="anime in watchlist.anime" class="md-1-line" ng-click="clickAnime(anime)">
-            <div class="md-list-item-text">
+<div layout="row" layout-fill style="margin-bottom: 10px;">
+    <md-list id="watchlist-anime" class="md-whiteframe-4dp" flex="50">
+        <md-list-item ng-repeat="anime in watchlist.anime" class="md-1-line" ng-click="clickAnime(anime)" layout="row">
+            <div class="md-list-item-text" flex="95">
                 <h3>{{anime.name}} - {{anime.episode}}</h3>
             </div>
-            <md-icon class="fa fa-play-circle-o fa-lg md-secondary" ng-class="{online: anime.status}"></md-icon>
+            <md-icon class="fa fa-play-circle-o fa-lg md-secondary" ng-class="{online: anime.status}" flex="5"></md-icon>
         </md-list-item>
     </md-list>
-    <md-list id="watchlist-manga" class="md-whiteframe-4dp" layout-margin>
-        <md-list-item ng-repeat="manga in watchlist.manga" class="md-1-line" ng-click="clickManga(manga)">
-            <div class="md-list-item-text">
+    <md-list id="watchlist-manga" class="md-whiteframe-4dp" layout-margin flex="50">
+        <md-list-item ng-repeat="manga in watchlist.manga" class="md-1-line" ng-click="clickManga(manga)" layout="row">
+            <div class="md-list-item-text" flex="95">
                 <h3>{{manga.name}} - {{manga.episode}}</h3>
             </div>
-            <md-icon class="fa fa-play-circle-o fa-lg md-secondary" ng-class="{online: manga.status}"></md-icon>
+            <md-icon class="fa fa-play-circle-o fa-lg md-secondary" ng-class="{online: manga.status}" flex="5"></md-icon>
         </md-list-item>
     </md-list>
 </div>
