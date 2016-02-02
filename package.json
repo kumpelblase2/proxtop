@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "node_modules/.bin/mocha --opts mocha.opts",
-    "start": "node_modules/.bin/electron main.js"
+    "start": "node_modules/.bin/electron main.js",
+    "build": "node_modules/.bin/electron-packager . \"Proxtop\" --platform=linux --arch=x64"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "chai-as-promised": "^5.1.0",
+    "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.30.7",
     "mocha": "^2.3.3"
   },
