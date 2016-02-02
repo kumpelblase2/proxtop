@@ -11,7 +11,7 @@ These goals are features/use cases that I want this app to provide to the user. 
 
 - [X] Use your existing proxer.me account
 - [X] View watchlist
-- [ ] Watch proxer HD streams
+- [X] Watch proxer HD streams
 - [ ] Update watchlist
 - [ ] Watch streams with favorite video player (prefered: MPV)
 - [X] Get notifications on new watchlist releases
@@ -33,6 +33,23 @@ Goals that I would like to implement afterwards, if I have interest in continuin
 ## What this application is and is not
 - It is _not_ a complete frontend/replacement for proxer.me, it is just an alternative frontend for doing the most common tasks on the site, such as watching anime.
 - It is so far _not_ officially supported and thus just a community/personal effort.
+
+## How to run
+
+First get all required dependencies:
+```
+npm install && bower install
+```
+
+Run tests via:
+```
+npm test
+```
+
+Run the application via:
+```
+npm start
+```
 
 ## FAQ
 

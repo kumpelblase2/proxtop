@@ -22,13 +22,15 @@
     "POINTS": "Punkte",
     "ANIME": "@:GENERAL.ANIME",
     "MANGA": "@:GENERAL.MANGA",
-    "NEWS": "Neuigkeiten"
+    "NEWS": "Neuigkeiten",
+    "WRITTEN_BY": "geschrieben von"
   },
   "MENU": {
     "PROFILE": "Profil",
     "WATCHLIST": "Lesezeichen",
     "MESSAGES": "Nachrichten",
-    "SETTINGS": "Einstellungen"
+    "SETTINGS": "Einstellungen",
+    "LOGOUT": "Abmelden"
   },
   "WATCHLIST": {
     "NEW_ANIME": "Die Episode {{episode}} von {{name}} ist nun verfügbar!",

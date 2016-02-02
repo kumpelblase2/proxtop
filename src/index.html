@@ -39,22 +39,17 @@
         <script src="ui/messages/message.controller.js"></script>
         <script src="ui/watch/watch.js"></script>
         <script src="ui/watch/watch.controller.js"></script>
+        <script src="ui/menu/menu.controller.js"></script>
 
     	<md-content layout-fill>
-            <md-fab-toolbar md-direction="right">
-                <md-fab-trigger class="align-with-text">
-                    <md-button aria-label="menu" class="md-fab md-primary"><md-icon class="fa fa-lg fa-bars"></md-icon></md-button>
-                </md-fab-trigger>
-                <md-toolbar>
-                    <md-fab-actions class="md-toolbar-tools">
-                        <md-button ui-sref="profile">{{ 'MENU.PROFILE' | translate }}</md-button>
-                        <md-button ui-sref="watchlist">{{ 'MENU.WATCHLIST' | translate }}</md-button>
-                        <md-button ui-sref="messages">{{ 'MENU.MESSAGES' | translate }}</md-button>
-                        <md-button ui-sref="settings">{{ 'MENU.SETTINGS' | translate }}</md-button>
-                    </md-fab-actions>
-                </md-toolbar>
-            </md-fab-toolbar>
-        	<div ui-view id="mainWindow" class="container md-body-2" layout="column" layout-align="center center"></div>
+            <nav class="menu" ng-controller="MenuController">
+                <a ui-sref="profile" class="menu-item md-whiteframe-1dp"><i class="fa fa-user fa-3x menu-icon"></i>{{ 'MENU.PROFILE' | translate }}</a>
+                <a ui-sref="watchlist" class="menu-item md-whiteframe-1dp"><i class="fa fa-bookmark fa-3x"></i>{{ 'MENU.WATCHLIST' | translate }}</a>
+                <a ui-sref="messages" class="menu-item md-whiteframe-1dp"><i class="fa fa-envelope fa-3x"></i>{{ 'MENU.MESSAGES' | translate }}</a>
+                <a ui-sref="settings" class="menu-item md-whiteframe-1dp"><i class="fa fa-gears fa-3x"></i>{{ 'MENU.SETTINGS' | translate }}</a>
+                <a href ng-click="logout();" class="menu-item md-whiteframe-1dp"><i class="fa fa-sign-out fa-3x"></i>{{ 'MENU.LOGOUT' | translate }}</a>
+            </nav>
+        	<div ui-view id="mainWindow" class="container md-body-2" layout="column" layout-align="center center" md-padding></div>
     	</md-content>
     </body>
 </html>
