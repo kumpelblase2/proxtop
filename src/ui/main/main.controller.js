@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', '$translate', function($scope, ipc, $state, notification, $mdToast, $translate) {
+angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', '$translate', "settings", function($scope, ipc, $state, notification, $mdToast, $translate, settings) {
     ipc.on('check-login', function(result) {
         if(result) {
             ipc.send('watchlist-update');
@@ -31,6 +31,8 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
             });
         };
     };
+
+    $translate.use(settings.get('general').language);
 
     ipc.on('new-anime-ep', displayNotification('anime'));
     ipc.on('new-manga-ep', displayNotification('manga'));
