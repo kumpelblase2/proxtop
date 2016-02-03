@@ -1,3 +1,9 @@
+<style scoped>
+.password-warning {
+    color: red;
+}
+</style>
+
 <md-content style="width: 75%;">
     <div layout="column" flex>
         <md-card>
@@ -26,6 +32,9 @@
                 </md-checkbox>
                 <md-checkbox ng-model="settings.account.store_password" aria-label="Save Password">
                     {{ 'LOGIN.SAVE_PASSWORD' | translate }}
+                    <span class="password-warning" ng-if="settings.account.store_password">
+                        Warning: This stores the password in plain text.
+                    </span>
                 </md-checkbox>
             </md-card-content>
         </md-card>
