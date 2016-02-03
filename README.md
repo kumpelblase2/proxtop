@@ -36,9 +36,9 @@ Goals that I would like to implement afterwards, if I have interest in continuin
 
 ## How to run
 
-First get all required dependencies:
+First get all required dependencies (requires NPM and bower to be installed):
 ```
-npm install && bower install
+npm run setup
 ```
 
 Run tests via:
@@ -49,6 +49,12 @@ npm test
 Run the application via:
 ```
 npm start
+
+```
+
+Or if you want to build the application:
+```
+npm run build
 ```
 
 ## FAQ
