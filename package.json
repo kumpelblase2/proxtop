@@ -4,9 +4,14 @@
   "description": "A desktop application for proxer.me",
   "main": "main.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha --opts mocha.opts",
-    "start": "node_modules/.bin/electron main.js",
-    "build": "node_modules/.bin/electron-packager . \"Proxtop\" --platform=linux --arch=x64"
+    "test": "mocha --opts mocha.opts",
+    "start": "electron main.js",
+    "setup": "npm install && bower install",
+    "prepare": "mkdir dist && cp -R src node_modules package.json bower.json bower_components main.js dist",
+    "build:linux": "electron-packager dist \"Proxtop\" --platform=linux --arch=x64 --asar",
+    "build:osx": "electron-packager dist \"Proxtop\" --platform=darwin --arch=x64 --asar",
+    "build:win": "electron-packager dist \"Proxtop\" --platform=win32 --arch=x64 --asar",
+    "build": "npm run prepare && npm run build:linux && npm run build:osx && npm run build:win"
   },
   "repository": {
     "type": "git",
