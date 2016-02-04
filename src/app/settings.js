@@ -31,6 +31,12 @@ var DEFAULT_GENERAL_SETTINGS = {
     type: 'general'
 };
 
+var DEFAULT_MANGA_SETTINGS = {
+    type: 'manga',
+    open_with: 'system'
+};
+
+// Might wanna do this with a loop or something
 var settings = {
     getAccountSettings: function() {
         var result = db('settings').find({ type: 'account' });
@@ -79,6 +85,18 @@ var settings = {
     },
     setGeneralSettings: function(settings) {
         return db('settings').chain().find({ type: 'general' }).merge(settings).value();
+    },
+    getMangaSettings: function() {
+        var result = db('settings').find({ type: 'manga' });
+        if(!result) {
+            db('settings').push(DEFAULT_MANGA_SETTINGS);
+            return DEFAULT_MANGA_SETTINGS;
+        } else {
+            return result;
+        }
+    },
+    setMangaSettings: function(settings) {
+        return db('settings').chain().find({ type: 'manga' }).merge(settings).value();
     }
 };
 

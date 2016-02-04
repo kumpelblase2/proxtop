@@ -9,6 +9,7 @@ function OpenHandler() {
 
 OpenHandler.prototype.buildUrl = function(type, id, ep, sub) {
     var path = type === 'anime' ? PROXER_PATHS.WATCH_ANIME : PROXER_PATHS.VIEW_MANGA;
+    sub = type === 'anime' ? sub : (sub == 'englisch' ? 'en' : 'de');
     return PROXER_BASE_URL + util.format(path, id, ep, sub);
 };
 
