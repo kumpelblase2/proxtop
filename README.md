@@ -83,3 +83,6 @@ Advertisments: There are three cases
 3. You have no adblocker installed and would normally see ads. This is the only case ad revenue would be missed.
 
 I hate ads myself, so I don't see this app getting ads to increase revenue for the creators being a thing. Just donate; makes everyone happier.
+
+## License
+This application is licensed under the MIT license. See the `LICENSE` file in this repository for more information.
