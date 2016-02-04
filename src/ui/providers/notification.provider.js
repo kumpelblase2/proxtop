@@ -1,11 +1,12 @@
-angular.module('proxtop').service('notification', ['notifier', function(notifier) {
+angular.module('proxtop').service('notification', [function() {
     this.displayNotification = function(title, message, image, callback) {
         current_loc = window.location.pathname;
-        notifier.notify({
-            title: title,
-            message: message,
-            icon: current_loc.substring(0, current_loc.lastIndexOf('/')) + '/' + image,
-            callback: callback
-        })
+        var notification = new Notification(title, {
+            body: message,
+            icon: image
+        });
+
+        notification.onclick = callback;
+        return notification;
     };
 }]);
