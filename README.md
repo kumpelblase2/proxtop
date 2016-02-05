@@ -5,6 +5,8 @@ This is considered experimental because there's no official API in place so this
 
 Please note that currently user data is stored on disk in plain text, use at own risk.
 
+![landing](screenshots/landing.jpg)
+
 ## Goals
 
 These goals are features/use cases that I want this app to provide to the user. All of them should be implemented until I consider this experiment 'done'.
