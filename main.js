@@ -22,6 +22,13 @@ app.on('window-all-closed', function() {
         proxApp.finish();
         app.quit();
     }
+
+    mainWindow = null;
+});
+
+app.on('activate-with-no-open-windows', function(event) {
+    event.preventDefault();
+    createWindow();
 });
 
 app.on('ready', function() {
