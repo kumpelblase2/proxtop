@@ -30,7 +30,7 @@
             <md-checkbox ng-model="storePassword" aria-label="Save Password">
                 {{ 'LOGIN.SAVE_PASSWORD' | translate }}
                 <span class="password-warning" ng-if="storePassword">
-                    Warning: This stores the password in plain text.
+                    {{ 'LOGIN.PLAINTEXT_WARNING' | translate }}
                 </span>
             </md-checkbox>
             <md-button class="md-primary" type="submit" aria-label="Login">{{'LOGIN.LOGIN' | translate}}</md-button>

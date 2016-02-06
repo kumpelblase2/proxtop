@@ -13,7 +13,8 @@
   "LOGIN": {
     "LOGIN": "Einloggen",
     "KEEP_LOGIN": "Eingeloggt bleiben",
-    "SAVE_PASSWORD": "Passwort speichern"
+    "SAVE_PASSWORD": "Passwort speichern",
+    "PLAINTEXT_WARNING": "Achtung: Das Passwort wird im Klartext abgespeichert"
   },
   "PROFILE": {
     "SELF": "Das bist du!",
