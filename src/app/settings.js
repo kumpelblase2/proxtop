@@ -17,7 +17,8 @@ var DEFAULT_ACCOUNT_SETTINGS = {
 var DEFAULT_ANIME_SETTINGS = {
     type: 'anime',
     open_with: 'system',
-    external_path: 'proxer-mpv'
+    external_path: 'proxer-mpv',
+    preferred_stream: 'proxer-stream'
 };
 
 var DEFAULT_WATCHLIST_SETTINGS = {
