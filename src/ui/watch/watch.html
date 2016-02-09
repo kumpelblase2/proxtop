@@ -1,5 +1,11 @@
-<div ng-if="video && video.type == 'mp4'" layout="row">
-    <video autoplay controls>
-        <source ng-attr-src="{{video.url}}" type="video/mp4">
-    </video>
+<div ng-if="!current.stream && current.info && current.info.streams">
+    <div layout="column">
+        <md-button ng-repeat="stream in current.info.streams" ng-click="select(stream)">{{stream.name}}</md-button>
+    </div>
+</div>
+<div ng-if="current.stream && !current.canPlay">
+    <loader></loader>
+</div>
+<div layout="row" ng-if="hasVideo()">
+    <video video-ready ready="current.canPlay" autoplay controls ng-attr-src="{{current.video.url}}" ng-class="{ 'no-display': !current.canPlay }"/>
 </div>
