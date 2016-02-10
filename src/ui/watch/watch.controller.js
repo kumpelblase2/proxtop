@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$stateParams', '$sce', 'settings', function($scope, ipc, $stateParams, $sce, settings) {
+angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$stateParams', '$sce', 'settings', '$state', function($scope, ipc, $stateParams, $sce, settings, $state) {
     $scope.current = {
         info: null,
         stream: null,
@@ -36,6 +36,22 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
 
     $scope.isReadyForPlayback = function() {
         return $scope.hasVideo() && $scope.current.canPlay;
+    };
+
+    $scope.previous = function() {
+        $state.go('watch', {
+            id: $stateParams.id,
+            ep: parseInt($stateParams.ep) - 1,
+            sub: $stateParams.sub
+        });
+    };
+
+    $scope.next = function() {
+        $state.go('watch', {
+            id: $stateParams.id,
+            ep: parseInt($stateParams.ep) + 1,
+            sub: $stateParams.sub
+        });
     };
 
     ipc.send('streams', $stateParams.id, $stateParams.ep, $stateParams.sub);
