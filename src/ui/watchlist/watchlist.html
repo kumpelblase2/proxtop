@@ -4,7 +4,8 @@
 }
 </style>
 
-<div layout="row" layout-fill style="margin-bottom: 10px;">
+<loader ng-if="!watchlist"></loader>
+<div ng-if="watchlist" layout="row" layout-fill style="margin-bottom: 10px;">
     <md-list id="watchlist-anime" class="md-whiteframe-4dp" flex="50">
         <md-list-item ng-repeat="anime in watchlist.anime" class="md-1-line" ng-click="clickAnime(anime)" layout="row">
             <div class="md-list-item-text" flex="95">
