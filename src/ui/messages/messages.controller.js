@@ -1,4 +1,5 @@
 angular.module('proxtop').controller('MessagesController', ['$scope', 'ipc', '$state', function($scope, ipc, $state) {
+    $scope.conversations = null;
     ipc.on('conversations', function(conversations) {
         $scope.$apply(function() {
             $scope.conversations = conversations;

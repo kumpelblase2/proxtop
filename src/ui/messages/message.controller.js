@@ -1,4 +1,5 @@
 angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', function($scope, ipc, $stateParams) {
+    $scope.messages = null;
     ipc.on('conversation', function(conversation) {
         $scope.$apply(function() {
             $scope.messages = conversation.reverse();

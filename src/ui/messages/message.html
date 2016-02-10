@@ -1,4 +1,5 @@
 <md-content>
+    <loader ng-if="!messages"></loader>
     <md-list>
         <md-list-item ng-repeat="message in messages" class="md-3-line long-text-list">
             <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
