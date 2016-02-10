@@ -6,6 +6,6 @@
 <div ng-if="current.stream && !current.canPlay">
     <loader></loader>
 </div>
-<div layout="row" ng-if="hasVideo()">
-    <video video-ready ready="current.canPlay" autoplay controls ng-attr-src="{{current.video.url}}" ng-class="{ 'no-display': !current.canPlay }"/>
+<div layout="row" ng-if="hasVideo()" layout-fill>
+    <video width="100%" height="100%" video-ready ready="current.canPlay" autoplay controls ng-attr-src="{{current.video.url}}" ng-class="{ 'no-display': !current.canPlay }"/>
 </div>
