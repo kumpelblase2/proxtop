@@ -6,9 +6,7 @@ angular.module('proxtop').directive('videoReady', function($timeout) {
         },
         link: function(scope, elem, attrs) {
             scope.ready = false;
-            console.log("attached!");
             elem.on('canplay', function() {
-                console.log("Ready!");
                 $timeout(function() {
                     scope.ready = true;
                 });
