@@ -15,7 +15,7 @@ These goals are features/use cases that I want this app to provide to the user. 
 - [X] View watchlist
 - [X] Watch proxer HD streams
 - [ ] Update watchlist
-- [ ] Watch streams with favorite video player (prefered: MPV)
+- [X] Watch streams with favorite video player (prefered: MPV)
 - [X] Get notifications on new watchlist releases
 
 ## Optional Goals
