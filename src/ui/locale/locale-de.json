@@ -35,7 +35,10 @@
   },
   "WATCHLIST": {
     "NEW_ANIME": "Die Episode {{episode}} von {{name}} ist nun verfügbar!",
-    "NEW_MANGA": "Das Chapter {{episode}} von {{name}} ist nun verfügbar!"
+    "NEW_MANGA": "Das Chapter {{episode}} von {{name}} ist nun verfügbar!",
+    "ADD_CURRENT": "Zur Watchlist hinzufügen",
+    "ADD_NEXT": "Nächste zur Watchlist hinzufügen",
+    "UPDATE_FINISHED": "Eintrag erneuert"
   },
   "SETTINGS": {
     "SAVE": "Speichern",

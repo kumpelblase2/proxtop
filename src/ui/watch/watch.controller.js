@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$stateParams', '$sce', 'settings', '$state', function($scope, ipc, $stateParams, $sce, settings, $state) {
+angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$stateParams', '$sce', 'settings', '$state', '$mdToast', '$translate', function($scope, ipc, $stateParams, $sce, settings, $state, $mdToast, $translate) {
     $scope.current = {
         info: null,
         stream: null,
@@ -42,29 +42,43 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
         if($scope.hasPrevious()) {
             $state.go('watch', {
                 id: $stateParams.id,
-                ep: $state.current.info.prev,
+                ep: $scope.current.info.prev,
                 sub: $stateParams.sub
             });
         }
     };
 
     $scope.hasPrevious = function() {
-        return $state.current.info.prev;
+        return $scope.current.info && $scope.current.info.prev;
     };
 
     $scope.next = function() {
         if($scope.hasNext()) {
             $state.go('watch', {
                 id: $stateParams.id,
-                ep: $state.current.info.next,
+                ep: $scope.current.info.next,
                 sub: $stateParams.sub
             });
         }
     };
 
     $scope.hasNext = function() {
-        return $state.current.info.next;
+        return $scope.current.info && $scope.current.info.next;
     };
+
+    $scope.addToWatchlist = function() {
+        ipc.send('add-watchlist', $stateParams.id, $stateParams.ep, $stateParams.sub);
+    };
+
+    $scope.addNextToWatchlist = function() {
+        ipc.send('add-watchlist', $stateParams.id, $scope.current.info.next, $stateParams.sub);
+    };
+
+    ipc.on('add-watchlist', function(response) {
+        $translate('WATCHLIST.UPDATE_FINISHED').then(function(translation) {
+            $mdToast.show($mdToast.simple().content(translation));
+        })
+    });
 
     ipc.send('episode', $stateParams.id, $stateParams.ep, $stateParams.sub);
 }]);
