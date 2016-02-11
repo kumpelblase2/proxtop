@@ -16,6 +16,27 @@ var parser = {
         text = text.children[0].data;
         var match = /streams ?= ?(\[.*\]);/.exec(text);
         return JSON.parse(match[1]);
+    },
+
+    parseNextPrevious: function($, row) {
+        var firstColumn = row.children().first();
+        var next = null;
+        var prev = null;
+        var epRegex = /\/watch\/\d+\/(\d+)\/.+/;
+        if(firstColumn.children().length == 1) {
+            var first = firstColumn.children().first();
+            prev = epRegex.exec(first.attr('href'))[1];
+        }
+
+        var nextButton = row.children().next().next().children().first();
+        if(/.+\>.+/.test(nextButton.text())) {
+            next = epRegex.exec(nextButton.attr('href'))[1];
+        }
+
+        return {
+            prev: prev,
+            next: next
+        };
     }
 };
 
@@ -25,6 +46,9 @@ parser.parseEpisode = function(page) {
         .then(function($) {
             var info = parser.parseInfo($('#wContainer').find('tr').first());
             info.streams = parser.parseMirrors($, $('#main'));
+            var navEps = parser.parseNextPrevious($, $('.no_details').first());
+            info.prev = navEps.prev;
+            info.next = navEps.next;
             return info;
         });
 };

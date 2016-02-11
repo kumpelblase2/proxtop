@@ -84,4 +84,8 @@ parser.parseWatchlist = function(page) {
     });
 };
 
+parser.parseUpdateReponse = function(response) {
+    return Promise.resolve(response).then(JSON.parse);
+};
+
 module.exports = parser;

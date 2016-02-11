@@ -7,7 +7,7 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
     };
     var preferredStream = settings.get('anime').preferred_stream;
 
-    ipc.on('streams', function(result) {
+    ipc.on('episode', function(result) {
         $scope.$apply(function() {
             $scope.current.info = result;
             var found = _.filter($scope.current.info.streams, { type: preferredStream });
@@ -39,20 +39,32 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
     };
 
     $scope.previous = function() {
-        $state.go('watch', {
-            id: $stateParams.id,
-            ep: parseInt($stateParams.ep) - 1,
-            sub: $stateParams.sub
-        });
+        if($scope.hasPrevious()) {
+            $state.go('watch', {
+                id: $stateParams.id,
+                ep: $state.current.info.prev,
+                sub: $stateParams.sub
+            });
+        }
+    };
+
+    $scope.hasPrevious = function() {
+        return $state.current.info.prev;
     };
 
     $scope.next = function() {
-        $state.go('watch', {
-            id: $stateParams.id,
-            ep: parseInt($stateParams.ep) + 1,
-            sub: $stateParams.sub
-        });
+        if($scope.hasNext()) {
+            $state.go('watch', {
+                id: $stateParams.id,
+                ep: $state.current.info.next,
+                sub: $stateParams.sub
+            });
+        }
     };
 
-    ipc.send('streams', $stateParams.id, $stateParams.ep, $stateParams.sub);
+    $scope.hasNext = function() {
+        return $state.current.info.next;
+    };
+
+    ipc.send('episode', $stateParams.id, $stateParams.ep, $stateParams.sub);
 }]);

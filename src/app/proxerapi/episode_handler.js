@@ -24,9 +24,9 @@ EpisodeHandler.prototype.extractStream = function(stream) {
 
 EpisodeHandler.prototype.register = function() {
     var self = this;
-    ipc.on('streams', function(event, id, ep, sub) {
+    ipc.on('episode', function(event, id, ep, sub) {
         self.loadEpisode(id, ep, sub).then(function(result) {
-            event.sender.send('streams', result);
+            event.sender.send('episode', result);
         });
     });
 
