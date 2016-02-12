@@ -3,8 +3,10 @@ angular.module('proxtop').service('open', ['ipc', 'settings', '$state', function
     ['Anime', 'Manga'].forEach(function(name) {
         var lower = name.toLowerCase();
         self['open' + name] = function(id, ep, sub) {
-            if(settings.get(lower).open_with === 'internal') {
-                $state.go('view.' + lower, {
+            var actualSettings = settings.get(lower);
+
+            if(actualSettings && actualSettings.open_with === 'internal') {
+                $state.go('watch', {
                     id: id,
                     ep: ep,
                     sub: sub

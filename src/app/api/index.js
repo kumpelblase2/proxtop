@@ -1,10 +1,8 @@
 var OpenHandler = require('./open_handler');
-var NotifyHandler = require('./notify_handler');
 
 function API(cookiePath) {
     this.handers = [
-        new OpenHandler(),
-        new NotifyHandler()
+        new OpenHandler()
     ];
 }
 

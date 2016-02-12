@@ -47,6 +47,28 @@ parser.parseLogin = function(page) {
         });
 };
 
+parser.parseLogout = function(page) {
+    return Promise.resolve(page).then(cheerio.load)
+        .then(function(page) {
+            if(isLoggedIn(page)) {
+                return parser.extractFormData(page).then(function(data) {
+                    if(data == null) {
+                        return createResult('error', "No logout form found.");
+                    } else {
+                        return createResult('logout', data);
+                    }
+                });
+            } else {
+                return createResult('logged-out', null);
+            }
+        });
+};
+
+parser.parseLoginCheck = function(body) {
+    var parsed = JSON.parse(body);
+    return parsed.error == 0;
+};
+
 parser.checkLogin = function(page) {
     var self = this;
     return Promise.resolve(page).then(cheerio.load)

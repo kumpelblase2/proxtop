@@ -4,5 +4,7 @@ module.exports = {
     profile: require('./profile'),
     details: require('./detail'),
     news: require('./news'),
-    message: require('./message')
+    message: require('./message'),
+    episode: require('./episode'),
+    stream: require('./stream')
 };

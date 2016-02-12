@@ -1,11 +1,18 @@
 {
   "name": "proxtop",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "A desktop application for proxer.me",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Tests are not done yet\"",
-    "start": "node_modules/.bin/electron main.js"
+    "test": "mocha --opts mocha.opts",
+    "start": "electron main.js",
+    "setup": "npm install && bower install",
+    "prepare": "mkdir dist && cp -R src node_modules package.json bower.json bower_components main.js dist",
+    "clean": "rm -r dist/",
+    "build:linux": "electron-packager dist \"Proxtop\" --platform=linux --arch=x64 --asar",
+    "build:osx": "electron-packager dist \"Proxtop\" --platform=darwin --arch=x64 --asar",
+    "build:win": "electron-packager dist \"Proxtop\" --platform=win32 --arch=x64 --asar",
+    "build": "npm run prepare && npm run build:linux && npm run build:osx && npm run build:win"
   },
   "repository": {
     "type": "git",
@@ -26,6 +33,7 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "chai-as-promised": "^5.1.0",
+    "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.30.7",
     "mocha": "^2.3.3"
   },
@@ -35,7 +43,7 @@
     "lodash": "^3.10.1",
     "lowdb": "^0.10.2",
     "moment": "^2.10.6",
-    "node-notifier": "^4.3.1",
+    "opener": "^1.4.1",
     "request-promise": "^0.4.3",
     "tough-cookie": "^2.0.0",
     "tough-cookie-filestore": "0.0.1",

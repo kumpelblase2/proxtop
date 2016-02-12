@@ -1,4 +1,5 @@
 angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', function($scope, ipc, $stateParams) {
+    $scope.messages = null;
     ipc.on('conversation', function(conversation) {
         $scope.$apply(function() {
             $scope.messages = conversation.reverse();
@@ -9,7 +10,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
         if(image == null || image == "") {
             return "";
         } else {
-            return "https://proxer.me/images/comprofiler/" + image;
+            return "https://cdn.proxer.me/avatar/tn/" + image;
         }
     };
 

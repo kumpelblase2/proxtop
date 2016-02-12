@@ -17,7 +17,8 @@ var DEFAULT_ACCOUNT_SETTINGS = {
 var DEFAULT_ANIME_SETTINGS = {
     type: 'anime',
     open_with: 'system',
-    external_path: 'proxer-mpv'
+    external_path: 'proxer-mpv',
+    preferred_stream: 'proxer-stream'
 };
 
 var DEFAULT_WATCHLIST_SETTINGS = {
@@ -26,6 +27,17 @@ var DEFAULT_WATCHLIST_SETTINGS = {
     display_notification: true
 };
 
+var DEFAULT_GENERAL_SETTINGS = {
+    language: 'de',
+    type: 'general'
+};
+
+var DEFAULT_MANGA_SETTINGS = {
+    type: 'manga',
+    open_with: 'system'
+};
+
+// Might wanna do this with a loop or something
 var settings = {
     getAccountSettings: function() {
         var result = db('settings').find({ type: 'account' });
@@ -62,6 +74,30 @@ var settings = {
     },
     setWatchlistSettings: function(settings) {
         return db('settings').chain().find({ type: 'watchlist' }).merge(settings).value();
+    },
+    getGeneralSettings: function() {
+        var result = db('settings').find({ type: 'general' });
+        if(!result) {
+            db('settings').push(DEFAULT_GENERAL_SETTINGS);
+            return DEFAULT_GENERAL_SETTINGS;
+        } else {
+            return result;
+        }
+    },
+    setGeneralSettings: function(settings) {
+        return db('settings').chain().find({ type: 'general' }).merge(settings).value();
+    },
+    getMangaSettings: function() {
+        var result = db('settings').find({ type: 'manga' });
+        if(!result) {
+            db('settings').push(DEFAULT_MANGA_SETTINGS);
+            return DEFAULT_MANGA_SETTINGS;
+        } else {
+            return result;
+        }
+    },
+    setMangaSettings: function(settings) {
+        return db('settings').chain().find({ type: 'manga' }).merge(settings).value();
     }
 };
 

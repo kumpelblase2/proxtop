@@ -1,6 +1,5 @@
 {
   "name": "proxer-desktop",
-  "version": "0.1.0",
   "authors": [
     "Tim Hagemann <tim@infinityblade.de>"
   ],
@@ -25,6 +24,8 @@
     "angular-ui-router": "~0.2.15",
     "lodash": "~3.10.1",
     "angular-progress-arc": "~1.0.0",
-    "font-awesome": "~4.4.0"
+    "font-awesome": "~4.4.0",
+    "angular-translate": "~2.8.1",
+    "angular-translate-loader-static-files": "~2.8.1"
   }
 }

@@ -2,22 +2,26 @@
 
 #profile {
     margin: 5px;
+    align-items: center;
 }
 
 #avatar-exp {
     padding-top: 5px;
     height: 270px;
+    width: 270px;
+    margin-bottom: 15px;
 }
 
 .avatar {
     width: 150px;
     position: relative;
-    top: 10px;
-    left: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
 }
 
 .avatar img {
     border-radius: 50%;
+    width: 250px;
 }
 
 .exp-arc {
@@ -27,56 +31,56 @@
 }
 
 #stats {
-    width: 270px;
-}
-
-#news {
-    margin: 5px;
-    overflow-y: auto;
-    max-height: 90vh;
-}
-
-#news p {
-    max-width: 65vh;
+    min-width: 270px;
 }
 
 .news-image {
     height: 100px;
     width: 100px;
     border-radius: 50%;
+    margin-right: 10px;
+}
+
+.news-item {
+    margin-bottom: 10px;
+}
+
+.news-item button {
+    height: 100px !important;
 }
 
 </style>
 
-<div ng-if="profile" layout="row" layout-align="center start">
-    <div id="profile" layout="column">
+<loader ng-if="!profile"></loader>
+<div ng-if="profile" layout="row" layout-align="center start" layout-fill>
+    <div id="profile" layout="column" flex="25">
         <div id="avatar-exp">
             <progress-arc class="exp-arc" size="270" complete="profile.progress" stroke="#736DAB" stroke-width="10">
             </progress-arc>
             <div class="avatar">
-                <img ng-src="{{'http://proxer.me/' + profile.picture}}" alt="Profile picture"/>
+                <img ng-src="{{'https:' + profile.picture}}" alt="Profile picture"/>
             </div>
         </div>
         <div id="stats" class="md-whiteframe-4dp">
-            <md-content layout-padding>
-                <center><p ng-if="profile.self">This is you!</p></center>
-                <p>Name: {{profile.name}}</p>
-                <p>Titel: {{profile.ranking.title}}</p>
-                <p>Punkte: {{profile.ranking.total}}</p>
-                <p>Anime: {{profile.ranking.anime}}</p>
-                <p>Manga: {{profile.ranking.manga}}</p>
+            <md-content layout-padding translate-namespace="PROFILE">
+                <p ng-if="profile.self" style="text-align: center;">{{ 'PROFILE.SELF' | translate }}</p>
+                <p>{{ 'PROFILE.NAME' | translate }}: {{profile.name}}</p>
+                <p>{{ 'PROFILE.TITLE' | translate }}: {{profile.ranking.title}}</p>
+                <p>{{ 'PROFILE.POINTS' | translate }}: {{profile.ranking.total}}</p>
+                <p>{{ 'PROFILE.ANIME' | translate }}: {{profile.ranking.anime}}</p>
+                <p>{{ 'PROFILE.MANGA' | translate }}: {{profile.ranking.manga}}</p>
             </md-content>
         </div>
     </div>
-    <div layout="column">
-        <md-content ng-if="news" layout-fill>
-            <h2>News<h2>
+    <div layout="column" flex="75">
+        <md-content ng-if="news">
+            <h2>{{ 'PROFILE.NEWS' | translate }}</h2>
             <md-list id="news">
-                <md-list-item class="md-3-line long-text-list" ng-repeat="newsItem in news" ng-click="openNews(newsItem);">
+                <md-list-item class="md-3-line long-text-list news-item" ng-repeat="newsItem in news" ng-click="openNews(newsItem);" layout="row">
                     <img ng-src="{{ createNewsImage(newsItem) }}" class="news-image" alt="image" />
                     <div class="md-list-item-text" layout="column">
                         <h3>{{newsItem.subject}}</h3>
-                        <h4>{{newsItem.uname}}</h4>
+                        <h4><i>{{ 'PROFILE.WRITTEN_BY' | translate }} {{newsItem.uname}}</i></h4>
                         <p>{{newsItem.description}}</p>
                     </div>
                 </md-list-item>

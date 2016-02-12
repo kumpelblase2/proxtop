@@ -14,7 +14,7 @@ Proxtop.prototype.init = function() {
     this.api = new api();
     this.proxerapi = new proxerapi(path.join(this.configPath, 'cookies.json'));
     Proxtop.instance = this;
-    return this.proxerapi.init().then(api.init);
+    return this.proxerapi.init().then(this.api.init.bind(this.api));
 };
 
 Proxtop.prototype.finish = function() {

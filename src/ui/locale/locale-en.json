@@ -1,0 +1,90 @@
+{
+  "GENERAL": {
+    "ANIME": "Anime",
+    "MANGA": "Manga",
+    "PROXTOP": "Proxtop"
+  },
+
+  "USER": {
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "ACCOUNT": "Account"
+  },
+  "LOGIN": {
+    "LOGIN": "Login",
+    "KEEP_LOGIN": "Keep login",
+    "SAVE_PASSWORD": "Save password",
+    "PLAINTEXT_WARNING": "Warning: This stores the password in plain text."
+  },
+  "PROFILE": {
+    "SELF": "This is you!",
+    "NAME": "Name",
+    "TITLE": "Title",
+    "POINTS": "Points",
+    "ANIME": "@:GENERAL.ANIME",
+    "MANGA": "@:GENERAL.MANGA",
+    "NEWS": "News",
+    "WRITTEN_BY": "written by"
+  },
+  "MENU": {
+    "PROFILE": "Profile",
+    "WATCHLIST": "Watchlist",
+    "MESSAGES": "Messages",
+    "SETTINGS": "Settings",
+    "LOGOUT": "Log out"
+  },
+  "WATCHLIST": {
+    "NEW_ANIME": "Episode {{episode}} from {{name}} is now available!",
+    "NEW_MANGA": "Chapter {{episode}} from {{name}} is now available!",
+    "ADD_CURRENT": "Add to watchlist",
+    "ADD_NEXT": "Add next to watchlist",
+    "UPDATE_FINISHED": "Updated entry"
+  },
+  "SETTINGS": {
+    "SAVE": "Save",
+    "ANIME": {
+      "ANIME": "@:GENERAL.ANIME",
+      "OPEN_IN": "Open with",
+      "SYSTEM_BROWSER": "System (Browser)",
+      "EXTERNAL": "External",
+      "PREFERRED_PROVIDER": "Preferred stream provider",
+      "APPLICATION": "Application"
+    },
+    "WATCHLIST": {
+      "WATCHLIST": "@:MENU.WATCHLIST",
+      "CHECK": "Check interval",
+      "MINUTE_INTERVAL": "Intervall in minutes",
+      "DISPLAY_NOTIFICATION": "Display notification"
+    },
+    "GENERAL": {
+      "GENERAL": "General",
+      "LANGUAGE": {
+        "LANGUAGE": "Language",
+        "EN": "English",
+        "DE": "German"
+      }
+    }
+  },
+  "MESSAGES": {
+    "LAST_MESSAGE": "Last message"
+  },
+  "ERROR": {
+    "CONNECTION_NO_NETWORK": "Could not perform request, no network available.",
+    "CONNECTION_NO_RESOLVE": "Could not resolve host to perform request.",
+    "CONNECTION_TIMEOUT": "Request timed out.",
+    "CONNECTION_NOT_FOUND": "Requested resource was not found.",
+    "CONNECTION_NO_CACHE_AVAILABLE": "Neither online nor offline versions were available.",
+    "PROXER_OFFLINE": "Could not perform request, Proxer is currently offline.",
+    "PROXER_INVALID_CREDENTIALS": "The provided credentials were invalid.",
+    "PROXER_NO_DETAILS": "No details provided to login. Please login manually.",
+    "PROXER_MYSQL_ERROR": "Proxer has thrown a database error.",
+    "PROXER_CLOUDFLARE_PROTECTION": "Proxer is experiencing heavy load and cloudflare is mitigating this.",
+    "STREAM_NO_PARSER": "Proxtop does not support this stream yet :(",
+    "UNKNOWN_ERROR": "Unknown error occurred: "
+  },
+  "ERROR_SEVERITY": {
+    "severe": "Severe",
+    "warn": "Warning",
+    "info": "Information"
+  }
+}

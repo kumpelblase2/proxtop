@@ -5,6 +5,7 @@ var WatchlistHandler = require('./watchlist_handler');
 var NewsHandler = require('./news_handler');
 var LoginChecker = require('./login_checker');
 var MessageHandler = require('./message_handler');
+var EpisodeHandler = require('./episode_handler');
 var db = require('../db');
 
 function API(cookiePath) {
@@ -15,7 +16,8 @@ function API(cookiePath) {
         new ProfileHandler(this.session_handler),
         new WatchlistHandler(this.session_handler),
         new NewsHandler(this.session_handler),
-        new MessageHandler(this.session_handler)
+        new MessageHandler(this.session_handler),
+        new EpisodeHandler(this.session_handler)
     ];
 }
 
@@ -23,6 +25,6 @@ API.prototype.init = function() {
     this.login_handler.register();
     this.handers.forEach(function(elem) { elem.register(); });
     return this.session_handler.loadState();
-}
+};
 
 module.exports = API;

@@ -1,20 +1,21 @@
-# Proxtop - The proxer.me desktop client
+# Proxtop - A proxer.me desktop client
 Proxtop is an experimental attempt to create a desktop client for the popular german anime site [proxer.me](https://proxer.me).
 
 This is considered experimental because there's no official API in place so this app parses the site itself to provide the content. Thus, the application might be less responsive as expected or even unusable. Another problem with this route is that UI changes _may_ break this application entirely.
 
-Please note that currently user data is stored on disk in plain text, use at own risk.
+![landing](screenshots/landing.jpg)
 
 ## Goals
 
 These goals are features/use cases that I want this app to provide to the user. All of them should be implemented until I consider this experiment 'done'.
 
-- Use your existing proxer.me account
-- View watchlist
-- Watch proxer HD streams
-- Update watchlist
-- Watch streams with favorite video player (prefered: MPV)
-- Get notifications on new watchlist releases
+- [X] Use your existing proxer.me account
+- [X] View watchlist
+- [X] Watch proxer HD streams
+- [ ] Update watchlist
+- [X] Watch streams with favorite video player (prefered: MPV)
+- [X] Get notifications on new watchlist releases
+- [ ] Read & Write messages
 
 ## Optional Goals
 
@@ -22,7 +23,6 @@ Goals that I would like to implement afterwards, if I have interest in continuin
 
 - Browse animes and search
 - Add same functionalities for mangas
-- Messaging
 - Forum notifications
 
 ## Technologies
@@ -33,6 +33,29 @@ Goals that I would like to implement afterwards, if I have interest in continuin
 ## What this application is and is not
 - It is _not_ a complete frontend/replacement for proxer.me, it is just an alternative frontend for doing the most common tasks on the site, such as watching anime.
 - It is so far _not_ officially supported and thus just a community/personal effort.
+
+## How to run
+
+First get all required dependencies (requires NPM and bower to be installed):
+```
+npm run setup
+```
+
+Run tests via:
+```
+npm test
+```
+
+Run the application via:
+```
+npm start
+
+```
+
+Or if you want to build the application:
+```
+npm run build
+```
 
 ## FAQ
 
@@ -60,3 +83,6 @@ Advertisments: There are three cases
 3. You have no adblocker installed and would normally see ads. This is the only case ad revenue would be missed.
 
 I hate ads myself, so I don't see this app getting ads to increase revenue for the creators being a thing. Just donate; makes everyone happier.
+
+## License
+This application is licensed under the MIT license. See the `LICENSE` file in this repository for more information.
