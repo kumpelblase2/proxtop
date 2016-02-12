@@ -79,6 +79,7 @@
     "PROXER_NO_DETAILS": "Keine Zugangsdaten angegeben, bitte manuell neu einloggen.",
     "PROXER_MYSQL_ERROR": "Proxer hatte einen Datenbankfehler, bitte erneut versuchen.",
     "PROXER_CLOUDFLARE_PROTECTION": "Proxer unter starker Last und Cloudflare ist eingeschaltet.",
+    "STREAM_NO_PARSER": "Proxtop unterstützt diesen Stream leider noch nicht :(",
     "UNKNOWN_ERROR": "Unbekannter Fehler: "
   },
   "ERROR_SEVERITY": {

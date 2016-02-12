@@ -34,6 +34,8 @@ EpisodeHandler.prototype.register = function() {
     ipc.on('watch', function(event, stream) {
         self.extractStream(stream).then(function(video) {
             event.sender.send('watch', video);
+        }).catch(function(e) {
+            event.sender.send('error', ERRORS.SEVERITY.WARNING, ERRORS.STREAMS.CANNOT_PARSE);
         });
     });
 };

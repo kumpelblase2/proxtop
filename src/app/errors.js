@@ -13,6 +13,9 @@ module.exports = {
         MYSQL_DOWN: 'PROXER_MYSQL_ERROR',
         CLOUDFLARE: 'PROXER_CLOUDFLARE_PROTECTION'
     },
+    STREAMS: {
+        CANNOT_PARSE: 'STREAM_NO_PARSER'
+    },
     OTHER: {
         UNKNOWN: 'UNKNOWN_ERROR'
     },
