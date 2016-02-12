@@ -25,7 +25,6 @@ Goals that I would like to implement afterwards, if I have interest in continuin
 
 - Browse animes and search
 - Add same functionalities for mangas
-- Messaging
 - Forum notifications
 
 ## Technologies
