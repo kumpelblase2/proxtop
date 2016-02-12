@@ -14,7 +14,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
         severity = $translate([severityTranslation, messageTranslation]).then(function(translations) {
             severity = translations[severityTranslation];
             message = translations[messageTranslation];
-            $mdToast.show($mdToast.simple().content(severity + ':' + message));
+            $mdToast.show($mdToast.simple().hideDelay(5000).content(severity + ':' + message));
         });
     });
 

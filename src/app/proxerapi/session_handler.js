@@ -2,6 +2,7 @@ var request = require('request-promise');
 var cookieStore = require('tough-cookie-filestore');
 var utils = require('../utils');
 var pageUtils = require('./page_utils');
+var Cloudscraper = require('../cloudscraper');
 
 function SessionHandler(cookiePath) {
     this.cookiePath = cookiePath;
@@ -23,6 +24,7 @@ SessionHandler.prototype.loadState = function() {
             resolveWithFullResponse: true
         });
         self.request = request;
+        self.cloudscraper = new Cloudscraper(request);
     }).return(self);
 };
 
@@ -44,7 +46,8 @@ SessionHandler.prototype.openRequest = function(doRequest) {
             self.app.getWindow().send('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.MYSQL_DOWN);
         } else if(error.statusCode == 503) {
             LOG.error('Received 503 error, attempting cloudlfare circumvention');
-            self.app.getWindow().send('error', ERRORS.SEVERITY.SEVERE, ERRORS.PROXER.CLOUDFLARE);
+            self.app.getWindow().send('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.CLOUDFLARE);
+            return self.cloudscraper.handle(error.response, error.response.body);
         } else if(/getaddr/.test(error.message)) {
             LOG.error('Other error but contained "getaddr" so it\'s probably no network:');
             LOG.error(error.message);

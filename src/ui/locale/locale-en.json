@@ -78,7 +78,7 @@
     "PROXER_INVALID_CREDENTIALS": "The provided credentials were invalid.",
     "PROXER_NO_DETAILS": "No details provided to login. Please login manually.",
     "PROXER_MYSQL_ERROR": "Proxer has thrown a database error.",
-    "PROXER_CLOUDFLARE_PROTECTION": "Proxer is experiencing heavy load and cloudflare is mitigating this.",
+    "PROXER_CLOUDFLARE_PROTECTION": "Cloudflare protection is on so Proxtop might not work properly.",
     "STREAM_NO_PARSER": "Proxtop does not support this stream yet :(",
     "UNKNOWN_ERROR": "Unknown error occurred: "
   },
