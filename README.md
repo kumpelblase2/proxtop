@@ -17,6 +17,7 @@ These goals are features/use cases that I want this app to provide to the user. 
 - [ ] Update watchlist
 - [X] Watch streams with favorite video player (prefered: MPV)
 - [X] Get notifications on new watchlist releases
+- [ ] Read & Write messages
 
 ## Optional Goals
 
