@@ -17,7 +17,8 @@ EpisodeHandler.prototype.extractStream = function(stream) {
     return this.session_handler.openRequest(url).then(function(content) {
         return {
             page: content,
-            stream: stream
+            stream: stream,
+            url: url
         };
     }).then(streamParser.parseVideo);
 };
@@ -35,6 +36,7 @@ EpisodeHandler.prototype.register = function() {
         self.extractStream(stream).then(function(video) {
             event.sender.send('watch', video);
         }).catch(function(e) {
+            console.log(e);
             event.sender.send('error', ERRORS.SEVERITY.WARNING, ERRORS.STREAMS.CANNOT_PARSE);
         });
     });

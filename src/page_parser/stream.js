@@ -44,18 +44,44 @@ function extractYourUpload($) {
     }
 }
 
+function extractStreamCloud($, options) {
+    var inputs = $('#login').find('form').serializeArray();
+    var form = inputs.reduce(function(prev, curr) {
+        prev[curr.name] = curr.value;
+        return prev;
+    }, {});
+
+    return Promise.delay(12000).then(function() {
+        return request({
+            method: 'POST',
+            url: options.url,
+            form: form
+        }).then(function(body) {
+            var video = /file *: *"(.+)",/m.exec(body);
+            if(video) {
+                return {
+                    url: video[1],
+                    type: 'mp4'
+                };
+            } else {
+                throw "Could not extract.";
+            }
+        });
+    });
+}
+
 var parser = {
     extractors: {
         'proxer-stream': extractProxer,
         'mp4upload': extractMP4Upload,
-        'yourupload': extractYourUpload
+        'yourupload': extractYourUpload,
+        'streamcloud2': extractStreamCloud
     },
     findExtractor: function(stream) {
         if(this.extractors[stream.type]) {
             return parser.extractors[stream.type];
         } else {
             return function() {
-                console.log("could not find");
                 throw "Cannot find extractor for type " + stream.type;
             };
         }
@@ -64,7 +90,9 @@ var parser = {
 
 parser.parseVideo = function(options) {
     return Promise.resolve(options.page).then(cheerio.load)
-        .then(parser.findExtractor(options.stream));
+        .then(function($) {
+            return parser.findExtractor(options.stream)($, options);
+        });
 };
 
 module.exports = parser;
