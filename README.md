@@ -3,8 +3,6 @@ Proxtop is an experimental attempt to create a desktop client for the popular ge
 
 This is considered experimental because there's no official API in place so this app parses the site itself to provide the content. Thus, the application might be less responsive as expected or even unusable. Another problem with this route is that UI changes _may_ break this application entirely.
 
-Please note that currently user data is stored on disk in plain text, use at own risk.
-
 ![landing](screenshots/landing.jpg)
 
 ## Goals
