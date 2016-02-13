@@ -38,68 +38,45 @@ var DEFAULT_MANGA_SETTINGS = {
 };
 
 // Might wanna do this with a loop or something
-var settings = {
-    getAccountSettings: function() {
-        var result = db('settings').find({ type: 'account' });
-        if(!result) {
-            db('settings').push(DEFAULT_ACCOUNT_SETTINGS);
-            return DEFAULT_ACCOUNT_SETTINGS;
-        } else {
-            return result;
+var settings = generateSettings([
+    'account',
+    'anime',
+    'watchlist',
+    'general',
+    'manga'
+]);
+
+function generateSettings(allSettings) {
+    var result = {};
+
+    allSettings.forEach(function(setting) {
+        var getterSetter = createGetterSetter(setting);
+        var capitalized = utils.capizalizeFirstLetter(setting);
+        result['get' + capitalized + 'Settings'] = getterSetter.getter;
+        result['set' + capitalized + 'Settings'] = getterSetter.setter;
+    });
+
+    return result;
+}
+
+function createGetterSetter(setting) {
+    var uppercase = setting.toUpperCase();
+    var globalVar = global['DEFALT_' + uppercase + '_SETTINGS'];
+    return {
+        getter: function() {
+            var result = db('settings').find({ type: setting });
+            if(!result) {
+                db('settings').push(globalVar);
+                return globalVar;
+            } else {
+                return result;
+            }
+        },
+        setter: function(value) {
+            return db('settings').chain().find({ type: setting }).merge(value).value();
         }
-    },
-    setAccountSettings: function(settings) {
-        return db('settings').chain().find({ type: 'account' }).merge(settings).value();
-    },
-    getAnimeSettings: function() {
-        var result = db('settings').find({ type: 'anime' });
-        if(!result) {
-            db('settings').push(DEFAULT_ANIME_SETTINGS);
-            return DEFAULT_ANIME_SETTINGS;
-        } else {
-            return result;
-        }
-    },
-    setAnimeSettings: function(settings) {
-        return db('settings').chain().find({ type: 'anime' }).merge(settings).value();
-    },
-    getWatchlistSettings: function() {
-        var result = db('settings').find({ type: 'watchlist' });
-        if(!result) {
-            db('settings').push(DEFAULT_WATCHLIST_SETTINGS);
-            return DEFAULT_WATCHLIST_SETTINGS;
-        } else {
-            return result;
-        }
-    },
-    setWatchlistSettings: function(settings) {
-        return db('settings').chain().find({ type: 'watchlist' }).merge(settings).value();
-    },
-    getGeneralSettings: function() {
-        var result = db('settings').find({ type: 'general' });
-        if(!result) {
-            db('settings').push(DEFAULT_GENERAL_SETTINGS);
-            return DEFAULT_GENERAL_SETTINGS;
-        } else {
-            return result;
-        }
-    },
-    setGeneralSettings: function(settings) {
-        return db('settings').chain().find({ type: 'general' }).merge(settings).value();
-    },
-    getMangaSettings: function() {
-        var result = db('settings').find({ type: 'manga' });
-        if(!result) {
-            db('settings').push(DEFAULT_MANGA_SETTINGS);
-            return DEFAULT_MANGA_SETTINGS;
-        } else {
-            return result;
-        }
-    },
-    setMangaSettings: function(settings) {
-        return db('settings').chain().find({ type: 'manga' }).merge(settings).value();
-    }
-};
+    };
+}
 
 ipc.on('settings', function(event, type, value) {
     var func = settings[(value ? 'set' : 'get') + utils.capizalizeFirstLetter(type) + 'Settings'];
