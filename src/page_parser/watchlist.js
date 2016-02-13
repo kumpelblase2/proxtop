@@ -26,6 +26,10 @@ var parser = {
 
     parseStatusColumn: function(column) {
         return /online/.test(column.children('img').attr('src'));
+    },
+
+    parseEntryId: function(row) {
+        return parseInt(row.attr('id').substr(5));
     }
 };
 
@@ -44,6 +48,7 @@ parser.parseRow = function(row) {
     title.sub = parser.parseSubColumn(current);
     current = current.next().next();
     title.status = parser.parseStatusColumn(current);
+    title.entry = parser.parseEntryId(row);
     return title;
 };
 
@@ -87,5 +92,7 @@ parser.parseWatchlist = function(page) {
 parser.parseUpdateReponse = function(response) {
     return Promise.resolve(response).then(JSON.parse);
 };
+
+parser.parseDeleteResponse = parser.parseUpdateReponse;
 
 module.exports = parser;

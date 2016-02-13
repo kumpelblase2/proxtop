@@ -62,6 +62,17 @@ WatchlistHandler.prototype.updateEntry = function(id, ep, sub) {
         });
 };
 
+WatchlistHandler.prototype.deleteEntry = function(entry) {
+    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.DELETE_WATCHLIST + entry)
+        .then(watchlistParser.parseDeleteResponse).then(function(msg) {
+            if(msg.error == 1) {
+                throw "Could not update watchlist";
+            } else {
+                return msg;
+            }
+        });
+};
+
 WatchlistHandler.prototype.register = function() {
     var self = this;
     ipc.on('watchlist', function(event) {
@@ -77,6 +88,13 @@ WatchlistHandler.prototype.register = function() {
     ipc.on('add-watchlist', function(event, id, ep, sub) {
         self.updateEntry(id, ep, sub).then(function(result) {
             event.sender.send('add-watchlist', result);
+        });
+    });
+
+    ipc.on('delete-watchlist', function(event, entry) {
+        self.deleteEntry(entry).then(function(res) {
+            res.entry = entry;
+            event.sender.send('delete-watchlist', res);
         });
     });
 

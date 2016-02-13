@@ -48,7 +48,7 @@ describe('watchlist parser', function() {
 
     it('should parse rows', function() {
         var $ = cheerio.load(fs.readFileSync('test/fixtures/page_parser/watchlist_rows.html'));
-        var result = watchlistParser.parseRow($('#first'));
+        var result = watchlistParser.parseRow($('#entry1'));
         result.should.have.property('name', 'Gangsta.');
         result.should.have.property('episode', 11);
         result.should.have.property('status', true);
@@ -56,8 +56,9 @@ describe('watchlist parser', function() {
         result.should.have.property('airing', true);
         result.should.have.property('sub', 'engsub');
         result.should.have.property('url', '/watch/11539/11/engsub#top');
+        result.should.have.property('entry', 1);
 
-        result = watchlistParser.parseRow($('#second'));
+        result = watchlistParser.parseRow($('#entry2'));
         result.should.have.property('name', 'Muv-Luv Alternative: Total Eclipse');
         result.should.have.property('episode', 23);
         result.should.have.property('status', true);
@@ -65,6 +66,7 @@ describe('watchlist parser', function() {
         result.should.have.property('id', 4169);
         result.should.have.property('sub', 'gersub');
         result.should.have.property('url', '/watch/4169/23/gersub#top');
+        result.should.have.property('entry', 2);
     });
 
     it('should parse a table', function() {
@@ -73,8 +75,11 @@ describe('watchlist parser', function() {
         result.type.should.be.eql('anime');
         result.contents.length.should.eql(3);
         result.contents[0].should.have.property('name', 'Gangsta.');
+        result.contents[0].should.have.property('entry', 18933051);
         result.contents[1].should.have.property('name', 'To Love-Ru -Trouble- Darkness 2nd');
+        result.contents[1].should.have.property('entry', 18919669);
         result.contents[2].should.have.property('name', 'Charlotte');
+        result.contents[2].should.have.property('entry', 18868712);
     });
 
     it('parses the watchlist page', function() {
@@ -88,6 +93,7 @@ describe('watchlist parser', function() {
                     episode: 11,
                     sub: 'engsub',
                     id: 11539,
+                    entry: 18933051,
                     url: '/watch/11539/11/engsub#top'
                 }
             ],
@@ -99,6 +105,7 @@ describe('watchlist parser', function() {
                     status: false,
                     airing: true,
                     id: 6304,
+                    entry: 18780788,
                     url: '/chapter/6304/17/en#top'
                 }
             ]

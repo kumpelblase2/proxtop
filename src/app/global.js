@@ -16,7 +16,8 @@ global.PROXER_PATHS = {
     MESSAGE_API: '/messages?format=json&json=messages&id=',
     WATCH_ANIME: '/watch/%d/%d/%s',
     VIEW_MANGA: '/chapter/%d/%d/%s',
-    LOGOUT: '/component/users/?task=user.logout'
+    LOGOUT: '/component/users/?task=user.logout',
+    DELETE_WATCHLIST: '/ucp?format=json&type=deleteReminder&id='
 };
 
 global.ERRORS = require('./errors');
