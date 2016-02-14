@@ -2,23 +2,21 @@ var cheerio = require('cheerio');
 var Promise = require('bluebird');
 
 var parser = {
-    parseInfo: function(row) {
-        var children = row.find('span');
+    parseInfo: function($) {
         return {
-            name: children.first().text(),
-            sub: children.next().text().toLowerCase(),
-            episode: parseInt(children.next().next().text())
+            name: $('.wName').first().text(),
+            sub: $('.wLanguage').first().text().toLowerCase(),
+            episode: parseInt($('.wEp').first().text())
         }
     },
 
-    parseMirrors: function($, main) {
-        var text = main.find('script').filter(function() { return $(this).text().length > 0 }).get()[0];
-        text = text.children[0].data;
+    parseMirrors: function(main) {
+        var text = main.html();
         var match = /streams ?= ?(\[.*\]);/.exec(text);
         return JSON.parse(match[1]);
     },
 
-    parseNextPrevious: function($, row) {
+    parseNextPrevious: function(row) {
         var firstColumn = row.children().first();
         var next = null;
         var prev = null;
@@ -44,9 +42,9 @@ parser.parseEpisode = function(page) {
     var self = this;
     return Promise.resolve(page).then(cheerio.load)
         .then(function($) {
-            var info = parser.parseInfo($('#wContainer').find('tr').first());
-            info.streams = parser.parseMirrors($, $('#main'));
-            var navEps = parser.parseNextPrevious($, $('.no_details').first());
+            var info = parser.parseInfo($);
+            info.streams = parser.parseMirrors($('#main'));
+            var navEps = parser.parseNextPrevious($('.no_details').first());
             info.prev = navEps.prev;
             info.next = navEps.next;
             return info;
@@ -57,7 +55,7 @@ parser.parseEpisodeList = function(page) {
     var self = this;
     return Promise.resolve(page).then(cheerio.load)
         .then(function($) {
-
+            throw "Not implemented.";
         });
 };
 

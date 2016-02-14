@@ -13,7 +13,13 @@ EpisodeHandler.prototype.loadEpisode = function(id, ep, sub) {
 };
 
 EpisodeHandler.prototype.extractStream = function(stream) {
-    var url = stream.replace.replace('#', stream.code);
+    var url;
+    if(stream.type === 'link') {
+        url = stream.code;
+    } else {
+        url = stream.replace.replace('#', stream.code);
+    }
+    
     return this.session_handler.openRequest(url).then(function(content) {
         return {
             page: content,
