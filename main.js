@@ -8,9 +8,12 @@ utils.createDirIfNotExists(APP_DIR);
 var Proxtop = require('./src/app/proxtop');
 var settings = require('./src/app/settings');
 
-var proxApp = new Proxtop();
-
 var mainWindow = null;
+
+var proxApp = new Proxtop(function(release) {
+    mainWindow.send('update', release);
+});
+
 var appData = {
     name: APP_NAME,
     getWindow: function() { return mainWindow; },
