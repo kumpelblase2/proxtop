@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', '$translate', "settings", function($scope, ipc, $state, notification, $mdToast, $translate, settings) {
+angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', '$translate', 'settings', function($scope, ipc, $state, notification, $mdToast, $translate, settings) {
     ipc.on('check-login', function(result) {
         if(result) {
             ipc.send('watchlist-update');
