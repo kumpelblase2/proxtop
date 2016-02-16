@@ -42,6 +42,10 @@ OpenHandler.prototype.register = function() {
     ipc.on('open', function(event, type, id, ep, sub) {
         self.open(type, id, ep, sub);
     });
+
+    ipc.on('open-link', function(event, link) {
+        opener(link);
+    });
 };
 
 module.exports = OpenHandler;
