@@ -16,4 +16,8 @@ angular.module('proxtop').service('open', ['ipc', 'settings', '$state', function
             }
         };
     });
+
+    this.openLink = function(link) {
+        ipc.send('open-link', link);
+    };
 }]);
