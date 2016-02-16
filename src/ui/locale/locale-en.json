@@ -68,6 +68,11 @@
   "MESSAGES": {
     "LAST_MESSAGE": "Last message"
   },
+  "UPDATE": {
+      "NEW_VERSION": "A new version is available",
+      "NO": "No, thanks",
+      "YES": "Show me"
+  },
   "ERROR": {
     "CONNECTION_NO_NETWORK": "Could not perform request, no network available.",
     "CONNECTION_NO_RESOLVE": "Could not resolve host to perform request.",

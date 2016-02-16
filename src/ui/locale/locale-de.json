@@ -68,6 +68,11 @@
   "MESSAGES": {
     "LAST_MESSAGE": "Letzte Nachricht"
   },
+  "UPDATE": {
+      "NEW_VERSION": "Eine neue Version ist verfügbar",
+      "NO": "Nein, Danke",
+      "YES": "Anzeigen"
+  },
   "ERROR": {
     "CONNECTION_NO_NETWORK": "Fehler bei der Anfrage; Konnte keine Verbindung zum Netzwerk herstellen.",
     "CONNECTION_NO_RESOLVE": "Fehler bei der Anfrage; Konnte den Host nicht auflösen.",

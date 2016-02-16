@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', '$translate', 'settings', '$mdDialog', function($scope, ipc, $state, notification, $mdToast, $translate, settings, $mdDialog) {
+angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', '$translate', 'settings', '$mdDialog', 'open', function($scope, ipc, $state, notification, $mdToast, $translate, settings, $mdDialog, open) {
     ipc.on('check-login', function(result) {
         if(result) {
             ipc.send('watchlist-update');
@@ -38,16 +38,23 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
     ipc.on('new-manga-ep', displayNotification('manga'));
 
     ipc.on('update', function(release) {
-        var dialog = $mdDialog.confirm()
-            .title("New Update avaiable!")
-            .textContent("Version " + release.tag_name + " - " + release.name + "\n\n" + release.body)
-            .ariaLabel("Update Notification")
-            .ok('Download')
-            .cancel('No Thanks');
-        $mdDialog.show(dialog).then(function() {
-            //TODO
-        }, function() {
-            //TODO
+        var yes = "UPDATE.YES";
+        var no = "UPDATE.NO";
+        var newVersion = "UPDATE.NEW_VERSION";
+
+        var content = release.body;
+        content = content.replace(/\r\n/g, "<br>");
+
+        $translate([yes, no, newVersion]).then(function(translations) {
+            var dialog = $mdDialog.confirm()
+                .title(translations[newVersion])
+                .content("Version " + release.tag_name + " - " + release.name + "<br><br>" + content)
+                .ariaLabel("Update Notification")
+                .ok(translations[yes])
+                .cancel(translations[no]);
+            $mdDialog.show(dialog).then(function() {
+                open.openLink(release.html_url);
+            });
         });
     });
 

@@ -11,7 +11,7 @@ var UPDATE_INTERVALL = 2 * 60 * 60 * 1000;
 
 function Proxtop(onUpdate) {
     this.baseURL = PROXER_BASE_URL;
-    this.updater = new Updater(onUpdate, packageInfo.version);
+    this.updater = new Updater(packageInfo.version, onUpdate);
 }
 
 Proxtop.prototype.init = function() {
