@@ -1,6 +1,6 @@
 {
   "name": "proxtop",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A desktop application for proxer.me",
   "main": "main.js",
   "scripts": {
