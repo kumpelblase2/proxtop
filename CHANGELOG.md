@@ -1,4 +1,4 @@
-# 0.2.0 (Upcoming)
+# 0.2.0 (current)
 Additions:
 - Improved watching anime to be able to go to the next or previous episode
 - Added buttons to add current or next episode to watchlist
@@ -18,7 +18,7 @@ Fixes:
 - Should be able to handle cloudflare DDoS protection
 - Some UI fixes
 
-# 0.1.1 (Current)
+# 0.1.1
 - Initial release
 - Features include
   - landing page with news
