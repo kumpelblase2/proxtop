@@ -15,6 +15,7 @@ Fixes:
 - Fix not having a default preferred stream
 - Fix video not using as much space as possible
 - Fix avatar overflowing if image is too big
+- Should be able to handle cloudflare DDoS protection
 - Some UI fixes
 
 # 0.1.1 (Current)
