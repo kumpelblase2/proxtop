@@ -38,7 +38,9 @@
     "NEW_MANGA": "Das Chapter {{episode}} von {{name}} ist nun verfügbar!",
     "ADD_CURRENT": "Zur Watchlist hinzufügen",
     "ADD_NEXT": "Nächste zur Watchlist hinzufügen",
-    "UPDATE_FINISHED": "Eintrag erneuert"
+    "UPDATE_FINISHED": "Eintrag erneuert",
+    "FINISH": "Abschließen",
+    "MARKED_FINISHED": "Erfolgreich als Abgeschlossen markiert"
   },
   "SETTINGS": {
     "SAVE": "Speichern",

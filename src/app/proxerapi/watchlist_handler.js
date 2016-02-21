@@ -5,6 +5,7 @@ var util = require('util');
 var utils = require('../utils');
 
 var SET_TO_CURRENT = "?format=json&type=reminder&title=reminder_this";
+var SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
 
 function WatchlistHandler(sessionHandler) {
     this.session_handler = sessionHandler;
@@ -62,6 +63,21 @@ WatchlistHandler.prototype.updateEntry = function(id, ep, sub) {
         });
 };
 
+WatchlistHandler.prototype.markFinished = function(id, ep, sub) {
+    return this.session_handler.openRequest(PROXER_BASE_URL + util.format(PROXER_PATHS.WATCH_ANIME, id, ep, sub) + SET_FINISHED)
+        .then(watchlistParser.parseFinishResponse).then(function(msg) {
+            return {
+                success: true,
+                msg: msg.msg
+            };
+        }).catch(function(e) {
+            return {
+                success: false,
+                msg: "Not Found"
+            };
+        });
+};
+
 WatchlistHandler.prototype.deleteEntry = function(entry) {
     return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.DELETE_WATCHLIST + entry)
         .then(watchlistParser.parseDeleteResponse).then(function(msg) {
@@ -95,6 +111,12 @@ WatchlistHandler.prototype.register = function() {
         self.deleteEntry(entry).then(function(res) {
             res.entry = entry;
             event.sender.send('delete-watchlist', res);
+        });
+    });
+
+    ipc.on('finish-watchlist', function(event, id, ep, sub) {
+        self.markFinished(id, ep, sub).then(function(result) {
+            event.sender.send('finish-watchlist', result);
         });
     });
 

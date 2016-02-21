@@ -93,6 +93,10 @@ parser.parseUpdateReponse = function(response) {
     return Promise.resolve(response).then(JSON.parse);
 };
 
+parser.parseFinishResponse = function(response) {
+    return Promise.resolve(response).then(JSON.parse);
+};
+
 parser.parseDeleteResponse = parser.parseUpdateReponse;
 
 module.exports = parser;

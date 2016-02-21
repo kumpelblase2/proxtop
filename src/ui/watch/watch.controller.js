@@ -74,10 +74,20 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
         ipc.send('add-watchlist', $stateParams.id, $scope.current.info.next, $stateParams.sub);
     };
 
+    $scope.finishWatching = function() {
+        ipc.send('finish-watchlist', $stateParams.id, $stateParams.ep, $stateParams.sub);
+    };
+
     ipc.on('add-watchlist', function(response) {
         $translate('WATCHLIST.UPDATE_FINISHED').then(function(translation) {
             $mdToast.show($mdToast.simple().content(translation));
-        })
+        });
+    });
+
+    ipc.on('finish-watchlist', function(response) {
+        $translate('WATCHLIST.MARKED_FINISHED').then(function(translation) {
+            $mdToast.show($mdToast.simple().content(translation));
+        });
     });
 
     ipc.send('episode', $stateParams.id, $stateParams.ep, $stateParams.sub);
