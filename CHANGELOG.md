@@ -8,6 +8,7 @@ Additions:
 - Added buttons to select stream if preferred one is not available
 - Support more streams (Now also supports Streamcloud and YourUpload)
 - Use loading icon throughout the app
+- Display a dialog if a new version of the app is available
 
 Fixes:
 - Fix not displaying warning when saving password
