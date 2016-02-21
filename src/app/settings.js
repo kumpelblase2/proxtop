@@ -4,37 +4,35 @@ var _ = require('lodash');
 var db = require('./db');
 var utils = require('./utils');
 
-var DEFAULT_ACCOUNT_SETTINGS = {
-    type: 'account',
-    keep_login: true,
-    store_password: false,
-    user: {
-        username: '',
-        password: ''
+var DEFAULTS = {
+    DEFAULT_ACCOUNT_SETTINGS: {
+        type: 'account',
+        keep_login: true,
+        store_password: false,
+        user: {
+            username: '',
+            password: ''
+        }
+    },
+    DEFAULT_ANIME_SETTINGS: {
+        type: 'anime',
+        open_with: 'system',
+        external_path: 'proxer-mpv',
+        preferred_stream: 'proxer-stream'
+    },
+    DEFAULT_WATCHLIST_SETTINGS: {
+        type: 'watchlist',
+        check_interval: 30,
+        display_notification: true
+    },
+    DEFAULT_GENERAL_SETTINGS: {
+        language: 'de',
+        type: 'general'
+    },
+    DEFAULT_MANGA_SETTINGS: {
+        type: 'manga',
+        open_with: 'system'
     }
-};
-
-var DEFAULT_ANIME_SETTINGS = {
-    type: 'anime',
-    open_with: 'system',
-    external_path: 'proxer-mpv',
-    preferred_stream: 'proxer-stream'
-};
-
-var DEFAULT_WATCHLIST_SETTINGS = {
-    type: 'watchlist',
-    check_interval: 30,
-    display_notification: true
-};
-
-var DEFAULT_GENERAL_SETTINGS = {
-    language: 'de',
-    type: 'general'
-};
-
-var DEFAULT_MANGA_SETTINGS = {
-    type: 'manga',
-    open_with: 'system'
 };
 
 // Might wanna do this with a loop or something
@@ -61,7 +59,7 @@ function generateSettings(allSettings) {
 
 function createGetterSetter(setting) {
     var uppercase = setting.toUpperCase();
-    var globalVar = global['DEFALT_' + uppercase + '_SETTINGS'];
+    var globalVar = DEFAULTS['DEFAULT_' + uppercase + '_SETTINGS'];
     return {
         getter: function() {
             var result = db('settings').find({ type: setting });
