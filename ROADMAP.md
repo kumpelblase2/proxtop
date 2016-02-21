@@ -6,7 +6,7 @@ Thus, there might be instances where I ignore this and do something else instead
 
 Also note that these are just the "bigger things" that I want to get done but more smaller things will probably pile up for those releases.
 
-## 0.2.0
+## 0.2.0 (FINISHED)
 - Improve watching experience
 - Add more stream providers
 
