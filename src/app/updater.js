@@ -36,6 +36,14 @@ Updater.prototype.check = function() {
         if(update) {
             self.callback(update);
         }
+    }).catch(function(e) {
+        if(e.statusCode == 403) {
+            LOG.warning("GitHub API limit reached.");
+        } else {
+            LOG.error("There was an issue doing github update check:", {
+                error: e
+            });
+        }
     });
 };
 
