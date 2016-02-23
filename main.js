@@ -3,6 +3,7 @@ var app = require('app');
 var BrowserWindow = require('browser-window');
 var winston = require("winston");
 var utils = require('./src/app/utils');
+var WindowStateKeeper = require('electron-window-state');
 
 utils.createDirIfNotExists(APP_DIR);
 var Proxtop = require('./src/app/proxtop');
@@ -40,9 +41,17 @@ app.on('ready', function() {
 
 function createWindow() {
     LOG.verbose('Opening new window');
+    var windowState = WindowStateKeeper({
+        defaultWidth: 800,
+        defaultHeigth: 600,
+        path: APP_DIR
+    });
+
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: windowState.width,
+        height: windowState.heigth,
+        y: windowState.y,
+        x: windowState.x,
         'auto-hide-menu-bar': true
     });
 
@@ -50,6 +59,8 @@ function createWindow() {
     mainWindow.on('closed', function() {
         mainWindow = null;
     });
+
+    windowState.manage(mainWindow);
 }
 
 module.exports = appData;
