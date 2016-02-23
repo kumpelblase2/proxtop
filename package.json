@@ -34,7 +34,7 @@
     "chai": "^3.3.0",
     "chai-as-promised": "^5.1.0",
     "electron-packager": "^5.2.1",
-    "electron-prebuilt": "^0.30.7",
+    "electron-prebuilt": "^0.36.8",
     "mocha": "^2.3.3"
   },
   "dependencies": {
@@ -42,13 +42,13 @@
     "cheerio": "^0.20.0",
     "electron-window-state": "^2.0.0",
     "lodash": "^4.3.0",
-    "lowdb": "^0.10.2",
+    "lowdb": "^0.12.4",
     "moment": "^2.10.6",
     "opener": "^1.4.1",
-    "request-promise": "^0.4.3",
+    "request-promise": "^2.0.1",
     "semver": "^5.1.0",
     "tough-cookie": "^2.0.0",
     "tough-cookie-filestore": "0.0.1",
-    "winston": "^1.0.1"
+    "winston": "^2.1.1"
   }
 }
