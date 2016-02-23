@@ -55,7 +55,7 @@ function createWindow() {
         'auto-hide-menu-bar': true
     });
 
-    mainWindow.loadUrl('file://' + INDEX_LOCATION);
+    mainWindow.loadURL('file://' + INDEX_LOCATION);
     mainWindow.on('closed', function() {
         mainWindow = null;
     });
