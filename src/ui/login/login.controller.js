@@ -1,6 +1,6 @@
 angular.module('proxtop').controller('LoginController', ['$scope', 'settings', 'ipc', '$state', '$mdToast', '$rootScope', function($scope, settings, ipc, $state, $mdToast, $rootScope) {
     var loggedIn = false;
-    ipc.on('login', function(result) {
+    ipc.on('login', function(ev, result) {
         if(result.success) {
             loggedIn = true;
             console.log('LOGGED IN');

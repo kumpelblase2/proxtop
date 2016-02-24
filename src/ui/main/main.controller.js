@@ -1,5 +1,5 @@
 angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', '$translate', 'settings', '$mdDialog', 'open', function($scope, ipc, $state, notification, $mdToast, $translate, settings, $mdDialog, open) {
-    ipc.on('check-login', function(result) {
+    ipc.on('check-login', function(ev, result) {
         if(result) {
             ipc.send('watchlist-update');
             $state.go('profile');
@@ -8,7 +8,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
         }
     });
 
-    ipc.on('error', function(severity, message) {
+    ipc.on('error', function(ev, severity, message) {
         var severityTranslation = "ERROR_SEVERITY." + severity;
         var messageTranslation = "ERROR." + message;
         severity = $translate([severityTranslation, messageTranslation]).then(function(translations) {
@@ -18,7 +18,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
         });
     });
 
-    var displayNotification = function(type) {
+    var displayNotification = function(ev, type) {
         return function(update) {
             $translate('WATCHLIST.NEW_' + type.toUpperCase(), { episode: update.episode, name: update.name}).then(function(translations) {
                 notification.displayNotification('Proxtop', translations, 'assets/proxer_logo_64.png', function() {
@@ -37,7 +37,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
     ipc.on('new-anime-ep', displayNotification('anime'));
     ipc.on('new-manga-ep', displayNotification('manga'));
 
-    ipc.on('update', function(release) {
+    ipc.on('update', function(ev, release) {
         var yes = "UPDATE.YES";
         var no = "UPDATE.NO";
         var newVersion = "UPDATE.NEW_VERSION";

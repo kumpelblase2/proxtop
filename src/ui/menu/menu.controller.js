@@ -1,5 +1,5 @@
 angular.module('proxtop').controller('MenuController', ['$scope', 'ipc', '$state', function($scope, ipc, $state) {
-    ipc.on('logout', function(data) {
+    ipc.on('logout', function(ev, data) {
         if(data.success) {
             $state.go('main');
         } else {

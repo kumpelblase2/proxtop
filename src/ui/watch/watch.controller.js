@@ -7,7 +7,7 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
     };
     var preferredStream = settings.get('anime').preferred_stream;
 
-    ipc.on('episode', function(result) {
+    ipc.on('episode', function(ev, result) {
         $scope.$apply(function() {
             $scope.current.info = result;
             var found = _.filter($scope.current.info.streams, { type: preferredStream });
@@ -23,7 +23,7 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
         ipc.send('watch', stream);
     };
 
-    ipc.on('watch', function(video) {
+    ipc.on('watch', function(ev, video) {
         $scope.$apply(function() {
             video.url = $sce.trustAsResourceUrl(video.url);
             $scope.current.video = video;
@@ -78,13 +78,13 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
         ipc.send('finish-watchlist', $stateParams.id, $stateParams.ep, $stateParams.sub);
     };
 
-    ipc.on('add-watchlist', function(response) {
+    ipc.on('add-watchlist', function(ev, response) {
         $translate('WATCHLIST.UPDATE_FINISHED').then(function(translation) {
             $mdToast.show($mdToast.simple().content(translation));
         });
     });
 
-    ipc.on('finish-watchlist', function(response) {
+    ipc.on('finish-watchlist', function(ev, response) {
         $translate('WATCHLIST.MARKED_FINISHED').then(function(translation) {
             $mdToast.show($mdToast.simple().content(translation));
         });

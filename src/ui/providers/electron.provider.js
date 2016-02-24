@@ -1,5 +1,5 @@
 angular.module('proxtop').factory('ipc', function() {
-    return require('ipc');
+    return require('electron').ipcRenderer;
 });
 
 angular.module('proxtop').service('info', ['ipc' , function() {

@@ -1,6 +1,6 @@
 angular.module('proxtop').controller('WatchlistController', ['$scope', 'ipc', '$state', 'open', function($scope, ipc, $state, open) {
     $scope.watchlist = null;
-    ipc.on('watchlist', function(watchlist) {
+    ipc.on('watchlist', function(ev, watchlist) {
         $scope.$apply(function() {
             $scope.watchlist = watchlist;
         });
@@ -18,7 +18,7 @@ angular.module('proxtop').controller('WatchlistController', ['$scope', 'ipc', '$
         ipc.send('delete-watchlist', entry.entry);
     };
 
-    ipc.on('delete-watchlist', function(result) {
+    ipc.on('delete-watchlist', function(ev, result) {
         $scope.$apply(function() {
             var index = _.findIndex($scope.watchlist.anime, { entry: result.entry });
             if(index >= 0) {
