@@ -1,4 +1,4 @@
-var ipc = require('ipc');
+var ipc = require('electron').ipcMain;
 var loginParser = require('../../page_parser').login;
 var Promise = require('bluebird');
 var _ = require('lodash');

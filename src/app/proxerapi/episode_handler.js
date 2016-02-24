@@ -1,4 +1,4 @@
-var ipc = require('ipc');
+var ipc = require('electron').ipcMain;
 var episodeParser = require('../../page_parser').episode;
 var streamParser = require('../../page_parser').stream;
 var util = require('util');

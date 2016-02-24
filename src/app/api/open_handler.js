@@ -1,4 +1,4 @@
-var ipc = require('ipc');
+var ipc = require('electron').ipcMain;
 var childProcess = require('child_process');
 var opener = require('opener');
 var util = require('util');

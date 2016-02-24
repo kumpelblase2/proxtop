@@ -1,4 +1,4 @@
-var ipc = require('ipc');
+var ipc = require('electron').ipcMain;
 var newsParser = require('../../page_parser').news;
 var Promise = require('bluebird');
 
