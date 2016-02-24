@@ -14,7 +14,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
         severity = $translate([severityTranslation, messageTranslation]).then(function(translations) {
             severity = translations[severityTranslation];
             message = translations[messageTranslation];
-            $mdToast.show($mdToast.simple().hideDelay(5000).content(severity + ':' + message));
+            $mdToast.show($mdToast.simple().hideDelay(5000).textContent(severity + ':' + message));
         });
     });
 
@@ -48,7 +48,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
         $translate([yes, no, newVersion]).then(function(translations) {
             var dialog = $mdDialog.confirm()
                 .title(translations[newVersion])
-                .content("Version " + release.tag_name + " - " + release.name + "<br><br>" + content)
+                .textContent("Version " + release.tag_name + " - " + release.name + "<br><br>" + content)
                 .ariaLabel("Update Notification")
                 .ok(translations[yes])
                 .cancel(translations[no]);

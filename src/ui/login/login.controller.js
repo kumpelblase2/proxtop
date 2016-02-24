@@ -7,7 +7,7 @@ angular.module('proxtop').controller('LoginController', ['$scope', 'settings', '
             $state.go('profile');
         } else {
             console.log('COULD NOT LOGIN - ' + result.reason);
-            $mdToast.show($mdToast.simple().content('Could not login: ' + result.reason));
+            $mdToast.show($mdToast.simple().textContent('Could not login: ' + result.reason));
         }
     });
 

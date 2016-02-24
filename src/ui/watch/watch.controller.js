@@ -80,13 +80,13 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
 
     ipc.on('add-watchlist', function(ev, response) {
         $translate('WATCHLIST.UPDATE_FINISHED').then(function(translation) {
-            $mdToast.show($mdToast.simple().content(translation));
+            $mdToast.show($mdToast.simple().textContent(translation));
         });
     });
 
     ipc.on('finish-watchlist', function(ev, response) {
         $translate('WATCHLIST.MARKED_FINISHED').then(function(translation) {
-            $mdToast.show($mdToast.simple().content(translation));
+            $mdToast.show($mdToast.simple().textContent(translation));
         });
     });
 
