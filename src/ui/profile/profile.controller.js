@@ -1,6 +1,5 @@
 angular.module('proxtop').controller('ProfileController', ['$scope', 'ipc', '$state', 'ProgressService', function($scope, ipc, $state, progressService) {
     ipc.on('profile', function(ev, profile) {
-        console.log(profile);
         $scope.$apply(function() {
             $scope.profile = profile;
             var rank = progressService.getNextRank($scope.profile.ranking.total);
