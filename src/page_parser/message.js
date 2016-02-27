@@ -15,6 +15,36 @@ parser.parseMessagesList = function(page) {
         });
 };
 
+parser.parseNewMessages = function(page) {
+    var self = this;
+    return Promise.resolve(page).then(JSON.parse)
+        .then(function(data) {
+            if(data.error) {
+                throw new Error(data.msg);
+            }
+
+            return {
+                conversation_id: data.uid,
+                messages: data.messages
+            };
+        });
+};
+
+parser.parseMessagePostResponse = function(page) {
+    var self = this;
+    return Promise.resolve(page).then(JSON.parse)
+        .then(function(data) {
+            if(data.error) {
+                throw new Error(data.msg);
+            }
+
+            return {
+                conversation_id: data.uid,
+                message: data.msg
+            };
+        });
+};
+
 parser.parseConversation = function(page) {
     var self = this;
     return Promise.resolve(page).then(JSON.parse)

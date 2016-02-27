@@ -1,6 +1,6 @@
-<md-content>
+<md-content layout-align="center start" flex="66" layout="column">
     <loader ng-if="!messages"></loader>
-    <md-list>
+    <md-list flex="100">
         <md-list-item ng-repeat="message in messages" class="md-3-line long-text-list">
             <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
             <div class="md-list-item-text">
@@ -10,4 +10,9 @@
             </div>
         </md-list-item>
     </md-list>
+    <md-input-container flex="100" style="width: 100%;" ng-if="messages">
+        <label>{{ 'MESSAGES.WRITE_MESSAGE' | translate }}</label>
+        <textarea ng-model="input.message" ng-disabled="{{ input.sent }}"></textarea>
+        <md-button class="pull-right md-raised" ng-click="sendMessage()">{{ 'MESSAGES.SEND' | translate }}</md-button>
+    </md-input-container>
 </md-content>

@@ -1,8 +1,15 @@
 angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', function($scope, ipc, $stateParams) {
     $scope.messages = null;
+    $scope.input = { message: "", sent: false };
     ipc.on('conversation', function(ev, conversation) {
         $scope.$apply(function() {
             $scope.messages = conversation.reverse();
+        });
+    });
+
+    ipc.on('conversation-update', function(ev, conversation) {
+        $scope.$apply(function() {
+            $scope.messages = conversation.messages;
         });
     });
 
@@ -13,6 +20,20 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
             return "https://cdn.proxer.me/avatar/tn/" + image;
         }
     };
+
+    $scope.sendMessage = function() {
+        if($scope.input.message.length > 0 && !$scope.input.sent) {
+            ipc.once('conversation-write', function(event, result) {
+                $scope.$apply(function() {
+                    $scope.input.message = "";
+                    $scope.input.sent = false;
+                });
+            });
+            $scope.input.sent = true;
+            ipc.send('conversation-write', $stateParams.id, $scope.input.message);
+            ipc.send('conversation-update', $stateParams.id);
+        }
+    }
 
     ipc.send('conversation', $stateParams.id);
 }]);

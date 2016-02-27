@@ -68,7 +68,9 @@
     }
   },
   "MESSAGES": {
-    "LAST_MESSAGE": "Letzte Nachricht"
+    "LAST_MESSAGE": "Letzte Nachricht",
+    "WRITE_MESSAGE": "Schreibe eine Nachricht",
+    "SEND": "Senden"
   },
   "UPDATE": {
       "NEW_VERSION": "Eine neue Version ist verfügbar",

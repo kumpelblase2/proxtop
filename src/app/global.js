@@ -14,6 +14,8 @@ global.PROXER_PATHS = {
     NEWS_API: '/notifications?format=json&s=news&p=1',
     CONVERSATIONS_API: '/messages?format=json&json=conferences',
     MESSAGE_API: '/messages?format=json&json=messages&id=',
+    MESSAGE_NEW_API: '/messages?format=json&json=newmessages&id=',
+    MESSAGE_WRITE_API: '/messages?format=json&json=answer&id=',
     WATCH_ANIME: '/watch/%d/%d/%s',
     VIEW_MANGA: '/chapter/%d/%d/%s',
     LOGOUT: '/component/users/?task=user.logout',
