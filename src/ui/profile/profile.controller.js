@@ -1,5 +1,5 @@
 angular.module('proxtop').controller('ProfileController', ['$scope', 'ipc', '$state', 'ProgressService', function($scope, ipc, $state, progressService) {
-    ipc.on('profile', function(ev, profile) {
+    ipc.once('profile', function(ev, profile) {
         $scope.$apply(function() {
             $scope.profile = profile;
             var rank = progressService.getNextRank($scope.profile.ranking.total);
@@ -7,7 +7,7 @@ angular.module('proxtop').controller('ProfileController', ['$scope', 'ipc', '$st
         });
     });
 
-    ipc.on('news', function(ev, news) {
+    ipc.once('news', function(ev, news) {
         $scope.$apply(function() {
             $scope.news = news;
         });

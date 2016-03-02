@@ -1,6 +1,6 @@
 angular.module('proxtop').controller('WatchlistController', ['$scope', 'ipc', '$state', 'open', function($scope, ipc, $state, open) {
     $scope.watchlist = null;
-    ipc.on('watchlist', function(ev, watchlist) {
+    ipc.once('watchlist', function(ev, watchlist) {
         $scope.$apply(function() {
             $scope.watchlist = watchlist;
         });

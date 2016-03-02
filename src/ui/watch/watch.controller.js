@@ -7,7 +7,7 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
     };
     var preferredStream = settings.get('anime').preferred_stream;
 
-    ipc.on('episode', function(ev, result) {
+    ipc.once('episode', function(ev, result) {
         $scope.$apply(function() {
             $scope.current.info = result;
             var found = _.filter($scope.current.info.streams, { type: preferredStream });
@@ -23,7 +23,7 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
         ipc.send('watch', stream);
     };
 
-    ipc.on('watch', function(ev, video) {
+    ipc.once('watch', function(ev, video) {
         $scope.$apply(function() {
             video.url = $sce.trustAsResourceUrl(video.url);
             $scope.current.video = video;
