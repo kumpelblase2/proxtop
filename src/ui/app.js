@@ -1,4 +1,4 @@
-angular.module('proxtop', ['ngMaterial', 'ui.router', 'angular-progress-arc', 'pascalprecht.translate'])
+angular.module('proxtop', ['ngMaterial', 'ngSanitize', 'ui.router', 'angular-progress-arc', 'pascalprecht.translate'])
     .config(['$stateProvider', '$urlRouterProvider', '$translateProvider', function($stateProvider, $urlRouterProvider, $translateProvider) {
         $urlRouterProvider.otherwise('/');
         $translateProvider.useStaticFilesLoader({

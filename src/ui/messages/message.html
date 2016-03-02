@@ -6,7 +6,7 @@
             <div class="md-list-item-text">
                 <h3>{{message.username}}</h3>
                 <h4>{{message.timestamp * 1000 | date}}</h4>
-                <p>{{message.message}}</p>
+                <p ng-bind-html="message.message | linky:'_system'"></p>
             </div>
         </md-list-item>
     </md-list>

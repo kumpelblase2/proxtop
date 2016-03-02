@@ -27,6 +27,7 @@
     "angular-progress-arc": "~1.0.0",
     "font-awesome": "~4.5.0",
     "angular-translate": "~2.9.2",
-    "angular-translate-loader-static-files": "~2.9.2"
+    "angular-translate-loader-static-files": "~2.9.2",
+    "angular-sanitize": "^1.5.0"
   }
 }
