@@ -60,6 +60,11 @@ function createWindow() {
         mainWindow = null;
     });
 
+    mainWindow.webContents.on('new-window', function(ev, url) {
+        ev.preventDefault();
+        require('shell').openExternal(url);
+    });
+
     windowState.manage(mainWindow);
 }
 
