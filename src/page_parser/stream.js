@@ -1,6 +1,7 @@
 var cheerio = require('cheerio');
 var Promise = require('bluebird');
 var request = require('request-promise');
+var _ = require('lodash');
 
 function extractProxer($) {
     return {
@@ -70,12 +71,29 @@ function extractStreamCloud($, options) {
     });
 }
 
+function extractDailymotion($, options) {
+    var bodyJson = /\(document\.getElementById\(\'player'\), (\{.*\})\);/m.exec(options.page);
+    if(!bodyJson) {
+        throw "Could not extract."
+    }
+
+    var json = JSON.parse(bodyJson[1]);
+    var qualities = json.metadata.qualities;
+    var availableQualities = _.sortBy(_.filter(Object.keys(qualities), function(key) { return parseInt(key); }));
+    var best = qualities[availableQualities[availableQualities.length - 1]][0];
+    return {
+        url: best.url,
+        type: 'mp4'
+    };
+}
+
 var parser = {
     extractors: {
         'proxer-stream': extractProxer,
         'mp4upload': extractMP4Upload,
         'yourupload': extractYourUpload,
-        'streamcloud2': extractStreamCloud
+        'streamcloud2': extractStreamCloud,
+        'dailymotion': extractDailymotion
     },
     findExtractor: function(stream) {
         if(this.extractors[stream.type]) {
@@ -89,6 +107,7 @@ var parser = {
 };
 
 parser.parseVideo = function(options) {
+    //TODO should not assume that we need cheerio
     return Promise.resolve(options.page).then(cheerio.load)
         .then(function($) {
             return parser.findExtractor(options.stream)($, options);
