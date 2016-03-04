@@ -19,7 +19,11 @@ EpisodeHandler.prototype.extractStream = function(stream) {
     } else {
         url = stream.replace.replace('#', stream.code);
     }
-    
+
+    if(url[0] == '/') {
+        url = 'https:' + url;
+    }
+
     return this.session_handler.openRequest(url).then(function(content) {
         return {
             page: content,
