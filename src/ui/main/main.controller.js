@@ -18,8 +18,8 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
         });
     });
 
-    var displayNotification = function(ev, type) {
-        return function(update) {
+    var displayNotification = function(type) {
+        return function(ev, update) {
             $translate('WATCHLIST.NEW_' + type.toUpperCase(), { episode: update.episode, name: update.name}).then(function(translations) {
                 notification.displayNotification('Proxtop', translations, 'assets/proxer_logo_64.png', function() {
                     if(type == 'anime') {
