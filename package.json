@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "mocha --opts mocha.opts",
-    "start": "electron main.js",
+    "start": "./run.sh",
     "setup": "npm install && bower install",
     "prepare": "mkdir dist && cp -R src node_modules package.json bower.json bower_components main.js dist",
     "clean": "rm -r dist/",
