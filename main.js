@@ -1,4 +1,6 @@
 require('./src/app/global');
+LOG.verbose('Running on ' + process.versions['electron'] + ' on chrome ' + process.versions['chrome']);
+
 var app = require('app');
 var BrowserWindow = require('browser-window');
 var winston = require("winston");
