@@ -4,21 +4,29 @@
 }
 </style>
 
-<md-content style="width: 75%;">
+<md-content flex="70" flex-offset="15">
     <div layout="column" flex>
         <md-card>
-            <h2 translate>SETTINGS.GENERAL</h2>
-            <md-input-container layout="row">
+            <md-card-header>
+                <md-card-header-text>
+                    <h2 translate>SETTINGS.GENERAL</h2>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
                 <p translate>SETTINGS.GENERAL.LANGUAGE</p>
-                <md-radio-group ng-model="settings.general.language" layout="row">
+                <md-radio-group ng-model="settings.general.language">
                     <md-radio-button value="de">{{ 'SETTINGS.GENERAL.LANGUAGE.DE' | translate }}</md-radio-button>
                     <md-radio-button value="en">{{ 'SETTINGS.GENERAL.LANGUAGE.EN' | translate }}</md-radio-button>
                 </md-radio-group>
-            </md-input-container>
+            </md-card-content>
         </md-card>
         <md-card>
-            <md-card-content>
-                <h2 translate>USER.ACCOUNT</h2>
+            <md-card-header>
+                <md-card-header-text>
+                    <h2 translate>USER.ACCOUNT</h2>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content layout="column">
                 <md-input-container>
                     <label>{{ 'USER.USERNAME' | translate }}</label>
                     <input ng-model="settings.account.user.username">
@@ -39,19 +47,23 @@
             </md-card-content>
         </md-card>
         <md-card>
-            <md-card-content>
-                <h2 translate>SETTINGS.ANIME.ANIME</h2>
-                <md-input-container>
+            <md-card-header>
+                <md-card-header-text>
+                    <h2 translate>SETTINGS.ANIME.ANIME</h2>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content layout="column">
+                <md-input-container layout="column">
                     {{ 'SETTINGS.ANIME.OPEN_IN' | translate }}:
                     <md-radio-group ng-model="settings.anime.open_with" layout="row">
                         <md-radio-button value="internal">{{ 'GENERAL.PROXTOP' | translate }}</md-radio-button>
                         <md-radio-button value="system">{{ 'SETTINGS.ANIME.SYSTEM_BROWSER' | translate }}</md-radio-button>
                         <md-radio-button value="external">{{ 'SETTINGS.ANIME.EXTERNAL' | translate }}</md-radio-button>
                     </md-radio-group>
-                    <div ng-if="settings.anime.open_with == 'external'">
-                        <label>{{ 'SETTINGS.ANIME.APPLICATION' | translate }}</label>
-                        <input ng-model="settings.anime.external_path" style="width: 50%;" />
-                    </div>
+                </md-input-container>
+                <md-input-container ng-if="settings.anime.open_with == 'external'">
+                    <label>{{ 'SETTINGS.ANIME.APPLICATION' | translate }}</label>
+                    <input ng-model="settings.anime.external_path" />
                 </md-input-container>
                 <md-input-container>
                     {{ 'SETTINGS.ANIME.PREFERRED_PROVIDER' | translate }}:
@@ -62,10 +74,14 @@
             </md-card-content>
         </md-card>
         <md-card>
-            <md-card-content>
-                <h2 translate>SETTINGS.WATCHLIST</h2>
+            <md-card-header>
+                <md-card-header-text>
+                    <h2 translate>SETTINGS.WATCHLIST</h2>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content layout="column">
+                {{ 'SETTINGS.WATCHLIST.CHECK' | translate }}:
                 <md-input-container>
-                    {{ 'SETTINGS.WATCHLIST.CHECK' | translate }}:
                     <label>{{ 'SETTINGS.WATCHLIST.MINUTE_INTERVAL' | translate }}</label>
                     <input ng-model="settings.watchlist.check_interval" type="number" step="5" min="1"/>
                 </md-input-container>

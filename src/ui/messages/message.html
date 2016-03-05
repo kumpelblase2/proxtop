@@ -1,18 +1,24 @@
-<md-content layout-align="center start" flex="66" layout="column">
+<md-content flex="100" flex-layout="column">
     <loader ng-if="!messages"></loader>
-    <md-list flex="100">
-        <md-list-item ng-repeat="message in messages" class="md-3-line long-text-list">
+    <md-list flex="70" flex-offset="15">
+        <md-list-item ng-repeat="message in messages" class="md-2-line long-text-list md-whiteframe-2dp" style="margin-bottom: 10px;">
             <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
             <div class="md-list-item-text">
-                <h3>{{message.username}}</h3>
-                <h4>{{message.timestamp * 1000 | date}}</h4>
+                <div layout="row" layout-align="space-between start"
+                    <h3>{{message.username}}</h3>
+                    <h4>{{message.timestamp * 1000 | date:'HH:mm:ss d.M.yyyy'}}</h4>
+                </div>
                 <p ng-bind-html="message.message | linky:'_system'"></p>
             </div>
         </md-list-item>
     </md-list>
-    <md-input-container flex="100" style="width: 100%;" ng-if="messages">
-        <label>{{ 'MESSAGES.WRITE_MESSAGE' | translate }}</label>
-        <textarea ng-model="input.message" ng-disabled="{{ input.sent }}"></textarea>
-        <md-button class="pull-right md-raised" ng-click="sendMessage()">{{ 'MESSAGES.SEND' | translate }}</md-button>
-    </md-input-container>
+    <div flex="70" flex-offset="15" layout="column" style="margin-top: 25px;">
+        <div ng-if="messages">
+            <md-input-container layout-fill>
+                <label>{{ 'MESSAGES.WRITE_MESSAGE' | translate }}</label>
+                <textarea ng-model="input.message" ng-disabled="{{ input.sent }}"></textarea>
+            </md-input-container>
+            <md-button ng-click="sendMessage()" layout-fill>{{ 'MESSAGES.SEND' | translate }}</md-button>
+        </div>
+    </div>
 </md-content>

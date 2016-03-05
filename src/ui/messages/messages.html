@@ -1,6 +1,6 @@
 <md-content>
     <loader ng-if="!conversations"></loader>
-    <md-list>
+    <md-list flex="50" flex-offset="25">
         <md-list-item ng-repeat="conversation in conversations" class="md-2-line" ng-click="openConversation(conversation)">
             <img ng-src="{{getImage(conversation.image)}}" class="md-avatar" />
             <div class="md-list-item-text">

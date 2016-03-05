@@ -3,37 +3,36 @@
     color: red;
 }
 
-.login-form {
-    min-width: 40%;
-    max-width: 50%;
+form {
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
-.login-form > md-content {
-    padding: 10px;
+form > * {
+    padding-left: 20px;
+    padding-right: 20px;
 }
 </style>
 
-<div class="md-whiteframe-4dp login-form">
-    <md-content layout-fill layout-align="center center" class="form" layout="column">
-        <form ng-submit="login()" style="width: 100%;">
-            <md-input-container>
-                <label translate>USER.USERNAME</label>
-                <input ng-model="user.username">
-            </md-input-container>
-            <md-input-container>
-                <label translate>USER.PASSWORD</label>
-                <input ng-model="user.password" type="password">
-            </md-input-container>
-            <md-checkbox ng-model="keepLogin" aria-label="Keep Login">
-                {{ 'LOGIN.KEEP_LOGIN' | translate }}
-            </md-checkbox>
-            <md-checkbox ng-model="storePassword" aria-label="Save Password">
-                {{ 'LOGIN.SAVE_PASSWORD' | translate }}
-                <span class="password-warning" ng-if="storePassword">
-                    {{ 'LOGIN.PLAINTEXT_WARNING' | translate }}
-                </span>
-            </md-checkbox>
-            <md-button class="md-primary" type="submit" aria-label="Login">{{'LOGIN.LOGIN' | translate}}</md-button>
-        </form>
-    </md-content>
+<div class="md-whiteframe-4dp" flex="50" flex-offset="25">
+    <form ng-submit="login()" layout="column" layout-align="space-around stretch">
+        <md-input-container>
+            <label translate>USER.USERNAME</label>
+            <input ng-model="user.username">
+        </md-input-container>
+        <md-input-container>
+            <label translate>USER.PASSWORD</label>
+            <input ng-model="user.password" type="password">
+        </md-input-container>
+        <md-checkbox ng-model="keepLogin" aria-label="Keep Login">
+            {{ 'LOGIN.KEEP_LOGIN' | translate }}
+        </md-checkbox>
+        <md-checkbox ng-model="storePassword" aria-label="Save Password">
+            {{ 'LOGIN.SAVE_PASSWORD' | translate }}
+            <span class="password-warning" ng-if="storePassword">
+                {{ 'LOGIN.PLAINTEXT_WARNING' | translate }}
+            </span>
+        </md-checkbox>
+        <md-button class="md-primary" type="submit" aria-label="Login">{{'LOGIN.LOGIN' | translate}}</md-button>
+    </form>
 </div>
