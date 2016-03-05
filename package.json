@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha --opts mocha.opts",
     "start": "./run.sh",
-    "setup": "npm install && bower install",
+    "setup": "./setup.sh",
     "prepare": "mkdir dist && cp -R src node_modules package.json bower.json bower_components main.js dist",
     "clean": "rm -r dist/",
     "build:linux": "electron-packager dist \"Proxtop\" --platform=linux --arch=x64 --asar",
