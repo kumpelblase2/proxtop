@@ -54,7 +54,8 @@ function createWindow() {
         height: windowState.heigth,
         y: windowState.y,
         x: windowState.x,
-        'auto-hide-menu-bar': true
+        'auto-hide-menu-bar': true,
+        icon: 'src/assets/proxtop_logo_256.png'
     });
 
     mainWindow.loadURL('file://' + INDEX_LOCATION);
