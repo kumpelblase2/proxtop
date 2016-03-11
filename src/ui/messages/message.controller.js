@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', function($scope, ipc, $stateParams) {
+angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', 'AvatarService', function($scope, ipc, $stateParams, avatar) {
     $scope.messages = null;
     $scope.input = { message: "", sent: false };
     ipc.once('conversation', function(ev, conversation) {
@@ -13,13 +13,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
         });
     });
 
-    $scope.getAvatar = function(image) {
-        if(image == null || image == "") {
-            image = "nophoto.png";
-        }
-
-        return "https://cdn.proxer.me/avatar/tn/" + image;
-    };
+    $scope.getAvatar = avatar.getAvatarForID.bind(avatar);
 
     $scope.sendMessage = function() {
         if($scope.input.message.length > 0 && !$scope.input.sent) {
