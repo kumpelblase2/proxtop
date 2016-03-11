@@ -21,10 +21,6 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
         return "https://cdn.proxer.me/avatar/tn/" + image;
     };
 
-    $scope.test = function() {
-        console.log('whatever');
-    };
-
     $scope.sendMessage = function() {
         if($scope.input.message.length > 0 && !$scope.input.sent) {
             ipc.once('conversation-write', function(event, result) {
