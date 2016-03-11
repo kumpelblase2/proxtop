@@ -15,10 +15,10 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
 
     $scope.getAvatar = function(image) {
         if(image == null || image == "") {
-            return "";
-        } else {
-            return "https://cdn.proxer.me/avatar/tn/" + image;
+            image = "nophoto.png";
         }
+
+        return "https://cdn.proxer.me/avatar/tn/" + image;
     };
 
     $scope.test = function() {

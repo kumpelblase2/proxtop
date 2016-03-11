@@ -14,10 +14,10 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipc', '$s
 
     $scope.getImage = function(image) {
         if(image == null || image == "") {
-            return "";
-        } else {
-            return "https://cdn.proxer.me/avatar/tn/" + image;
+            image = "nophoto.png";
         }
+
+        return "https://cdn.proxer.me/avatar/tn/" + image;
     };
 
     ipc.send('conversations');
