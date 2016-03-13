@@ -1,4 +1,9 @@
 <md-content flex="100" flex-layout="column">
+    <style>
+    a {
+        color: inherit;
+    }
+    </style>
     <loader ng-if="!messages"></loader>
     <md-list flex="70" flex-offset="15">
         <md-list-item ng-repeat="message in messages" class="md-2-line long-text-list md-whiteframe-2dp" style="margin-bottom: 10px;">
