@@ -25,8 +25,9 @@ MessagesHandler.prototype.sendMessage = function(id, content) {
     }).then(messageParser.parseMessagePostResponse);
 };
 
-MessagesHandler.prototype.refreshMessages = function(id) {
-    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NEW_API + id)
+MessagesHandler.prototype.refreshMessages = function(id, last_id) {
+    last_id = last_id || 0;
+    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NEW_API + id + "&mid=" + last_id)
         .then(messageParser.parseNewMessages);
 };
 
@@ -50,8 +51,8 @@ MessagesHandler.prototype.register = function() {
         });
     });
 
-    ipc.on('conversation-update', function(event, id) {
-        self.refreshMessages(id).then(function(result) {
+    ipc.on('conversation-update', function(event, id, last_id) {
+        self.refreshMessages(id, last_id).then(function(result) {
             event.sender.send('conversation-update', result);
         });
     });
