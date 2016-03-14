@@ -1,74 +1,32 @@
 require('./src/app/global');
-LOG.verbose('Running on ' + process.versions['electron'] + ' on chrome ' + process.versions['chrome']);
-
 var app = require('app');
-var BrowserWindow = require('browser-window');
-var winston = require("winston");
-var utils = require('./src/app/utils');
-var WindowStateKeeper = require('electron-window-state');
+LOG.verbose('Running on ' + process.versions['electron'] + ' on chrome ' + process.versions['chrome']);
+LOG.verbose('Making sure app dir exists...');
+require('./src/app/utils').createDirIfNotExists(APP_DIR);
 
-utils.createDirIfNotExists(APP_DIR);
 var Proxtop = require('./src/app/proxtop');
-var settings = require('./src/app/settings');
+var WindowManager = require('./src/app/window_manager');
+var Updater = require('./src/app/updater');
 
-var mainWindow = null;
-
-var proxApp = new Proxtop(function(release) {
-    mainWindow.send('update', release);
+LOG.verbose('Initializing...');
+var updater = new Updater(GITHUB_RELEASES_URL);
+var windowManager = new WindowManager({
+    app: APP_DIR,
+    logo: 'src/assets/proxtop_logo_256.png',
+    index: INDEX_LOCATION
 });
 
-var appData = {
+var proxtop = new Proxtop(app, windowManager, updater, {
     name: APP_NAME,
-    getWindow: function() { return mainWindow; },
-    proxtop: proxApp
-};
-
-app.on('window-all-closed', function() {
-    if(process.platform != 'darwin') {
-        proxApp.finish();
-        app.quit();
-    }
-
-    mainWindow = null;
-});
-
-app.on('activate-with-no-open-windows', function(event) {
-    event.preventDefault();
-    createWindow();
+    app_dir: APP_DIR,
+    proxer_url: PROXER_BASE_URL,
+    info: require('./package.json')
 });
 
 app.on('ready', function() {
-    proxApp.init().then(createWindow);
+    LOG.verbose('Starting up...');
+    proxtop.start().then(function() {
+        LOG.verbose('Off we go!');
+    });
 });
-
-function createWindow() {
-    LOG.verbose('Opening new window');
-    var windowState = WindowStateKeeper({
-        defaultWidth: 800,
-        defaultHeigth: 600,
-        path: APP_DIR
-    });
-
-    mainWindow = new BrowserWindow({
-        width: windowState.width,
-        height: windowState.heigth,
-        y: windowState.y,
-        x: windowState.x,
-        'auto-hide-menu-bar': true,
-        icon: 'src/assets/proxtop_logo_256.png'
-    });
-
-    mainWindow.loadURL('file://' + INDEX_LOCATION);
-    mainWindow.on('closed', function() {
-        mainWindow = null;
-    });
-
-    mainWindow.webContents.on('new-window', function(ev, url) {
-        ev.preventDefault();
-        require('shell').openExternal(url);
-    });
-
-    windowState.manage(mainWindow);
-}
-
-module.exports = appData;
+module.exports = proxtop;

@@ -2,10 +2,10 @@ var pageUtils = require('./page_utils');
 var Promise = require('bluebird');
 var _ = require('lodash');
 
-function LoginChecker(sessionHandler, loginHandler, db) {
+function LoginChecker(app, sessionHandler, loginHandler, db) {
     this.login_handler = loginHandler;
     this.db = db;
-    this.app = require('../../../main');
+    this.app = app;
 
     sessionHandler._openRequest = sessionHandler.openRequest;
     var login = this;
@@ -28,7 +28,7 @@ LoginChecker.prototype.checkLogin = function(doRequest) {
         if(pageUtils.checkUnauthorized(body)) {
             var details = self.getLoginDetails();
             if(!details) {
-                self.app.getWindow().send('check-login', false);
+                self.app.notifyWindow('check-login', false);
                 throw new Error(ERRORS.PROXER.NO_DETAILS_PROVIDED);
             }
             return self.login_handler.login(details.user.username, details.user.password, details.keep_login)

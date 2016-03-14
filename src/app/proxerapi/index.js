@@ -8,13 +8,13 @@ var MessageHandler = require('./message_handler');
 var EpisodeHandler = require('./episode_handler');
 var db = require('../db');
 
-function API(cookiePath) {
-    this.session_handler = new SessionHandler(cookiePath);
+function API(app, cookiePath) {
+    this.session_handler = new SessionHandler(app, cookiePath);
     this.login_handler = new LoginHandler(this.session_handler);
-    this.login_checker = new LoginChecker(this.session_handler, this.login_handler, db);
+    this.login_checker = new LoginChecker(app, this.session_handler, this.login_handler, db);
     this.handers = [
         new ProfileHandler(this.session_handler),
-        new WatchlistHandler(this.session_handler),
+        new WatchlistHandler(app, this.session_handler),
         new NewsHandler(this.session_handler),
         new MessageHandler(this.session_handler),
         new EpisodeHandler(this.session_handler)

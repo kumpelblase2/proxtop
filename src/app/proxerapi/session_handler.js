@@ -4,9 +4,9 @@ var utils = require('../utils');
 var pageUtils = require('./page_utils');
 var Cloudscraper = require('../cloudscraper');
 
-function SessionHandler(cookiePath) {
+function SessionHandler(app, cookiePath) {
+    this.app = app;
     this.cookiePath = cookiePath;
-    this.app = require('../../../main');
     this.db = require('../db');
     this.online = true;
 }
@@ -40,24 +40,24 @@ SessionHandler.prototype.openRequest = function(doRequest) {
         LOG.warn("Error when requesting " + error.options.uri);
         if(error.statusCode == 525) {
             LOG.error('Received error 525 on request');
-            self.app.getWindow().send('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.OFFLINE);
+            self.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.OFFLINE);
         } else if(error.statusCode == 500) {
             LOG.error('Received 500 error, probably MySQL down');
-            self.app.getWindow().send('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.MYSQL_DOWN);
+            self.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.MYSQL_DOWN);
         } else if(error.statusCode == 503) {
             LOG.error('Received 503 error, attempting cloudlfare circumvention');
-            self.app.getWindow().send('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.CLOUDFLARE);
+            self.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.CLOUDFLARE);
             return self.cloudscraper.handle(error.response, error.response.body);
         } else if(/getaddr/.test(error.message)) {
             LOG.error('Other error but contained "getaddr" so it\'s probably no network:');
             LOG.error(error.message);
             if(self.isOnline()) {
                 self.online = false;
-                self.app.getWindow().send('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_NETWORK);
+                self.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_NETWORK);
             }
         } else {
             LOG.error('Unknown error occurred: ' + error.message);
-            self.app.getWindow().send('error', ERRORS.SEVERITY.SEVERE, ERRORS.OTHER.UNKNOWN);
+            self.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.OTHER.UNKNOWN);
         }
 
         LOG.verbose("Trying response cache");
@@ -69,7 +69,7 @@ SessionHandler.prototype.openRequest = function(doRequest) {
             return cached.body;
         } else {
             LOG.error('No cached version found for uri ' + realUri);
-            self.app.getWindow().send('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_CACHE);
+            self.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_CACHE);
             return "";
         }
     };

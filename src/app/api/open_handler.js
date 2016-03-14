@@ -3,8 +3,8 @@ var childProcess = require('child_process');
 var opener = require('opener');
 var util = require('util');
 
-function OpenHandler() {
-    this.settings = require('../settings');
+function OpenHandler(settings) {
+    this.settings = settings;
 }
 
 OpenHandler.prototype.buildUrl = function(type, id, ep, sub) {

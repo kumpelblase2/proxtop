@@ -1,38 +1,59 @@
-var Promise = require('bluebird');
-var Settings = require('./settings');
-var winston = require('winston');
-var path = require("path");
-var proxerapi = require('./proxerapi');
-var api = require('./api');
-var packageInfo = require('../../package.json');
-var Updater = require('./updater');
+var path = require('path');
+var settings = require('./settings');
+var API = require('./api');
+var ProxerAPI = require('./proxerapi');
 
-var UPDATE_INTERVALL = 2 * 60 * 60 * 1000;
-
-function Proxtop(onUpdate) {
-    this.baseURL = PROXER_BASE_URL;
-    this.updater = new Updater(packageInfo.version, onUpdate);
+function Proxtop(app, window_manager, updater, options) {
+    this.app = app;
+    this.window_manager = window_manager;
+    this.name = options.name;
+    this.app_dir = options.app_dir;
+    this.proxer_url = options.proxer_url;
+    this.info = options.info;
+    this.updater = updater;
+    this.api = new API(settings);
+    this.proxer_api = new ProxerAPI(this,path.join(this.app_dir, "cookies.json"));
 }
 
-Proxtop.prototype.init = function() {
-    this.configPath = APP_DIR;
-    this.api = new api();
-    this.proxerapi = new proxerapi(path.join(this.configPath, 'cookies.json'));
-    Proxtop.instance = this;
-    this.updater.run();
-    this.updateLoop();
-    return this.proxerapi.init().then(this.api.init.bind(this.api));
-};
-
-Proxtop.prototype.updateLoop = function() {
+Proxtop.prototype.start = function() {
+    this.setupApp();
+    this.updater.start(this.info.version, this.notifyUpdate.bind(this));
+    this.api.init();
     var self = this;
-    setTimeout(function() {
-        self.updater.check();
-        self.updateLoop();
-    }, UPDATE_INTERVALL);
+    return this.proxer_api.init().then(function() {
+        self.window_manager.createMainWindow();
+    });
 };
 
-Proxtop.prototype.finish = function() {
+Proxtop.prototype.shutdown = function() {
+    this.updater.stop();
+};
+
+Proxtop.prototype.notifyWindow = function() {
+    var params = Array.prototype.slice.call(arguments);
+    var mainWindow = this.window_manager.getMainWindow();
+    mainWindow.send.apply(mainWindow, params);
+};
+
+Proxtop.prototype.notifyUpdate = function(release) {
+    this.notifyWindow('update', release);
+};
+
+Proxtop.prototype.setupApp = function() {
+    var self = this;
+    this.app.on('window-all-closed', function() {
+        if(process.platform != 'darwin') {
+            //TODO somehow the app is still alive sometimes
+            self.shutdown();
+            self.app.quit();
+        }
+    });
+
+    // TODO check if this still works on OSX
+    this.app.on('activate-with-no-open-windows', function(event) {
+        event.preventDefault();
+        self.window_manager.createMainWindow();
+    });
 };
 
 module.exports = Proxtop;

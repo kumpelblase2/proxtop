@@ -1,8 +1,8 @@
 var OpenHandler = require('./open_handler');
 
-function API(cookiePath) {
+function API(settings) {
     this.handers = [
-        new OpenHandler()
+        new OpenHandler(settings)
     ];
 }
 

@@ -7,10 +7,10 @@ var utils = require('../utils');
 var SET_TO_CURRENT = "?format=json&type=reminder&title=reminder_this";
 var SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
 
-function WatchlistHandler(sessionHandler) {
+function WatchlistHandler(app, sessionHandler) {
     this.session_handler = sessionHandler;
     this.cache = require('../db')('watchlist-cache');
-    this.app = require('../../../main');
+    this.app = app;
     this.settings = require('../settings');
 }
 
@@ -42,7 +42,7 @@ WatchlistHandler.prototype.checkUpdates = function() {
     }).then(function(updates) {
         Object.keys(updates).forEach(function(type) {
             updates[type].forEach(function(update) {
-                self.app.getWindow().send('new-' + type + '-ep', update);
+                self.app.notifyWindow('new-' + type + '-ep', update);
             });
         });
     });
