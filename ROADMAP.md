@@ -9,10 +9,11 @@ Also note that these are just the "bigger things" that I want to get done but mo
 ## 0.2.0 (FINISHED)
 - Improve watching experience
 - Add more stream providers
-
-## 0.3.0
-- Improve messaging
 - Update/notification mechanism
+
+## 0.3.0 (In progress)
+- Improve messaging
+- Improve internal workings
 
 ## 0.4.0
 - Anime browsing
