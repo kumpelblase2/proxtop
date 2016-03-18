@@ -3,14 +3,16 @@ var Promise = require('bluebird');
 var request = require('request-promise');
 var _ = require('lodash');
 
-function extractProxer($) {
+function extractProxer(options) {
+    var $ = cheerio.load(options.page);
     return {
         url: $('source').attr('src'),
         type: 'mp4'
     };
 }
 
-function extractMP4Upload($) {
+function extractMP4Upload(options) {
+    var $ = cheerio.load(options.page);
     var source = $('#player_code').html();
     var video = /'file' *: *'(.+)',/m.exec(source);
     if(video) {
@@ -23,7 +25,8 @@ function extractMP4Upload($) {
     }
 }
 
-function extractYourUpload($) {
+function extractYourUpload(options) {
+    var $ = cheerio.load(options.page);
     var body = $('body').html();
     var video = /file *: *'(.+)',/m.exec(body);
     var referer = /link *: *'(.+embed.+)',/m.exec(body);
@@ -45,7 +48,8 @@ function extractYourUpload($) {
     }
 }
 
-function extractStreamCloud($, options) {
+function extractStreamCloud(options) {
+    var $ = cheerio.load(options.page);
     var inputs = $('#login').find('form').serializeArray();
     var form = inputs.reduce(function(prev, curr) {
         prev[curr.name] = curr.value;
@@ -71,7 +75,7 @@ function extractStreamCloud($, options) {
     });
 }
 
-function extractDailymotion($, options) {
+function extractDailymotion(options) {
     var bodyJson = /\(document\.getElementById\(\'player'\), (\{.*\})\);/m.exec(options.page);
     if(!bodyJson) {
         throw "Could not extract."
@@ -107,11 +111,9 @@ var parser = {
 };
 
 parser.parseVideo = function(options) {
-    //TODO should not assume that we need cheerio
-    return Promise.resolve(options.page).then(cheerio.load)
-        .then(function($) {
-            return parser.findExtractor(options.stream)($, options);
-        });
+    return Promise.resolve(function() {
+        return parser.findExtractor(options.stream)(options);
+    });
 };
 
 module.exports = parser;
