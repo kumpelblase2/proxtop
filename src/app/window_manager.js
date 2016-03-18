@@ -24,7 +24,7 @@ WindowManager.prototype.createMainWindow = function() {
 
     this.mainWindow = new BrowserWindow({
         width: windowState.width,
-        height: windowState.heigth,
+        height: windowState.height,
         y: windowState.y,
         x: windowState.x,
         'auto-hide-menu-bar': true,
