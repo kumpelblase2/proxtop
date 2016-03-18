@@ -24,6 +24,8 @@ EpisodeHandler.prototype.extractStream = function(stream) {
         url = 'https:' + url;
     }
 
+    LOG.verbose('Found stream url: ' + url);
+
     return this.session_handler.openRequest(url).then(function(content) {
         return {
             page: content,

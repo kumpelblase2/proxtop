@@ -69,7 +69,7 @@ Cloudscraper.prototype.solveChallenge = function(response, body) {
         var headers = {
             Referer: response.request.uri.href // Original url should be placed as referer
         };
-
+        LOG.verbose('Solved CloudFlare with ' + result + '. Sending result.');
         // Make request with answer
         return self.request.get({
             url: answerUrl,
@@ -84,6 +84,7 @@ Cloudscraper.prototype.handle = function(response, body) {
 
     // If body contains specified string, solve challenge
     if (body.indexOf('a = document.getElementById(\'jschl-answer\');') !== -1) {
+        LOG.verbose('Detected CloudFlare protection. Attempt to resolve it.');
         return Promise.resolve().delay(Timeout).then(function() {
             return self.solveChallenge(response, body);
         });

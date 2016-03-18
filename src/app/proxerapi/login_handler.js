@@ -19,7 +19,8 @@ LoginHandler.prototype.login = function(username, password, keepLogin) {
                 LOG.verbose('Already logged in.');
                 return { success: true, reason: 'already-logged-in' };
             } else if(result.status === 'logged-out'){
-                LOG.verbose('Not logged in yet, sending login');
+                LOG.verbose('Not logged in yet, sending login with following details:');
+                LOG.verbose('Username: ' + username + '; Pass: ' + (password || password.length == 0 ? 'No' : '****'));
                 return Promise.resolve(result.data).then(function(data) {
                     return _.merge(data, {
                         username: username,
@@ -45,7 +46,7 @@ LoginHandler.prototype.login = function(username, password, keepLogin) {
                     } else {
                         LOG.warn('There was an issue with logging in:');
                         LOG.warn(error);
-                        return { success: false, reason: 'error'};
+                        return { success: false, reason: 'error' };
                     }
                 });
             } else {
@@ -78,7 +79,7 @@ LoginHandler.prototype.logout = function() {
                     } else {
                         LOG.warn('There was an issue with logging out:');
                         LOG.warn(error);
-                        return { success: false, reason: 'error'};
+                        return { success: false, reason: 'error' };
                     }
                 });
             } else {
