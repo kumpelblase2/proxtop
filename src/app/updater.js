@@ -1,6 +1,6 @@
-var semver = require('semver');
 var request = require('request-promise');
 var _ = require('lodash');
+var utils = require('./utils');
 
 function Updater(check_url) {
     this.check_url = check_url;
@@ -28,14 +28,7 @@ Updater.prototype.check = function() {
             'User-Agent': 'proxtop-' + this.currentVersion
         }
     }).then(JSON.parse).then(function(releases) {
-        var actual = _.filter(releases, { prerelease: false, draft: false });
-        var orderedNewerReleases = _.reverse(_.sortBy(_.filter(actual, function(release) {
-            return semver.gt(release.tag_name, self.currentVersion);
-        }), function(release) {
-            return new Date(release.published_at).getTime();
-        }));
-
-        return orderedNewerReleases[0];
+        return utils.findLatestRelease(releases, self.currentVersion);
     }).then(function(update) {
         LOG.verbose('Update available? ' + (update ? 'Yes' : 'No'));
         if(update) {
@@ -43,6 +36,7 @@ Updater.prototype.check = function() {
         }
     }).catch(function(e) {
         if(e.statusCode == 403) {
+            //TODO disable until unblock time reached
             LOG.warning("GitHub API limit reached.");
         } else {
             LOG.error("There was an issue doing github update check:", {

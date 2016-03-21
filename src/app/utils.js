@@ -1,6 +1,7 @@
 var Promise = require('bluebird');
 var fs = Promise.promisifyAll(require('fs'));
 var _ = require('lodash');
+var semver = require('semver');
 
 module.exports = {
     createIfNotExists: function(inPath) {
@@ -34,5 +35,20 @@ module.exports = {
         });
 
         return updates;
+    },
+
+    findLatestRelease: function(releases, current) {
+        var actual = _.filter(releases, { prerelease: false, draft: false });
+        var orderedNewerReleases = _.reverse(_.sortBy(_.filter(actual, function(release) {
+            if(current) {
+                return semver.gt(release.tag_name, current);
+            } else {
+                return true;
+            }
+        }), function(release) {
+            return new Date(release.published_at).getTime();
+        }));
+
+        return orderedNewerReleases[0];
     }
 };

@@ -37,6 +37,7 @@ WindowManager.prototype.createMainWindow = function() {
     });
 
     this.mainWindow.webContents.on('new-window', function(ev, url) {
+        LOG.verbose('Prevent new window and open externally instead.');
         ev.preventDefault();
         Shell.openExternal(url);
     });
