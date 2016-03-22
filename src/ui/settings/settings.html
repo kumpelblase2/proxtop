@@ -18,6 +18,7 @@
                     <md-radio-button value="de">{{ 'SETTINGS.GENERAL.LANGUAGE.DE' | translate }}</md-radio-button>
                     <md-radio-button value="en">{{ 'SETTINGS.GENERAL.LANGUAGE.EN' | translate }}</md-radio-button>
                 </md-radio-group>
+                <md-checkbox ng-model="settings.general.disable_user_agent" aira-label="Custom Header?" ng-change="toggleRequestUpdate()">{{ 'SETTINGS.GENERAL.DISABLE_USER_AGENT' | translate }}</md-checkbox>
             </md-card-content>
         </md-card>
         <md-card>

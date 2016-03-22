@@ -3,29 +3,45 @@ var cookieStore = require('tough-cookie-filestore');
 var utils = require('../utils');
 var pageUtils = require('./page_utils');
 var Cloudscraper = require('../cloudscraper');
+var os = require('os');
+var ipc = require('electron').ipcMain;
 
 function SessionHandler(app, cookiePath) {
     this.app = app;
     this.cookiePath = cookiePath;
     this.db = require('../db');
     this.online = true;
+
+    var self = this;
+    ipc.on('reload-request', function() {
+        self.request = self.setupRequest();
+    });
 }
 
 SessionHandler.prototype.isOnline = function() { return this.online; };
 
 SessionHandler.prototype.loadState = function() {
     var self = this;
+
     return utils.createIfNotExists(self.cookiePath).then(function() {
         self.cookieJar = request.jar(new cookieStore(self.cookiePath));
         LOG.verbose('Loaded cookies from ' + self.cookiePath);
-        request = request.defaults({
-            jar: self.cookieJar,
-            headers: pageUtils.headers,
-            resolveWithFullResponse: true
-        });
-        self.request = request;
-        self.cloudscraper = new Cloudscraper(request);
+        self.request = self.setupRequest();
+        self.cloudscraper = new Cloudscraper(self.request);
     }).return(self);
+};
+
+SessionHandler.prototype.setupRequest = function() {
+    var self = this;
+    var disableUserAgent = this.app.getSettings().getGeneralSettings().disable_user_agent;
+    var header = pageUtils.getHeaders(self.app.info.version, disableUserAgent, os.platform(), os.release());
+
+    LOG.verbose('Settings useragent to: ' + header['User-Agent']);
+    return request.defaults({
+        jar: self.cookieJar,
+        headers: header,
+        resolveWithFullResponse: true
+    });
 };
 
 SessionHandler.prototype.openRequest = function(doRequest) {

@@ -64,7 +64,8 @@
         "LANGUAGE": "Language",
         "EN": "English",
         "DE": "German"
-      }
+      },
+      "DISABLE_USER_AGENT": "Use universal user agent"
     }
   },
   "MESSAGES": {

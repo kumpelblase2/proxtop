@@ -12,7 +12,7 @@ function Proxtop(app, window_manager, updater, options) {
     this.info = options.info;
     this.updater = updater;
     this.api = new API(settings);
-    this.proxer_api = new ProxerAPI(this,path.join(this.app_dir, "cookies.json"));
+    this.proxer_api = new ProxerAPI(this, path.join(this.app_dir, "cookies.json"));
 }
 
 Proxtop.prototype.start = function() {
@@ -37,6 +37,10 @@ Proxtop.prototype.notifyWindow = function() {
 
 Proxtop.prototype.notifyUpdate = function(release) {
     this.notifyWindow('update', release);
+};
+
+Proxtop.prototype.getSettings = function() {
+    return settings;
 };
 
 Proxtop.prototype.setupApp = function() {
