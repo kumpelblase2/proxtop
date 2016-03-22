@@ -37,7 +37,7 @@ Updater.prototype.check = function() {
     }).catch(function(e) {
         if(e.statusCode == 403) {
             //TODO disable until unblock time reached
-            LOG.warning("GitHub API limit reached.");
+            LOG.warn("GitHub API limit reached.");
         } else {
             LOG.error("There was an issue doing github update check:", {
                 error: e

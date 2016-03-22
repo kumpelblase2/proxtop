@@ -42,6 +42,7 @@ WatchlistHandler.prototype.checkUpdates = function() {
     }).then(function(updates) {
         Object.keys(updates).forEach(function(type) {
             updates[type].forEach(function(update) {
+                LOG.verbose('Sending watchlist update for ' + update.name);
                 self.app.notifyWindow('new-' + type + '-ep', update);
             });
         });
