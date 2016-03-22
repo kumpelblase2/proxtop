@@ -4,6 +4,7 @@ angular.module('proxtop').controller('LoginController', ['$scope', 'settings', '
         if(result.success) {
             loggedIn = true;
             console.log('LOGGED IN');
+            ipc.send('watchlist-update');
             $state.go('profile');
         } else {
             console.log('COULD NOT LOGIN - ' + result.reason);
