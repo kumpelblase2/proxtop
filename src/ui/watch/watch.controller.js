@@ -10,13 +10,14 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
     ipc.once('episode', function(ev, result) {
         $scope.$apply(function() {
             $scope.current.info = result;
-            var found = _.filter($scope.current.info.streams, { type: preferredStream });
-            if(found && found[0]) {
-                $scope.select(found[0]);
+            var supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
+            $scope.current.info.streams = supported;
+            if(supported && supported.length == 1) {
+                $scope.select(supported[0]);
             } else {
-                var supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
-                if(supported && supported.length == 1) {
-                    $scope.select(supported[0]);
+                var found = _.filter(supported, { type: preferredStream });
+                if(found && found[0]) {
+                    $scope.select(found[0]);
                 }
             }
         });

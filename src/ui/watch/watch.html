@@ -1,6 +1,6 @@
 <div ng-if="!current.stream && current.info && current.info.streams">
     <div layout="column">
-        <md-button ng-repeat="stream in current.info.streams | supportedStream" ng-click="select(stream)">{{stream.name}}</md-button>
+        <md-button ng-repeat="stream in current.info.streams" ng-click="select(stream)">{{stream.name}}</md-button>
     </div>
 </div>
 <div ng-if="current.stream && !current.canPlay">
