@@ -111,8 +111,8 @@ var parser = {
 };
 
 parser.parseVideo = function(options) {
-    return Promise.resolve(function() {
-        return parser.findExtractor(options.stream)(options);
+    return Promise.resolve(options).then(function(opt) {
+        return parser.findExtractor(opt.stream)(opt);
     });
 };
 
