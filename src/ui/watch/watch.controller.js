@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$stateParams', '$sce', 'settings', '$state', '$mdToast', '$translate', function($scope, ipc, $stateParams, $sce, settings, $state, $mdToast, $translate) {
+angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$stateParams', '$sce', 'settings', '$state', '$mdToast', '$translate', 'SupportedProviderService', function($scope, ipc, $stateParams, $sce, settings, $state, $mdToast, $translate, SupportedProviderService) {
     $scope.current = {
         info: null,
         stream: null,
@@ -13,6 +13,11 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
             var found = _.filter($scope.current.info.streams, { type: preferredStream });
             if(found && found[0]) {
                 $scope.select(found[0]);
+            } else {
+                var supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
+                if(supported && supported.length == 1) {
+                    $scope.select(supported[0]);
+                }
             }
         });
     });
