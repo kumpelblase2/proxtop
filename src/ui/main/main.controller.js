@@ -48,7 +48,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
         $translate([yes, no, newVersion]).then(function(translations) {
             var dialog = $mdDialog.confirm()
                 .title(translations[newVersion])
-                .textContent("Version " + release.tag_name + " - " + release.name + "<br><br>" + content)
+                .htmlContent("Version " + release.tag_name + " - " + release.name + "<br><br>" + content)
                 .ariaLabel("Update Notification")
                 .ok(translations[yes])
                 .cancel(translations[no]);
