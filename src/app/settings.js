@@ -67,6 +67,7 @@ function createGetterSetter(setting) {
                 db('settings').push(globalVar);
                 return globalVar;
             } else {
+                result = _.defaults(result, globalVar);
                 return result;
             }
         },
