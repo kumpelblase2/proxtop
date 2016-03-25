@@ -1,6 +1,8 @@
 var BrowserWindow = require('browser-window');
 var WindowState = require('electron-window-state');
 var Shell = require('shell');
+var openAboutWindow = require('about-window').default;
+var path = require('path');
 
 function WindowManager(dirs) {
     this.mainWindow = null;
@@ -43,6 +45,13 @@ WindowManager.prototype.createMainWindow = function() {
     });
 
     windowState.manage(this.mainWindow);
+};
+
+WindowManager.prototype.createAboutWindow = function() {
+    openAboutWindow({
+        icon_path: this.logo_location,
+        open_devtools: true
+    });
 };
 
 module.exports = WindowManager;

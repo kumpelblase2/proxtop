@@ -2,6 +2,7 @@ var path = require('path');
 var settings = require('./settings');
 var API = require('./api');
 var ProxerAPI = require('./proxerapi');
+var Menu = require('electron').Menu;
 
 function Proxtop(app, window_manager, updater, options) {
     this.app = app;
@@ -54,6 +55,22 @@ Proxtop.prototype.setupApp = function() {
         event.preventDefault();
         self.window_manager.createMainWindow();
     });
+
+    var menu = Menu.buildFromTemplate([
+        {
+            label: 'Proxtop',
+            submenu: [
+                {
+                    label: 'About',
+                    click: function() {
+                        self.window_manager.createAboutWindow()
+                    }
+                }
+            ]
+        }
+    ]);
+
+    Menu.setApplicationMenu(menu);
 };
 
 module.exports = Proxtop;
