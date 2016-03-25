@@ -1,5 +1,5 @@
 require('./src/app/global');
-var app = require('app');
+var app = require('electron').app;
 LOG.verbose('Running on ' + process.versions['electron'] + ' on chrome ' + process.versions['chrome']);
 LOG.verbose('Making sure app dir exists...');
 require('./src/app/utils').createDirIfNotExists(APP_DIR);
@@ -12,7 +12,7 @@ LOG.verbose('Initializing...');
 var updater = new Updater(GITHUB_RELEASES_URL);
 var windowManager = new WindowManager({
     app: APP_DIR,
-    logo: 'src/assets/proxtop_logo_256.png',
+    logo: LOGO_LOCATION,
     index: INDEX_LOCATION
 });
 

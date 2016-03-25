@@ -3,7 +3,8 @@ var path = require('path');
 
 global.APP_NAME = "proxtop";
 global.PROXER_BASE_URL = "https://proxer.me";
-global.INDEX_LOCATION = __dirname + "../../index.html";
+global.INDEX_LOCATION = path.join(__dirname, "../index.html");
+global.LOGO_LOCATION = path.join(__dirname, "../assets/proxtop_logo_256.png");
 global.PROXER_PATHS = {
     ROOT: '/',
     LOGIN: '/component/user/?task=user.login',
