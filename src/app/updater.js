@@ -39,7 +39,7 @@ Updater.prototype.isLimited = function() {
     if(isReleased) {
         this.limited.value = false;
         this.limited.release_time = 0;
-        this.updateLimitation();
+        this.saveLimitation();
         return false;
     }
 
