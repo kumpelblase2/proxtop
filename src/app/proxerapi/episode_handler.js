@@ -39,6 +39,7 @@ EpisodeHandler.prototype.register = function() {
     var self = this;
     ipc.on('episode', function(event, id, ep, sub) {
         self.loadEpisode(id, ep, sub).then(function(result) {
+            LOG.verbose("Extracted info for " + result.name + " - " + result.episode);
             event.sender.send('episode', result);
         });
     });
@@ -46,6 +47,7 @@ EpisodeHandler.prototype.register = function() {
 
     ipc.on('watch', function(event, stream) {
         self.extractStream(stream).then(function(video) {
+            LOG.verbose("Got video: " + video.url);
             event.sender.send('watch', video);
         }).catch(function(e) {
             console.log(e);
