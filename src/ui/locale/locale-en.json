@@ -70,7 +70,8 @@
   "MESSAGES": {
     "LAST_MESSAGE": "Last message",
     "WRITE_MESSAGE": "Write a message",
-    "SEND": "Send"
+    "SEND": "Send",
+    "PARTICIPANTS": "Participants"
   },
   "UPDATE": {
       "NEW_VERSION": "A new version is available",

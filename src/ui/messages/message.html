@@ -1,29 +1,41 @@
-<md-content flex="100" flex-layout="column">
+<md-content layout="row" layout-align="center start">
     <style>
     a {
         color: inherit;
     }
     </style>
-    <loader ng-if="!messages"></loader>
-    <md-list flex="70" flex-offset="15">
-        <md-list-item ng-repeat="message in messages" class="md-2-line long-text-list md-whiteframe-2dp" style="margin-bottom: 10px;">
-            <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
-            <div class="md-list-item-text">
-                <div layout="row" layout-align="space-between start"
-                    <h3>{{message.username}}</h3>
-                    <h4>{{message.timestamp * 1000 | date:'HH:mm:ss d.M.yyyy'}}</h4>
+    <loader ng-if="!conversation.messages" flex-offset="50"></loader>
+    <div layout="column" flex="50" flex-offset="15" layout-align="start center">
+        <md-list layout-fill>
+            <md-list-item ng-repeat="message in conversation.messages" class="md-2-line long-text-list md-whiteframe-2dp" style="margin-bottom: 10px;">
+                <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
+                <div class="md-list-item-text">
+                    <div layout="row" layout-align="space-between start"
+                        <h3>{{message.username}}</h3>
+                        <h4>{{message.timestamp * 1000 | date:'HH:mm:ss d.M.yyyy'}}</h4>
+                    </div>
+                    <p style="white-space: pre;" ng-bind-html="message.message | linky:'_system'"></p>
                 </div>
-                <p style="white-space: pre;" ng-bind-html="message.message | linky:'_system'"></p>
+            </md-list-item>
+        </md-list>
+        <div layout="column" layout-fill style="margin-top: 25px;">
+            <div ng-if="conversation.messages">
+                <md-input-container layout-fill>
+                    <label>{{ 'MESSAGES.WRITE_MESSAGE' | translate }}</label>
+                    <textarea ng-model="input.message" ng-disabled="{{ input.sent }}"></textarea>
+                </md-input-container>
+                <md-button ng-click="sendMessage()" layout-fill>{{ 'MESSAGES.SEND' | translate }}</md-button>
+            </div>
+        </div>
+    </div>
+    <md-list flex="15" flex-offset="5" ng-if="conversation.messages" class="md-whiteframe-2dp" style="max-height: 50vh; overflow-y: auto;">
+        <md-subheader>{{ 'MESSAGES.PARTICIPANTS' | translate }}</md-subheader>
+        <md-list-item ng-repeat="participant in conversation.participants" class="md-2-line">
+            <img ng-src="{{'https:' + participant.avatar}}" class="md-avatar" />
+            <div class="md-list-item-text">
+                <h3>{{participant.username}}</h3>
+                <p ng-bind="participant.status"></p>
             </div>
         </md-list-item>
     </md-list>
-    <div flex="70" flex-offset="15" layout="column" style="margin-top: 25px;">
-        <div ng-if="messages">
-            <md-input-container layout-fill>
-                <label>{{ 'MESSAGES.WRITE_MESSAGE' | translate }}</label>
-                <textarea ng-model="input.message" ng-disabled="{{ input.sent }}"></textarea>
-            </md-input-container>
-            <md-button ng-click="sendMessage()" layout-fill>{{ 'MESSAGES.SEND' | translate }}</md-button>
-        </div>
-    </div>
 </md-content>

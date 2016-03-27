@@ -12,8 +12,15 @@ MessagesHandler.prototype.loadConversations = function() {
 };
 
 MessagesHandler.prototype.loadConversation = function(id) {
-    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id)
-        .then(messageParser.parseConversation);
+    return Promise.join(this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id).then(messageParser.parseConversation),
+            this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_PAGE + id).then(messageParser.parseConversationPage),
+        function(conversation, participants) {
+            return {
+                messages: conversation,
+                participants: participants
+            };
+        }
+    );
 };
 
 MessagesHandler.prototype.sendMessage = function(id, content) {

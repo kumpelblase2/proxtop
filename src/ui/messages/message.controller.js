@@ -1,7 +1,7 @@
 angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', 'AvatarService', '$interval', '$rootScope', function($scope, ipc, $stateParams, avatar, $interval, $rootScope) {
     var MESSAGE_UPDATE_DELAY = 15000;
 
-    $scope.messages = null;
+    $scope.conversation = {};
     $scope.state = {
         message: "",
         sent: false,
@@ -11,7 +11,8 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
 
     ipc.once('conversation', function(ev, conversation) {
         $scope.$apply(function() {
-            $scope.messages = _.sortBy(conversation, function(m) { return m.timestamp; });
+            $scope.conversation = conversation;
+            $scope.conversation.messages = _.sortBy(conversation.messages, function(m) { return m.timestamp; });
             $scope.refreshLast();
         });
     });
