@@ -39,7 +39,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
     ipc.on('new-message', function(ev, message) {
         $translate('MESSAGES.NEW_MESSAGE', { user: message.username }).then(function(translations) {
             notification.displayNotification('Proxtop', translations, 'assets/proxtop_logo_256.png', function() {
-                $state.go('message', message.id);
+                $state.go('message', { id: message.id });
             });
         });
     });
