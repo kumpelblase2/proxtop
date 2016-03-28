@@ -16,11 +16,17 @@ MessagesHandler.prototype.loadConversation = function(id) {
             this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_PAGE + id).then(messageParser.parseConversationPage),
         function(conversation, participants) {
             return {
-                messages: conversation,
+                messages: conversation.messages,
+                has_more: conversation.has_more,
                 participants: participants
             };
         }
     );
+};
+
+MessagesHandler.prototype.loadPreviousMessages = function(id, page) {
+    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id + "&p=" + page)
+        .then(messageParser.parseConversation);
 };
 
 MessagesHandler.prototype.sendMessage = function(id, content) {
@@ -61,6 +67,12 @@ MessagesHandler.prototype.register = function() {
     ipc.on('conversation-update', function(event, id, last_id) {
         self.refreshMessages(id, last_id).then(function(result) {
             event.sender.send('conversation-update', result);
+        });
+    });
+
+    ipc.on('conversation-more', function(event, id, page) {
+        self.loadPreviousMessages(id, page).then(function(result) {
+            event.sender.send('conversation-more', result);
         });
     });
 };

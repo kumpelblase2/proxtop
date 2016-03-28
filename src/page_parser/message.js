@@ -45,7 +45,8 @@ parser.parseNewMessages = function(page) {
 
             return {
                 conversation_id: data.uid,
-                messages: data.messages
+                messages: data.messages,
+                has_more: data.messages.length == 15
             };
         });
 };
@@ -77,7 +78,10 @@ parser.parseConversation = function(page) {
                 throw new Error(data.msg);
             }
 
-            return data.messages;
+            return {
+                messages: data.messages,
+                has_more: data.messages.length == 15
+            };
         });
 };
 

@@ -72,7 +72,8 @@
     "LAST_MESSAGE": "Last message",
     "WRITE_MESSAGE": "Write a message",
     "SEND": "Send",
-    "PARTICIPANTS": "Participants"
+    "PARTICIPANTS": "Participants",
+    "LOAD_MORE": "Load more"
   },
   "UPDATE": {
       "NEW_VERSION": "A new version is available",
