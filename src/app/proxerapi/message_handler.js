@@ -7,6 +7,7 @@ function MessagesHandler(app, sessionHandler) {
     this.session_handler = sessionHandler;
     this.settings = require('../settings');
     this.lastCheck = 0;
+    this.cache = require('../db')('messages-cache');
 }
 
 MessagesHandler.prototype.loadConversations = function() {
@@ -69,8 +70,14 @@ MessagesHandler.prototype.messageCheck = function() {
         LOG.info("Check if new messages have arrived...");
         self.checkNotifications().then(function(notifications) {
             notifications.forEach(function(notification) {
-                self.app.notifyWindow('new-message', notification);
+                if(!self.cache.find({ username: notification.username })) {
+                    LOG.verbose('Got new message from ' + notification.username);
+                    self.app.notifyWindow('new-message', notification);
+                }
             });
+
+            self.cache.remove();
+            notifications.forEach(function(not) { self.cache.push(not); });
         });
     }
 };
