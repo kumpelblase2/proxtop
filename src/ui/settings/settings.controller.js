@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('SettingsController', ['$scope', 'settings', '$translate', function($scope, settings, $translate) {
+angular.module('proxtop').controller('SettingsController', ['$scope', 'settings', '$translate', 'ipc', function($scope, settings, $translate, ipc) {
     $scope.providers = [
         "Proxer-Stream",
         "Dailymotion",
@@ -23,12 +23,17 @@ angular.module('proxtop').controller('SettingsController', ['$scope', 'settings'
         watchlist: settings.get('watchlist'),
         general: settings.get('general')
     };
+    $scope.has_toggled = false;
 
     $scope.$watch(function(scope) {
         return scope.settings.general.language;
     }, function(newValue) {
         $translate.use(newValue);
     });
+
+    $scope.toggleRequestUpdate = function() {
+        $scope.has_toggled = !$scope.has_toggled;
+    };
 
     $scope.saveSettings = function() {
         settings.set('account', {
@@ -43,5 +48,10 @@ angular.module('proxtop').controller('SettingsController', ['$scope', 'settings'
         settings.set('anime', $scope.settings.anime);
         settings.set('watchlist', $scope.settings.watchlist);
         settings.set('general', $scope.settings.general);
+
+        if($scope.has_toggled) {
+            ipc.send('reload-request');
+            $scope.has_toggled = false;
+        }
     };
 }]);

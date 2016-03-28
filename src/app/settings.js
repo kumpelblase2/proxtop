@@ -27,7 +27,8 @@ var DEFAULTS = {
     },
     DEFAULT_GENERAL_SETTINGS: {
         language: 'de',
-        type: 'general'
+        type: 'general',
+        disable_user_agent: false
     },
     DEFAULT_MANGA_SETTINGS: {
         type: 'manga',
