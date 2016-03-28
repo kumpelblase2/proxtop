@@ -44,6 +44,7 @@
   },
   "SETTINGS": {
     "SAVE": "Save",
+    "MINUTE_INTERVAL": "Intervall in minutes",
     "ANIME": {
       "ANIME": "@:GENERAL.ANIME",
       "OPEN_IN": "Open with",
@@ -55,7 +56,6 @@
     "WATCHLIST": {
       "WATCHLIST": "@:MENU.WATCHLIST",
       "CHECK": "Check interval",
-      "MINUTE_INTERVAL": "Intervall in minutes",
       "DISPLAY_NOTIFICATION": "Display notification"
     },
     "GENERAL": {
@@ -65,7 +65,8 @@
         "EN": "English",
         "DE": "German"
       },
-      "DISABLE_USER_AGENT": "Use universal user agent"
+      "DISABLE_USER_AGENT": "Use universal user agent",
+      "MESSAGE_CHECK": "Message check intervall"
     }
   },
   "MESSAGES": {
@@ -73,7 +74,8 @@
     "WRITE_MESSAGE": "Write a message",
     "SEND": "Send",
     "PARTICIPANTS": "Participants",
-    "LOAD_MORE": "Load more"
+    "LOAD_MORE": "Load more",
+    "NEW_MESSAGE": "New message from {{user}}!"
   },
   "UPDATE": {
       "NEW_VERSION": "A new version is available",

@@ -12,6 +12,7 @@ function WatchlistHandler(app, sessionHandler) {
     this.cache = require('../db')('watchlist-cache');
     this.app = app;
     this.settings = require('../settings');
+    this.lastCheck = 0;
 }
 
 WatchlistHandler.prototype.loadWatchlist = function() {
@@ -128,7 +129,7 @@ WatchlistHandler.prototype.watchLoop = function() {
     var self = this;
     setTimeout(function() {
         var time = self.settings.getWatchlistSettings().check_interval;
-        if(new Date().getTime() - self.lastCheck > time * 55000) {
+        if(new Date().getTime() - self.lastCheck > time * 60000 - 5000) {
             self.checkUpdates();
         }
 

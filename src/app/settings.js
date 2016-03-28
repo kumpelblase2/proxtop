@@ -28,7 +28,8 @@ var DEFAULTS = {
     DEFAULT_GENERAL_SETTINGS: {
         language: 'de',
         type: 'general',
-        disable_user_agent: false
+        disable_user_agent: false,
+        check_message_interval: 30
     },
     DEFAULT_MANGA_SETTINGS: {
         type: 'manga',
