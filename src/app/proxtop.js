@@ -67,7 +67,13 @@ Proxtop.prototype.setupApp = function() {
                 {
                     label: 'About',
                     click: function() {
-                        self.window_manager.createAboutWindow()
+                        self.window_manager.createAboutWindow();
+                    }
+                },
+                {
+                    label: 'Open Dev Tools',
+                    click: function() {
+                        self.window_manager.getMainWindow().openDevTools();
                     }
                 }
             ]
