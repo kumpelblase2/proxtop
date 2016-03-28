@@ -10,7 +10,7 @@
 
 <loader ng-if="!watchlist"></loader>
 <div ng-if="watchlist" layout="row" layout-fill style="margin-bottom: 10px;">
-    <md-list id="watchlist-anime" class="md-whiteframe-4dp" flex="50">
+    <md-list id="watchlist-anime" class="md-whiteframe-4dp" layout-margin flex="50">
         <md-list-item ng-repeat="anime in watchlist.anime" class="md-1-line" ng-click="clickAnime(anime)" layout="row">
             <md-icon class="fa fa-play-circle-o fa-lg" ng-class="{online: anime.status}" flex="5"></md-icon>
             <div class="md-list-item-text" flex="95">
