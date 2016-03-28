@@ -9,12 +9,12 @@
         <md-list layout-fill>
             <md-list-item ng-repeat="message in conversation.messages" class="md-2-line long-text-list md-whiteframe-2dp" style="margin-bottom: 10px;">
                 <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
-                <div class="md-list-item-text">
+                <div class="md-list-item-text" style="word-wrap: break-word; min-width: 0;">
                     <div layout="row" layout-align="space-between start"
                         <h3>{{message.username}}</h3>
                         <h4>{{message.timestamp * 1000 | date:'HH:mm:ss d.M.yyyy'}}</h4>
                     </div>
-                    <p style="white-space: pre;" ng-bind-html="message.message | linky:'_system'"></p>
+                    <p ng-bind-html="message.message | linky:'_system'"></p>
                 </div>
             </md-list-item>
         </md-list>
