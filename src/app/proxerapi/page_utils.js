@@ -12,7 +12,7 @@ module.exports = {
                     osInfo = 'X11; Linux x86_64';
                     break;
                 case 'win32':
-                    osInfo = 'Windows NT ' + release.substr(0, 3) + '; WOW64';
+                    osInfo = 'Windows NT 6.2; WOW64';
                     break;
             }
 

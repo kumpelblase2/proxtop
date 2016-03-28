@@ -14,10 +14,10 @@ describe('page_utils#getHeaders', function() {
     });
 
     it('should include the current OS', function() {
-        utils.getHeaders('1.1.0', true, 'win32', '6.1.1').should.have.property('User-Agent');
-        utils.getHeaders('1.1.0', true, 'win32', '6.1.1')['User-Agent'].should.include('Windows NT 6.1');
-        utils.getHeaders('1.1.0', true, 'win32', '6.1.1')['User-Agent'].should.not.include('Linux');
-        utils.getHeaders('1.1.0', true, 'win32', '6.1.1')['User-Agent'].should.not.include('Mac');
+        utils.getHeaders('1.1.0', true, 'win32', '10.0.1').should.have.property('User-Agent');
+        utils.getHeaders('1.1.0', true, 'win32', '10.0.1')['User-Agent'].should.include('Windows NT 6.1');
+        utils.getHeaders('1.1.0', true, 'win32', '10.0.1')['User-Agent'].should.not.include('Linux');
+        utils.getHeaders('1.1.0', true, 'win32', '10.0.1')['User-Agent'].should.not.include('Mac');
 
         utils.getHeaders('1.1.0', true, 'darwin', '10_11_3').should.have.property('User-Agent');
         utils.getHeaders('1.1.0', true, 'darwin', '10_11_3')['User-Agent'].should.include('Mac OS X 10_11_3');
