@@ -19,10 +19,10 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
 
     ipc.on('conversation-update', function(ev, conversation) {
         $scope.$apply(function() {
-            if($scope.messages) {
-                Array.prototype.push.apply($scope.messages, conversation.messages);
+            if($scope.conversation.messages) {
+                Array.prototype.push.apply($scope.conversation.messages, conversation.messages);
             } else {
-                $scope.messages = conversation.messages;
+                $scope.conversation.messages = conversation.messages;
             }
             $scope.refreshLast();
         });
@@ -50,7 +50,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
     };
 
     $scope.refreshLast = function() {
-        var last = _.last($scope.messages);
+        var last = _.last($scope.conversation.messages);
         if(last) {
             $scope.state.lastReceived = last.id;
         } else {
