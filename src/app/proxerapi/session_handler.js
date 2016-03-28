@@ -92,8 +92,10 @@ SessionHandler.prototype.openRequest = function(doRequest) {
 
     var promise;
     if(typeof(doRequest) == 'string') {
+        LOG.silly('Doing request for url ' + doRequest);
         promise = this.request(doRequest);
     } else {
+        LOG.silly('Creating custom request');
         promise = Promise.resolve(this.request).then(doRequest);
     }
 
