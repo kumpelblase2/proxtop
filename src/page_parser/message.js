@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var Promise = require('bluebird');
 var cheerio = require('cheerio');
+var moment = require('moment');
 
 var parser = {
     parseConversationParticipants: function($, participants) {
@@ -23,6 +24,24 @@ var parser = {
             });
         }
         return users;
+    },
+
+    parseMessageNotificationItems: function($, items) {
+        var notifications = [];
+
+        for(var i = 0; i < items.length; i++) {
+            var username = $(items[i].children[3]).text();
+            var date = $(items[i].children[5]).text();
+            var id = parseInt(/.+id=(\d+)/.exec($(items[i]).attr('href'))[1]);
+
+            notifications.push({
+                username: username,
+                date: moment(date, "DD.MM.YYYY").unix(),
+                id: id
+            });
+        }
+
+        return notifications;
     }
 };
 
@@ -83,6 +102,12 @@ parser.parseConversation = function(page) {
                 has_more: data.messages.length == 15
             };
         });
+};
+
+parser.parseMessagesNotification = function(page) {
+    return Promise.resolve(page).then(cheerio.load).then(function($) {
+        return parser.parseMessageNotificationItems($, $('a.conferenceList'));
+    });
 };
 
 module.exports = parser;
