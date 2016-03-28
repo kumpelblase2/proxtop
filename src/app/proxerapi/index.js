@@ -16,7 +16,7 @@ function API(app, cookiePath) {
         new ProfileHandler(this.session_handler),
         new WatchlistHandler(app, this.session_handler),
         new NewsHandler(this.session_handler),
-        new MessageHandler(this.session_handler),
+        new MessageHandler(app, this.session_handler),
         new EpisodeHandler(this.session_handler)
     ];
 }

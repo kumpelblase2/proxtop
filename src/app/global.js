@@ -18,6 +18,7 @@ global.PROXER_PATHS = {
     MESSAGE_API: '/messages/?format=json&json=messages&id=',
     MESSAGE_NEW_API: '/messages/?format=json&json=newmessages&id=',
     MESSAGE_WRITE_API: '/messages/?format=json&json=answer&id=',
+    MESSAGE_NOTIFICATIONS: '/messages?format=raw&s=notification',
     WATCH_ANIME: '/watch/%d/%d/%s',
     VIEW_MANGA: '/chapter/%d/%d/%s',
     LOGOUT: '/component/users/?task=user.logout',

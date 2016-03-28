@@ -44,6 +44,8 @@
   },
   "SETTINGS": {
     "SAVE": "Speichern",
+    "MINUTE_INTERVAL": "Intervall in Minuten",
+    "DISPLAY_NOTIFICATION": "Benachrichtigung anzeigen",
     "ANIME": {
       "ANIME": "@:GENERAL.ANIME",
       "OPEN_IN": "Öffnen mit",
@@ -54,9 +56,7 @@
     },
     "WATCHLIST": {
       "WATCHLIST": "@:MENU.WATCHLIST",
-      "CHECK": "Checkintervall",
-      "MINUTE_INTERVAL": "Intervall in Minuten",
-      "DISPLAY_NOTIFICATION": "Benachrichtigung anzeigen"
+      "CHECK": "Checkintervall"
     },
     "GENERAL": {
       "GENERAL": "Allgemein",
@@ -65,7 +65,8 @@
         "EN": "Englisch",
         "DE": "Deutsch"
       },
-      "DISABLE_USER_AGENT": "Universalen User-Agent verwenden"
+      "DISABLE_USER_AGENT": "Universalen User-Agent verwenden",
+      "MESSAGE_CHECK": "Nachrichten Checkintervall"
     }
   },
   "MESSAGES": {
@@ -73,7 +74,8 @@
     "WRITE_MESSAGE": "Schreibe eine Nachricht",
     "SEND": "Senden",
     "PARTICIPANTS": "Teilnehmer",
-    "LOAD_MORE": "Weitere laden"
+    "LOAD_MORE": "Weitere laden",
+    "NEW_MESSAGE": "Neue Nachricht von {{user}}!"
   },
   "UPDATE": {
       "NEW_VERSION": "Eine neue Version ist verfügbar",

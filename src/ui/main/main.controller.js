@@ -36,6 +36,13 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
 
     ipc.on('new-anime-ep', displayNotification('anime'));
     ipc.on('new-manga-ep', displayNotification('manga'));
+    ipc.on('new-message', function(ev, message) {
+        $translate('MESSAGES.NEW_MESSAGE', { user: message.username }).then(function(translations) {
+            notification.displayNotification('Proxtop', translations, 'assets/proxtop_logo_256.png', function() {
+                $state.go('message', message.id);
+            });
+        });
+    });
 
     ipc.on('update', function(ev, release) {
         var yes = "UPDATE.YES";
