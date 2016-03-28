@@ -5,7 +5,7 @@ if ! type "npm" > /dev/null; then
 fi
 
 if ! type "bower" > /dev/null; then
-    ecoh "Bower is not installed. Please make sure you have bower on your system."
+    echo "Bower is not installed. Please make sure you have bower on your system."
     exit 1
 fi
 
