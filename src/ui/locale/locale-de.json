@@ -45,6 +45,7 @@
   "SETTINGS": {
     "SAVE": "Speichern",
     "MINUTE_INTERVAL": "Intervall in Minuten",
+    "DISPLAY_NOTIFICATION": "Benachrichtigung anzeigen",
     "ANIME": {
       "ANIME": "@:GENERAL.ANIME",
       "OPEN_IN": "Öffnen mit",
@@ -55,8 +56,7 @@
     },
     "WATCHLIST": {
       "WATCHLIST": "@:MENU.WATCHLIST",
-      "CHECK": "Checkintervall",
-      "DISPLAY_NOTIFICATION": "Benachrichtigung anzeigen"
+      "CHECK": "Checkintervall"
     },
     "GENERAL": {
       "GENERAL": "Allgemein",

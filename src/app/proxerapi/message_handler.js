@@ -63,6 +63,12 @@ MessagesHandler.prototype.messageCheckLoop = function() {
 
 MessagesHandler.prototype.messageCheck = function() {
     var self = this;
+    var enabled = self.settings.getGeneralSettings().message_notification;
+    if(!enabled) {
+        this.cache.remove();
+        return;
+    }
+
     var interval = self.settings.getGeneralSettings().check_message_interval;
     var time = new Date().getTime();
     if(time - self.lastCheck > interval * 60000 - 5000) {

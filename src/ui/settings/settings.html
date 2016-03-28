@@ -24,6 +24,9 @@
                     <label>{{ 'SETTINGS.MINUTE_INTERVAL' | translate }}</label>
                     <input ng-model="settings.general.check_message_interval" type="number" step="5" min="1"/>
                 </md-input-container>
+                <md-checkbox ng-model="settings.general.message_notification" aria-label="Display Notification">
+                    {{ 'SETTINGS.DISPLAY_NOTIFICATION' | translate }}
+                </md-checkbox>
             </md-card-content>
         </md-card>
         <md-card>
@@ -92,7 +95,7 @@
                     <input ng-model="settings.watchlist.check_interval" type="number" step="5" min="1"/>
                 </md-input-container>
                 <md-checkbox ng-model="settings.watchlist.display_notification" aria-label="Display Notification">
-                    {{ 'SETTINGS.WATCHLIST.DISPLAY_NOTIFICATION' | translate }}
+                    {{ 'SETTINGS.DISPLAY_NOTIFICATION' | translate }}
                 </md-checkbox>
             </md-card-content>
         </md-card>
