@@ -12,12 +12,12 @@ This is considered experimental because there's no official API in place so this
 
 These goals are features/use cases that I want this app to provide to the user. All of them should be implemented until I consider this experiment 'done'.
 
-- [X] Use your existing proxer.me account
-- [X] View watchlist
-- [X] Watch proxer HD streams
+- [x] Use your existing proxer.me account
+- [x] View watchlist
+- [x] Watch proxer HD streams
 - [x] Update watchlist
-- [X] Watch streams with favorite video player (prefered: MPV)
-- [X] Get notifications on new watchlist releases
+- [x] Watch streams with favorite video player (prefered: MPV)
+- [x] Get notifications on new watchlist releases
 - [x] Read & Write messages
 
 ## Optional Goals
@@ -39,6 +39,10 @@ Goals that I would like to implement afterwards, if I have interest in continuin
 
 ## How to run
 
+### Running latest stable
+You can find the latest stable releases under [Releases](https://github.com/kumpelblase2/proxtop/releases/latest) in the repository. There you can download the right archive for your platform. Extract it and run the `Proxtop` executable inside the directory.
+
+### Running latest/development version
 First get all required dependencies (requires NPM and bower to be installed):
 ```
 npm run setup
