@@ -13,7 +13,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
     ipc.once('conversation', function(ev, conversation) {
         $scope.$apply(function() {
             $scope.conversation = conversation;
-            $scope.conversation.messages = _.sortBy(conversation.messages, function(m) { return m.timestamp; });
+            $scope.conversation.messages = _.sortBy(conversation.messages, function(m) { return parseInt(m.id); });
             $scope.refreshLast();
         });
     });
