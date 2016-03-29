@@ -44,8 +44,10 @@
   },
   "SETTINGS": {
     "SAVE": "Save",
+    "SAVED": "Settings saved.",
     "MINUTE_INTERVAL": "Intervall in minutes",
     "DISPLAY_NOTIFICATION": "Display notification",
+    "AUTOSAVE_INFO": "Settings will automatically save after a short time.",
     "ANIME": {
       "ANIME": "@:GENERAL.ANIME",
       "OPEN_IN": "Open with",
