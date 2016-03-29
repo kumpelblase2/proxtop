@@ -25,17 +25,13 @@ angular.module('proxtop').controller('SettingsController', ['$scope', 'settings'
     };
     $scope.has_toggled = false;
 
-    $scope.$watch(function(scope) {
-        return scope.settings.general.language;
-    }, function(newValue) {
-        $translate.use(newValue);
-    });
-
     $scope.toggleRequestUpdate = function() {
         $scope.has_toggled = !$scope.has_toggled;
     };
 
     $scope.saveSettings = function() {
+        $translate.use($scope.settings.general.language);
+        
         settings.set('account', {
             keep_login: $scope.settings.account.keep_login,
             store_password: $scope.settings.account.store_password,
