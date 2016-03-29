@@ -15,10 +15,10 @@ These goals are features/use cases that I want this app to provide to the user. 
 - [X] Use your existing proxer.me account
 - [X] View watchlist
 - [X] Watch proxer HD streams
-- [ ] Update watchlist
+- [x] Update watchlist
 - [X] Watch streams with favorite video player (prefered: MPV)
 - [X] Get notifications on new watchlist releases
-- [ ] Read & Write messages
+- [x] Read & Write messages
 
 ## Optional Goals
 

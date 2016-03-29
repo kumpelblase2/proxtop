@@ -11,12 +11,13 @@ Also note that these are just the "bigger things" that I want to get done but mo
 - Add more stream providers
 - Update/notification mechanism
 
-## 0.3.0 (In progress)
+## 0.3.0 (FINISHED)
 - Improve messaging
 - Improve internal workings
 
-## 0.4.0
+## 0.4.0 (in progress)
 - Anime browsing
+- proper UI layout
 - Basic manga reading
 
 ## 0.5.0 (maybe 1.0?)
