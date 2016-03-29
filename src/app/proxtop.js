@@ -66,15 +66,31 @@ Proxtop.prototype.setupApp = function() {
             submenu: [
                 {
                     label: 'About',
+                    role: 'about',
                     click: function() {
                         self.window_manager.createAboutWindow();
                     }
                 },
                 {
-                    label: 'Open Dev Tools',
-                    click: function() {
-                        self.window_manager.getMainWindow().openDevTools();
+                    label: 'Toggle Developer Tools',
+                    accelerator: (function() {
+                        if (process.platform == 'darwin')
+                            return 'Alt+Command+I';
+                        else
+                            return 'Ctrl+Shift+I';
+                    })(),
+                    click: function(item, focusedWindow) {
+                        if (focusedWindow)
+                            focusedWindow.toggleDevTools();
                     }
+                },
+                {
+                    type: 'separator'
+                },
+                {
+                    label: 'Quit',
+                    accelerator: 'Command+Q',
+                    click: function() { self.app.quit(); }
                 }
             ]
         }
