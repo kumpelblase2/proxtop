@@ -1,4 +1,25 @@
-# 0.2.0 (current)
+# 0.3.0 (current)
+Additions:
+- Added own icon
+- Improved messaging to be able to write, load previous messages and display participants
+- Added notification for new, unread messages
+- Added custom user-agent
+- Save window size and location
+- Added play/pause via space
+- Open links in messages in system browser
+
+Fixes:
+- Fix inonsisten size of containers in watchlist
+- Fix behavior on small screens for main page
+- Fix default avatar in messages
+- Fix watchlist notifications not showing on first login
+- No longer check for updates if API limit is reached
+
+# 0.2.1
+Fixes:
+- Error when trying to load while missing default settings.
+
+# 0.2.0
 Additions:
 - Improved watching anime to be able to go to the next or previous episode
 - Added buttons to add current or next episode to watchlist
