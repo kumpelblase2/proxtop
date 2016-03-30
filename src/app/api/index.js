@@ -1,4 +1,4 @@
-var OpenHandler = require('./open_handler');
+const OpenHandler = require('./open_handler');
 
 function API(settings) {
     this.handers = [

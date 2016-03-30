@@ -1,9 +1,9 @@
 angular.module('proxtop').service('open', ['ipc', 'settings', '$state', function(ipc, settings, $state) {
-    var self = this;
+    const self = this;
     ['Anime', 'Manga'].forEach(function(name) {
-        var lower = name.toLowerCase();
+        const lower = name.toLowerCase();
         self['open' + name] = function(id, ep, sub) {
-            var actualSettings = settings.get(lower);
+            const actualSettings = settings.get(lower);
 
             if(actualSettings && actualSettings.open_with === 'internal') {
                 $state.go('watch', {

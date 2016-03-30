@@ -1,4 +1,4 @@
-var ranks = [
+const ranks = [
     { points: 0, title: 'Schnupperninja' },
     { points: 10, title: 'Anwärter' },
     { points: 100, title: 'Akademie Schüler' },

@@ -2,7 +2,7 @@ angular.module('proxtop').controller('ProfileController', ['$scope', 'ipc', '$st
     ipc.once('profile', function(ev, profile) {
         $scope.$apply(function() {
             $scope.profile = profile;
-            var rank = progressService.getNextRank($scope.profile.ranking.total);
+            const rank = progressService.getNextRank($scope.profile.ranking.total);
             $scope.profile.progress = rank.points / $scope.profile.ranking.total;
         });
     });

@@ -1,6 +1,6 @@
-var pageUtils = require('./page_utils');
-var Promise = require('bluebird');
-var _ = require('lodash');
+const pageUtils = require('./page_utils');
+const Promise = require('bluebird');
+const _ = require('lodash');
 
 function LoginChecker(app, sessionHandler, loginHandler, db) {
     this.login_handler = loginHandler;
@@ -8,10 +8,10 @@ function LoginChecker(app, sessionHandler, loginHandler, db) {
     this.app = app;
 
     sessionHandler._openRequest = sessionHandler.openRequest;
-    var login = this;
+    const login = this;
     sessionHandler.openRequest = (function(doRequest, checkLogin) {
-        var request = this._openRequest(doRequest);
-        var self = this;
+        let request = this._openRequest(doRequest);
+        const self = this;
         if(checkLogin) {
             request = request.then(login.checkLogin(function() {
                 return self._openRequest(doRequest);
@@ -23,10 +23,10 @@ function LoginChecker(app, sessionHandler, loginHandler, db) {
 }
 
 LoginChecker.prototype.checkLogin = function(doRequest) {
-    var self = this;
+    const self = this;
     return function(body) {
         if(pageUtils.checkUnauthorized(body)) {
-            var details = self.getLoginDetails();
+            const details = self.getLoginDetails();
             if(!details) {
                 self.app.notifyWindow('check-login', false);
                 throw new Error(ERRORS.PROXER.NO_DETAILS_PROVIDED);
@@ -40,7 +40,7 @@ LoginChecker.prototype.checkLogin = function(doRequest) {
 };
 
 LoginChecker.prototype.getLoginDetails = function() {
-    var settings = this.db('settings').find({ type: 'account' });
+    const settings = this.db('settings').find({ type: 'account' });
     if(!settings) {
         return null;
     }

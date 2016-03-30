@@ -20,7 +20,7 @@ angular.module('proxtop').controller('WatchlistController', ['$scope', 'ipc', '$
 
     ipc.on('delete-watchlist', function(ev, result) {
         $scope.$apply(function() {
-            var index = _.findIndex($scope.watchlist.anime, { entry: result.entry });
+            let index = _.findIndex($scope.watchlist.anime, { entry: result.entry });
             if(index >= 0) {
                 $scope.watchlist.anime.splice(index, 1);
             }

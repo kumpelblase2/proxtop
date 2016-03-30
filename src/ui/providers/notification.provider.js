@@ -1,12 +1,12 @@
 angular.module('proxtop').service('notification', [function() {
-    var remote = require('remote');
-    var os = remote.require('os');
-    var path = remote.require('path');
-    var tray = remote.Tray;
+    const remote = require('remote');
+    const os = remote.require('os');
+    const path = remote.require('path');
+    const tray = remote.Tray;
 
     this.displayNotification = function(title, message, image, callback) {
         if(os.platform() != 'win32' || /10\..+/.test(os.release())) {
-            var notification = new Notification(title, {
+            const notification = new Notification(title, {
                 body: message,
                 icon: image
             });
@@ -15,7 +15,7 @@ angular.module('proxtop').service('notification', [function() {
             return notification;
         } else {
             image = path.join(__dirname, image);
-            var temp = new tray(image);
+            const temp = new tray(image);
             temp.displayBalloon({
                 icon: image,
                 title: title,

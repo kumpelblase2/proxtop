@@ -1,10 +1,10 @@
-var cheerio = require('cheerio');
-var Promise = require('bluebird');
-var request = require('request-promise');
-var _ = require('lodash');
+const cheerio = require('cheerio');
+const Promise = require('bluebird');
+const request = require('request-promise');
+const _ = require('lodash');
 
 function extractProxer(options) {
-    var $ = cheerio.load(options.page);
+    const $ = cheerio.load(options.page);
     return {
         url: $('source').attr('src'),
         type: 'mp4'
@@ -12,9 +12,9 @@ function extractProxer(options) {
 }
 
 function extractMP4Upload(options) {
-    var $ = cheerio.load(options.page);
-    var source = $('#player_code').html();
-    var video = /'file' *: *'(.+)',/m.exec(source);
+    const $ = cheerio.load(options.page);
+    const source = $('#player_code').html();
+    const video = /'file' *: *'(.+)',/m.exec(source);
     if(video) {
         return {
             url: video[1],
@@ -26,10 +26,10 @@ function extractMP4Upload(options) {
 }
 
 function extractYourUpload(options) {
-    var $ = cheerio.load(options.page);
-    var body = $('body').html();
-    var video = /file *: *'(.+)',/m.exec(body);
-    var referer = /link *: *'(.+embed.+)',/m.exec(body);
+    const $ = cheerio.load(options.page);
+    const body = $('body').html();
+    const video = /file *: *'(.+)',/m.exec(body);
+    const referer = /link *: *'(.+embed.+)',/m.exec(body);
     if(video) {
         return request({
             url: video[1],
@@ -49,9 +49,9 @@ function extractYourUpload(options) {
 }
 
 function extractStreamCloud(options) {
-    var $ = cheerio.load(options.page);
-    var inputs = $('#login').find('form').serializeArray();
-    var form = inputs.reduce(function(prev, curr) {
+    const $ = cheerio.load(options.page);
+    const inputs = $('#login').find('form').serializeArray();
+    const form = inputs.reduce(function(prev, curr) {
         prev[curr.name] = curr.value;
         return prev;
     }, {});
@@ -62,7 +62,7 @@ function extractStreamCloud(options) {
             url: options.url,
             form: form
         }).then(function(body) {
-            var video = /file *: *"(.+)",/m.exec(body);
+            const video = /file *: *"(.+)",/m.exec(body);
             if(video) {
                 return {
                     url: video[1],
@@ -76,22 +76,22 @@ function extractStreamCloud(options) {
 }
 
 function extractDailymotion(options) {
-    var bodyJson = /\(document\.getElementById\(\'player'\), (\{.*\})\);/m.exec(options.page);
+    const bodyJson = /\(document\.getElementById\(\'player'\), (\{.*\})\);/m.exec(options.page);
     if(!bodyJson) {
         throw "Could not extract."
     }
 
-    var json = JSON.parse(bodyJson[1]);
-    var qualities = json.metadata.qualities;
-    var availableQualities = _.sortBy(_.filter(Object.keys(qualities), function(key) { return parseInt(key); }));
-    var best = qualities[availableQualities[availableQualities.length - 1]][0];
+    const json = JSON.parse(bodyJson[1]);
+    const qualities = json.metadata.qualities;
+    const availableQualities = _.sortBy(_.filter(Object.keys(qualities), function(key) { return parseInt(key); }));
+    const best = qualities[availableQualities[availableQualities.length - 1]][0];
     return {
         url: best.url,
         type: 'mp4'
     };
 }
 
-var parser = {
+const parser = {
     extractors: {
         'proxer-stream': extractProxer,
         'mp4upload': extractMP4Upload,

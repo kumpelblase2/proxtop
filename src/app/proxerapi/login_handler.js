@@ -1,15 +1,15 @@
-var ipc = require('electron').ipcMain;
-var loginParser = require('../../page_parser').login;
-var Promise = require('bluebird');
-var _ = require('lodash');
-var pageUtils = require('./page_utils');
+const ipc = require('electron').ipcMain;
+const loginParser = require('../../page_parser').login;
+const Promise = require('bluebird');
+const _ = require('lodash');
+const pageUtils = require('./page_utils');
 
 function LoginHandler(sessionHandler) {
     this.session_handler = sessionHandler;
 }
 
 LoginHandler.prototype.login = function(username, password, keepLogin = false) {
-    var self = this;
+    const self = this;
     return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.ROOT)
         .then(loginParser.parseLogin)
         .then(function(result) {
@@ -34,7 +34,7 @@ LoginHandler.prototype.login = function(username, password, keepLogin = false) {
                     })
                 }).catch(function(error) {
                     if(error.statusCode === 303) {
-                        var location = error.response.headers.location;
+                        const location = error.response.headers.location;
                         if(location === '/' || location === 'https://proxer.me/') {
                             LOG.info("Logged in");
                             return { success: true, reason: null };
@@ -55,7 +55,7 @@ LoginHandler.prototype.login = function(username, password, keepLogin = false) {
 };
 
 LoginHandler.prototype.logout = function() {
-    var self = this;
+    const self = this;
     return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.ROOT)
         .then(loginParser.parseLogout)
         .then(function(result) {
@@ -93,7 +93,7 @@ LoginHandler.prototype.checkLogin = function() {
 };
 
 LoginHandler.prototype.register = function() {
-    var self = this;
+    const self = this;
     ipc.on('login', function(event, user, keepLogin) {
         self.login(user.username, user.password, keepLogin).then(function(result) {
             event.sender.send('login', result);

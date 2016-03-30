@@ -1,14 +1,14 @@
-var cheerio = require('cheerio');
-var Promise = require('bluebird');
-var _ = require('lodash');
+const cheerio = require('cheerio');
+const Promise = require('bluebird');
+const _ = require('lodash');
 
-var parser = {
+const parser = {
     parseAiringColumn: function(column) {
         return column.children('img').attr('title') === 'Airing';
     },
 
     parseNameColumn: function(column) {
-        var content = column.children('a');
+        const content = column.children('a');
         return {
             name: content.text(),
             id: parseInt(content.attr('title').split(':')[1], 10),
@@ -34,11 +34,11 @@ var parser = {
 };
 
 parser.parseRow = function(row) {
-    var title = {};
-    var current = row.children().first();
+    const title = {};
+    let current = row.children().first();
     title.airing = parser.parseAiringColumn(current);
     current = current.next();
-    var name = parser.parseNameColumn(current);
+    const name = parser.parseNameColumn(current);
     title.name = name.name;
     title.id = name.id;
     title.url = name.url;
@@ -53,8 +53,8 @@ parser.parseRow = function(row) {
 };
 
 parser.extractFromTable = function($, table) {
-    var result = {};
-    var title = table.parent().children().first().text();
+    const result = {};
+    const title = table.parent().children().first().text();
     if(title.indexOf('Anime') >= 0) {
         result.type = 'anime';
     } else if(title.indexOf('Manga') >= 0) {
@@ -77,10 +77,10 @@ parser.extractFromTable = function($, table) {
 
 parser.parseWatchlist = function(page) {
     return Promise.resolve(page).then(cheerio.load).then(function($) {
-        var tables = $('table#box-table-a');
-        var data = {};
+        const tables = $('table#box-table-a');
+        const data = {};
         tables.each(function(i, elem) {
-            var result = parser.extractFromTable($, $(elem));
+            const result = parser.extractFromTable($, $(elem));
             if(result) {
                 data[result.type] = result.contents;
             }

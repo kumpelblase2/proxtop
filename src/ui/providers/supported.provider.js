@@ -1,11 +1,11 @@
-var supportedStreams = [
+const supportedStreams = [
     'proxer-stream',
     'mp4upload',
     'streamcloud2',
     'yourupload'
 ]
 
-var module = angular.module('proxtop');
+const module = angular.module('proxtop');
 
 module.service('SupportedProviderService', function() {
     this.isSupported = function(stream) {

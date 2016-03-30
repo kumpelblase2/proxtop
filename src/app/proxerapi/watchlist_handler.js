@@ -1,11 +1,11 @@
-var ipc = require('electron').ipcMain;
-var watchlistParser = require('../../page_parser').watchlist;
-var Promise = require('bluebird');
-var util = require('util');
-var utils = require('../utils');
+const ipc = require('electron').ipcMain;
+const watchlistParser = require('../../page_parser').watchlist;
+const Promise = require('bluebird');
+const util = require('util');
+const utils = require('../utils');
 
-var SET_TO_CURRENT = "?format=json&type=reminder&title=reminder_this";
-var SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
+const SET_TO_CURRENT = "?format=json&type=reminder&title=reminder_this";
+const SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
 
 function WatchlistHandler(app, sessionHandler) {
     this.session_handler = sessionHandler;
@@ -21,11 +21,11 @@ WatchlistHandler.prototype.loadWatchlist = function() {
 };
 
 WatchlistHandler.prototype.checkUpdates = function() {
-    var self = this;
+    const self = this;
     LOG.info("Checking for new watchlist updates");
     this.lastCheck = new Date().getTime();
     this.loadWatchlist().then(function(result) {
-        var old = self.cache.find({ type: 'watchlist-cache' });
+        const old = self.cache.find({ type: 'watchlist-cache' });
         if(!old) {
             self.cache.push({
                 type: 'watchlist-cache',
@@ -35,7 +35,7 @@ WatchlistHandler.prototype.checkUpdates = function() {
             return result;
         }
 
-        var updates = {};
+        const updates = {};
         updates.anime = utils.getOnlineDiff(old.anime, result.anime);
         updates.manga = utils.getOnlineDiff(old.manga, result.manga);
         self.cache.chain().find({ type: 'watchlist-cache' }).merge({ anime: result.anime, manga: result.manga }).value();
@@ -92,7 +92,7 @@ WatchlistHandler.prototype.deleteEntry = function(entry) {
 };
 
 WatchlistHandler.prototype.register = function() {
-    var self = this;
+    const self = this;
     ipc.on('watchlist', function(event) {
         self.loadWatchlist().then(function(result) {
             event.sender.send('watchlist', result);
@@ -126,9 +126,9 @@ WatchlistHandler.prototype.register = function() {
 };
 
 WatchlistHandler.prototype.watchLoop = function() {
-    var self = this;
+    const self = this;
     setTimeout(function() {
-        var time = self.settings.getWatchlistSettings().check_interval;
+        const time = self.settings.getWatchlistSettings().check_interval;
         if(new Date().getTime() - self.lastCheck > time * 60000 - 5000) {
             self.checkUpdates();
         }

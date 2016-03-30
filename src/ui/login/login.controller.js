@@ -19,8 +19,6 @@ angular.module('proxtop').controller('LoginController', ['$scope', 'settings', '
         }
     });
 
-    var loaded = _.omit(settings.get('account'), 'type');
-
     $scope.login = function() {
         settings.set('account', {
             keep_login: $scope.keepLogin,
@@ -33,6 +31,7 @@ angular.module('proxtop').controller('LoginController', ['$scope', 'settings', '
         ipc.send('login', $scope.user, $scope.keepLogin);
     };
 
+    const loaded = _.omit(settings.get('account'), 'type');
     $scope.user = loaded.user;
     $scope.keepLogin = loaded.keep_login;
     $scope.storePassword = loaded.store_password;

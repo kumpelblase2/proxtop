@@ -1,8 +1,8 @@
-var path = require('path');
-var settings = require('./settings');
-var API = require('./api');
-var ProxerAPI = require('./proxerapi');
-var Menu = require('electron').Menu;
+const path = require('path');
+const settings = require('./settings');
+const API = require('./api');
+const ProxerAPI = require('./proxerapi');
+const Menu = require('electron').Menu;
 
 function Proxtop(app, window_manager, updater, options) {
     this.app = app;
@@ -20,7 +20,7 @@ Proxtop.prototype.start = function() {
     this.setupApp();
     this.updater.start(this.info.version, this.notifyUpdate.bind(this));
     this.api.init();
-    var self = this;
+    const self = this;
     return this.proxer_api.init().then(function() {
         self.window_manager.createMainWindow();
     });
@@ -31,8 +31,8 @@ Proxtop.prototype.shutdown = function() {
 };
 
 Proxtop.prototype.notifyWindow = function() {
-    var params = Array.prototype.slice.call(arguments);
-    var mainWindow = this.window_manager.getMainWindow();
+    const params = Array.prototype.slice.call(arguments);
+    const mainWindow = this.window_manager.getMainWindow();
     mainWindow.send.apply(mainWindow, params);
 };
 
@@ -45,10 +45,9 @@ Proxtop.prototype.getSettings = function() {
 };
 
 Proxtop.prototype.setupApp = function() {
-    var self = this;
+    const self = this;
     this.app.on('window-all-closed', function() {
         if(process.platform != 'darwin') {
-            //TODO somehow the app is still alive sometimes
             self.shutdown();
             self.app.quit();
         }
@@ -60,7 +59,7 @@ Proxtop.prototype.setupApp = function() {
         self.window_manager.createMainWindow();
     });
 
-    var menu = Menu.buildFromTemplate([
+    const menu = Menu.buildFromTemplate([
         {
             label: 'Proxtop',
             submenu: [
@@ -74,14 +73,16 @@ Proxtop.prototype.setupApp = function() {
                 {
                     label: 'Toggle Developer Tools',
                     accelerator: (function() {
-                        if (process.platform == 'darwin')
+                        if (process.platform == 'darwin') {
                             return 'Alt+Command+I';
-                        else
+                        } else {
                             return 'Ctrl+Shift+I';
+                        }
                     })(),
                     click: function(item, focusedWindow) {
-                        if (focusedWindow)
+                        if (focusedWindow) {
                             focusedWindow.toggleDevTools();
+                        }
                     }
                 },
                 {

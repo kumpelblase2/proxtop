@@ -1,5 +1,5 @@
-var cheerio = require('cheerio');
-var _ = require('lodash');
+const cheerio = require('cheerio');
+const _ = require('lodash');
 
 /*
 RESULT:
@@ -26,7 +26,7 @@ function extractRow(row) {
 }
 
 
-var parser = {
+const parser = {
     parseGenres: function($, row) {
         return row.children().next().find('a').map(function() {
             return $(this).text();
@@ -40,8 +40,8 @@ var parser = {
     },
 
     parseSeason: function(row) {
-        var seasonText = row.children().next().first().text();
-        var match = /Start: (\w+ \d+)(Ende: (\w+ \d+))?/.exec(seasonText);
+        const seasonText = row.children().next().first().text();
+        const match = /Start: (\w+ \d+)(Ende: (\w+ \d+))?/.exec(seasonText);
         return {
             start: match[1],
             end: (match.length == 4 ? match[3] : null)
@@ -49,7 +49,7 @@ var parser = {
     },
 
     parseStatus: function(row) {
-        var text = extractRow(row);
+        const text = extractRow(row);
         switch(true) {
             case /Abgeschlossen/.test(text):
                 return 'finished';
@@ -61,13 +61,13 @@ var parser = {
     },
 
     parseSubs: function($, row) {
-        var content = row.children().next().first();
+        const content = row.children().next().first();
         if(content.text().indexOf('Keine Gruppen') >= 0) {
             return [];
         }
 
-        var flags = content.find('img.flag');
-        var subs = content.find('a');
+        const flags = content.find('img.flag');
+        const subs = content.find('a');
         return flags.map(function(i) {
             return {
                 country: /\/images\/flag\/(\w+)\.gif/.exec($(this).attr('src'))[1],
@@ -85,8 +85,8 @@ var parser = {
     },
 
     parseRating: function(page) {
-        var average = parseFloat(page.find('span.average').text());
-        var votes = parseInt(page.find('span.votes').text());
+        const average = parseFloat(page.find('span.average').text());
+        const votes = parseInt(page.find('span.votes').text());
         return {
             votes: votes,
             average: average
@@ -94,10 +94,10 @@ var parser = {
     },
 
     parseInfo: function($, page) {
-        var table = page.find('table.details').first();
-        var rows = table.find('tr');
-        var current = rows.first();
-        var info = {};
+        const table = page.find('table.details').first();
+        const rows = table.find('tr');
+        const current = rows.first();
+        const info = {};
         info.name = extractRow(current);
         current = current.next();
         if(/Eng/.test(current.children().text())) {

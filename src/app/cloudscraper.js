@@ -2,9 +2,8 @@
     Original code made by https://github.com/codemanki/cloudscraper modified to use Promises and fit personal usecase.
  */
 
-
-var Timeout = 5500; // Cloudflare requires a delay of 5 seconds, so wait for at least 6.
-var Promise = require('bluebird');
+const Timeout = 5500; // Cloudflare requires a delay of 5 seconds, so wait for at least 6.
+const Promise = require('bluebird');
 
 function Cloudscraper(request) {
     this.request = request;
@@ -19,14 +18,13 @@ Cloudscraper.prototype.performRequest = function(url) {
 };
 
 function checkForErrors(body) {
-    var match;
     // Finding captcha
     if (body.indexOf('why_captcha') !== -1 || /recaptcha/i.test(body)) {
         throw new Error('Detected Captcha');
     }
 
     // trying to find '<span class="cf-error-code">1006</span>'
-    match = body.match(/<\w+\s+class="cf-error-code">(.*)<\/\w+>/i);
+    const match = body.match(/<\w+\s+class="cf-error-code">(.*)<\/\w+>/i);
 
     if (match) {
         throw new Error('unknown cloudflare error ' + match[1]);
@@ -35,15 +33,15 @@ function checkForErrors(body) {
 
 
 Cloudscraper.prototype.solveChallenge = function(response, body) {
-    var challenge = body.match(/name="jschl_vc" value="(\w+)"/),
-    host = response.request.host,
-    self = this;
+    let challenge = body.match(/name="jschl_vc" value="(\w+)"/),
+        host = response.request.host,
+        self = this;
 
     if (!challenge) {
         throw new Error({errorType: 3, error: 'I cant extract challengeId (jschl_vc) from page', body: body, response: response});
     }
 
-    var jsChlVc = challenge[1];
+    const jsChlVc = challenge[1];
 
     challenge = body.match(/getElementById\('cf-content'\)[\s\S]+?setTimeout.+?\r?\n([\s\S]+?a\.value =.+?)\r?\n/i);
 
@@ -64,9 +62,9 @@ Cloudscraper.prototype.solveChallenge = function(response, body) {
             'pass': challenge_pass
         };
     }).then(function(result) {
-        var answerUrl = response.request.uri.protocol + '://' + host + '/cdn-cgi/l/chk_jschl';
+        const answerUrl = response.request.uri.protocol + '://' + host + '/cdn-cgi/l/chk_jschl';
 
-        var headers = {
+        const headers = {
             Referer: response.request.uri.href // Original url should be placed as referer
         };
         LOG.verbose('Solved CloudFlare with ' + result + '. Sending result.');

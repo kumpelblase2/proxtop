@@ -1,7 +1,7 @@
-var request = require('request-promise');
-var _ = require('lodash');
-var utils = require('./utils');
-var db = require('./db');
+const request = require('request-promise');
+const _ = require('lodash');
+const utils = require('./utils');
+const db = require('./db');
 
 function Updater(check_url) {
     this.check_url = check_url;
@@ -16,7 +16,7 @@ function Updater(check_url) {
 Updater.prototype.start = function(current, callback) {
     this.currentVersion = current;
     this.callback = callback;
-    var self = this;
+    const self = this;
     setTimeout(function() {
         self.check();
     }, 1000);
@@ -35,7 +35,7 @@ Updater.prototype.isLimited = function() {
         return false;
     }
 
-    var isReleased = this.limited.release_time * 1000 < new Date().getTime();
+    const isReleased = this.limited.release_time * 1000 < new Date().getTime();
     if(isReleased) {
         this.limited.value = false;
         this.limited.release_time = 0;
@@ -47,7 +47,7 @@ Updater.prototype.isLimited = function() {
 };
 
 Updater.prototype.check = function() {
-    var self = this;
+    const self = this;
     LOG.verbose('Running update check...');
     if(this.isLimited()) {
         LOG.verbose("Still rate limited. Skipping.");

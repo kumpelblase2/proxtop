@@ -1,10 +1,10 @@
-var request = require('request-promise');
-var cookieStore = require('tough-cookie-filestore');
-var utils = require('../utils');
-var pageUtils = require('./page_utils');
-var Cloudscraper = require('../cloudscraper');
-var os = require('os');
-var ipc = require('electron').ipcMain;
+const request = require('request-promise');
+const cookieStore = require('tough-cookie-filestore');
+const utils = require('../utils');
+const pageUtils = require('./page_utils');
+const Cloudscraper = require('../cloudscraper');
+const os = require('os');
+const ipc = require('electron').ipcMain;
 
 function SessionHandler(app, cookiePath) {
     this.app = app;
@@ -12,7 +12,7 @@ function SessionHandler(app, cookiePath) {
     this.db = require('../db');
     this.online = true;
 
-    var self = this;
+    const self = this;
     ipc.on('reload-request', function() {
         self.request = self.setupRequest();
     });
@@ -21,7 +21,7 @@ function SessionHandler(app, cookiePath) {
 SessionHandler.prototype.isOnline = function() { return this.online; };
 
 SessionHandler.prototype.loadState = function() {
-    var self = this;
+    const self = this;
 
     return utils.createIfNotExists(self.cookiePath).then(function() {
         self.cookieJar = request.jar(new cookieStore(self.cookiePath));
@@ -32,20 +32,19 @@ SessionHandler.prototype.loadState = function() {
 };
 
 SessionHandler.prototype.setupRequest = function() {
-    var self = this;
-    var disableUserAgent = this.app.getSettings().getGeneralSettings().disable_user_agent;
-    var header = pageUtils.getHeaders(self.app.info.version, disableUserAgent, os.platform(), os.release());
+    const disableUserAgent = this.app.getSettings().getGeneralSettings().disable_user_agent;
+    const header = pageUtils.getHeaders(this.app.info.version, disableUserAgent, os.platform(), os.release());
 
     LOG.verbose('Settings useragent to: ' + header['User-Agent']);
     return request.defaults({
-        jar: self.cookieJar,
+        jar: this.cookieJar,
         headers: header,
         resolveWithFullResponse: true
     });
 };
 
 SessionHandler.prototype.openRequest = function(doRequest) {
-    var self = this;
+    const self = this;
 
     var handleError = function(error) {
         if(error.statusCode == 303) { // Just rethrow to let login handle it.
@@ -77,10 +76,10 @@ SessionHandler.prototype.openRequest = function(doRequest) {
         }
 
         LOG.verbose("Trying response cache");
-        var realUri = error.options.uri;
+        let realUri = error.options.uri;
         realUri = realUri.substring(realUri.indexOf('/', 9));
 
-        var cached = self.getCachedResponse(realUri);
+        let cached = self.getCachedResponse(realUri);
         if(cached) {
             return cached.body;
         } else {
@@ -90,21 +89,33 @@ SessionHandler.prototype.openRequest = function(doRequest) {
         }
     };
 
-    var promise;
-    if(typeof(doRequest) == 'string') {
-        LOG.silly('Doing request for url ' + doRequest);
-        promise = this.request(doRequest);
-    } else {
-        LOG.silly('Creating custom request');
-        promise = Promise.resolve(this.request).then(doRequest);
+    var createRequest = function() {
+        let promise;
+        if(typeof(doRequest) == 'string') {
+            LOG.silly('Doing request for url ' + doRequest);
+            promise = self.request(doRequest);
+        } else {
+            LOG.silly('Creating custom request');
+            promise = Promise.resolve(self.request).then(doRequest);
+        }
+        return promise;
     }
 
-    return promise.then(this.cacheResponse.bind(this)).catch(handleError);
+    return createRequest(function(response) {
+        let body = request.body;
+        if(body.includes("Bitte aktualisiere die Seite")) {
+            return createRequest();
+        } else if(body.includes("Retry for a live version")) {
+            throw new Error("Offline");
+        }
+
+        return response;
+    }).then(this.cacheResponse.bind(this)).catch(handleError);
 };
 
 SessionHandler.prototype.cacheResponse = function(response) {
-    var url = response.request.path;
-    var body = response.body;
+    const url = response.request.path;
+    const body = response.body;
     this.online = true;
     if(this.db('cache').find({ url: url })) {
         this.db('cache').chain().find({ url: url }).merge({ body: body }).value();

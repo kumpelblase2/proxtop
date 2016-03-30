@@ -1,20 +1,20 @@
-var _ = require('lodash');
-var Promise = require('bluebird');
-var cheerio = require('cheerio');
-var moment = require('moment');
+const _ = require('lodash');
+const Promise = require('bluebird');
+const cheerio = require('cheerio');
+const moment = require('moment');
 
-var parser = {
+const parser = {
     parseConversationParticipants: function($, participants) {
-        var users = [];
+        const users = [];
         for(var i = 0; i < participants.length; i++) {
-            var user = participants[i];
-            var children = user.children;
-            var image = $(children[1]);
-            var userinfo = $(children[3]);
+            const user = participants[i];
+            const children = user.children;
+            const image = $(children[1]);
+            const userinfo = $(children[3]);
 
-            var username = userinfo.children().first().children().first().html();
-            var userid = parseInt(/(\d+)/.exec(userinfo.children().first().attr('href'))[1]);
-            var status = userinfo.text().trim().substring(username.length).trim();
+            const username = userinfo.children().first().children().first().html();
+            const userid = parseInt(/(\d+)/.exec(userinfo.children().first().attr('href'))[1]);
+            const status = userinfo.text().trim().substring(username.length).trim();
 
             users.push({
                 userid: userid,
@@ -27,12 +27,12 @@ var parser = {
     },
 
     parseMessageNotificationItems: function($, items) {
-        var notifications = [];
+        const notifications = [];
 
         for(var i = 0; i < items.length; i++) {
-            var username = $(items[i].children[3]).text();
-            var date = $(items[i].children[5]).text();
-            var id = parseInt(/.+id=(\d+)/.exec($(items[i]).attr('href'))[1]);
+            const username = $(items[i].children[3]).text();
+            const date = $(items[i].children[5]).text();
+            const id = parseInt(/.+id=(\d+)/.exec($(items[i]).attr('href'))[1]);
 
             notifications.push({
                 username: username,

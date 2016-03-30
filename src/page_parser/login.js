@@ -1,9 +1,9 @@
-var cheerio = require('cheerio');
-var Promise = require('bluebird');
-var _ = require('lodash');
+const cheerio = require('cheerio');
+const Promise = require('bluebird');
+const _ = require('lodash');
 
 function createResult(status, formData) {
-    var data = { status: status };
+    const data = { status: status };
     if(status !== 'logged-in') {
         data.data = formData;
     }
@@ -15,11 +15,11 @@ function isLoggedIn($) {
     return $('#uname').length != 0;
 }
 
-var parser = {};
+const parser = {};
 parser.extractFormData = function(page) {
     return Promise.resolve(page)
         .then(function(page) {
-            var form = page('#login-form');
+            const form = page('#login-form');
             return _.reduce(form.serializeArray(), function(result, info) {
                 result[info.name] = info.value;
                 return result;
@@ -28,7 +28,7 @@ parser.extractFormData = function(page) {
 };
 
 parser.parseLogin = function(page) {
-    var self = this;
+    const self = this;
     return Promise.resolve(page).then(cheerio.load)
         .then(function(page) {
             if(isLoggedIn(page)) {
@@ -65,12 +65,12 @@ parser.parseLogout = function(page) {
 };
 
 parser.parseLoginCheck = function(body) {
-    var parsed = JSON.parse(body);
+    const parsed = JSON.parse(body);
     return parsed.error == 0;
 };
 
 parser.checkLogin = function(page) {
-    var self = this;
+    const self = this;
     return Promise.resolve(page).then(cheerio.load)
         .then(function(page) {
             return !!isLoggedIn(page);

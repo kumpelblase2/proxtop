@@ -5,17 +5,17 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
         video: null,
         canPlay: false
     };
-    var preferredStream = settings.get('anime').preferred_stream;
+    const preferredStream = settings.get('anime').preferred_stream;
 
     ipc.once('episode', function(ev, result) {
         $scope.$apply(function() {
             $scope.current.info = result;
-            var supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
+            const supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
             $scope.current.info.streams = supported;
             if(supported && supported.length == 1) {
                 $scope.select(supported[0]);
             } else {
-                var found = _.filter(supported, { type: preferredStream });
+                const found = _.filter(supported, { type: preferredStream });
                 if(found && found[0]) {
                     $scope.select(found[0]);
                 }

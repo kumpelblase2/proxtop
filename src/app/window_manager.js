@@ -1,8 +1,8 @@
-var BrowserWindow = require('browser-window');
-var WindowState = require('electron-window-state');
-var Shell = require('shell');
-var openAboutWindow = require('about-window').default;
-var path = require('path');
+const BrowserWindow = require('browser-window');
+const WindowState = require('electron-window-state');
+const Shell = require('shell');
+const openAboutWindow = require('about-window').default;
+const path = require('path');
 
 function WindowManager(dirs) {
     this.mainWindow = null;
@@ -17,8 +17,8 @@ WindowManager.prototype.getMainWindow = function() {
 
 WindowManager.prototype.createMainWindow = function() {
     LOG.verbose('Opening new window');
-    var self = this;
-    var windowState = WindowState({
+    const self = this;
+    const windowState = WindowState({
         defaultWidth: 800,
         defaultHeigth: 600,
         path: this.app_dir

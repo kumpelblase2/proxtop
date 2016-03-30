@@ -1,5 +1,5 @@
 angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', 'AvatarService', '$interval', '$rootScope', function($scope, ipc, $stateParams, avatar, $interval, $rootScope) {
-    var MESSAGE_UPDATE_DELAY = 15000;
+    const MESSAGE_UPDATE_DELAY = 15000;
 
     $scope.conversation = {};
     $scope.state = {
@@ -51,7 +51,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
     };
 
     $scope.refreshLast = function() {
-        var last = _.last($scope.conversation.messages);
+        const last = _.last($scope.conversation.messages);
         if(last) {
             $scope.state.lastReceived = last.id;
         } else {
@@ -60,7 +60,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
     };
 
     $scope.loadMore = function() {
-        var page = $scope.state.last_page + 1;
+        const page = $scope.state.last_page + 1;
         $scope.state.last_page = page;
         ipc.send('conversation-more', $stateParams.id, page);
         ipc.once('conversation-more', function(ev, messages) {

@@ -9,8 +9,8 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
     });
 
     ipc.on('error', function(ev, severity, message) {
-        var severityTranslation = "ERROR_SEVERITY." + severity;
-        var messageTranslation = "ERROR." + message;
+        const severityTranslation = "ERROR_SEVERITY." + severity;
+        const messageTranslation = "ERROR." + message;
         severity = $translate([severityTranslation, messageTranslation]).then(function(translations) {
             severity = translations[severityTranslation];
             message = translations[messageTranslation];
@@ -18,7 +18,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
         });
     });
 
-    var displayNotification = function(type) {
+    const displayNotification = function(type) {
         return function(ev, update) {
             $translate('WATCHLIST.NEW_' + type.toUpperCase(), { episode: update.episode, name: update.name}).then(function(translations) {
                 notification.displayNotification('Proxtop', translations, 'assets/proxtop_logo_256.png', function() {
@@ -45,15 +45,15 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
     });
 
     ipc.on('update', function(ev, release) {
-        var yes = "UPDATE.YES";
-        var no = "UPDATE.NO";
-        var newVersion = "UPDATE.NEW_VERSION";
+        const yes = "UPDATE.YES";
+        const no = "UPDATE.NO";
+        const newVersion = "UPDATE.NEW_VERSION";
 
-        var content = release.body;
+        let content = release.body;
         content = content.replace(/\r\n/g, "<br>");
 
         $translate([yes, no, newVersion]).then(function(translations) {
-            var dialog = $mdDialog.confirm()
+            const dialog = $mdDialog.confirm()
                 .title(translations[newVersion])
                 .htmlContent("Version " + release.tag_name + " - " + release.name + "<br><br>" + content)
                 .ariaLabel("Update Notification")

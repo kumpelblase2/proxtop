@@ -1,7 +1,7 @@
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require('fs'));
-var _ = require('lodash');
-var semver = require('semver');
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('fs'));
+const _ = require('lodash');
+const semver = require('semver');
 
 module.exports = {
     createIfNotExists: function(inPath) {
@@ -24,9 +24,9 @@ module.exports = {
     },
 
     getOnlineDiff: function(oldEntries, newEntries) {
-        var updates = [];
+        const updates = [];
         newEntries.forEach(function(entry) {
-            var oldEntry = _.find(oldEntries, { id: entry.id });
+            const oldEntry = _.find(oldEntries, { id: entry.id });
             if(oldEntry) {
                 if(entry.status && !oldEntry.status) {
                     updates.push(entry);
@@ -38,8 +38,8 @@ module.exports = {
     },
 
     findLatestRelease: function(releases, current) {
-        var actual = _.filter(releases, { prerelease: false, draft: false });
-        var orderedNewerReleases = _.reverse(_.sortBy(_.filter(actual, function(release) {
+        const actual = _.filter(releases, { prerelease: false, draft: false });
+        const orderedNewerReleases = _.reverse(_.sortBy(_.filter(actual, function(release) {
             if(current) {
                 return semver.gt(release.tag_name, current);
             } else {

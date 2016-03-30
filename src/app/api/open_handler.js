@@ -1,14 +1,14 @@
-var ipc = require('electron').ipcMain;
-var childProcess = require('child_process');
-var opener = require('opener');
-var util = require('util');
+const ipc = require('electron').ipcMain;
+const childProcess = require('child_process');
+const opener = require('opener');
+const util = require('util');
 
 function OpenHandler(settings) {
     this.settings = settings;
 }
 
 OpenHandler.prototype.buildUrl = function(type, id, ep, sub) {
-    var path = type === 'anime' ? PROXER_PATHS.WATCH_ANIME : PROXER_PATHS.VIEW_MANGA;
+    const path = type === 'anime' ? PROXER_PATHS.WATCH_ANIME : PROXER_PATHS.VIEW_MANGA;
     sub = type === 'anime' ? sub : (sub == 'englisch' ? 'en' : 'de');
     return PROXER_BASE_URL + util.format(path, id, ep, sub);
 };
@@ -21,7 +21,7 @@ OpenHandler.prototype.open = function(type, id, ep, sub) {
         openSettings = this.settings.getMangaSettings();
     }
 
-    var url = this.buildUrl(type, id, ep, sub);
+    const url = this.buildUrl(type, id, ep, sub);
     if(openSettings.open_with == 'external') {
         childProcess.execFile(openSettings.external_path, [url], function(err, stdout, stderr) {
             if(err) {
@@ -38,7 +38,7 @@ OpenHandler.prototype.open = function(type, id, ep, sub) {
 };
 
 OpenHandler.prototype.register = function() {
-    var self = this;
+    const self = this;
     ipc.on('open', function(event, type, id, ep, sub) {
         self.open(type, id, ep, sub);
     });

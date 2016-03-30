@@ -1,6 +1,6 @@
-var ipc = require('electron').ipcMain;
-var newsParser = require('../../page_parser').news;
-var Promise = require('bluebird');
+const ipc = require('electron').ipcMain;
+const newsParser = require('../../page_parser').news;
+const Promise = require('bluebird');
 
 function NewsHandler(sessionHandler) {
     this.session_handler = sessionHandler;
@@ -12,7 +12,7 @@ NewsHandler.prototype.loadNews = function() {
 };
 
 NewsHandler.prototype.register = function() {
-    var self = this;
+    const self = this;
     ipc.on('news', function(event) {
         self.loadNews().then(function(result) {
             event.sender.send('news', result);

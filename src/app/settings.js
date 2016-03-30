@@ -1,10 +1,10 @@
-var ipc = require('electron').ipcMain;
-var Promise = require('bluebird');
-var _ = require('lodash');
-var db = require('./db');
-var utils = require('./utils');
+const ipc = require('electron').ipcMain;
+const Promise = require('bluebird');
+const _ = require('lodash');
+const db = require('./db');
+const utils = require('./utils');
 
-var DEFAULTS = {
+const DEFAULTS = {
     DEFAULT_ACCOUNT_SETTINGS: {
         type: 'account',
         keep_login: true,
@@ -39,7 +39,7 @@ var DEFAULTS = {
 };
 
 // Might wanna do this with a loop or something
-var settings = generateSettings([
+const settings = generateSettings([
     'account',
     'anime',
     'watchlist',
@@ -48,11 +48,11 @@ var settings = generateSettings([
 ]);
 
 function generateSettings(allSettings) {
-    var result = {};
+    const result = {};
 
     allSettings.forEach(function(setting) {
-        var getterSetter = createGetterSetter(setting);
-        var capitalized = utils.capizalizeFirstLetter(setting);
+        const getterSetter = createGetterSetter(setting);
+        const capitalized = utils.capizalizeFirstLetter(setting);
         result['get' + capitalized + 'Settings'] = getterSetter.getter;
         result['set' + capitalized + 'Settings'] = getterSetter.setter;
     });
@@ -61,17 +61,16 @@ function generateSettings(allSettings) {
 }
 
 function createGetterSetter(setting) {
-    var uppercase = setting.toUpperCase();
-    var globalVar = DEFAULTS['DEFAULT_' + uppercase + '_SETTINGS'];
+    const uppercase = setting.toUpperCase();
+    const globalVar = DEFAULTS['DEFAULT_' + uppercase + '_SETTINGS'];
     return {
         getter: function() {
-            var result = db('settings').find({ type: setting });
+            const result = db('settings').find({ type: setting });
             if(!result) {
                 db('settings').push(globalVar);
                 return globalVar;
             } else {
-                result = _.defaults(result, globalVar);
-                return result;
+                return _.defaults(result, globalVar);
             }
         },
         setter: function(value) {
@@ -81,7 +80,7 @@ function createGetterSetter(setting) {
 }
 
 ipc.on('settings', function(event, type, value) {
-    var func = settings[(value ? 'set' : 'get') + utils.capizalizeFirstLetter(type) + 'Settings'];
+    const func = settings[(value ? 'set' : 'get') + utils.capizalizeFirstLetter(type) + 'Settings'];
     if(func) {
         event.returnValue = func(value);
     } else {

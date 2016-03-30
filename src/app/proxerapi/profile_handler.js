@@ -1,7 +1,7 @@
-var ipc = require('electron').ipcMain;
-var pageUtils = require('./page_utils');
-var profileParser = require('../../page_parser').profile;
-var Promise = require('bluebird');
+const ipc = require('electron').ipcMain;
+const pageUtils = require('./page_utils');
+const profileParser = require('../../page_parser').profile;
+const Promise = require('bluebird');
 
 function ProfileHandler(sessionHandler) {
     this.session_handler = sessionHandler;
@@ -13,7 +13,7 @@ ProfileHandler.prototype.loadProfile = function() {
 };
 
 ProfileHandler.prototype.register = function() {
-    var self = this;
+    const self = this;
     ipc.on('profile', function(event) {
         self.loadProfile().then(function(result) {
             event.sender.send('profile', result);

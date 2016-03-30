@@ -1,6 +1,6 @@
-var ipc = require('electron').ipcMain;
-var messageParser = require('../../page_parser').message;
-var Promise = require('bluebird');
+const ipc = require('electron').ipcMain;
+const messageParser = require('../../page_parser').message;
+const Promise = require('bluebird');
 
 function MessagesHandler(app, sessionHandler) {
     this.app = app;
@@ -53,7 +53,7 @@ MessagesHandler.prototype.checkNotifications = function() {
 };
 
 MessagesHandler.prototype.messageCheckLoop = function() {
-    var self = this;
+    const self = this;
     setTimeout(function() {
         self.messageCheck();
         self.messageCheckLoop();
@@ -61,15 +61,15 @@ MessagesHandler.prototype.messageCheckLoop = function() {
 };
 
 MessagesHandler.prototype.messageCheck = function() {
-    var self = this;
-    var enabled = self.settings.getGeneralSettings().message_notification;
+    const self = this;
+    const enabled = self.settings.getGeneralSettings().message_notification;
     if(!enabled) {
         this.cache.remove();
         return;
     }
 
-    var interval = self.settings.getGeneralSettings().check_message_interval;
-    var time = new Date().getTime();
+    const interval = self.settings.getGeneralSettings().check_message_interval;
+    const time = new Date().getTime();
     if(time - self.lastCheck > interval * 60000 - 5000) {
         this.lastCheck = time;
         LOG.info("Check if new messages have arrived...");
@@ -88,7 +88,7 @@ MessagesHandler.prototype.messageCheck = function() {
 };
 
 MessagesHandler.prototype.register = function() {
-    var self = this;
+    const self = this;
     ipc.on('conversations', function(event) {
         self.loadConversations().then(function(result) {
             event.sender.send('conversations', result);

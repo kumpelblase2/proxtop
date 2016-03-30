@@ -1,5 +1,5 @@
-var winston = require('winston');
-var path = require('path');
+const winston = require('winston');
+const path = require('path');
 
 global.APP_NAME = "proxtop";
 global.PROXER_BASE_URL = "https://proxer.me";
@@ -35,7 +35,7 @@ try {
     global.APP_DIR = path.join(__dirname, '..', '..', APP_NAME);
 }
 
-var logPath = path.join(APP_DIR, "app.log");
+const logPath = path.join(APP_DIR, "app.log");
 console.log("Setting logfile to " + logPath);
 global.LOG = new (winston.Logger)({
     transports: [

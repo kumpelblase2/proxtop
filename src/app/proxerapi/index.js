@@ -1,12 +1,12 @@
-var SessionHandler = require('./session_handler');
-var LoginHandler = require('./login_handler');
-var ProfileHandler = require('./profile_handler');
-var WatchlistHandler = require('./watchlist_handler');
-var NewsHandler = require('./news_handler');
-var LoginChecker = require('./login_checker');
-var MessageHandler = require('./message_handler');
-var EpisodeHandler = require('./episode_handler');
-var db = require('../db');
+const SessionHandler = require('./session_handler');
+const LoginHandler = require('./login_handler');
+const ProfileHandler = require('./profile_handler');
+const WatchlistHandler = require('./watchlist_handler');
+const NewsHandler = require('./news_handler');
+const LoginChecker = require('./login_checker');
+const MessageHandler = require('./message_handler');
+const EpisodeHandler = require('./episode_handler');
+const db = require('../db');
 
 function API(app, cookiePath) {
     this.session_handler = new SessionHandler(app, cookiePath);
