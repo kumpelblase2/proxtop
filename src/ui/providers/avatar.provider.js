@@ -1,5 +1,5 @@
 angular.module('proxtop').service('AvatarService', function() {
-    this.getAvatarForID = function(id) {
+    this.getAvatarForID = function(id = null) {
         if(id == null || id == "") {
             id = "nophoto.png";
         }

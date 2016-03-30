@@ -42,8 +42,7 @@ MessagesHandler.prototype.sendMessage = function(id, content) {
     }).then(messageParser.parseMessagePostResponse);
 };
 
-MessagesHandler.prototype.refreshMessages = function(id, last_id) {
-    last_id = last_id || 0;
+MessagesHandler.prototype.refreshMessages = function(id, last_id = 0) {
     return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NEW_API + id + "&mid=" + last_id)
         .then(messageParser.parseNewMessages);
 };

@@ -8,9 +8,7 @@ function LoginHandler(sessionHandler) {
     this.session_handler = sessionHandler;
 }
 
-LoginHandler.prototype.login = function(username, password, keepLogin) {
-    keepLogin = keepLogin || false;
-
+LoginHandler.prototype.login = function(username, password, keepLogin = false) {
     var self = this;
     return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.ROOT)
         .then(loginParser.parseLogin)
