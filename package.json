@@ -7,7 +7,7 @@
     "test": "mocha --opts mocha.opts",
     "start": "./run.sh",
     "setup": "./setup.sh",
-    "prepare": "mkdir dist && cp -R src node_modules package.json bower.json bower_components main.js dist",
+    "prepare": "mkdir dist && cp -R src package.json bower.json bower_components main.js dist && cd dist && npm install --production",
     "clean": "rm -r dist/",
     "build:linux": "electron-packager dist \"Proxtop\" --platform=linux --arch=x64 --asar",
     "build:osx": "electron-packager dist \"Proxtop\" --platform=darwin --arch=x64 --asar --icon=src/assets/proxtop_logo_256.icns",
