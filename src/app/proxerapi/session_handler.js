@@ -102,7 +102,7 @@ SessionHandler.prototype.openRequest = function(doRequest) {
     }
 
     return createRequest().then(function(response) {
-        let body = request.body;
+        const body = response.body;
         if(body.includes("Bitte aktualisiere die Seite")) {
             LOG.verbose("Proxer requested page reload.");
             return createRequest();
