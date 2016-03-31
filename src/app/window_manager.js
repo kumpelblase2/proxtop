@@ -29,7 +29,7 @@ WindowManager.prototype.createMainWindow = function() {
         height: windowState.height,
         y: windowState.y,
         x: windowState.x,
-        'auto-hide-menu-bar': true,
+        autoHideMenuBar: true,
         icon: this.logo_location
     });
 
