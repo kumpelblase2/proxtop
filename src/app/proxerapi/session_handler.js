@@ -101,9 +101,10 @@ SessionHandler.prototype.openRequest = function(doRequest) {
         return promise;
     }
 
-    return createRequest(function(response) {
+    return createRequest().then(function(response) {
         let body = request.body;
         if(body.includes("Bitte aktualisiere die Seite")) {
+            LOG.verbose("Proxer requested page reload.");
             return createRequest();
         } else if(body.includes("Retry for a live version")) {
             throw new Error("Offline");
