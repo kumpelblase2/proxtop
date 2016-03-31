@@ -23,6 +23,10 @@ class Updater {
         }, 1000);
     }
 
+    stop() {
+        
+    }
+
     saveLimitation() {
         this.settings.chain().find({ name: 'limited' }).assign(this.limited).value();
     }
