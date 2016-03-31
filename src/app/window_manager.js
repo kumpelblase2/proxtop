@@ -49,8 +49,7 @@ WindowManager.prototype.createMainWindow = function() {
 
 WindowManager.prototype.createAboutWindow = function() {
     openAboutWindow({
-        icon_path: this.logo_location,
-        open_devtools: true
+        icon_path: this.logo_location
     });
 };
 
