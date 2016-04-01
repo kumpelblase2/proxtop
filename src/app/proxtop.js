@@ -31,8 +31,7 @@ class Proxtop {
         this.updater.stop();
     }
 
-    notifyWindow() {
-        const params = Array.prototype.slice.call(arguments);
+    notifyWindow(...params) {
         const mainWindow = this.window_manager.getMainWindow();
         mainWindow.send.apply(mainWindow, params);
     }
