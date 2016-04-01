@@ -2,10 +2,11 @@ const path = require('path');
 const settings = require('./settings');
 const API = require('./api');
 const ProxerAPI = require('./proxerapi');
-const Menu = require('electron').Menu;
+const ProxtopMenu = require('./menu');
+const { Menu } = require('electron');
 
 class Proxtop {
-    constructor(app, window_manager, updater, options) {
+    constructor(app, window_manager, updater, tray, options) {
         this.app = app;
         this.window_manager = window_manager;
         this.name = options.name;
@@ -15,6 +16,7 @@ class Proxtop {
         this.updater = updater;
         this.api = new API(settings);
         this.proxer_api = new ProxerAPI(this, path.join(this.app_dir, "cookies.json"));
+        this.tray = tray;
     }
 
     start() {
@@ -23,7 +25,11 @@ class Proxtop {
         this.api.init();
         const self = this;
         return this.proxer_api.init().then(function() {
-            self.window_manager.createMainWindow();
+            if(self.getSettings().getGeneralSettings().use_tray) {
+                this.tray.create();
+            }
+        }).then(function() {
+            self.openMainWindow();
         });
     }
 
@@ -48,7 +54,7 @@ class Proxtop {
     setupApp() {
         const self = this;
         this.app.on('window-all-closed', function() {
-            if(process.platform != 'darwin') {
+            if(!self.tray.exists() && process.platform != 'darwin') {
                 self.shutdown();
                 self.app.quit();
             }
@@ -57,48 +63,16 @@ class Proxtop {
         // TODO check if this still works on OSX
         this.app.on('activate-with-no-open-windows', function(event) {
             event.preventDefault();
-            self.window_manager.createMainWindow();
+            self.openMainWindow();
         });
 
-        const menu = Menu.buildFromTemplate([
-            {
-                label: 'Proxtop',
-                submenu: [
-                    {
-                        label: 'About',
-                        role: 'about',
-                        click: function() {
-                            self.window_manager.createAboutWindow();
-                        }
-                    },
-                    {
-                        label: 'Toggle Developer Tools',
-                        accelerator: (function() {
-                            if (process.platform == 'darwin') {
-                                return 'Alt+Command+I';
-                            } else {
-                                return 'Ctrl+Shift+I';
-                            }
-                        })(),
-                        click: function(item, focusedWindow) {
-                            if (focusedWindow) {
-                                focusedWindow.toggleDevTools();
-                            }
-                        }
-                    },
-                    {
-                        type: 'separator'
-                    },
-                    {
-                        label: 'Quit',
-                        accelerator: 'Command+Q',
-                        click: function() { self.app.quit(); }
-                    }
-                ]
-            }
-        ]);
+        const menu = ProxtopMenu(this);
 
         Menu.setApplicationMenu(menu);
+    }
+
+    openMainWindow() {
+        this.window_manager.createMainWindow();
     }
 }
 
