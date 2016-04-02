@@ -4,6 +4,8 @@ const API = require('./api');
 const ProxerAPI = require('./proxerapi');
 const ProxtopMenu = require('./menu');
 const { Menu } = require('electron');
+const utils = require('./utils');
+const NotificationManager = require('./notification_manager');
 
 class Proxtop {
     constructor(app, window_manager, updater, tray, options) {
@@ -17,16 +19,17 @@ class Proxtop {
         this.api = new API(settings);
         this.proxer_api = new ProxerAPI(this, path.join(this.app_dir, "cookies.json"));
         this.tray = tray;
+        this.notification_manager = new NotificationManager(this.tray, this);
     }
 
     start() {
         this.setupApp();
-        this.updater.start(this.info.version, this.notifyUpdate.bind(this));
+        this.updater.start(this.info.version, (release) => this.notifyUpdate(release));
         this.api.init();
         const self = this;
         return this.proxer_api.init().then(function() {
-            if(self.getSettings().getGeneralSettings().use_tray) {
-                this.tray.create();
+            if(!utils.isNotificationSupported()) {
+                self.tray.create();
             }
         }).then(function() {
             self.openMainWindow();
@@ -35,6 +38,10 @@ class Proxtop {
 
     shutdown() {
         this.updater.stop();
+    }
+
+    displayNotification(notification) {
+        this.notification_manager.displayNotification(notification);
     }
 
     notifyWindow() {
@@ -54,7 +61,7 @@ class Proxtop {
     setupApp() {
         const self = this;
         this.app.on('window-all-closed', function() {
-            if(!self.tray.exists() && process.platform != 'darwin') {
+            if(process.platform != 'darwin') {
                 self.shutdown();
                 self.app.quit();
             }
@@ -66,9 +73,8 @@ class Proxtop {
             self.openMainWindow();
         });
 
-        const menu = ProxtopMenu(this);
-
-        Menu.setApplicationMenu(menu);
+        this.menu = ProxtopMenu(this);
+        Menu.setApplicationMenu(this.menu);
     }
 
     openMainWindow() {

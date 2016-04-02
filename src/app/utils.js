@@ -2,6 +2,7 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const _ = require('lodash');
 const semver = require('semver');
+const os = require('os');
 
 module.exports = {
     createIfNotExists: function(inPath) {
@@ -50,5 +51,9 @@ module.exports = {
         }));
 
         return orderedNewerReleases[0];
+    },
+
+    isNotificationSupported: function(platform = os.platform(), release = os.release()) {
+        return platform != 'win32' || os.release.startsWith('10.');
     }
 };

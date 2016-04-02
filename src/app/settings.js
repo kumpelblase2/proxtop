@@ -30,8 +30,7 @@ const DEFAULTS = {
         type: 'general',
         disable_user_agent: false,
         check_message_interval: 30,
-        message_notification: true,
-        use_tray: true
+        message_notification: true
     },
     DEFAULT_MANGA_SETTINGS: {
         type: 'manga',

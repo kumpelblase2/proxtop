@@ -20,14 +20,12 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
 
     const displayNotification = function(type) {
         return function(ev, update) {
-            $translate('WATCHLIST.NEW_' + type.toUpperCase(), { episode: update.episode, name: update.name}).then(function(translations) {
-                notification.displayNotification('Proxtop', translations, 'assets/proxtop_logo_256.png', function() {
-                    if(type == 'anime') {
-                        open.openAnime(update.id, update.episode, update.sub);
-                    } else {
-                        open.openManga(update.id, update.episode, update.sub);
-                    }
-                });
+            notification.displayNotification(update.title, update.content, update.icon, function() {
+                if(type == 'anime') {
+                    open.openAnime(update.id, update.episode, update.sub);
+                } else {
+                    open.openManga(update.id, update.episode, update.sub);
+                }
             });
         };
     };

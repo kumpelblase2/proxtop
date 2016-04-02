@@ -3,6 +3,7 @@ const watchlistParser = require('../../page_parser').watchlist;
 const Promise = require('bluebird');
 const util = require('util');
 const utils = require('../utils');
+const translate = require('../translation');
 
 const SET_TO_CURRENT = "?format=json&type=reminder&title=reminder_this";
 const SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
@@ -13,6 +14,7 @@ function WatchlistHandler(app, sessionHandler) {
     this.app = app;
     this.settings = require('../settings');
     this.lastCheck = 0;
+    this.translation = translate();
 }
 
 WatchlistHandler.prototype.loadWatchlist = function() {
@@ -44,7 +46,12 @@ WatchlistHandler.prototype.checkUpdates = function() {
         Object.keys(updates).forEach(function(type) {
             updates[type].forEach(function(update) {
                 LOG.verbose('Sending watchlist update for ' + update.name);
-                self.app.notifyWindow('new-' + type + '-ep', update);
+                self.app.displayNotification({
+                    type: 'new-' + type + '-ep',
+                    title: 'Proxtop',
+                    content: self.translation.get(`WATCHLIST.NEW_${type.toUpperCase()}`, { episode: update.episode, name: update.name }),
+                    icon: 'assets/proxtop_logo_256.png'
+                });
             });
         });
     });
