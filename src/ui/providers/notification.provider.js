@@ -15,20 +15,11 @@ angular.module('proxtop').service('notification', [function() {
             return notification;
         } else {
             image = path.join(__dirname, image);
-            const temp = new tray(image);
-            temp.displayBalloon({
+            this.trayIcon = this.trayIcon || new tray(image);
+            this.trayIcon.displayBalloon({
                 icon: image,
                 title: title,
                 content: message
-            });
-
-            temp.on('balloon-closed', function() {
-                temp.destroy();
-            });
-
-            temp.on('balloon-click', function() {
-                callback();
-                temp.destroy();
             });
         }
     };
