@@ -2,7 +2,7 @@ angular.module('proxtop', ['ngMaterial', 'ngSanitize', 'ui.router', 'angular-pro
     .config(['$stateProvider', '$urlRouterProvider', '$translateProvider', function($stateProvider, $urlRouterProvider, $translateProvider) {
         $urlRouterProvider.otherwise('/');
         $translateProvider.useStaticFilesLoader({
-            prefix: 'ui/locale/locale-',
+            prefix: 'locale/locale-',
             suffix: '.json'
         });
 
