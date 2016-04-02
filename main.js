@@ -8,6 +8,15 @@ const Proxtop = require('./src/app/proxtop');
 const WindowManager = require('./src/app/window_manager');
 const Updater = require('./src/app/updater');
 const TrayManager = require('./src/app/tray_manager');
+const translate = require('./src/app/translation');
+const settings = require('./src/app/settings');
+const path = require('path');
+
+translate.setup(settings, {
+    path: path.join(__dirname, 'src', 'locale'),
+    prefix: 'locale-',
+    suffix: '.json'
+});
 
 LOG.verbose('Initializing...');
 const updater = new Updater(GITHUB_RELEASES_URL);
