@@ -62,7 +62,13 @@ SessionHandler.prototype.openRequest = function(doRequest) {
         } else if(error.statusCode == 503) {
             LOG.error('Received 503 error, attempting cloudlfare circumvention');
             self.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.CLOUDFLARE);
-            return self.cloudscraper.handle(error.response, error.response.body);
+            return self.cloudscraper.handle(error.response, error.response.body).then(() => self.openRequest(doRequest)).catch((error) => {
+                if(error.statusCode == 302) {
+                    return self.openRequest(doRequest);
+                } else {
+                    throw error;
+                }
+            });
         } else if(/getaddr/.test(error.message)) {
             LOG.error('Other error but contained "getaddr" so it\'s probably no network:');
             LOG.error(error.message);

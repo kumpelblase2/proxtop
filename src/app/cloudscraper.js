@@ -62,7 +62,7 @@ Cloudscraper.prototype.solveChallenge = function(response, body) {
             'pass': challenge_pass
         };
     }).then(function(result) {
-        const answerUrl = response.request.uri.protocol + '://' + host + '/cdn-cgi/l/chk_jschl';
+        const answerUrl = response.request.uri.protocol + '//' + host + '/cdn-cgi/l/chk_jschl';
 
         const headers = {
             Referer: response.request.uri.href // Original url should be placed as referer
@@ -79,7 +79,7 @@ Cloudscraper.prototype.solveChallenge = function(response, body) {
 
 Cloudscraper.prototype.handle = function(response, body) {
     checkForErrors(body);
-
+    const self = this;
     // If body contains specified string, solve challenge
     if (body.indexOf('a = document.getElementById(\'jschl-answer\');') !== -1) {
         LOG.verbose('Detected CloudFlare protection. Attempt to resolve it.');
