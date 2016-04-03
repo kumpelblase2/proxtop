@@ -1,6 +1,7 @@
 const ipc = require('electron').ipcMain;
 const messageParser = require('../../page_parser').message;
 const Promise = require('bluebird');
+const translate = require('../translation');
 
 function MessagesHandler(app, sessionHandler) {
     this.app = app;
@@ -8,6 +9,7 @@ function MessagesHandler(app, sessionHandler) {
     this.settings = require('../settings');
     this.lastCheck = 0;
     this.cache = require('../db')('messages-cache');
+    this.translation = translate();
 }
 
 MessagesHandler.prototype.loadConversations = function() {
@@ -77,7 +79,12 @@ MessagesHandler.prototype.messageCheck = function() {
             notifications.forEach(function(notification) {
                 if(!self.cache.find({ username: notification.username })) {
                     LOG.verbose('Got new message from ' + notification.username);
-                    self.app.notifyWindow('new-message', notification);
+                    self.app.displayNotification({
+                        type: 'new-message',
+                        title: 'Proxtop',
+                        content: self.translation.get('MESSAGES.NEW_MESSAGE', { username: notification.username }),
+                        icon: 'assets/proxtop_logo_256.png'
+                    });
                 }
             });
 
