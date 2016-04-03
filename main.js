@@ -12,7 +12,7 @@ const translate = require('./src/app/translation');
 const settings = require('./src/app/settings');
 const path = require('path');
 
-translate.setup(settings, {
+translate.load(settings, {
     path: path.join(__dirname, 'src', 'locale'),
     prefix: 'locale-',
     suffix: '.json'
