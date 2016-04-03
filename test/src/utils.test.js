@@ -53,7 +53,9 @@ describe('utils#findLatestRelease', function() {
                 draft: false
             }
         ];
-        should.not.exist(utils.findLatestRelease(normalReleases, '1.1.0'));
+        if(utils.findLatestRelease(normalReleases, '1.1.0')) {
+            should.fail('something', 'not existent');
+        }
     });
 
     it('should ignore prereleases and drafts', function() {
@@ -92,7 +94,9 @@ describe('utils#findLatestRelease', function() {
             newest
         ];
 
-        should.not.exist(utils.findLatestRelease(normalReleases, '1.1.0'));
+        if(utils.findLatestRelease(normalReleases, '1.1.0')) {
+            should.fail('something', 'not existent');
+        }
         utils.findLatestRelease(normalReleases).should.eql(newest);
         utils.findLatestRelease(normalReleases, '1.0.0').should.eql(newest);
     });

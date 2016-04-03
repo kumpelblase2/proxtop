@@ -96,7 +96,7 @@ const parser = {
     parseInfo: function($, page) {
         const table = page.find('table.details').first();
         const rows = table.find('tr');
-        const current = rows.first();
+        let current = rows.first();
         const info = {};
         info.name = extractRow(current);
         current = current.next();

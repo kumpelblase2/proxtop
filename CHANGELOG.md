@@ -1,4 +1,15 @@
-# 0.3.0 (current)
+# 0.3.1 (current)
+Additions:
+- Automatically save settings instead of manually having to click save.
+
+Fixes:
+- Fix display issue if avatar is too large in height.
+- Fix too many tray icons on windows 7.
+- Fix error when proxer displays to reload the site.
+- Fix duplicate messages when opening a new conference.
+- Internal updates.
+
+# 0.3.0
 Additions:
 - Added own icon
 - Improved messaging to be able to write, load previous messages and display participants

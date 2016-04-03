@@ -89,7 +89,7 @@ SessionHandler.prototype.openRequest = function(doRequest) {
         }
     };
 
-    var createRequest = function() {
+    const createRequest = function() {
         let promise;
         if(typeof(doRequest) == 'string') {
             LOG.silly('Doing request for url ' + doRequest);

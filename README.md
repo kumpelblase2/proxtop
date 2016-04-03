@@ -46,7 +46,9 @@ You can find the latest stable releases under [Releases](https://github.com/kump
 ### Running latest/development version
 First get all required dependencies (requires NPM and bower to be installed):
 ```
-npm run setup
+make
+# Or this:
+npm install && bower install
 ```
 
 Run tests via:
@@ -62,7 +64,7 @@ npm start
 
 Or if you want to build the application:
 ```
-npm run build
+make clean build
 ```
 
 ## FAQ

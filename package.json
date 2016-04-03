@@ -5,14 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "mocha --opts mocha.opts",
-    "start": "./run.sh",
-    "setup": "./setup.sh",
-    "prepare": "mkdir dist && cp -R src package.json bower.json bower_components main.js dist && cd dist && npm install --production",
-    "clean": "rm -r dist/",
-    "build:linux": "electron-packager dist \"Proxtop\" --platform=linux --arch=x64 --asar",
-    "build:osx": "electron-packager dist \"Proxtop\" --platform=darwin --arch=x64 --asar --icon=src/assets/proxtop_logo_256.icns",
-    "build:win": "electron-packager dist \"Proxtop\" --platform=win32 --arch=x64 --asar --icon=src/assets/proxtop_logo_256.ico",
-    "build": "npm run prepare && npm run build:linux && npm run build:osx && npm run build:win"
+    "start": "./run.sh"
   },
   "repository": {
     "type": "git",
@@ -34,7 +27,7 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "electron-packager": "^6.0.0",
-    "electron-prebuilt": "^0.37.3",
+    "electron-prebuilt": "0.37.2",
     "mocha": "^2.4.5"
   },
   "dependencies": {

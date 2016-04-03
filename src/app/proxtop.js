@@ -44,8 +44,7 @@ class Proxtop {
         this.notification_manager.displayNotification(notification);
     }
 
-    notifyWindow() {
-        const params = Array.prototype.slice.call(arguments);
+    notifyWindow(...params) {
         const mainWindow = this.window_manager.getMainWindow();
         mainWindow.send.apply(mainWindow, params);
     }
