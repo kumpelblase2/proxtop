@@ -32,7 +32,13 @@ WatchlistHandler.prototype.checkUpdates = function() {
                 anime: result.anime,
                 manga: result.manga
             });
-            return result;
+
+            const onlineFilter = entry => entry.status;
+
+            return {
+                anime: result.anime.filter(onlineFilter),
+                manga: result.manga.filter(onlineFilter)
+            };
         }
 
         const updates = {};
