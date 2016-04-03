@@ -4,6 +4,8 @@ angular.module('proxtop').service('notification', [function() {
     const path = remote.require('path');
     const tray = remote.Tray;
 
+    this.trayIcon = null;
+
     this.displayNotification = function(title, message, image, callback) {
         if(os.platform() != 'win32' || /10\..+/.test(os.release())) {
             const notification = new Notification(title, {
