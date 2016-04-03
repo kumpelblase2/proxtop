@@ -8,11 +8,12 @@
     "start": "./run.sh",
     "setup": "./setup.sh",
     "prepare": "mkdir dist && cp -R src package.json bower.json bower_components main.js dist && cd dist && npm install --production",
-    "clean": "rm -r dist/",
+    "clean": "rm -r dist/ && rm -r packaged/",
     "build:linux": "electron-packager dist \"Proxtop\" --platform=linux --arch=x64 --asar",
     "build:osx": "electron-packager dist \"Proxtop\" --platform=darwin --arch=x64 --asar --icon=src/assets/proxtop_logo_256.icns",
     "build:win": "electron-packager dist \"Proxtop\" --platform=win32 --arch=x64 --asar --icon=src/assets/proxtop_logo_256.ico",
-    "build": "npm run prepare && npm run build:linux && npm run build:osx && npm run build:win"
+    "build:all": "electron-packager dist --platform=all --arch=x64 --out=packaged/ --overwrite --asar --icon=src/assets/proxtop_logo_256",
+    "build": "npm run prepare && npm run build:all"
   },
   "repository": {
     "type": "git",
