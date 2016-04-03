@@ -6,6 +6,11 @@ class Translation {
     constructor(settings, translations) {
         this.settings = settings;
         this.translations = translations;
+        this.fixed_language = null;
+    }
+
+    getAvailableLanguages() {
+        return Object.keys(this.translations);
     }
 
     get(key, params = {}) {
@@ -24,22 +29,25 @@ class Translation {
         return value;
     }
 
+    setLanguage(lang) {
+        this.fixed_language = lang;
+    }
+
     getLanguage() {
-        return this.settings.getGeneralSettings().language;
+        return this.fixed_language || this.settings.getGeneralSettings().language;
     }
 
     static load(settings, options = { path: '../', prefix: 'locale-', suffix: '.json' }) {
         const translations = {};
-        fs.readdir(options.path, (err, files) => {
-            files.filter(f => {
-                return f.startsWith(options.prefix) && f.endsWith(options.suffix)
-            }).forEach(f => {
-                let lang = f.substring(options.prefix.length, f.length - options.suffix.length);
-                translations[lang] = JSON.parse(fs.readFileSync(path.join(options.path, f)));
-            });
+        const files = fs.readdirSync(options.path);
+        files.filter(f => {
+            return f.startsWith(options.prefix) && f.endsWith(options.suffix)
+        }).forEach(f => {
+            const lang = f.substring(options.prefix.length, f.length - options.suffix.length);
+            translations[lang] = JSON.parse(fs.readFileSync(path.join(options.path, f)));
         });
 
-        return new Translation(translations);
+        return new Translation(settings, translations);
     }
 }
 
@@ -51,6 +59,12 @@ var translate = function() {
 
 translate.setup = function(settings, options) {
     latest = new Translation(settings, options);
+    return latest;
 }
+
+translate.load = function(settings, options) {
+    latest = Translation.load(settings, options);
+    return latest;
+};
 
 module.exports = translate;
