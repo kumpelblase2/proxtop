@@ -96,3 +96,5 @@ I hate ads myself, so I don't see this app getting ads to increase revenue for t
 
 ## License
 This application is licensed under the MIT license. See the `LICENSE` file in this repository for more information.
+
+The Proxtop Logo is licensed under the Creative Commons BY-NC-SA 4.0. You can find more details and the full license text at http://creativecommons.org/licenses/by-nc-sa/4.0/ .
