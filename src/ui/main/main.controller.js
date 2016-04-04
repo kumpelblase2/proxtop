@@ -20,14 +20,12 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
 
     const displayNotification = function(type) {
         return function(ev, update) {
-            $translate('WATCHLIST.NEW_' + type.toUpperCase(), { episode: update.episode, name: update.name}).then(function(translations) {
-                notification.displayNotification('Proxtop', translations, 'assets/proxtop_logo_256.png', function() {
-                    if(type == 'anime') {
-                        open.openAnime(update.id, update.episode, update.sub);
-                    } else {
-                        open.openManga(update.id, update.episode, update.sub);
-                    }
-                });
+            notification.displayNotification(update.title, update.content, update.icon, function() {
+                if(type == 'anime') {
+                    open.openAnime(update.id, update.episode, update.sub);
+                } else {
+                    open.openManga(update.id, update.episode, update.sub);
+                }
             });
         };
     };
@@ -37,10 +35,8 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
     ipc.on('new-anime-ep', displayNotification('anime'));
     ipc.on('new-manga-ep', displayNotification('manga'));
     ipc.on('new-message', function(ev, message) {
-        $translate('MESSAGES.NEW_MESSAGE', { user: message.username }).then(function(translations) {
-            notification.displayNotification('Proxtop', translations, 'assets/proxtop_logo_256.png', function() {
-                $state.go('message', { id: message.id });
-            });
+        notification.displayNotification(message.title, message.content, message.icon, function() {
+            $state.go('message', { id: message.id });
         });
     });
 
