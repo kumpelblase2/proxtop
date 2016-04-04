@@ -82,7 +82,7 @@ MessagesHandler.prototype.messageCheck = function() {
                     self.app.displayNotification({
                         type: 'new-message',
                         title: 'Proxtop',
-                        content: self.translation.get('MESSAGES.NEW_MESSAGE', { username: notification.username }),
+                        content: self.translation.get('MESSAGES.NEW_MESSAGE', { user: notification.username }),
                         icon: 'assets/proxtop_logo_256.png'
                     });
                 }
