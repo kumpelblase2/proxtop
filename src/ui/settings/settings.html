@@ -4,101 +4,99 @@
 }
 </style>
 
-<md-content flex="70" flex-offset="15">
-    <div layout="column" flex>
-        <center><h4 translate>SETTINGS.AUTOSAVE_INFO</h4></center>
-        <md-card>
-            <md-card-header>
-                <md-card-header-text>
-                    <h2 translate>SETTINGS.GENERAL</h2>
-                </md-card-header-text>
-            </md-card-header>
-            <md-card-content layout="column">
-                <p translate>SETTINGS.GENERAL.LANGUAGE</p>
-                <md-radio-group ng-model="settings.general.language">
-                    <md-radio-button value="de">{{ 'SETTINGS.GENERAL.LANGUAGE.DE' | translate }}</md-radio-button>
-                    <md-radio-button value="en">{{ 'SETTINGS.GENERAL.LANGUAGE.EN' | translate }}</md-radio-button>
+<div>
+    <center><h4 translate>SETTINGS.AUTOSAVE_INFO</h4></center>
+    <md-card>
+        <md-card-header>
+            <md-card-header-text>
+                <h2 translate>SETTINGS.GENERAL</h2>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content layout="column">
+            <p translate>SETTINGS.GENERAL.LANGUAGE</p>
+            <md-radio-group ng-model="settings.general.language">
+                <md-radio-button value="de">{{ 'SETTINGS.GENERAL.LANGUAGE.DE' | translate }}</md-radio-button>
+                <md-radio-button value="en">{{ 'SETTINGS.GENERAL.LANGUAGE.EN' | translate }}</md-radio-button>
+            </md-radio-group>
+            <md-checkbox ng-model="settings.general.disable_user_agent" aira-label="Custom Header?" ng-change="toggleRequestUpdate()">{{ 'SETTINGS.GENERAL.DISABLE_USER_AGENT' | translate }}</md-checkbox>
+            {{ 'SETTINGS.GENERAL.MESSAGE_CHECK' | translate }}:
+            <md-input-container>
+                <label>{{ 'SETTINGS.MINUTE_INTERVAL' | translate }}</label>
+                <input ng-model="settings.general.check_message_interval" type="number" step="5" min="1"/>
+            </md-input-container>
+            <md-checkbox ng-model="settings.general.message_notification" aria-label="Display Notification">
+                {{ 'SETTINGS.DISPLAY_NOTIFICATION' | translate }}
+            </md-checkbox>
+        </md-card-content>
+    </md-card>
+    <md-card>
+        <md-card-header>
+            <md-card-header-text>
+                <h2 translate>USER.ACCOUNT</h2>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content layout="column">
+            <md-input-container>
+                <label>{{ 'USER.USERNAME' | translate }}</label>
+                <input ng-model="settings.account.user.username">
+            </md-input-container>
+            <md-input-container>
+                <label>{{ 'USER.PASSWORD' | translate }}</label>
+                <input ng-model="settings.account.user.password" type="password">
+            </md-input-container>
+            <md-checkbox ng-model="settings.account.keep_login" aria-label="Keep Login">
+                {{ 'LOGIN.KEEP_LOGIN' | translate }}
+            </md-checkbox>
+            <md-checkbox ng-model="settings.account.store_password" aria-label="Save Password">
+                {{ 'LOGIN.SAVE_PASSWORD' | translate }}
+                <span class="password-warning" ng-if="settings.account.store_password">
+                    {{ 'LOGIN.PLAINTEXT_WARNING' | translate }}
+                </span>
+            </md-checkbox>
+        </md-card-content>
+    </md-card>
+    <md-card>
+        <md-card-header>
+            <md-card-header-text>
+                <h2 translate>SETTINGS.ANIME.ANIME</h2>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content layout="column">
+            <md-input-container layout="column">
+                {{ 'SETTINGS.ANIME.OPEN_IN' | translate }}:
+                <md-radio-group ng-model="settings.anime.open_with" layout="row">
+                    <md-radio-button value="internal">{{ 'GENERAL.PROXTOP' | translate }}</md-radio-button>
+                    <md-radio-button value="system">{{ 'SETTINGS.ANIME.SYSTEM_BROWSER' | translate }}</md-radio-button>
+                    <md-radio-button value="external">{{ 'SETTINGS.ANIME.EXTERNAL' | translate }}</md-radio-button>
                 </md-radio-group>
-                <md-checkbox ng-model="settings.general.disable_user_agent" aira-label="Custom Header?" ng-change="toggleRequestUpdate()">{{ 'SETTINGS.GENERAL.DISABLE_USER_AGENT' | translate }}</md-checkbox>
-                {{ 'SETTINGS.GENERAL.MESSAGE_CHECK' | translate }}:
-                <md-input-container>
-                    <label>{{ 'SETTINGS.MINUTE_INTERVAL' | translate }}</label>
-                    <input ng-model="settings.general.check_message_interval" type="number" step="5" min="1"/>
-                </md-input-container>
-                <md-checkbox ng-model="settings.general.message_notification" aria-label="Display Notification">
-                    {{ 'SETTINGS.DISPLAY_NOTIFICATION' | translate }}
-                </md-checkbox>
-            </md-card-content>
-        </md-card>
-        <md-card>
-            <md-card-header>
-                <md-card-header-text>
-                    <h2 translate>USER.ACCOUNT</h2>
-                </md-card-header-text>
-            </md-card-header>
-            <md-card-content layout="column">
-                <md-input-container>
-                    <label>{{ 'USER.USERNAME' | translate }}</label>
-                    <input ng-model="settings.account.user.username">
-                </md-input-container>
-                <md-input-container>
-                    <label>{{ 'USER.PASSWORD' | translate }}</label>
-                    <input ng-model="settings.account.user.password" type="password">
-                </md-input-container>
-                <md-checkbox ng-model="settings.account.keep_login" aria-label="Keep Login">
-                    {{ 'LOGIN.KEEP_LOGIN' | translate }}
-                </md-checkbox>
-                <md-checkbox ng-model="settings.account.store_password" aria-label="Save Password">
-                    {{ 'LOGIN.SAVE_PASSWORD' | translate }}
-                    <span class="password-warning" ng-if="settings.account.store_password">
-                        {{ 'LOGIN.PLAINTEXT_WARNING' | translate }}
-                    </span>
-                </md-checkbox>
-            </md-card-content>
-        </md-card>
-        <md-card>
-            <md-card-header>
-                <md-card-header-text>
-                    <h2 translate>SETTINGS.ANIME.ANIME</h2>
-                </md-card-header-text>
-            </md-card-header>
-            <md-card-content layout="column">
-                <md-input-container layout="column">
-                    {{ 'SETTINGS.ANIME.OPEN_IN' | translate }}:
-                    <md-radio-group ng-model="settings.anime.open_with" layout="row">
-                        <md-radio-button value="internal">{{ 'GENERAL.PROXTOP' | translate }}</md-radio-button>
-                        <md-radio-button value="system">{{ 'SETTINGS.ANIME.SYSTEM_BROWSER' | translate }}</md-radio-button>
-                        <md-radio-button value="external">{{ 'SETTINGS.ANIME.EXTERNAL' | translate }}</md-radio-button>
-                    </md-radio-group>
-                </md-input-container>
-                <md-input-container ng-if="settings.anime.open_with == 'external'">
-                    <label>{{ 'SETTINGS.ANIME.APPLICATION' | translate }}</label>
-                    <input ng-model="settings.anime.external_path" />
-                </md-input-container>
-                <md-input-container>
-                    {{ 'SETTINGS.ANIME.PREFERRED_PROVIDER' | translate }}:
-                    <md-select ng-model="settings.anime.preferred_stream" aria-label="Preferred Stream Provider">
-                        <md-option ng-repeat="provider in providers" value="{{provider.toLowerCase()}}">{{provider}}</md-option>
-                    </md-select>
-                </md-input-container>
-            </md-card-content>
-        </md-card>
-        <md-card>
-            <md-card-header>
-                <md-card-header-text>
-                    <h2 translate>SETTINGS.WATCHLIST</h2>
-                </md-card-header-text>
-            </md-card-header>
-            <md-card-content layout="column">
-                {{ 'SETTINGS.WATCHLIST.CHECK' | translate }}:
-                <md-input-container>
-                    <label>{{ 'SETTINGS.MINUTE_INTERVAL' | translate }}</label>
-                    <input ng-model="settings.watchlist.check_interval" type="number" step="5" min="1"/>
-                </md-input-container>
-                <md-checkbox ng-model="settings.watchlist.display_notification" aria-label="Display Notification">
-                    {{ 'SETTINGS.DISPLAY_NOTIFICATION' | translate }}
-                </md-checkbox>
-            </md-card-content>
-        </md-card>
-    </div>
-</md-content>
+            </md-input-container>
+            <md-input-container ng-if="settings.anime.open_with == 'external'">
+                <label>{{ 'SETTINGS.ANIME.APPLICATION' | translate }}</label>
+                <input ng-model="settings.anime.external_path" />
+            </md-input-container>
+            <md-input-container>
+                {{ 'SETTINGS.ANIME.PREFERRED_PROVIDER' | translate }}:
+                <md-select ng-model="settings.anime.preferred_stream" aria-label="Preferred Stream Provider">
+                    <md-option ng-repeat="provider in providers" value="{{provider.toLowerCase()}}">{{provider}}</md-option>
+                </md-select>
+            </md-input-container>
+        </md-card-content>
+    </md-card>
+    <md-card>
+        <md-card-header>
+            <md-card-header-text>
+                <h2 translate>SETTINGS.WATCHLIST</h2>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content layout="column">
+            {{ 'SETTINGS.WATCHLIST.CHECK' | translate }}:
+            <md-input-container>
+                <label>{{ 'SETTINGS.MINUTE_INTERVAL' | translate }}</label>
+                <input ng-model="settings.watchlist.check_interval" type="number" step="5" min="1"/>
+            </md-input-container>
+            <md-checkbox ng-model="settings.watchlist.display_notification" aria-label="Display Notification">
+                {{ 'SETTINGS.DISPLAY_NOTIFICATION' | translate }}
+            </md-checkbox>
+        </md-card-content>
+    </md-card>
+</div>

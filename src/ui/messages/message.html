@@ -10,7 +10,7 @@
             <md-list-item ng-if="conversation.has_more">
                 <md-button ng-click="loadMore()" layout-fill>{{ 'MESSAGES.LOAD_MORE' | translate }}</md-button>
             </md-list-item>
-            <md-list-item ng-repeat="message in conversation.messages" class="md-2-line long-text-list md-whiteframe-2dp" style="margin-bottom: 10px;">
+            <md-list-item ng-repeat="message in conversation.messages" class="md-2-line long-text-list" style="margin-bottom: 10px;">
                 <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
                 <div class="md-list-item-text" style="word-wrap: break-word; min-width: 0;">
                     <div layout="row" layout-align="space-between start"
@@ -18,6 +18,7 @@
                         <h4>{{message.timestamp * 1000 | date:'HH:mm:ss d.M.yyyy'}}</h4>
                     </div>
                     <p ng-bind-html="message.message | linky:'_system'"></p>
+                    <md-divider ng-if="!$last"></md-divider>
                 </div>
             </md-list-item>
         </md-list>

@@ -1,21 +1,15 @@
-.spin-image {
-    -webkit-animation:spin 4s linear infinite;
-    -moz-animation:spin 4s linear infinite;
-    animation:spin 4s linear infinite;
+md-icon.md-font {
+    line-height: 1.75;
 }
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 .long-text-list {
     height: unset !important;
 }
 
-#mainWindow {
-    position:inherit;
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
+.menu-icon {
+    height: auto;
+    width: auto;
+    margin-left: 0;
 }
 
 .menu {
@@ -36,4 +30,25 @@
 
 .no-display {
     display: none;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: grey;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+	background: grey;
 }

@@ -7,6 +7,7 @@
                 <h3>{{conversation.topic}}</h3>
                 <p>{{ 'MESSAGES.LAST_MESSAGE' | translate }}: {{conversation.timestamp_end * 1000 | date}}</p>
             </div>
+            <md-divider ng-if="!$last"></md-divider>
         </md-list-item>
     </md-list>
 </md-content>

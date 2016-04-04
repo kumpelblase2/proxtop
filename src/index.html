@@ -4,8 +4,8 @@
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
         <title>Proxtop</title>
         <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css" />
-        <link rel="stylesheet" href="assets/style.css" />
         <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="assets/style.css" />
     </head>
     <body>
         <script src="../bower_components/angular/angular.js"></script>
@@ -48,16 +48,44 @@
         <script src="ui/watch/watch.controller.js"></script>
         <script src="ui/menu/menu.controller.js"></script>
 
-    	<md-content layout-fill>
-            <nav class="menu" ng-controller="MenuController">
-                <a ui-sref="profile" class="menu-item md-whiteframe-1dp"><i class="fa fa-user fa-3x menu-icon"></i>{{ 'MENU.PROFILE' | translate }}</a>
-                <a ui-sref="watchlist" class="menu-item md-whiteframe-1dp"><i class="fa fa-bookmark fa-3x"></i>{{ 'MENU.WATCHLIST' | translate }}</a>
-                <a ui-sref="messages" class="menu-item md-whiteframe-1dp"><i class="fa fa-envelope fa-3x"></i>{{ 'MENU.MESSAGES' | translate }}</a>
-                <a ui-sref="settings" class="menu-item md-whiteframe-1dp"><i class="fa fa-gears fa-3x"></i>{{ 'MENU.SETTINGS' | translate }}</a>
-                <a href ng-click="logout();" class="menu-item md-whiteframe-1dp"><i class="fa fa-sign-out fa-3x"></i>{{ 'MENU.LOGOUT' | translate }}</a>
-            </nav>
-            <div style="width: 100%; height: 20px;"></div>
-        	<div ui-view id="mainWindow" class="container md-body-2" md-padding></div>
-    	</md-content>
+        <div layout="column" layout-fill ng-controller="MenuController">
+            <md-toolbar class="md-hue-2">
+                <div class="md-toolbar-tools" md-whiteframe="4">
+                    <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleMenu()" hide-gt-md>
+                        <md-icon md-font-icon="fa-bars" class="fa"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <div layout="row" class="full-height">
+                <md-sidenav md-component-id="left" class="md-sidenav-left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4">
+                    <md-content>
+                        <md-list>
+                            <md-list-item ui-sref="profile">
+                                <md-icon md-font-icon="fa-user" class="fa menu-icon md-avatar-icon"></md-icon>
+                                <span>{{ 'MENU.PROFILE' | translate }}</span>
+                            </md-list-item>
+                            <md-list-item ui-sref="watchlist">
+                                <md-icon md-font-icon="fa-bookmark" class="fa menu-icon md-avatar-icon"></md-icon>
+                                <span>{{ 'MENU.WATCHLIST' | translate }}</span>
+                            </md-list-item>
+                            <md-list-item ui-sref="messages">
+                                <md-icon md-font-icon="fa-envelope" class="fa menu-icon md-avatar-icon"></md-icon>
+                                <span>{{ 'MENU.MESSAGES' | translate }}</span>
+                            </md-list-item>
+                            <md-list-item ui-sref="settings">
+                                <md-icon md-font-icon="fa-gears" class="fa menu-icon md-avatar-icon"></md-icon>
+                                <span>{{ 'MENU.SETTINGS' | translate }}</span>
+                            </md-list-item>
+                            <md-list-item ng-click="logout();" style="margin-top: 6px; margin-bottom: 6px; margin-left: 8px; margin-right: 8px;">
+                                <md-icon md-font-icon="fa-sign-out" class="fa menu-icon md-avatar-icon"></md-icon>
+                                <span>{{ 'MENU.LOGOUT' | translate }}</span>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                </md-sidenav>
+                <md-content ui-view id="mainWindow" layout-padding layout="column" class="full-width">
+                </md-content>
+            </div>
+        </div>
     </body>
 </html>

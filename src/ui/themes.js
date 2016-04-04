@@ -1,6 +1,6 @@
 angular.module('proxtop').config(['$mdThemingProvider', function(themingProvider) {
 	themingProvider.theme('default')
-		.primaryPalette('grey')
-		.accentPalette('brown')
+		.primaryPalette('blue-grey')
+		.accentPalette('blue')
 		.dark();
 }]);

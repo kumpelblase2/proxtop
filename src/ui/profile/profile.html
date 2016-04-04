@@ -3,6 +3,7 @@
 #profile {
     margin: 5px;
     align-items: center;
+    min-height: 280px;
 }
 
 #avatar-exp {
@@ -59,15 +60,15 @@
 
 <loader ng-if="!profile"></loader>
 <div ng-if="profile" layout="row" layout-align="center start" layout-fill layout-sm="column" layout-xs="column" layout-align-xs="start center" layout-align-sm="start center">
-    <div id="profile" layout="column" flex="25">
-        <div id="avatar-exp">
+    <div id="profile" layout="column" layout-sm="row" layout-xs="row" flex="25" flex-sm="100" flex-xs="100">
+        <div id="avatar-exp" flex="50">
             <progress-arc class="exp-arc" size="270" complete="profile.progress" stroke="#736DAB" stroke-width="10">
             </progress-arc>
             <div class="avatar">
                 <img ng-src="{{'https:' + profile.picture}}" alt="Profile picture"/>
             </div>
         </div>
-        <div id="stats" class="md-whiteframe-4dp">
+        <div id="stats" class="md-whiteframe-4dp" flex="50">
             <md-content layout-padding translate-namespace="PROFILE">
                 <p style="text-align: center;">{{profile.name}}</p>
                 <p>{{ 'PROFILE.TITLE' | translate }}: {{profile.ranking.title}}</p>
@@ -77,7 +78,7 @@
             </md-content>
         </div>
     </div>
-    <div layout="column" flex="75">
+    <div layout="column" flex="75" flex-sm="100" flex-xs="100">
         <md-content ng-if="news">
             <h2>{{ 'PROFILE.NEWS' | translate }}</h2>
             <md-list id="news">
