@@ -14,25 +14,27 @@ form > * {
 }
 </style>
 
-<div class="md-whiteframe-4dp" flex="50" flex-offset="25">
-    <form ng-submit="login()" layout="column" layout-align="space-around stretch">
-        <md-input-container>
-            <label translate>USER.USERNAME</label>
-            <input ng-model="user.username">
-        </md-input-container>
-        <md-input-container>
-            <label translate>USER.PASSWORD</label>
-            <input ng-model="user.password" type="password">
-        </md-input-container>
-        <md-checkbox ng-model="keepLogin" aria-label="Keep Login">
-            {{ 'LOGIN.KEEP_LOGIN' | translate }}
-        </md-checkbox>
-        <md-checkbox ng-model="storePassword" aria-label="Save Password">
-            {{ 'LOGIN.SAVE_PASSWORD' | translate }}
-            <span class="password-warning" ng-if="storePassword">
-                {{ 'LOGIN.PLAINTEXT_WARNING' | translate }}
-            </span>
-        </md-checkbox>
-        <md-button class="md-primary" type="submit" aria-label="Login">{{'LOGIN.LOGIN' | translate}}</md-button>
-    </form>
+<div layout="column" layout-align="start center">
+    <div class="md-whiteframe-4dp" flex="50" style="min-width: 50%;">
+        <form ng-submit="login()" layout="column" layout-align="space-around stretch">
+            <md-input-container>
+                <label translate>USER.USERNAME</label>
+                <input ng-model="user.username">
+            </md-input-container>
+            <md-input-container>
+                <label translate>USER.PASSWORD</label>
+                <input ng-model="user.password" type="password">
+            </md-input-container>
+            <md-checkbox ng-model="keepLogin" aria-label="Keep Login">
+                {{ 'LOGIN.KEEP_LOGIN' | translate }}
+            </md-checkbox>
+            <md-checkbox ng-model="storePassword" aria-label="Save Password">
+                {{ 'LOGIN.SAVE_PASSWORD' | translate }}
+                <span class="password-warning" ng-if="storePassword">
+                    {{ 'LOGIN.PLAINTEXT_WARNING' | translate }}
+                </span>
+            </md-checkbox>
+            <md-button class="md-primary" type="submit" aria-label="Login">{{'LOGIN.LOGIN' | translate}}</md-button>
+        </form>
+    </div>
 </div>
