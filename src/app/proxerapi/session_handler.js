@@ -5,6 +5,7 @@ const pageUtils = require('./page_utils');
 const Cloudscraper = require('../cloudscraper');
 const os = require('os');
 const ipc = require('electron').ipcMain;
+const { Cookie } = require('tough-cookie');
 
 function SessionHandler(app, cookiePath) {
     this.app = app;
@@ -48,68 +49,19 @@ SessionHandler.prototype.setupRequest = function() {
 
 SessionHandler.prototype.openRequest = function(doRequest) {
     const self = this;
-
-    var handleError = function(error) {
-        if(error.statusCode == 303) { // Just rethrow to let login handle it.
-            LOG.debug('Received 303 error, rethrowing for login handler.');
-            throw error;
-        }
-
-        LOG.warn("Error when requesting " + error.options.uri);
-        if(error.statusCode == 525) {
-            LOG.error('Received error 525 on request');
-            self.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.OFFLINE);
-        } else if(error.statusCode == 500) {
-            LOG.error('Received 500 error, probably MySQL down');
-            self.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.MYSQL_DOWN);
-        } else if(error.statusCode == 503) {
-            LOG.error('Received 503 error, attempting cloudlfare circumvention');
-            self.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.CLOUDFLARE);
-            return self.cloudscraper.handle(error.response, error.response.body).then(() => self.openRequest(doRequest)).catch((error) => {
-                if(error.statusCode == 302) {
-                    return self.openRequest(doRequest);
-                } else {
-                    throw error;
-                }
-            });
-        } else if(/getaddr/.test(error.message)) {
-            LOG.error('Other error but contained "getaddr" so it\'s probably no network:');
-            LOG.error(error.message);
-            if(self.isOnline()) {
-                self.setOnline(false);
-            }
-        } else {
-            LOG.error('Unknown error occurred: ' + error.message);
-            self.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.OTHER.UNKNOWN);
-        }
-
-        LOG.verbose("Trying response cache");
-        let realUri = error.options.uri;
-        realUri = realUri.substring(realUri.indexOf('/', 9));
-
-        let cached = self.getCachedResponse(realUri);
-        if(cached) {
-            return cached.body;
-        } else {
-            LOG.error('No cached version found for uri ' + realUri);
-            self.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_CACHE);
-            return "";
-        }
-    };
-
-    const createRequest = function() {
+    const createRequest = () => {
         let promise;
         if(typeof(doRequest) == 'string') {
             LOG.silly('Doing request for url ' + doRequest);
-            promise = self.request(doRequest);
+            promise = this.request(doRequest);
         } else {
             LOG.silly('Creating custom request');
-            promise = Promise.resolve(self.request).then(doRequest);
+            promise = Promise.resolve(this.request).then(doRequest);
         }
         return promise;
-    }
+    };
 
-    return createRequest().then(function(response) {
+    return createRequest().then((response) => {
         const body = response.body;
         if(body.includes("Bitte aktualisiere die Seite")) {
             LOG.verbose("Proxer requested page reload.");
@@ -119,7 +71,7 @@ SessionHandler.prototype.openRequest = function(doRequest) {
         }
 
         return response;
-    }).then(this.cacheResponse.bind(this)).catch(handleError);
+    }).then(this.updateCookies.bind(this)).then(this.cacheResponse.bind(this)).catch(this.handleError.bind(this));
 };
 
 SessionHandler.prototype.cacheResponse = function(response) {
@@ -133,6 +85,86 @@ SessionHandler.prototype.cacheResponse = function(response) {
     }
 
     return body;
+};
+
+SessionHandler.prototype.handleError = function(error) {
+    if(error.statusCode == 303) { // Just rethrow to let login handle it.
+        LOG.debug('Received 303 error, rethrowing for login handler.');
+        throw error;
+    }
+
+    console.log(error);
+    LOG.warn("Error when requesting " + error.options.uri);
+    if(error.statusCode == 525) {
+        LOG.error('Received error 525 on request');
+        this.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.OFFLINE);
+    } else if(error.statusCode == 500) {
+        LOG.error('Received 500 error, probably MySQL down');
+        this.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.MYSQL_DOWN);
+    } else if(error.statusCode == 503) {
+        LOG.error('Received 503 error, attempting cloudlfare circumvention');
+        this.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.CLOUDFLARE);
+        return this.cloudscraper.handle(error.response, error.response.body).then(() => this.openRequest(doRequest)).catch((error) => {
+            if(error.statusCode == 302) {
+                return this.openRequest(doRequest);
+            } else {
+                throw error;
+            }
+        });
+    } else if(/getaddr/.test(error.message)) {
+        LOG.error('Other error but contained "getaddr" so it\'s probably no network:');
+        LOG.error(error.message);
+        if(this.isOnline()) {
+            this.setOnline(false);
+        }
+    } else {
+        LOG.error('Unknown error occurred: ' + error.message);
+        this.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.OTHER.UNKNOWN);
+    }
+
+    LOG.verbose("Trying response cache");
+    let realUri = error.options.uri;
+    realUri = realUri.substring(realUri.indexOf('/', 9));
+
+    let cached = this.getCachedResponse(realUri);
+    if(cached) {
+        return cached.body;
+    } else {
+        LOG.error('No cached version found for uri ' + realUri);
+        this.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_CACHE);
+        return "";
+    }
+};
+
+SessionHandler.prototype.updateCookies = function(response) {
+    if(response.headers['set-cookie']) {
+        const host = response.request.host;
+        let cookies = response.headers['set-cookie'];
+        const sessionCookies = this.app.getCookies();
+        if (cookies instanceof Array) {
+            cookies = cookies.map(Cookie.parse);
+        } else {
+            cookies = [Cookie.parse(cookies)];
+        }
+
+        cookies.forEach((cookie) => {
+            LOG.silly('Saving new cookie ' + cookie.key + " = " + cookie.value);
+            sessionCookies.set({
+                name: cookie.key,
+                value: cookie.value,
+                domain: cookie.domain || host,
+                path: cookie.path,
+                secure: cookie.secure,
+                httpOnly: cookie.httpOnly,
+                url: (cookie.secure ? "https" : "http") + "://" + host
+            }, (error) => {
+                if(error) {
+                    LOG.warn('Unable to sync cookie: ' + error);
+                }
+            });
+        });
+    }
+    return response;
 };
 
 SessionHandler.prototype.getCachedResponse = function(url) {

@@ -53,6 +53,10 @@ class Proxtop {
         this.notifyWindow('update', release);
     }
 
+    getCookies() {
+        return this.window_manager.getMainWindow().webContents.session.cookies;
+    }
+
     getSettings() {
         return settings;
     }
