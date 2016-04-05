@@ -13,10 +13,10 @@ function SessionHandler(app, cookiePath) {
     this.online = true;
 
     ipc.on('reload-request', ()  => {
-        this.request = self.setupRequest();
+        this.request = this.setupRequest();
     });
 
-    ipc.on('connectivity', (state) => {
+    ipc.on('connectivity', (ev, state) => {
         this.setOnline(state);
     });
 }
@@ -141,11 +141,11 @@ SessionHandler.prototype.getCachedResponse = function(url) {
 };
 
 SessionHandler.prototype.setOnline = function(state) {
-    self.online = state;
+    this.online = state;
     if(!state) {
-        self.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_NETWORK);
+        this.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_NETWORK);
     } else {
-        self.app.notifyWindow('error', ERRORS.SEVERITY.INFO, ERRORS.CONNECTION.NETWORK_RECONNECT);
+        this.app.notifyWindow('error', ERRORS.SEVERITY.INFO, ERRORS.CONNECTION.NETWORK_RECONNECT);
     }
 };
 
