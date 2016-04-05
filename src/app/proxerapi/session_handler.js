@@ -12,9 +12,12 @@ function SessionHandler(app, cookiePath) {
     this.db = require('../db');
     this.online = true;
 
-    const self = this;
-    ipc.on('reload-request', function() {
-        self.request = self.setupRequest();
+    ipc.on('reload-request', ()  => {
+        this.request = self.setupRequest();
+    });
+
+    ipc.on('connectivity', (state) => {
+        this.setOnline(state);
     });
 }
 
@@ -73,8 +76,7 @@ SessionHandler.prototype.openRequest = function(doRequest) {
             LOG.error('Other error but contained "getaddr" so it\'s probably no network:');
             LOG.error(error.message);
             if(self.isOnline()) {
-                self.online = false;
-                self.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_NETWORK);
+                self.setOnline(false);
             }
         } else {
             LOG.error('Unknown error occurred: ' + error.message);
@@ -136,6 +138,15 @@ SessionHandler.prototype.cacheResponse = function(response) {
 SessionHandler.prototype.getCachedResponse = function(url) {
     LOG.info("Return cached reponse for request to " + url);
     return this.db('cache').find({ url: url });
+};
+
+SessionHandler.prototype.setOnline = function(state) {
+    self.online = state;
+    if(!state) {
+        self.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_NETWORK);
+    } else {
+        self.app.notifyWindow('error', ERRORS.SEVERITY.INFO, ERRORS.CONNECTION.NETWORK_RECONNECT);
+    }
 };
 
 module.exports = SessionHandler;

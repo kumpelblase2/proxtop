@@ -90,6 +90,7 @@
     "CONNECTION_TIMEOUT": "Die Abfrage konnte in der gegebenen Zeit nicht vollendet werden.",
     "CONNECTION_NOT_FOUND": "Die gewünschte REsource wurde nicht gefunden.",
     "CONNECTION_NO_CACHE_AVAILABLE": "Weder die online noch offline Version sind vorhanden.",
+    "CONNECTION_RECONNECT": "Internet wieder verbunden.",
     "PROXER_OFFLINE": "Proxer ist im Moment offline, die Anfrage konnte nicht vollzogen werden.",
     "PROXER_INVALID_CREDENTIALS": "Angegebene Zugangsdaten sind nicht richtig.",
     "PROXER_NO_DETAILS": "Keine Zugangsdaten angegeben, bitte manuell neu einloggen.",
