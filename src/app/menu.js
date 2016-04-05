@@ -28,6 +28,21 @@ module.exports = function(proxtop) {
                     }
                 },
                 {
+                    label: 'Reload',
+                    accelerator: (function() {
+                        if (process.platform == 'darwin') {
+                            return 'Command+R';
+                        } else {
+                            return 'Ctrl+R';
+                        }
+                    })(),
+                    click: function(item, focusedWindow) {
+                        if (focusedWindow) {
+                            focusedWindow.reload();
+                        }
+                    }
+                },
+                {
                     type: 'separator'
                 },
                 {
