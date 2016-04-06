@@ -68,7 +68,8 @@
         "DE": "German"
       },
       "DISABLE_USER_AGENT": "Use universal user agent",
-      "MESSAGE_CHECK": "Message check intervall"
+      "MESSAGE_CHECK": "Message check intervall",
+      "CLEAR_CACHE": "Clear cache"
     }
   },
   "MESSAGES": {
@@ -97,7 +98,8 @@
     "PROXER_MYSQL_ERROR": "Proxer has thrown a database error.",
     "PROXER_CLOUDFLARE_PROTECTION": "Cloudflare protection is on so Proxtop might not work properly.",
     "STREAM_NO_PARSER": "Proxtop does not support this stream yet :(",
-    "UNKNOWN_ERROR": "Unknown error occurred: "
+    "UNKNOWN_ERROR": "Unknown error occurred: ",
+    "CACHE_CLEAR": "Cache has been cleared."
   },
   "ERROR_SEVERITY": {
     "severe": "Severe",

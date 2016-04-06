@@ -37,6 +37,10 @@
                         <p translate>SETTINGS.DISPLAY_NOTIFICATION</p>
                         <md-switch class="md-secondary" ng-model="settings.general.message_notification" aria-label="Display Notification"></md-switch>
                     </md-list-item>
+                    <md-list-item ng-click="requestCacheClear()">
+                        <p translate>SETTINGS.GENERAL.CLEAR_CACHE</p>
+                        <md-icon md-font-icon="fa-trash" class="fa"></md-icon>
+                    </md-list-item>
                 </md-list>
             </md-card-content>
         </md-card>

@@ -20,6 +20,11 @@ function SessionHandler(app, cookiePath) {
     ipc.on('connectivity', (ev, state) => {
         this.setOnline(state);
     });
+
+    ipc.on('clear-cache', (ev) => {
+        this.clearCache();
+        this.app.notifyWindow('error', ERRORS.SEVERITY.INFO, ERRORS.OTHER.CACHE_CLEAR);
+    });
 }
 
 SessionHandler.prototype.isOnline = function() { return this.online; };
@@ -170,6 +175,11 @@ SessionHandler.prototype.updateCookies = function(response) {
 SessionHandler.prototype.getCachedResponse = function(url) {
     LOG.info("Return cached reponse for request to " + url);
     return this.db('cache').find({ url: url });
+};
+
+SessionHandler.prototype.clearCache = function() {
+    LOG.info('Clearing response cache...');
+    this.db('cache').remove();
 };
 
 SessionHandler.prototype.setOnline = function(state) {

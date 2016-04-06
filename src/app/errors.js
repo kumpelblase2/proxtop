@@ -18,7 +18,8 @@ module.exports = {
         CANNOT_PARSE: 'STREAM_NO_PARSER'
     },
     OTHER: {
-        UNKNOWN: 'UNKNOWN_ERROR'
+        UNKNOWN: 'UNKNOWN_ERROR',
+        CACHE_CLEAR: 'CACHE_CLEAR'
     },
     SEVERITY: {
         SEVERE: 'severe',

@@ -29,6 +29,10 @@ angular.module('proxtop').controller('SettingsController', ['$scope', 'settings'
         $scope.has_toggled = !$scope.has_toggled;
     };
 
+    $scope.requestCacheClear = function() {
+        ipc.send('clear-cache');
+    };
+
     $scope.$watch(function(scope) {
         return scope.settings;
     }, function(newValue, oldValue) {
