@@ -1,9 +1,11 @@
 PATH	:= node_modules/.bin:$(PATH)
 
-source_files = src package.json bower.json bower_components main.js
-target_dir = _dist
-build_dir = _packaged
-version = $(shell cat package.json | grep "version" | cut -d '"' -f4)
+SOURCE_FILES = src package.json bower.json bower_components main.js
+TARGET_DIR = _dist
+BUILD_DIR = _packaged
+VERSION = $(shell cat package.json | grep "version" | cut -d '"' -f4)
+
+ICON_DIR = usr/share/pixmaps/
 
 setup:
 	npm install
@@ -12,28 +14,30 @@ setup:
 .PHONY: setup
 
 clean:
-	-rm -r $(target_dir)
-	-rm -r $(build_dir)
+	-rm -r $(TARGET_DIR)
+	-rm -r $(BUILD_DIR)
 
 prepare:
-	mkdir $(target_dir)
-	cp -R $(source_files) $(target_dir)
-	cd $(target_dir) && npm install --production
+	mkdir $(TARGET_DIR)
+	cp -R $(SOURCE_FILES) $(TARGET_DIR)
+	cd $(TARGET_DIR) && npm install --production
 
 build: prepare
-	mkdir $(build_dir)
-	electron-packager $(target_dir) --platform=all --arch=x64 --out=$(build_dir) --overwrite --asar --icon=src/assets/proxtop_logo_256
-	rm -r $(build_dir)/proxtop-mas-x64
+	mkdir $(BUILD_DIR)
+	electron-packager $(TARGET_DIR) --platform=all --arch=x64 --out=$(BUILD_DIR) --overwrite --asar --icon=build/proxtop_logo_256
+	rm -r $(BUILD_DIR)/proxtop-mas-x64
 
 package: build
-	cd $(build_dir) && tar -cvzf proxtop-$(version)-osx.tar.gz proxtop-darwin-x64
-	cd $(build_dir) && tar -cvzf proxtop-$(version)-linux.tar.gz proxtop-linux-x64
-	cd $(build_dir) && zip -r proxtop-$(version)-win.zip proxtop-win32-x64
-	cd $(build_dir)/proxtop-linux-x64 && mkdir -p opt/proxtop \
+	cd $(BUILD_DIR) && tar -cvzf proxtop-$(VERSION)-osx.tar.gz proxtop-darwin-x64
+	cd $(BUILD_DIR) && tar -cvzf proxtop-$(VERSION)-linux.tar.gz proxtop-linux-x64
+	cd $(BUILD_DIR) && zip -r proxtop-$(VERSION)-win.zip proxtop-win32-x64
+	cd $(BUILD_DIR)/proxtop-linux-x64 && mkdir -p opt/proxtop \
 		&& (mv ./* opt/proxtop || true)
 
-	cd $(build_dir)/proxtop-linux-x64 && mkdir -p usr/bin \
+	cd $(BUILD_DIR)/proxtop-linux-x64 && mkdir -p usr/bin \
+		&& mkdir -p ${ICON_DIR} && cp ../../build/proxtop_logo_48.png ${ICON_DIR}/proxtop_48x48.png \
+		&& mkdir -p ${ICON_DIR} && cp ../../build/proxtop_logo_256.png ${ICON_DIR}/proxtop_256x256.png \
 		&& cd usr/bin \
 		&& ln -s ../../opt/proxtop/proxtop proxtop
 
-	cd $(build_dir)/proxtop-linux-x64 && fpm -s dir -t deb -n proxtop -v $(version) --deb-no-default-config-files . && mv proxtop_$(version)_amd64.deb ..
+	cd $(BUILD_DIR)/proxtop-linux-x64 && fpm -s dir -t deb -n proxtop -v $(VERSION) --deb-no-default-config-files . && mv proxtop_$(VERSION)_amd64.deb ..
