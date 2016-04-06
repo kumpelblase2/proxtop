@@ -39,6 +39,7 @@ LoginHandler.prototype.login = function(username, password, keepLogin = false) {
                             LOG.info("Logged in");
                             return { success: true, reason: null };
                         } else {
+                            LOG.warn('Couldn\'t login, invalid info.');
                             return { success: false, reason: 'invalid' };
                         }
                     } else {
@@ -73,6 +74,7 @@ LoginHandler.prototype.logout = function() {
                     });
                 }).catch(function(error) {
                     if(error.statusCode === 303) {
+                        LOG.info('Logged out.');
                         return { success: true, reason: null };
                     } else {
                         LOG.warn('There was an issue with logging out:');
