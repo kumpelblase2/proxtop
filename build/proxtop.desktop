@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=proxtop
+Name=Proxtop
 Path=/opt/proxtop
 Exec=proxtop
 Icon=proxtop
