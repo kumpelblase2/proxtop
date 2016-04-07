@@ -4,5 +4,5 @@ Type=Application
 Name=proxtop
 Path=/opt/proxtop
 Exec=proxtop
-Icon=proxtop-logo_256
+Icon=proxtop
 Terminal=false

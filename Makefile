@@ -5,7 +5,11 @@ TARGET_DIR = _dist
 BUILD_DIR = _packaged
 VERSION = $(shell cat package.json | grep "version" | cut -d '"' -f4)
 
-ICON_DIR = usr/share/pixmaps/
+ICON_DIR = usr/share/icons/hicolor/
+ICON_48_DIR = ${ICON_DIR}/48x48/apps/
+ICON_256_DIR = ${ICON_DIR}/256x256/apps/
+
+DESKTOP_ENTRY_DIR = usr/share/applications/
 
 setup:
 	npm install
@@ -35,8 +39,9 @@ package: build
 		&& (mv ./* opt/proxtop || true)
 
 	cd $(BUILD_DIR)/proxtop-linux-x64 && mkdir -p usr/bin \
-		&& mkdir -p ${ICON_DIR} && cp ../../build/proxtop_logo_48.png ${ICON_DIR}/proxtop_48x48.png \
-		&& mkdir -p ${ICON_DIR} && cp ../../build/proxtop_logo_256.png ${ICON_DIR}/proxtop_256x256.png \
+		&& mkdir -p ${ICON_48_DIR} && cp ../../build/proxtop_logo_48.png ${ICON_48_DIR}/proxtop.png \
+		&& mkdir -p ${ICON_256_DIR} && cp ../../build/proxtop_logo_256.png ${ICON_256_DIR}/proxtop.png \
+		&& mkdir -p ${DESKTOP_ENTRY_DIR} && cp ../../build/proxtop.desktop ${DESKTOP_ENTRY_DIR}/proxtop.desktop \
 		&& cd usr/bin \
 		&& ln -s ../../opt/proxtop/proxtop proxtop
 
