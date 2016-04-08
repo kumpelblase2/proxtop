@@ -26,22 +26,22 @@ const parser = {
         return users;
     },
 
-    parseMessageNotificationItems: function($, items) {
-        const notifications = [];
+    parseConversationItems: function($, items, format) {
+        const conversations = [];
 
         for(var i = 0; i < items.length; i++) {
             const username = $(items[i].children[3]).text();
             const date = $(items[i].children[5]).text();
             const id = parseInt(/.+id=(\d+)/.exec($(items[i]).attr('href'))[1]);
 
-            notifications.push({
+            conversations.push({
                 username: username,
-                date: moment(date, "DD.MM.YYYY").unix(),
+                date: moment(date, format).unix(),
                 id: id
             });
         }
 
-        return notifications;
+        return conversations;
     }
 };
 
@@ -51,7 +51,11 @@ parser.parseMessagesList = function(page) {
             if(data.error) {
                 throw new Error(data.msg);
             }
-            return data.conferences;
+            
+            return data.conferences.map((conv) => {
+                conv.id = parseInt(conv.id);
+                return conv;
+            });
         });
 };
 
@@ -106,7 +110,13 @@ parser.parseConversation = function(page) {
 
 parser.parseMessagesNotification = function(page) {
     return Promise.resolve(page).then(cheerio.load).then(function($) {
-        return parser.parseMessageNotificationItems($, $('a.conferenceList'));
+        return parser.parseConversationItems($, $('a.conferenceList'), "DD.MM.YYYY");
+    });
+};
+
+parser.parseFavoriteMessages = function(page) {
+    return Promise.resolve(page).then(cheerio.load).then(($) => {
+        return parser.parseConversationItems($, $('a.conferenceGrid'), "DD.MM.YYYY HH:mm");
     });
 };
 

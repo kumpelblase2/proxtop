@@ -79,7 +79,8 @@
     "SEND": "Senden",
     "PARTICIPANTS": "Teilnehmer",
     "LOAD_MORE": "Weitere laden",
-    "NEW_MESSAGE": "Neue Nachricht von {{user}}!"
+    "NEW_MESSAGE": "Neue Nachricht von {{user}}!",
+    "FAVORITES_ONLY": "Nur Favoriten anzeigen"
   },
   "UPDATE": {
       "NEW_VERSION": "Eine neue Version ist verfügbar",

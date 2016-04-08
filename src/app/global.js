@@ -15,6 +15,7 @@ global.PROXER_PATHS = {
     NEWS_API: '/notifications?format=json&s=news&p=1',
     CONVERSATIONS_API: '/messages/?format=json&json=conferences',
     CONVERSATION_PAGE: '/messages/?id=',
+    CONVERSATION_FAVORITES: '/messages/favourite',
     MESSAGE_API: '/messages/?format=json&json=messages&id=',
     MESSAGE_NEW_API: '/messages/?format=json&json=newmessages&id=',
     MESSAGE_WRITE_API: '/messages/?format=json&json=answer&id=',

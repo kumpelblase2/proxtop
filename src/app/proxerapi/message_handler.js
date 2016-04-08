@@ -19,6 +19,11 @@ class MessagesHandler extends IPCHandler {
             .then(messageParser.parseMessagesList);
     }
 
+    loadFavorites() {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_FAVORITES)
+            .then(messageParser.parseFavoriteMessages);
+    }
+
     loadConversation(id) {
         return Promise.join(this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id).then(messageParser.parseConversation),
                 this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_PAGE + id).then(messageParser.parseConversationPage),
@@ -102,7 +107,8 @@ class MessagesHandler extends IPCHandler {
         this.handle('conversation', this.loadConversation);
         this.handle('conversation-write', this.sendMessage);
         this.handle('conversation-update', this.refreshMessages);
-        this.handle('conversation-more', this.loadPreviousMessages)
+        this.handle('conversation-more', this.loadPreviousMessages);
+        this.handle('conversations-favorites', this.loadFavorites);
 
         this.messageCheckLoop();
     }

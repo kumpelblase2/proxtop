@@ -1,10 +1,19 @@
+<style scoped>
+.fa-star {
+    color: yellow;
+}
+</style>
+
 <md-content>
     <loader ng-if="!conversations"></loader>
     <md-list flex="50" flex-offset="25">
-        <md-list-item ng-repeat="conversation in conversations" class="md-2-line" ng-click="openConversation(conversation)">
+        <md-list-item>
+            <p translate>MESSAGES.FAVORITES_ONLY</p><md-switch ng-model="hide_nonfavs"></md-switch>
+        </md-list-item>
+        <md-list-item ng-repeat="conversation in conversations" class="md-2-line" ng-click="openConversation(conversation)" ng-hide="hide_nonfavs && !conversation.favorite">
             <img ng-src="{{getImage(conversation.image)}}" class="md-avatar" />
             <div class="md-list-item-text">
-                <h3>{{conversation.topic}}</h3>
+                <h3>{{conversation.topic}} <i class="fa fa-star" ng-if="conversation.favorite"></i></h3>
                 <p>{{ 'MESSAGES.LAST_MESSAGE' | translate }}: {{conversation.timestamp_end * 1000 | date}}</p>
             </div>
             <md-divider ng-if="!$last"></md-divider>
