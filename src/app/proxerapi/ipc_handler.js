@@ -9,6 +9,11 @@ class IPCHandler {
             });
         });
     }
+
+    provide(event, func) {
+        const localFunc = func.bind(this);
+        ipcMain.on(event, localFunc);
+    }
 }
 
 module.exports = IPCHandler;

@@ -1,4 +1,3 @@
-var ipc = require('electron').ipcMain;
 var { episode: episodeParser, stream: streamParser } = require('../../page_parser');
 var util = require('util');
 const IPCHandler = require('./ipc_handler');
@@ -40,8 +39,7 @@ class EpisodeHandler extends IPCHandler {
     register() {
         var self = this;
         this.handle('episode', this.loadEpisode);
-
-        ipc.on('watch', function(event, stream) {
+        this.provide('watch', function(event, stream) {
             self.extractStream(stream).then(function(video) {
                 LOG.verbose("Got video: " + video.url);
                 event.sender.send('watch', video);

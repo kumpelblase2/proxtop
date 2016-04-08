@@ -1,4 +1,3 @@
-const ipc = require('electron').ipcMain;
 const watchlistParser = require('../../page_parser').watchlist;
 const Promise = require('bluebird');
 const util = require('util');
@@ -93,7 +92,7 @@ class WatchlistHandler extends IPCHandler {
 
     register() {
         this.handle('watchlist', this.loadWatchlist);
-        ipc.on('watchlist-update', () => this.checkUpdates());
+        this.provide('watchlist-update', () => this.checkUpdates());
         this.handle('add-watchlist', this.updateEntry);
         this.handle('delete-watchlist', this.deleteEntry);
         this.handle('finish-watchlist', this.markFinished);

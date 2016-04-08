@@ -1,132 +1,111 @@
-const ipc = require('electron').ipcMain;
 const messageParser = require('../../page_parser').message;
 const Promise = require('bluebird');
 const translate = require('../translation');
+const IPCHandler = require('./ipc_handler');
 
-function MessagesHandler(app, sessionHandler) {
-    this.app = app;
-    this.session_handler = sessionHandler;
-    this.settings = require('../settings');
-    this.lastCheck = 0;
-    this.cache = require('../db')('messages-cache');
-    this.translation = translate();
-}
-
-MessagesHandler.prototype.loadConversations = function() {
-    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATIONS_API)
-        .then(messageParser.parseMessagesList);
-};
-
-MessagesHandler.prototype.loadConversation = function(id) {
-    return Promise.join(this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id).then(messageParser.parseConversation),
-            this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_PAGE + id).then(messageParser.parseConversationPage),
-        function(conversation, participants) {
-            return {
-                messages: conversation.messages,
-                has_more: conversation.has_more,
-                participants: participants
-            };
-        }
-    );
-};
-
-MessagesHandler.prototype.loadPreviousMessages = function(id, page) {
-    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id + "&p=" + page)
-        .then(messageParser.parseConversation);
-};
-
-MessagesHandler.prototype.sendMessage = function(id, content) {
-    return this.session_handler.openRequest(function(request) {
-        return request.post({
-            url: PROXER_BASE_URL + PROXER_PATHS.MESSAGE_WRITE_API + id,
-            form: { message: content }
-        });
-    }).then(messageParser.parseMessagePostResponse);
-};
-
-MessagesHandler.prototype.refreshMessages = function(id, last_id = 0) {
-    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NEW_API + id + "&mid=" + last_id)
-        .then(messageParser.parseNewMessages);
-};
-
-MessagesHandler.prototype.checkNotifications = function() {
-    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NOTIFICATIONS)
-        .then(messageParser.parseMessagesNotification);
-};
-
-MessagesHandler.prototype.messageCheckLoop = function() {
-    const self = this;
-    setTimeout(function() {
-        self.messageCheck();
-        self.messageCheckLoop();
-    }, 30000);
-};
-
-MessagesHandler.prototype.messageCheck = function() {
-    const self = this;
-    const enabled = self.settings.getGeneralSettings().message_notification;
-    if(!enabled) {
-        this.cache.remove();
-        return;
+class MessagesHandler extends IPCHandler {
+    constructor(app, sessionHandler) {
+        super();
+        this.app = app;
+        this.session_handler = sessionHandler;
+        this.settings = require('../settings');
+        this.lastCheck = 0;
+        this.cache = require('../db')('messages-cache');
+        this.translation = translate();
     }
 
-    const interval = self.settings.getGeneralSettings().check_message_interval;
-    const time = new Date().getTime();
-    if(time - self.lastCheck > interval * 60000 - 5000) {
-        this.lastCheck = time;
-        LOG.info("Check if new messages have arrived...");
-        self.checkNotifications().then(function(notifications) {
-            notifications.forEach(function(notification) {
-                if(!self.cache.find({ username: notification.username })) {
-                    LOG.verbose('Got new message from ' + notification.username);
-                    self.app.displayNotification({
-                        type: 'new-message',
-                        title: 'Proxtop',
-                        content: self.translation.get('MESSAGES.NEW_MESSAGE', { user: notification.username }),
-                        icon: 'assets/proxtop_logo_256.png'
-                    });
-                }
+    loadConversations() {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATIONS_API)
+            .then(messageParser.parseMessagesList);
+    }
+
+    loadConversation(id) {
+        return Promise.join(this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id).then(messageParser.parseConversation),
+                this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_PAGE + id).then(messageParser.parseConversationPage),
+            function(conversation, participants) {
+                return {
+                    messages: conversation.messages,
+                    has_more: conversation.has_more,
+                    participants: participants
+                };
+            }
+        );
+    }
+
+    loadPreviousMessages(id, page) {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id + "&p=" + page)
+            .then(messageParser.parseConversation);
+    }
+
+    sendMessage(id, content) {
+        return this.session_handler.openRequest(function(request) {
+            return request.post({
+                url: PROXER_BASE_URL + PROXER_PATHS.MESSAGE_WRITE_API + id,
+                form: { message: content }
             });
-
-            self.cache.remove();
-            notifications.forEach(function(not) { self.cache.push(not); });
-        });
+        }).then(messageParser.parseMessagePostResponse);
     }
-};
 
-MessagesHandler.prototype.register = function() {
-    const self = this;
-    ipc.on('conversations', function(event) {
-        self.loadConversations().then(function(result) {
-            event.sender.send('conversations', result);
-        });
-    });
+    refreshMessages(id, last_id = 0) {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NEW_API + id + "&mid=" + last_id)
+            .then(messageParser.parseNewMessages);
+    }
 
-    ipc.on('conversation', function(event, id) {
-        self.loadConversation(id).then(function(result) {
-            event.sender.send('conversation', result);
-        });
-    });
+    checkNotifications() {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NOTIFICATIONS)
+            .then(messageParser.parseMessagesNotification);
+    }
 
-    ipc.on('conversation-write', function(event, id, message) {
-        self.sendMessage(id, message).then(function(result) {
-            event.sender.send('conversation-write', result);
-        });
-    });
+    messageCheckLoop() {
+        const self = this;
+        setTimeout(function() {
+            self.messageCheck();
+            self.messageCheckLoop();
+        }, 30000);
+    }
 
-    ipc.on('conversation-update', function(event, id, last_id) {
-        self.refreshMessages(id, last_id).then(function(result) {
-            event.sender.send('conversation-update', result);
-        });
-    });
+    messageCheck() {
+        const self = this;
+        const enabled = self.settings.getGeneralSettings().message_notification;
+        if(!enabled) {
+            this.cache.remove();
+            return;
+        }
 
-    ipc.on('conversation-more', function(event, id, page) {
-        self.loadPreviousMessages(id, page).then(function(result) {
-            event.sender.send('conversation-more', result);
-        });
-    });
+        const interval = self.settings.getGeneralSettings().check_message_interval;
+        const time = new Date().getTime();
+        if(time - self.lastCheck > interval * 60000 - 5000) {
+            this.lastCheck = time;
+            LOG.info("Check if new messages have arrived...");
+            self.checkNotifications().then(function(notifications) {
+                notifications.forEach(function(notification) {
+                    if(!self.cache.find({ username: notification.username })) {
+                        LOG.verbose('Got new message from ' + notification.username);
+                        self.app.displayNotification({
+                            type: 'new-message',
+                            title: 'Proxtop',
+                            content: self.translation.get('MESSAGES.NEW_MESSAGE', { user: notification.username }),
+                            icon: 'assets/proxtop_logo_256.png'
+                        });
+                    }
+                });
 
-    this.messageCheckLoop();
-};
+                self.cache.remove();
+                notifications.forEach(function(not) { self.cache.push(not); });
+            });
+        }
+    }
+
+    register() {
+        const self = this;
+        this.handle('conversations', this.loadConversations);
+        this.handle('conversation', this.loadConversation);
+        this.handle('conversation-write', this.sendMessage);
+        this.handle('conversation-update', this.refreshMessages);
+        this.handle('conversation-more', this.loadPreviousMessages)
+
+        this.messageCheckLoop();
+    }
+}
 
 module.exports = MessagesHandler;

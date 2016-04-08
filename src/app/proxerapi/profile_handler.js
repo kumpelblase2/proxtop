@@ -1,24 +1,22 @@
-const ipc = require('electron').ipcMain;
 const pageUtils = require('./page_utils');
 const profileParser = require('../../page_parser').profile;
 const Promise = require('bluebird');
+const IPCHandler = require('./ipc_handler');
 
-function ProfileHandler(sessionHandler) {
-    this.session_handler = sessionHandler;
+class ProfileHandler extends IPCHandler {
+    constructor(sessionHandler) {
+        super();
+        this.session_handler = sessionHandler;
+    }
+
+    loadProfile() {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.OWN_PROFILE, true)
+            .then(profileParser.parseProfile);
+    }
+
+    register() {
+        this.handle('profile', this.loadProfile);
+    }
 }
-
-ProfileHandler.prototype.loadProfile = function() {
-    return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.OWN_PROFILE, true)
-        .then(profileParser.parseProfile);
-};
-
-ProfileHandler.prototype.register = function() {
-    const self = this;
-    ipc.on('profile', function(event) {
-        self.loadProfile().then(function(result) {
-            event.sender.send('profile', result);
-        });
-    });
-};
 
 module.exports = ProfileHandler;

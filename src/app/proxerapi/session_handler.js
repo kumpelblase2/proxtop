@@ -4,191 +4,195 @@ const utils = require('../utils');
 const pageUtils = require('./page_utils');
 const Cloudscraper = require('../cloudscraper');
 const os = require('os');
-const ipc = require('electron').ipcMain;
 const { Cookie } = require('tough-cookie');
+const IPCHandler = require('./ipc_handler');
 
-function SessionHandler(app, cookiePath) {
-    this.app = app;
-    this.cookiePath = cookiePath;
-    this.db = require('../db');
-    this.online = true;
+class SessionHandler extends IPCHandler {
+    constructor(app, cookiePath) {
+        super();
+        this.app = app;
+        this.cookiePath = cookiePath;
+        this.db = require('../db');
+        this._online = true;
 
-    ipc.on('reload-request', ()  => {
-        this.request = this.setupRequest();
-    });
-
-    ipc.on('connectivity', (ev, state) => {
-        this.setOnline(state);
-    });
-
-    ipc.on('clear-cache', (ev) => {
-        this.clearCache();
-        this.app.notifyWindow('error', ERRORS.SEVERITY.INFO, ERRORS.OTHER.CACHE_CLEAR);
-    });
-}
-
-SessionHandler.prototype.isOnline = function() { return this.online; };
-
-SessionHandler.prototype.loadState = function() {
-    const self = this;
-
-    return utils.createIfNotExists(self.cookiePath).then(function() {
-        self.cookieJar = request.jar(new cookieStore(self.cookiePath));
-        LOG.verbose('Loaded cookies from ' + self.cookiePath);
-        self.request = self.setupRequest();
-        self.cloudscraper = new Cloudscraper(self.request);
-    }).return(self);
-};
-
-SessionHandler.prototype.setupRequest = function() {
-    const disableUserAgent = this.app.getSettings().getGeneralSettings().disable_user_agent;
-    const header = pageUtils.getHeaders(this.app.info.version, disableUserAgent, os.platform(), os.release());
-
-    LOG.verbose('Settings useragent to: ' + header['User-Agent']);
-    return request.defaults({
-        jar: this.cookieJar,
-        headers: header,
-        resolveWithFullResponse: true
-    });
-};
-
-SessionHandler.prototype.openRequest = function(doRequest) {
-    const self = this;
-    const createRequest = () => {
-        let promise;
-        if(typeof(doRequest) == 'string') {
-            LOG.silly('Doing request for url ' + doRequest);
-            promise = this.request(doRequest);
-        } else {
-            LOG.silly('Creating custom request');
-            promise = Promise.resolve(this.request).then(doRequest);
-        }
-        return promise;
-    };
-
-    return createRequest().then((response) => {
-        const body = response.body;
-        if(body.includes("Bitte aktualisiere die Seite")) {
-            LOG.verbose("Proxer requested page reload.");
-            return createRequest();
-        } else if(body.includes("Retry for a live version")) {
-            throw new Error("Offline");
-        }
-
-        return response;
-    }).then(this.updateCookies.bind(this)).then(this.cacheResponse.bind(this)).catch(this.handleError.bind(this));
-};
-
-SessionHandler.prototype.cacheResponse = function(response) {
-    const url = response.request.path;
-    const body = response.body;
-    this.online = true;
-    if(this.db('cache').find({ url: url })) {
-        this.db('cache').chain().find({ url: url }).merge({ body: body }).value();
-    } else {
-        this.db('cache').push({ url: url, body: body });
-    }
-
-    return body;
-};
-
-SessionHandler.prototype.handleError = function(error) {
-    if(error.statusCode == 303) { // Just rethrow to let login handle it.
-        LOG.debug('Received 303 error, rethrowing for login handler.');
-        throw error;
-    }
-
-    console.log(error);
-    LOG.warn("Error when requesting " + error.options.uri);
-    if(error.statusCode == 525) {
-        LOG.error('Received error 525 on request');
-        this.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.OFFLINE);
-    } else if(error.statusCode == 500) {
-        LOG.error('Received 500 error, probably MySQL down');
-        this.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.MYSQL_DOWN);
-    } else if(error.statusCode == 503) {
-        LOG.error('Received 503 error, attempting cloudlfare circumvention');
-        this.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.CLOUDFLARE);
-        return this.cloudscraper.handle(error.response, error.response.body).then(() => this.openRequest(doRequest)).catch((error) => {
-            if(error.statusCode == 302) {
-                return this.openRequest(doRequest);
-            } else {
-                throw error;
-            }
+        this.provide('reload-request', ()  => {
+            this.request = this.setupRequest();
         });
-    } else if(/getaddr/.test(error.message)) {
-        LOG.error('Other error but contained "getaddr" so it\'s probably no network:');
-        LOG.error(error.message);
-        if(this.isOnline()) {
-            this.setOnline(false);
+
+        this.provide('connectivity', (ev, state) => {
+            this.online = state;
+        });
+
+        this.provide('clear-cache', (ev) => {
+            this.clearCache();
+            this.app.notifyWindow('error', ERRORS.SEVERITY.INFO, ERRORS.OTHER.CACHE_CLEAR);
+        });
+    }
+
+    get online() {
+        return this._online;
+    }
+
+    set online(value) {
+        const changed = this._online != value;
+        this._online = value;
+        if(changed) {
+            if(!value) {
+                this.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_NETWORK);
+            } else {
+                this.app.notifyWindow('error', ERRORS.SEVERITY.INFO, ERRORS.CONNECTION.NETWORK_RECONNECT);
+            }
         }
-    } else {
-        LOG.error('Unknown error occurred: ' + error.message);
-        this.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.OTHER.UNKNOWN);
     }
 
-    LOG.verbose("Trying response cache");
-    let realUri = error.options.uri;
-    realUri = realUri.substring(realUri.indexOf('/', 9));
-
-    let cached = this.getCachedResponse(realUri);
-    if(cached) {
-        return cached.body;
-    } else {
-        LOG.error('No cached version found for uri ' + realUri);
-        this.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_CACHE);
-        return "";
+    loadState() {
+        return utils.createIfNotExists(this.cookiePath).then(() => {
+            this.cookieJar = request.jar(new cookieStore(this.cookiePath));
+            LOG.verbose('Loaded cookies from ' + this.cookiePath);
+            this.request = this.setupRequest();
+            this.cloudscraper = new Cloudscraper(this.request);
+        }).return(this);
     }
-};
 
-SessionHandler.prototype.updateCookies = function(response) {
-    if(response.headers['set-cookie']) {
-        const host = response.request.host;
-        let cookies = response.headers['set-cookie'];
-        const sessionCookies = this.app.getCookies();
-        if (cookies instanceof Array) {
-            cookies = cookies.map(Cookie.parse);
+    setupRequest() {
+        const disableUserAgent = this.app.getSettings().getGeneralSettings().disable_user_agent;
+        const header = pageUtils.getHeaders(this.app.info.version, disableUserAgent, os.platform(), os.release());
+
+        LOG.verbose('Settings useragent to: ' + header['User-Agent']);
+        return request.defaults({
+            jar: this.cookieJar,
+            headers: header,
+            resolveWithFullResponse: true
+        });
+    }
+
+    openRequest(doRequest) {
+        const createRequest = () => {
+            let promise;
+            if(typeof(doRequest) == 'string') {
+                LOG.silly('Doing request for url ' + doRequest);
+                promise = this.request(doRequest);
+            } else {
+                LOG.silly('Creating custom request');
+                promise = Promise.resolve(this.request).then(doRequest);
+            }
+            return promise;
+        };
+
+        return createRequest().then((response) => {
+            const body = response.body;
+            if(body.includes("Bitte aktualisiere die Seite")) {
+                LOG.verbose("Proxer requested page reload.");
+                return createRequest();
+            } else if(body.includes("Retry for a live version")) {
+                throw new Error("Offline");
+            }
+
+            return response;
+        }).then(this.updateCookies.bind(this)).then(this.cacheResponse.bind(this)).catch(this.handleError.bind(this));
+    }
+
+    cacheResponse(response) {
+        const url = response.request.path;
+        const body = response.body;
+        this.online = true;
+        if(this.db('cache').find({ url: url })) {
+            this.db('cache').chain().find({ url: url }).merge({ body: body }).value();
         } else {
-            cookies = [Cookie.parse(cookies)];
+            this.db('cache').push({ url: url, body: body });
         }
 
-        cookies.forEach((cookie) => {
-            LOG.silly('Saving new cookie ' + cookie.key + " = " + cookie.value);
-            sessionCookies.set({
-                name: cookie.key,
-                value: cookie.value,
-                domain: cookie.domain || host,
-                path: cookie.path,
-                secure: cookie.secure,
-                httpOnly: cookie.httpOnly,
-                url: (cookie.secure ? "https" : "http") + "://" + host
-            }, (error) => {
-                if(error) {
-                    LOG.warn('Unable to sync cookie: ' + error);
+        return body;
+    }
+
+    handleError(error) {
+        if(error.statusCode == 303) { // Just rethrow to let login handle it.
+            LOG.debug('Received 303 error, rethrowing for login handler.');
+            throw error;
+        }
+
+        console.log(error);
+        LOG.warn("Error when requesting " + error.options.uri);
+        if(error.statusCode == 525) {
+            LOG.error('Received error 525 on request');
+            this.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.OFFLINE);
+        } else if(error.statusCode == 500) {
+            LOG.error('Received 500 error, probably MySQL down');
+            this.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.MYSQL_DOWN);
+        } else if(error.statusCode == 503) {
+            LOG.error('Received 503 error, attempting cloudlfare circumvention');
+            this.app.notifyWindow('error', ERRORS.SEVERITY.WARNING, ERRORS.PROXER.CLOUDFLARE);
+            return this.cloudscraper.handle(error.response, error.response.body).then(() => this.openRequest(doRequest)).catch((error) => {
+                if(error.statusCode == 302) {
+                    return this.openRequest(doRequest);
+                } else {
+                    throw error;
                 }
             });
-        });
+        } else if(/getaddr/.test(error.message)) {
+            LOG.error('Other error but contained "getaddr" so it\'s probably no network:');
+            LOG.error(error.message);
+            if(this.online) {
+                this.online = false;
+            }
+        } else {
+            LOG.error('Unknown error occurred: ' + error.message);
+            this.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.OTHER.UNKNOWN);
+        }
+
+        LOG.verbose("Trying response cache");
+        let realUri = error.options.uri;
+        realUri = realUri.substring(realUri.indexOf('/', 9));
+
+        let cached = this.getCachedResponse(realUri);
+        if(cached) {
+            return cached.body;
+        } else {
+            LOG.error('No cached version found for uri ' + realUri);
+            this.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_CACHE);
+            return "";
+        }
     }
-    return response;
-};
 
-SessionHandler.prototype.getCachedResponse = function(url) {
-    LOG.info("Return cached reponse for request to " + url);
-    return this.db('cache').find({ url: url });
-};
+    updateCookies(response) {
+        if(response.headers['set-cookie']) {
+            const host = response.request.host;
+            let cookies = response.headers['set-cookie'];
+            const sessionCookies = this.app.getCookies();
+            if (cookies instanceof Array) {
+                cookies = cookies.map(Cookie.parse);
+            } else {
+                cookies = [Cookie.parse(cookies)];
+            }
 
-SessionHandler.prototype.clearCache = function() {
-    LOG.info('Clearing response cache...');
-    this.db('cache').remove();
-};
-
-SessionHandler.prototype.setOnline = function(state) {
-    this.online = state;
-    if(!state) {
-        this.app.notifyWindow('error', ERRORS.SEVERITY.SEVERE, ERRORS.CONNECTION.NO_NETWORK);
-    } else {
-        this.app.notifyWindow('error', ERRORS.SEVERITY.INFO, ERRORS.CONNECTION.NETWORK_RECONNECT);
+            cookies.forEach((cookie) => {
+                LOG.silly('Saving new cookie ' + cookie.key + " = " + cookie.value);
+                sessionCookies.set({
+                    name: cookie.key,
+                    value: cookie.value,
+                    domain: cookie.domain || host,
+                    path: cookie.path,
+                    secure: cookie.secure,
+                    httpOnly: cookie.httpOnly,
+                    url: (cookie.secure ? "https" : "http") + "://" + host
+                }, (error) => {
+                    if(error) {
+                        LOG.warn('Unable to sync cookie: ' + error);
+                    }
+                });
+            });
+        }
+        return response;
     }
-};
 
+    getCachedResponse(url) {
+        LOG.info("Return cached reponse for request to " + url);
+        return this.db('cache').find({ url: url });
+    }
+
+    clearCache() {
+        LOG.info('Clearing response cache...');
+        this.db('cache').remove();
+    }
+}
 module.exports = SessionHandler;
