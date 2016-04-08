@@ -6,6 +6,7 @@ const ProxtopMenu = require('./menu');
 const { Menu } = require('electron');
 const utils = require('./utils');
 const NotificationManager = require('./notification_manager');
+const { ipcMain } = require('electron');
 
 class Proxtop {
     constructor(app, window_manager, updater, tray, options) {
@@ -78,6 +79,10 @@ class Proxtop {
 
         this.menu = ProxtopMenu(this);
         Menu.setApplicationMenu(this.menu);
+
+        ipcMain.on('open-about', () => {
+            this.window_manager.createAboutWindow();
+        });
     }
 
     openMainWindow() {

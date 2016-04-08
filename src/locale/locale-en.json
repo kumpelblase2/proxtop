@@ -31,7 +31,8 @@
     "WATCHLIST": "Watchlist",
     "MESSAGES": "Messages",
     "SETTINGS": "Settings",
-    "LOGOUT": "Log out"
+    "LOGOUT": "Log out",
+    "ABOUT": "About"
   },
   "WATCHLIST": {
     "NEW_ANIME": "Episode {{episode}} from {{name}} is now available!",
