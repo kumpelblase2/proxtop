@@ -1,11 +1,11 @@
-<md-content layout="row" layout-align="center start">
+<md-content layout="row" layout-align="space-around start">
     <style>
     a {
         color: inherit;
     }
     </style>
     <loader ng-if="!conversation.messages" flex-offset="50"></loader>
-    <div layout="column" flex="50" flex-offset="15" layout-align="start center">
+    <div layout="column" flex="50" layout-align="start center">
         <md-list layout-fill>
             <md-list-item ng-if="conversation.has_more">
                 <md-button ng-click="loadMore()" layout-fill>{{ 'MESSAGES.LOAD_MORE' | translate }}</md-button>
@@ -32,8 +32,8 @@
             </div>
         </div>
     </div>
-    <md-list flex="15" flex-offset="5" ng-if="conversation.messages" class="md-whiteframe-2dp" style="max-height: 50vh; overflow-y: auto;">
-        <md-subheader>{{ 'MESSAGES.PARTICIPANTS' | translate }}</md-subheader>
+    <md-list flex="20" ng-if="conversation.messages" class="md-whiteframe-2dp" style="max-height: 50vh; overflow-y: auto;">
+        <md-subheader class="md-no-sticky">{{ 'MESSAGES.PARTICIPANTS' | translate }}</md-subheader>
         <md-list-item ng-repeat="participant in conversation.participants" class="md-2-line">
             <img ng-src="{{'https:' + participant.avatar}}" class="md-avatar" />
             <div class="md-list-item-text">
