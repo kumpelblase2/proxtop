@@ -8,6 +8,8 @@ class Updater {
         this.check_url = check_url;
         this.settings = db('updater');
         this.limited = this.settings.find({ name: 'limited' });
+        this.has_noticed = false;
+        this.timer = null;
         if(!this.limited) {
             this.limited = { value: false, release_time: 0, name: 'limited' };
             this.settings.push(this.limited);
@@ -17,14 +19,17 @@ class Updater {
     start(current, callback) {
         this.currentVersion = current;
         this.callback = callback;
-        const self = this;
-        setTimeout(function() {
-            self.check();
+        setTimeout(() => {
+            this.check();
         }, 1000);
     }
 
     stop() {
-        
+        clearTimeout(this.timer);
+    }
+
+    stopBothering() {
+        this.has_noticed = true;
     }
 
     saveLimitation() {
@@ -55,6 +60,11 @@ class Updater {
             return;
         }
 
+        if(this.has_noticed) {
+            LOG.verbose("User already knows, no need to check.");
+            return;
+        }
+
         request({
             url: self.check_url,
             headers: {
@@ -62,11 +72,16 @@ class Updater {
             }
         }).then(JSON.parse).then(function(releases) {
             return utils.findLatestRelease(releases, self.currentVersion);
-        }).then(function(update) {
+        }).then((update) => {
             LOG.verbose('Update available? ' + (update ? 'Yes' : 'No'));
             if(update) {
                 self.callback(update);
+                this.stopBothering();
             }
+        }).then(() => {
+            this.timer = setTimeout(() => {
+                this.check();
+            }, UPDATE_INTERVALL);
         }).catch(function(e) {
             if(e.statusCode == 403) {
                 LOG.warn("GitHub API limit reached.");
