@@ -6,8 +6,8 @@ BUILD_DIR = _packaged
 VERSION = $(shell cat package.json | grep "version" | cut -d '"' -f4)
 
 ICON_DIR = usr/share/icons/hicolor/
-ICON_48_DIR = ${ICON_DIR}/48x48/apps/
-ICON_256_DIR = ${ICON_DIR}/256x256/apps/
+ICON_48_DIR = ${ICON_DIR}/48x48/apps
+ICON_256_DIR = ${ICON_DIR}/256x256/apps
 
 DESKTOP_ENTRY_DIR = usr/share/applications/
 
@@ -18,8 +18,8 @@ setup:
 .PHONY: setup
 
 clean:
-	-rm -r $(TARGET_DIR)
-	-rm -r $(BUILD_DIR)
+	if test -d $(TARGET_DIR); then rm -r $(TARGET_DIR); fi
+	if test -d $(BUILD_DIR); then rm -r $(BUILD_DIR); fi
 
 prepare:
 	mkdir $(TARGET_DIR)
