@@ -12,7 +12,12 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
             $scope.current.info = result;
             const supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
             $scope.current.info.streams = supported;
-            if(supported && supported.length == 1) {
+            if(supported && supported.length == 0) {
+                $translate('ERROR.NO_STREAM_AVAILABLE').then(function(translation) {
+                    $mdToast.show($mdToast.simple().textContent(translation));
+                    $state.go('watchlist');
+                });
+            } else if(supported && supported.length == 1) {
                 $scope.select(supported[0]);
             } else {
                 const found = _.filter(supported, { type: preferredStream });

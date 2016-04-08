@@ -101,7 +101,8 @@
     "PROXER_CLOUDFLARE_PROTECTION": "Cloudflare ist eingeschaltet, Proxtop könnte nicht mehr komplett funktionieren.",
     "STREAM_NO_PARSER": "Proxtop unterstützt diesen Stream leider noch nicht :(",
     "UNKNOWN_ERROR": "Unbekannter Fehler: ",
-    "CACHE_CLEAR": "Der Cache wurde geleert."
+    "CACHE_CLEAR": "Der Cache wurde geleert.",
+    "NO_STREAM_AVAILABLE": "Es existiert kein unterstützter Stream."
   },
   "ERROR_SEVERITY": {
     "severe":"Schwerwiegend",
