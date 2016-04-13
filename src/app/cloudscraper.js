@@ -67,7 +67,7 @@ Cloudscraper.prototype.solveChallenge = function(response, body) {
         const headers = {
             Referer: response.request.uri.href // Original url should be placed as referer
         };
-        LOG.verbose('Solved CloudFlare with ' + result + '. Sending result.');
+        LOG.verbose('Solved CloudFlare with ' + JSON.stringify(result) + '. Sending result.');
         // Make request with answer
         return self.request.get({
             url: answerUrl,
