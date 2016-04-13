@@ -16,6 +16,8 @@ global.PROXER_PATHS = {
     CONVERSATIONS_API: '/messages/?format=json&json=conferences',
     CONVERSATION_PAGE: '/messages/?id=',
     CONVERSATION_FAVORITES: '/messages/favourite',
+    CONVERSATION_MARK_FAVORITE: '/messages/?format=json&json=favour&id=',
+    CONVERSATION_UNMARK_FAVORITE: '/messages/?format=json&json=unfavour&id=',
     MESSAGE_API: '/messages/?format=json&json=messages&id=',
     MESSAGE_NEW_API: '/messages/?format=json&json=newmessages&id=',
     MESSAGE_WRITE_API: '/messages/?format=json&json=answer&id=',

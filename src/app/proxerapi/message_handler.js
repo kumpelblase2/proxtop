@@ -24,6 +24,22 @@ class MessagesHandler extends IPCHandler {
             .then(messageParser.parseFavoriteMessages);
     }
 
+    favoriteMessage(id) {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_MARK_FAVORITE + id)
+            .then(messageParser.parseMarkFavorite).then(function(result) {
+                result.id = id;
+                return result;
+            });
+    }
+
+    unfavoriteMessage(id) {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_UNMARK_FAVORITE + id)
+            .then(messageParser.parseMarkFavorite).then(function(result) {
+                result.id = id;
+                return result;
+            });
+    }
+
     loadConversation(id) {
         return Promise.join(this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id).then(messageParser.parseConversation),
                 this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_PAGE + id).then(messageParser.parseConversationPage),
@@ -109,6 +125,8 @@ class MessagesHandler extends IPCHandler {
         this.handle('conversation-update', this.refreshMessages);
         this.handle('conversation-more', this.loadPreviousMessages);
         this.handle('conversations-favorites', this.loadFavorites);
+        this.handle('conversation-favorite', this.favoriteMessage);
+        this.handle('conversation-unfavorite', this.unfavoriteMessage);
 
         this.messageCheckLoop();
     }

@@ -51,7 +51,7 @@ parser.parseMessagesList = function(page) {
             if(data.error) {
                 throw new Error(data.msg);
             }
-            
+
             return data.conferences.map((conv) => {
                 conv.id = parseInt(conv.id);
                 return conv;
@@ -118,6 +118,10 @@ parser.parseFavoriteMessages = function(page) {
     return Promise.resolve(page).then(cheerio.load).then(($) => {
         return parser.parseConversationItems($, $('a.conferenceGrid'), "DD.MM.YYYY HH:mm");
     });
+};
+
+parser.parseMarkFavorite = function(page) {
+    return Promise.resolve(page).then(JSON.parse);
 };
 
 module.exports = parser;
