@@ -16,12 +16,12 @@ Also note that these are just the "bigger things" that I want to get done but mo
 - Improve internal workings
 
 ## 0.4.0 (in progress)
-- Anime browsing
 - proper UI layout
-- Basic manga reading
 
 ## 0.5.0 (maybe 1.0?)
+- Anime browsing
 - Manga browsing
+- Basic manga reading
 
 ## Out of the line / Do whenever
 - UI/UX improvements - always welcome
