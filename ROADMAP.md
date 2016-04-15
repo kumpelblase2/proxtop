@@ -17,6 +17,7 @@ Also note that these are just the "bigger things" that I want to get done but mo
 
 ## 0.4.0 (in progress)
 - proper UI layout
+- Dedicated web page
 
 ## 0.5.0 (maybe 1.0?)
 - Anime browsing
