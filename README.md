@@ -64,7 +64,10 @@ npm start
 
 Or if you want to build the application:
 ```
-make clean build
+make clean
+make build
+# Or if you want to package it:
+make package
 ```
 
 ## FAQ
