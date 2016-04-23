@@ -3,10 +3,9 @@ const settings = require('./settings');
 const API = require('./api');
 const ProxerAPI = require('./proxerapi');
 const ProxtopMenu = require('./menu');
-const { Menu } = require('electron');
 const utils = require('./utils');
 const NotificationManager = require('./notification_manager');
-const { ipcMain } = require('electron');
+const { ipcMain, Menu } = require('electron');
 
 class Proxtop {
     constructor(app, window_manager, updater, tray, options) {
@@ -52,10 +51,6 @@ class Proxtop {
 
     notifyUpdate(release) {
         this.notifyWindow('update', release);
-    }
-
-    getCookies() {
-        return this.window_manager.getMainWindow().webContents.session.cookies;
     }
 
     getSettings() {

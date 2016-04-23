@@ -89,7 +89,9 @@ class SessionHandler extends IPCHandler {
             }
 
             return response;
-        }).then(this.updateCookies.bind(this)).then(this.cacheResponse.bind(this)).catch(this.handleError.bind(this));
+        }).then(this.cacheResponse.bind(this)).catch((error) => {
+            return this.handleError(error, doRequest);
+        });
     }
 
     cacheResponse(response) {
@@ -105,13 +107,12 @@ class SessionHandler extends IPCHandler {
         return body;
     }
 
-    handleError(error) {
+    handleError(error, doRequest) {
         if(error.statusCode == 303) { // Just rethrow to let login handle it.
             LOG.debug('Received 303 error, rethrowing for login handler.');
             throw error;
         }
 
-        console.log(error);
         LOG.warn("Error when requesting " + error.options.uri);
         if(error.statusCode == 525) {
             LOG.error('Received error 525 on request');
@@ -153,38 +154,6 @@ class SessionHandler extends IPCHandler {
             return "";
         }
     }
-
-    updateCookies(response) {
-        if(response.headers['set-cookie']) {
-            const host = response.request.host;
-            let cookies = response.headers['set-cookie'];
-            const sessionCookies = this.app.getCookies();
-            if (cookies instanceof Array) {
-                cookies = cookies.map(Cookie.parse);
-            } else {
-                cookies = [Cookie.parse(cookies)];
-            }
-
-            cookies.forEach((cookie) => {
-                LOG.silly('Saving new cookie ' + cookie.key + " = " + cookie.value);
-                sessionCookies.set({
-                    name: cookie.key,
-                    value: cookie.value,
-                    domain: cookie.domain || host,
-                    path: cookie.path,
-                    secure: cookie.secure,
-                    httpOnly: cookie.httpOnly,
-                    url: (cookie.secure ? "https" : "http") + "://" + host
-                }, (error) => {
-                    if(error) {
-                        LOG.warn('Unable to sync cookie: ' + error);
-                    }
-                });
-            });
-        }
-        return response;
-    }
-
     getCachedResponse(url) {
         LOG.info("Return cached reponse for request to " + url);
         return this.db('cache').find({ url: url });
