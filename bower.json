@@ -20,15 +20,15 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.5.3",
+    "angular": "~1.5.5",
     "angular-material": "~1.0.7",
     "angular-ui-router": "~0.2.18",
-    "lodash": "~4.8.2",
+    "lodash": "~4.11.2",
     "angular-progress-arc": "~1.0.0",
-    "font-awesome": "~4.5.0",
+    "font-awesome": "~4.6.1",
     "angular-translate": "~2.11.0",
     "angular-translate-loader-static-files": "~2.11.0",
-    "angular-sanitize": "^1.5.3",
+    "angular-sanitize": "^1.5.5",
     "ng-debounce": "^0.1.7"
   }
 }
