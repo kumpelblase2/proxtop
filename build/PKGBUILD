@@ -1,0 +1,18 @@
+pkgname=proxtop
+pkgver=0.3.1
+_pkgver=$pkgver-alpha4
+pkgrel=1
+pkgdesc='Desktop client for proxer.me'
+url="https://github.com/kumpelblase2/proxtop.git"
+license=('MIT')
+arch=('x86_64')
+depends=('libnotify')
+makedepends=('git' 'nodejs' 'npm' 'make' 'bower')
+provides=("${pkgname}")
+conflicts=("${pkgname}")
+install=proxtop.install
+source=("https://github.com/kumpelblase2/proxtop/releases/download/v$_pkgver/proxtop-$_pkgver-linux.deb")
+
+package() {
+	tar -zxf data.tar.gz -C "${pkgdir}"
+}
