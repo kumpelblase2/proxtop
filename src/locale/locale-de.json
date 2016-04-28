@@ -80,7 +80,12 @@
     "PARTICIPANTS": "Teilnehmer",
     "LOAD_MORE": "Weitere laden",
     "NEW_MESSAGE": "Neue Nachricht von {{user}}!",
-    "FAVORITES_ONLY": "Nur Favoriten anzeigen"
+    "FAVORITES_ONLY": "Nur Favoriten anzeigen",
+    "REPORT": "Melden",
+    "FAVORITE": "Favorisieren",
+    "UNFAVORITE": "Favorit entfernen",
+    "BLOCK": "Blockieren",
+    "UNBLOCK": "Blockierung aufheben"
   },
   "UPDATE": {
       "NEW_VERSION": "Eine neue Version ist verfügbar",

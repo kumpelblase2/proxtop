@@ -40,15 +40,28 @@ class MessagesHandler extends IPCHandler {
             });
     }
 
+    blockConversation(id) {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_MARK_BLOCKED + id)
+            .then(messageParser.parseMarkBlocked).then(function(result) {
+                result.id = id;
+                return result;
+            });
+    }
+
+    unblockConversation(id) {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_UNMARK_BLOCKED + id)
+            .then(messageParser.parseMarkBlocked).then(function(result) {
+                result.id = id;
+                return result;
+            });
+    }
+
     loadConversation(id) {
         return Promise.join(this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id).then(messageParser.parseConversation),
                 this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_PAGE + id).then(messageParser.parseConversationPage),
             function(conversation, participants) {
-                return {
-                    messages: conversation.messages,
-                    has_more: conversation.has_more,
-                    participants: participants
-                };
+                conversation.participants = participants;
+                return conversation;
             }
         );
     }
@@ -118,7 +131,6 @@ class MessagesHandler extends IPCHandler {
     }
 
     register() {
-        const self = this;
         this.handle('conversations', this.loadConversations);
         this.handle('conversation', this.loadConversation);
         this.handle('conversation-write', this.sendMessage);
@@ -127,6 +139,8 @@ class MessagesHandler extends IPCHandler {
         this.handle('conversations-favorites', this.loadFavorites);
         this.handle('conversation-favorite', this.favoriteMessage);
         this.handle('conversation-unfavorite', this.unfavoriteMessage);
+        this.handle('conversation-block', this.blockConversation);
+        this.handle('conversation-unblock', this.unblockConversation);
 
         this.messageCheckLoop();
     }

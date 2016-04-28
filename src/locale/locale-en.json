@@ -80,7 +80,12 @@
     "PARTICIPANTS": "Participants",
     "LOAD_MORE": "Load more",
     "NEW_MESSAGE": "New message from {{user}}!",
-    "FAVORITES_ONLY": "Show favorites only"
+    "FAVORITES_ONLY": "Show favorites only",
+    "REPORT": "Report",
+    "FAVORITE": "Favorite",
+    "UNFAVORITE": "Unfavorite",
+    "BLOCK": "Block",
+    "UNBLOCK": "Unblock"
   },
   "UPDATE": {
       "NEW_VERSION": "A new version is available",

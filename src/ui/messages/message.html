@@ -41,5 +41,20 @@
                 <p ng-bind="participant.status"></p>
             </div>
         </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item ng-click="toggleFavorite()">
+            <p ng-if="conversation.favorite" translate>MESSAGES.UNFAVORITE</p>
+            <p ng-if="!conversation.favorite" translate>MESSAGES.FAVORITE</p>
+            <md-icon md-font-icon="fa-star" class="fa"></md-icon>
+        </md-list-item>
+        <md-list-item ng-click="toggleBlock()">
+            <p ng-if="conversation.blocked" translate>MESSAGES.UNBLOCK</p>
+            <p ng-if="!conversation.blocked" translate>MESSAGES.BLOCK</p>
+            <md-icon md-font-icon="fa-ban" class="fa"></md-icon>
+        </md-list-item>
+        <md-list-item ng-if="!state.reported" ng-click="report()">
+            <p translate>MESSAGES.REPORT</p>
+            <md-icon md-font-icon="fa-flag" class="fa"></md-icon>
+        </md-list-item>
     </md-list>
 </md-content>

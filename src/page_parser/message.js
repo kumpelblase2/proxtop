@@ -103,7 +103,9 @@ parser.parseConversation = function(page) {
 
             return {
                 messages: data.messages,
-                has_more: data.messages.length == 15
+                has_more: data.messages.length == 15,
+                favorite: data.favour == "1",
+                blocked: data.block == "1"
             };
         });
 };
@@ -121,6 +123,10 @@ parser.parseFavoriteMessages = function(page) {
 };
 
 parser.parseMarkFavorite = function(page) {
+    return Promise.resolve(page).then(JSON.parse);
+};
+
+parser.parseMarkBlocked = function(page) {
     return Promise.resolve(page).then(JSON.parse);
 };
 
