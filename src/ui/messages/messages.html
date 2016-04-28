@@ -2,6 +2,10 @@
 .favorited {
     color: yellow;
 }
+
+.new-message {
+    color: lightblue;
+}
 </style>
 
 <md-content>
@@ -16,6 +20,7 @@
             <div class="md-list-item-text">
                 <h3>{{conversation.topic}}
                     <i class="fa fa-star" ng-class="{ 'favorited': conversation.favorite }" ng-if="conversation.favorite || conversation.id == hover_id" ng-click="toggleFavorite(conversation, $event)"></i>
+                    <i class="fa fa-circle new-message" ng-if="conversation.read == '0'"></i>
                 </h3>
                 <p>{{ 'MESSAGES.LAST_MESSAGE' | translate }}: {{conversation.timestamp_end * 1000 | date}}</p>
             </div>
