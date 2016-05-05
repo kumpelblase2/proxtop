@@ -22,9 +22,25 @@ const ranks = [
 ];
 
 angular.module('proxtop').service('ProgressService', function() {
-    this.getNextRank = function(points = 0) {
-        return _.find(ranks, function(rank) {
-            return rank.points > points;
-        });
+    this.getNextRank = (points = 0) => {
+        return _.find(ranks, (rank) => rank.points > points);
+    };
+
+    this.getCurrentRank = (points = 0) => {
+        for(var i = 1; i < ranks.length; i++) {
+            const curr = ranks[i];
+            if(curr.points > points) {
+                return ranks[i - 1];
+            }
+        }
+        return ranks[0];
+    };
+
+    this.getProgressToNextRank = (points = 0) => {
+        const nextRank = this.getNextRank(points);
+        const currRank = this.getCurrentRank(points);
+        const progression = points - currRank.points;
+        const required = nextRank.points - currRank.points;
+        return progression / required;
     };
 });
