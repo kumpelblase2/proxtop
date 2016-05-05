@@ -2,7 +2,10 @@
   "GENERAL": {
     "ANIME": "Anime",
     "MANGA": "Manga",
-    "PROXTOP": "Proxtop"
+    "PROXTOP": "Proxtop",
+    "YES": "Ja",
+    "NO": "Nein",
+    "ARE_YOU_SURE": "Sicher?"
   },
 
   "USER": {

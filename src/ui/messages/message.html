@@ -52,7 +52,7 @@
             <p ng-if="!conversation.blocked" translate>MESSAGES.BLOCK</p>
             <md-icon md-font-icon="fa-ban" class="fa"></md-icon>
         </md-list-item>
-        <md-list-item ng-if="!state.reported" ng-click="report()">
+        <md-list-item ng-if="!state.reported" ng-click="report($event)">
             <p translate>MESSAGES.REPORT</p>
             <md-icon md-font-icon="fa-flag" class="fa"></md-icon>
         </md-list-item>

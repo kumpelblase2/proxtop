@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', 'AvatarService', '$interval', '$rootScope', function($scope, ipc, $stateParams, avatar, $interval, $rootScope) {
+angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', 'AvatarService', '$interval', '$rootScope', '$mdDialog', '$translate', function($scope, ipc, $stateParams, avatar, $interval, $rootScope, $mdDialog, $translate) {
     const MESSAGE_UPDATE_DELAY = 15000;
 
     $scope.conversation = {};
@@ -74,9 +74,24 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
         });
     };
 
-    $scope.report = () => {
-        ipc.send('conversation-report', $stateParams.id);
-        $scope.state.reported = true;
+    $scope.report = (ev) => {
+        const sure = "GENERAL.ARE_YOU_SURE";
+        const title = "MESSAGES.REPORT";
+        const yes = "GENERAL.YES";
+        const no = "GENERAL.NO";
+        $translate([sure, title, yes, no]).then((translations) => {
+            const confirm = $mdDialog.confirm()
+                      .title(translations[title] + "?")
+                      .textContent(translations[sure])
+                      .ariaLabel(translations[title])
+                      .targetEvent(ev)
+                      .ok(translations[yes])
+                      .cancel(translations[no]);
+            $mdDialog.show(confirm).then(() => {
+                ipc.send('conversation-report', $stateParams.id);
+                $scope.state.reported = true;
+            }, () => {});
+        });
     };
 
     $scope.toggleFavorite = () => {
