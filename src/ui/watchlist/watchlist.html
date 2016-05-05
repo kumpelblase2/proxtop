@@ -12,7 +12,7 @@
 <div ng-if="watchlist" layout="row" layout-sm="column" layout-xs="column">
     <md-list id="watchlist-anime" class="md-whiteframe-1dp full-height" layout-margin flex="50" flex-sm="100" flex-xs="100">
         <md-list-item ng-repeat="anime in watchlist.anime" class="md-1-line" ng-click="clickAnime(anime)" layout="row">
-            <md-icon class="fa fa-play-circle-o fa-lg" ng-class="{online: anime.status}"></md-icon>
+            <md-icon class="fa fa-play-circle-o fa-lg" ng-class="::{online: anime.status}"></md-icon>
             <div class="md-list-item-text" flex="95">
                 <h3>{{anime.name}} - {{anime.episode}}</h3>
             </div>
@@ -21,7 +21,7 @@
     </md-list>
     <md-list id="watchlist-manga" class="md-whiteframe-1dp full-height" layout-margin flex="50" flex-sm="100" flex-xs="100">
         <md-list-item ng-repeat="manga in watchlist.manga" class="md-1-line" ng-click="clickManga(manga)" layout="row">
-            <md-icon class="fa fa-play-circle-o fa-lg" ng-class="{online: manga.status}"></md-icon>
+            <md-icon class="fa fa-play-circle-o fa-lg" ng-class="::{online: manga.status}"></md-icon>
             <div class="md-list-item-text" flex="95">
                 <h3>{{manga.name}} - {{manga.episode}}</h3>
             </div>
