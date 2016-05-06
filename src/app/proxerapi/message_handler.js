@@ -149,6 +149,7 @@ class MessagesHandler extends IPCHandler {
         this.handle('conversation-unfavorite', this.unfavoriteMessage);
         this.handle('conversation-block', this.blockConversation);
         this.handle('conversation-unblock', this.unblockConversation);
+        this.handle('conversation-report', this.reportConversation);
 
         this.messageCheckLoop();
     }
