@@ -59,14 +59,13 @@ npm test
 Run the application via:
 ```
 npm start
-
 ```
 
 Or if you want to build the application:
 ```
 make clean
 make build
-# Or if you want to package it:
+# And if you want to package it:
 make package
 ```
 
