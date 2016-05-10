@@ -1,11 +1,13 @@
 var { episode: episodeParser, stream: streamParser } = require('../../page_parser');
 var util = require('util');
 const IPCHandler = require('./ipc_handler');
+const translate = require('../translation');
 
 class EpisodeHandler extends IPCHandler {
     constructor(sessionHandler) {
         super();
         this.session_handler = sessionHandler;
+        this.translation = translate();
     }
 
     loadEpisode(id, ep, sub) {
@@ -45,7 +47,7 @@ class EpisodeHandler extends IPCHandler {
                 event.sender.send('watch', video);
             }).catch(function(e) {
                 console.log(e);
-                event.sender.send('error', ERRORS.SEVERITY.WARNING, ERRORS.STREAMS.CANNOT_PARSE);
+                event.sender.send('error', this.translation.get(ERRORS.SEVERITY.WARNING), self.translation.get(ERRORS.STREAMS.CANNOT_PARSE));
             });
         });
     }
