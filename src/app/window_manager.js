@@ -1,8 +1,6 @@
-const BrowserWindow = require('browser-window');
+const { BrowserWindow, shell } = require('electron');
 const WindowState = require('electron-window-state');
-const Shell = require('shell');
 const openAboutWindow = require('about-window').default;
-const path = require('path');
 
 class WindowManager {
     constructor(dirs) {
@@ -42,7 +40,7 @@ class WindowManager {
         this.mainWindow.webContents.on('new-window', function(ev, url) {
             LOG.verbose('Prevent new window and open externally instead.');
             ev.preventDefault();
-            Shell.openExternal(url);
+            shell.openExternal(url);
         });
 
         windowState.manage(this.mainWindow);

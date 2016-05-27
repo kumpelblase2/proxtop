@@ -36,7 +36,7 @@ global.UPDATE_INTERVALL = 2 * 60 * 60 * 1000;
 global.GITHUB_RELEASES_URL = "https://api.github.com/repos/kumpelblase2/proxtop/releases";
 
 try {
-    global.APP_DIR = path.join(require("app").getPath("appData"), APP_NAME);
+    global.APP_DIR = path.join(require("electron").app.getPath("appData"), APP_NAME);
 } catch(e) {
     global.APP_DIR = path.join(__dirname, '..', '..', APP_NAME);
 }

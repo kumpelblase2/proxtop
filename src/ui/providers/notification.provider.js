@@ -1,5 +1,5 @@
 angular.module('proxtop').service('notification', [function() {
-    const remote = require('remote');
+    const { remote } = require('electron');
     const os = remote.require('os');
     const path = remote.require('path');
     const tray = remote.Tray;
