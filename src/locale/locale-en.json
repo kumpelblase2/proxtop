@@ -44,7 +44,8 @@
     "ADD_NEXT": "Add next to watchlist",
     "UPDATE_FINISHED": "Updated entry",
     "FINISH": "Finish",
-    "MARKED_FINISHED": "Successfully marked as finished"
+    "MARKED_FINISHED": "Successfully marked as finished",
+    "OPENED_EXTERNAL": "The items was opened in an external application"
   },
   "SETTINGS": {
     "SAVE": "Save",
@@ -58,7 +59,8 @@
       "SYSTEM_BROWSER": "System (Browser)",
       "EXTERNAL": "External",
       "PREFERRED_PROVIDER": "Preferred stream provider",
-      "APPLICATION": "Application"
+      "APPLICATION": "Application",
+      "PASS_RAW": "Pass direct video url to application"
     },
     "WATCHLIST": {
       "WATCHLIST": "@:MENU.WATCHLIST",
@@ -91,9 +93,9 @@
     "UNBLOCK": "Unblock"
   },
   "UPDATE": {
-      "NEW_VERSION": "A new version is available",
-      "NO": "No, thanks",
-      "YES": "Show me"
+    "NEW_VERSION": "A new version is available",
+    "NO": "No, thanks",
+    "YES": "Show me"
   },
   "ERROR": {
     "CONNECTION_NO_NETWORK": "Could not perform request, no network available.",

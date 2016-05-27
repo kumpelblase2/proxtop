@@ -5,15 +5,21 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
         video: null,
         canPlay: false
     };
-    const preferredStream = settings.get('anime').preferred_stream;
 
-    ipc.once('episode', function(ev, result) {
-        $scope.$apply(function() {
+    const animeSettings = settings.get('anime');
+    const preferredStream = animeSettings.preferred_stream;
+    const playExternal = animeSettings.open_with === 'external';
+    const passRaw = animeSettings.pass_raw_url;
+    
+    $scope.current.display = !playExternal;
+
+    ipc.once('episode', (ev, result) => {
+        $scope.$apply(() => {
             $scope.current.info = result;
             const supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
             $scope.current.info.streams = supported;
             if(supported && supported.length == 0) {
-                $translate('ERROR.NO_STREAM_AVAILABLE').then(function(translation) {
+                $translate('ERROR.NO_STREAM_AVAILABLE').then((translation) => {
                     $mdToast.show($mdToast.simple().textContent(translation));
                     $state.go('watchlist');
                 });
@@ -28,28 +34,36 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
         });
     });
 
-    $scope.select = function(stream) {
+    $scope.select = (stream) => {
         $scope.current.stream = stream;
         $scope.current.canPlay = false;
         ipc.send('watch', stream);
     };
 
-    ipc.once('watch', function(ev, video) {
-        $scope.$apply(function() {
+    ipc.once('watch', (ev, video) => {
+        $scope.$apply(() => {
+            const actualUrl = video.url;
             video.url = $sce.trustAsResourceUrl(video.url);
             $scope.current.video = video;
+            if(playExternal && passRaw) {
+                ipc.send('open-external', actualUrl);
+            }
         });
     });
 
-    $scope.hasVideo = function() {
+    $scope.hasVideo = () => {
         return $scope.current.video && $scope.current.video.type == 'mp4';
     };
 
-    $scope.isReadyForPlayback = function() {
+    $scope.isReadyForPlayback = () => {
         return $scope.hasVideo() && $scope.current.canPlay;
     };
 
-    $scope.previous = function() {
+    $scope.shouldShowControls = () => {
+        return $scope.current.stream && ($scope.hasVideo() || playExternal);
+    };
+
+    $scope.previous = () => {
         if($scope.hasPrevious()) {
             $state.go('watch', {
                 id: $stateParams.id,
@@ -59,11 +73,11 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
         }
     };
 
-    $scope.hasPrevious = function() {
+    $scope.hasPrevious = () => {
         return $scope.current.info && $scope.current.info.prev;
     };
 
-    $scope.next = function() {
+    $scope.next = () => {
         if($scope.hasNext()) {
             $state.go('watch', {
                 id: $stateParams.id,
@@ -73,29 +87,29 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
         }
     };
 
-    $scope.hasNext = function() {
+    $scope.hasNext = () => {
         return $scope.current.info && $scope.current.info.next;
     };
 
-    $scope.addToWatchlist = function() {
+    $scope.addToWatchlist = () => {
         ipc.send('add-watchlist', $stateParams.id, $stateParams.ep, $stateParams.sub);
     };
 
-    $scope.addNextToWatchlist = function() {
+    $scope.addNextToWatchlist = () => {
         ipc.send('add-watchlist', $stateParams.id, $scope.current.info.next, $stateParams.sub);
     };
 
-    $scope.finishWatching = function() {
+    $scope.finishWatching = () => {
         ipc.send('finish-watchlist', $stateParams.id, $stateParams.ep, $stateParams.sub);
     };
 
-    ipc.on('add-watchlist', function(ev, response) {
+    ipc.on('add-watchlist', (ev, response) => {
         $translate('WATCHLIST.UPDATE_FINISHED').then(function(translation) {
             $mdToast.show($mdToast.simple().textContent(translation));
         });
     });
 
-    ipc.on('finish-watchlist', function(ev, response) {
+    ipc.on('finish-watchlist', (ev, response) => {
         $translate('WATCHLIST.MARKED_FINISHED').then(function(translation) {
             $mdToast.show($mdToast.simple().textContent(translation));
         });

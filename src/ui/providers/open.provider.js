@@ -5,7 +5,8 @@ angular.module('proxtop').service('open', ['ipc', 'settings', '$state', function
         self['open' + name] = function(id, ep, sub) {
             const actualSettings = settings.get(lower);
 
-            if(actualSettings && actualSettings.open_with === 'internal') {
+            // TODO refactor this, this looks hacky
+            if(actualSettings && (actualSettings.open_with === 'internal' || (lower === 'anime' && actualSettings.pass_raw_url))) {
                 $state.go('watch', {
                     id: id,
                     ep: ep,

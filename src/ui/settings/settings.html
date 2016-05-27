@@ -112,6 +112,10 @@ md-card md-card-content {
                             <input ng-disabled="settings.anime.open_with != 'external'" ng-model="settings.anime.external_path" />
                         </md-input-container>
                     </md-list-item>
+                    <md-list-item ng-if="settings.anime.open_with == 'external'">
+                        <p translate>SETTINGS.ANIME.PASS_RAW</p>
+                        <md-switch class="md-secondary" ng-model="settings.anime.pass_raw_url"></md-switch>
+                    </md-list-item>
                     <md-list-item>
                         <p translate>SETTINGS.ANIME.PREFERRED_PROVIDER</p>
                         <md-select class="md-secondary" ng-model="settings.anime.preferred_stream" aria-label="Preferred Stream Provider">

@@ -44,7 +44,8 @@
     "ADD_NEXT": "Nächste zur Watchlist hinzufügen",
     "UPDATE_FINISHED": "Eintrag erneuert",
     "FINISH": "Abschließen",
-    "MARKED_FINISHED": "Erfolgreich als Abgeschlossen markiert"
+    "MARKED_FINISHED": "Erfolgreich als Abgeschlossen markiert",
+    "OPENED_EXTERNAL": "Das Element wurde in einer externen Applikation geöffnet"
   },
   "SETTINGS": {
     "SAVE": "Speichern",
@@ -58,7 +59,8 @@
       "SYSTEM_BROWSER": "System (Browser)",
       "EXTERNAL": "Extern",
       "PREFERRED_PROVIDER": "Bevorzugter Stream-Provider",
-      "APPLICATION": "Anwendung"
+      "APPLICATION": "Anwendung",
+      "PASS_RAW": "Direkten Video-Url an Applikation leiten"
     },
     "WATCHLIST": {
       "WATCHLIST": "@:MENU.WATCHLIST",

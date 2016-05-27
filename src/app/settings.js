@@ -18,6 +18,7 @@ const DEFAULTS = {
         type: 'anime',
         open_with: 'system',
         external_path: 'proxer-mpv',
+        pass_raw_url: true,
         preferred_stream: 'proxer-stream'
     },
     DEFAULT_WATCHLIST_SETTINGS: {

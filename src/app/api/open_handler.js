@@ -24,27 +24,41 @@ class OpenHandler {
 
         const url = this.buildUrl(type, id, ep, sub);
         if(openSettings.open_with == 'external') {
-            childProcess.execFile(openSettings.external_path, [url], function(err, stdout, stderr) {
-                if(err) {
-                    console.log("error spawning command.");
-                    return;
-                }
-
-                console.log(stdout);
-                console.log(stderr);
-            });
+            this.openExternal(type, url);
         } else if(openSettings.open_with == 'system') {
             opener(url);
         }
     }
 
+    openExternal(type, url) {
+        var openSettings;
+        if(type == 'anime') {
+            openSettings = this.settings.getAnimeSettings();
+        } else {
+            openSettings = this.settings.getMangaSettings();
+        }
+
+        LOG.info("Starting external application with url " + url);
+        childProcess.execFile(openSettings.external_path, [url], function(err, stdout, stderr) {
+            if(err) {
+                LOG.error(err);
+                return;
+            }
+            
+            console.log(stderr);
+        });
+    }
+
     register() {
-        const self = this;
-        ipc.on('open', function(event, type, id, ep, sub) {
-            self.open(type, id, ep, sub);
+        ipc.on('open', (event, type, id, ep, sub) => {
+            this.open(type, id, ep, sub);
         });
 
-        ipc.on('open-link', function(event, link) {
+        ipc.on('open-external', (event, url) => {
+            this.openExternal('anime', url);
+        });
+
+        ipc.on('open-link', (event, link) => {
             opener(link);
         });
     }
