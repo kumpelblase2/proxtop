@@ -39,13 +39,8 @@ class OpenHandler {
         }
 
         LOG.info("Starting external application with url " + url);
-        childProcess.execFile(openSettings.external_path, [url], function(err, stdout, stderr) {
-            if(err) {
-                LOG.error(err);
-                return;
-            }
-            
-            console.log(stderr);
+        childProcess.spawn(openSettings.external_path, [url], {
+            stdio: [ 'ignore', 'ignore', process.stderr ]
         });
     }
 
