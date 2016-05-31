@@ -3,8 +3,8 @@ const { ipcMain } = require('electron');
 class IPCHandler {
     handle(event, funct) {
         const localFunc = funct.bind(this);
-        ipcMain.on(event, function(ev, ...args) {
-            localFunc(...args).then(function(...result) {
+        ipcMain.on(event, (ev, ...args) => {
+            localFunc(...args).then((...result) => {
                 ev.sender.send(event, ...result);
             });
         });

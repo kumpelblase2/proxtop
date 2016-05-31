@@ -14,27 +14,27 @@ class LoginHandler extends IPCHandler {
         const self = this;
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.ROOT)
             .then(loginParser.parseLogin)
-            .then(function(result) {
+            .then((result) => {
                 if(result.status === 'logged-in') {
                     LOG.verbose('Already logged in.');
                     return { success: true, reason: 'already-logged-in' };
                 } else if(result.status === 'logged-out'){
                     LOG.verbose('Not logged in yet, sending login with following details:');
                     LOG.verbose('Username: ' + username + '; Pass: ' + (!password || password.length == 0 ? 'No' : '****'));
-                    return Promise.resolve(result.data).then(function(data) {
+                    return Promise.resolve(result.data).then((data) => {
                         return _.merge(data, {
                             username: username,
                             password: password,
                             remember: keepLogin ? 'yes' : 'no'
                         });
-                    }).then(function(formData) {
-                        return self.session_handler.openRequest(function(request) {
+                    }).then((formData) => {
+                        return self.session_handler.openRequest((request) => {
                             return request.post({
                                 url: PROXER_BASE_URL + PROXER_PATHS.LOGIN,
                                 form: formData
                             });
                         })
-                    }).catch(function(error) {
+                    }).catch((error) => {
                         if(error.statusCode === 303) {
                             const location = error.response.headers.location;
                             if(location === '/' || location === 'https://proxer.me/') {
@@ -61,20 +61,20 @@ class LoginHandler extends IPCHandler {
         const self = this;
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.ROOT)
             .then(loginParser.parseLogout)
-            .then(function(result) {
+            .then((result) => {
                 if(result.status === 'logged-out') {
                     LOG.verbose('Already logged out.');
                     return { success: true, reason: 'already-logged-in' };
                 } else if(result.status === 'logout'){
                     LOG.verbose('Still logged in, logging out.');
-                    return Promise.resolve(result.data).then(function(formData) {
-                        return self.session_handler.openRequest(function(request) {
+                    return Promise.resolve(result.data).then((formData) => {
+                        return self.session_handler.openRequest((request) => {
                             return request.post({
                                 url: PROXER_BASE_URL + PROXER_PATHS.LOGOUT,
                                 form: formData
                             });
                         });
-                    }).catch(function(error) {
+                    }).catch((error) => {
                         if(error.statusCode === 303) {
                             LOG.info('Logged out.');
                             return { success: true, reason: null };
@@ -100,9 +100,8 @@ class LoginHandler extends IPCHandler {
         this.handle('logout', this.logout);
         this.handle('check-login', this.checkLogin);
         this.provide('login', (event, user, keepLogin) => {
-            this.login(user.username, user.password, keepLogin).then(function(result) {
-                event.sender.send('login', result);
-            });
+            this.login(user.username, user.password, keepLogin)
+                .then((result) => event.sender.send('login', result));
         });
     }
 }

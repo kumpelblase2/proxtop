@@ -29,7 +29,7 @@ class EpisodeHandler extends IPCHandler {
 
         LOG.verbose('Found stream url: ' + url);
 
-        return this.session_handler.openRequest(url).then(function(content) {
+        return this.session_handler.openRequest(url).then((content) => {
             return {
                 page: content,
                 stream: stream,
@@ -39,15 +39,15 @@ class EpisodeHandler extends IPCHandler {
     }
 
     register() {
-        var self = this;
         this.handle('episode', this.loadEpisode);
-        this.provide('watch', function(event, stream) {
-            self.extractStream(stream).then(function(video) {
+        this.provide('watch', (event, stream) => {
+            this.extractStream(stream).then((video) => {
                 LOG.verbose("Got video: " + video.url);
                 event.sender.send('watch', video);
-            }).catch(function(e) {
-                console.log(e);
-                event.sender.send('error', this.translation.get(ERRORS.SEVERITY.WARNING), self.translation.get(ERRORS.STREAMS.CANNOT_PARSE));
+            }).catch((e) => {
+                LOG.error("Error extracting stream", e);
+                console.log(this.translation);
+                event.sender.send('error', this.translation.get(ERRORS.SEVERITY.WARNING), this.translation.get(ERRORS.STREAMS.CANNOT_PARSE));
             });
         });
     }

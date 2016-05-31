@@ -67,7 +67,7 @@ class MessagesHandler extends IPCHandler {
     loadConversation(id) {
         return Promise.join(this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id).then(messageParser.parseConversation),
                 this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_PAGE + id).then(messageParser.parseConversationPage),
-            function(conversation, participants) {
+            (conversation, participants) => {
                 conversation.participants = participants;
                 return conversation;
             }
@@ -99,10 +99,9 @@ class MessagesHandler extends IPCHandler {
     }
 
     messageCheckLoop() {
-        const self = this;
-        setTimeout(function() {
-            self.messageCheck();
-            self.messageCheckLoop();
+        setTimeout(() => {
+            this.messageCheck();
+            this.messageCheckLoop();
         }, 30000);
     }
 
@@ -119,8 +118,8 @@ class MessagesHandler extends IPCHandler {
         if(time - self.lastCheck > interval * 60000 - 5000) {
             this.lastCheck = time;
             LOG.info("Check if new messages have arrived...");
-            self.checkNotifications().then(function(notifications) {
-                notifications.forEach(function(notification) {
+            self.checkNotifications().then((notifications) => {
+                notifications.forEach((notification) => {
                     if(!self.cache.find({ username: notification.username })) {
                         LOG.verbose('Got new message from ' + notification.username);
                         self.app.displayNotification({
@@ -133,7 +132,7 @@ class MessagesHandler extends IPCHandler {
                 });
 
                 self.cache.remove();
-                notifications.forEach(function(not) { self.cache.push(not); });
+                notifications.forEach((not) => self.cache.push(not));
             });
         }
     }

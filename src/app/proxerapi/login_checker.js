@@ -12,11 +12,8 @@ class LoginChecker {
         const login = this;
         sessionHandler.openRequest = (function(doRequest, checkLogin) {
             let request = this._openRequest(doRequest);
-            const self = this;
             if(checkLogin) {
-                request = request.then(login.checkLogin(function() {
-                    return self._openRequest(doRequest);
-                }));
+                request = request.then(login.checkLogin(() => this._openRequest(doRequest)));
             }
 
             return request;
