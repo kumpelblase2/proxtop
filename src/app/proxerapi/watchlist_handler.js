@@ -53,8 +53,8 @@ class WatchlistHandler extends IPCHandler {
             this.cache.chain().find({ type: 'watchlist-cache' }).merge({ anime: result.anime, manga: result.manga }).value();
             return updates;
         }).then((updates) => {
-            Object.keys(updates).forEach(function(type) {
-                updates[type].forEach(function(update) {
+            Object.keys(updates).forEach((type) => {
+                updates[type].forEach((update) => {
                     LOG.verbose('Sending watchlist update for ' + update.name);
                     this.app.displayNotification({
                         type: 'new-' + type + '-ep',
