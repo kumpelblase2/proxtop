@@ -11,5 +11,5 @@ angular.module('proxtop', ['ngMaterial', 'ngSanitize', 'ui.router', 'angular-pro
 
         $mdIconProvider.defaultIconSet('../bower_components/font-awesome/fonts/fontawesome-webfont.svg');
 
-        $logProvider.debugEnabled(true);
+        $logProvider.debugEnabled(false);
     }]);
