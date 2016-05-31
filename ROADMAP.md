@@ -15,14 +15,16 @@ Also note that these are just the "bigger things" that I want to get done but mo
 - Improve messaging
 - Improve internal workings
 
-## 0.4.0 (in progress)
+## 0.4.0 (FINISHED)
 - proper UI layout
-- Dedicated web page
+- proper external application support
+- linux package
 
-## 0.5.0 (maybe 1.0?)
+## 0.5.0 (maybe 1.0?, WIP)
 - Anime browsing
 - Manga browsing
 - Basic manga reading
+- dedicated page
 
 ## Out of the line / Do whenever
 - UI/UX improvements - always welcome

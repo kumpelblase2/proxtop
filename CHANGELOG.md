@@ -1,4 +1,22 @@
-# 0.3.1 (current)
+# 0.4.0 (current)
+Additions:
+- Updated looks! Plus some general UI improvements
+- Pass over raw video url to external applications
+- Debian package
+- Added option to clear chache
+- Display and filter favorite conversations
+- Added actions to conversations (Favorite, Block, Report)
+- Display if conversation contains new messages
+- Display category of news
+
+Fixes:
+- Redo tray icon handling
+- Update to electron 1.2.0. Also updated other dependencies.
+- Also use browser to detect if we're connected to the internet
+- Continuously look for updates, not just at startup
+- Fix progress being displayed incorrectly
+
+# 0.3.1
 Additions:
 - Automatically save settings instead of manually having to click save.
 
