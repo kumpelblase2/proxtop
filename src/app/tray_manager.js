@@ -47,8 +47,9 @@ class ProxtopTray {
         }
 
         options = _.defaults(options, { icon: this.icon, content: "" });
+        options.title = title;
         this.last_balloon = options;
-        return this.tray.displayBaloon(title, options);
+        return this.tray.displayBalloon(options);
     }
 }
 
