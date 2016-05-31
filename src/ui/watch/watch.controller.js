@@ -1,4 +1,5 @@
 angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$stateParams', '$sce', 'settings', '$state', '$mdToast', '$translate', 'SupportedProviderService', function($scope, ipc, $stateParams, $sce, settings, $state, $mdToast, $translate, SupportedProviderService) {
+    ipc.setup($scope);
     $scope.current = {
         info: null,
         stream: null,
@@ -10,7 +11,7 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$sta
     const preferredStream = animeSettings.preferred_stream;
     const playExternal = animeSettings.open_with === 'external';
     const passRaw = animeSettings.pass_raw_url;
-    
+
     $scope.current.display = !playExternal;
 
     ipc.once('episode', (ev, result) => {

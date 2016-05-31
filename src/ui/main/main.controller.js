@@ -1,6 +1,7 @@
 angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', 'notification', '$mdToast', '$translate', 'settings', '$mdDialog', 'open', '$window', 'debounce',
     function($scope, ipc, $state, notification, $mdToast, $translate, settings, $mdDialog, open, $window, debounce) {
-        ipc.on('check-login', function(ev, result) {
+        ipc.setup($scope);
+        ipc.once('check-login', function(ev, result) {
             if(result) {
                 ipc.send('watchlist-update');
                 $state.go('profile');
@@ -35,7 +36,7 @@ angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state
             });
         });
 
-        ipc.on('update', function(ev, release) {
+        ipc.once('update', function(ev, release) {
             const yes = "UPDATE.YES";
             const no = "UPDATE.NO";
             const newVersion = "UPDATE.NEW_VERSION";

@@ -1,4 +1,5 @@
-angular.module('proxtop').controller('ProfileController', ['$scope', 'ipc', '$state', 'ProgressService', function($scope, ipc, $state, progressService) {
+angular.module('proxtop').controller('ProfileController', ['$scope', 'ipc', '$state', 'ProgressService', 'shell', function($scope, ipc, $state, progressService, shell) {
+    ipc.setup($scope);
     ipc.once('profile', function(ev, profile) {
         $scope.$apply(function() {
             $scope.profile = profile;
@@ -13,7 +14,7 @@ angular.module('proxtop').controller('ProfileController', ['$scope', 'ipc', '$st
     });
 
     $scope.openNews = function(newsItem) {
-        require('shell').openExternal('https://proxer.me/forum/' + newsItem.catid + '/' + newsItem.mid);
+        shell.openExternal('https://proxer.me/forum/' + newsItem.catid + '/' + newsItem.mid);
     };
 
     $scope.createNewsImage = function(newsItem) {

@@ -1,4 +1,5 @@
 angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', 'AvatarService', '$interval', '$rootScope', '$mdDialog', '$translate', function($scope, ipc, $stateParams, avatar, $interval, $rootScope, $mdDialog, $translate) {
+    ipc.setup($scope);
     const MESSAGE_UPDATE_DELAY = 15000;
 
     $scope.conversation = {};
@@ -53,11 +54,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
 
     $scope.refreshLast = () => {
         const last = _.last($scope.conversation.messages);
-        if(last) {
-            $scope.state.lastReceived = last.id;
-        } else {
-            $scope.state.lastReceived = 0;
-        }
+        $scope.state.lastReceived = (last ? last.id : 0);
     };
 
     $scope.loadMore = () => {
@@ -121,9 +118,8 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$st
     ipc.send('conversation', $stateParams.id);
     $scope.state.updateTimer = $interval(() => { $scope.updateMessages(); }, MESSAGE_UPDATE_DELAY);
 
-    $scope.$on('$stateChangeStart', (event, toState, toParams, from) => {
-        if(from.name == 'message') {
-            $interval.cancel($scope.state.updateTimer);
-        }
+    $scope.$on('$destroy', () => {
+        $interval.cancel($scope.state.updateTimer);
+        //ipc.removeListener('conversation-update', conversationUpdate);
     });
 }]);
