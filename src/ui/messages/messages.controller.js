@@ -1,4 +1,5 @@
-angular.module('proxtop').controller('MessagesController', ['$scope', 'ipc', '$state', 'AvatarService', function($scope, ipc, $state, avatar) {
+angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManager', '$state', 'AvatarService', function($scope, ipcManager, $state, avatar) {
+    const ipc = ipcManager($scope);
     $scope.conversations = null;
     $scope.hide_nonfavs = false;
     $scope.hover_id = -1;

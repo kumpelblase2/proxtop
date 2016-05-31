@@ -1,12 +1,9 @@
-angular.module('proxtop').provider('ipc', function() {
+angular.module('proxtop').service('ipcManager', ['$log',function($log) {
     class IpcManager {
-        constructor(ipcMain, logger) {
+        constructor(ipcMain, scope, logger) {
             this.ipc = ipcMain
             this.events = new Map();
             this.log = logger;
-        }
-
-        setup(scope) {
             scope.$on('$destroy', () => {
                 const allEvents = this.events;
                 const ipc = this.ipc;
@@ -65,7 +62,7 @@ angular.module('proxtop').provider('ipc', function() {
         }
     }
 
-    this.$get = ['$log', ($log) => {
-        return new IpcManager(require('electron').ipcRenderer, $log);
-    }];
-});
+    return (scope) => {
+        return new IpcManager(require('electron').ipcRenderer, scope, $log);
+    };
+}]);

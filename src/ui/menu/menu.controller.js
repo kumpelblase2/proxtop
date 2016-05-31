@@ -1,5 +1,5 @@
-angular.module('proxtop').controller('MenuController', ['$scope', 'ipc', '$state', '$mdSidenav', '$rootScope', function($scope, ipc, $state, $mdSidenav, $rootScope) {
-    ipc.setup($scope);
+angular.module('proxtop').controller('MenuController', ['$scope', 'ipcManager', '$state', '$mdSidenav', '$rootScope', function($scope, ipcManager, $state, $mdSidenav, $rootScope) {
+    const ipc = ipcManager($scope);
     ipc.on('logout', (ev, data) => {
         if(data.success) {
             $state.go('main');

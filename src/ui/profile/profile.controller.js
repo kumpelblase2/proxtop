@@ -1,5 +1,5 @@
-angular.module('proxtop').controller('ProfileController', ['$scope', 'ipc', '$state', 'ProgressService', 'shell', function($scope, ipc, $state, progressService, shell) {
-    ipc.setup($scope);
+angular.module('proxtop').controller('ProfileController', ['$scope', 'ipcManager', '$state', 'ProgressService', 'shell', function($scope, ipcManager, $state, progressService, shell) {
+    const ipc = ipcManager($scope);
     ipc.once('profile', function(ev, profile) {
         $scope.$apply(function() {
             $scope.profile = profile;

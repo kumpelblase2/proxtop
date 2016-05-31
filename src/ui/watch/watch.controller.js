@@ -1,5 +1,5 @@
-angular.module('proxtop').controller('WatchController', ['$scope', 'ipc' , '$stateParams', '$sce', 'settings', '$state', '$mdToast', '$translate', 'SupportedProviderService', function($scope, ipc, $stateParams, $sce, settings, $state, $mdToast, $translate, SupportedProviderService) {
-    ipc.setup($scope);
+angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' , '$stateParams', '$sce', 'settings', '$state', '$mdToast', '$translate', 'SupportedProviderService', function($scope, ipcManager, $stateParams, $sce, settings, $state, $mdToast, $translate, SupportedProviderService) {
+    const ipc = ipcManager($scope);
     $scope.current = {
         info: null,
         stream: null,

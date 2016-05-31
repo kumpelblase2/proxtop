@@ -1,5 +1,5 @@
-angular.module('proxtop').controller('MessageController', ['$scope', 'ipc', '$stateParams', 'AvatarService', '$interval', '$rootScope', '$mdDialog', '$translate', function($scope, ipc, $stateParams, avatar, $interval, $rootScope, $mdDialog, $translate) {
-    ipc.setup($scope);
+angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager', '$stateParams', 'AvatarService', '$interval', '$rootScope', '$mdDialog', '$translate', function($scope, ipcManager, $stateParams, avatar, $interval, $rootScope, $mdDialog, $translate) {
+    const ipc = ipcManager($scope);
     const MESSAGE_UPDATE_DELAY = 15000;
 
     $scope.conversation = {};

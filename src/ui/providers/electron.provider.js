@@ -7,3 +7,7 @@ angular.module('proxtop').service('info', ['ipc' , function() {
 angular.module('proxtop').factory('shell', function() {
     return require('electron').shell;
 });
+
+angular.module('proxtop').factory('ipc', function() {
+    return require('electron').ipcRenderer;
+});
