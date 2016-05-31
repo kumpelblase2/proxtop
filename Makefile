@@ -47,6 +47,7 @@ package-osx: build
 
 package-win: build
 	cd $(BUILD_DIR) && zip -r proxtop-$(VERSION)-win.zip proxtop-win32-x64
+	cd $(BUILD_DIR) && zip -r proxtop-$(VERSION)-win-32bit.zip proxtop-win32-ia32
 
 package-deb: build
 	cd $(BUILD_DIR)/proxtop-linux-x64 && mkdir -p opt/proxtop \
