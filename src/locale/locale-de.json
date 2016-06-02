@@ -45,7 +45,7 @@
     "UPDATE_FINISHED": "Eintrag erneuert",
     "FINISH": "Abschließen",
     "MARKED_FINISHED": "Erfolgreich als Abgeschlossen markiert",
-    "OPENED_EXTERNAL": "Das Element wurde in einer externen Applikation geöffnet"
+    "OPENED_EXTERNAL": "Das Element wurde in einer externen Anwendung geöffnet"
   },
   "SETTINGS": {
     "SAVE": "Speichern",
@@ -60,7 +60,7 @@
       "EXTERNAL": "Extern",
       "PREFERRED_PROVIDER": "Bevorzugter Stream-Provider",
       "APPLICATION": "Anwendung",
-      "PASS_RAW": "Direkten Video-Url an Applikation leiten"
+      "PASS_RAW": "Direkten Video-Url an Anwendung leiten"
     },
     "WATCHLIST": {
       "WATCHLIST": "@:MENU.WATCHLIST",
