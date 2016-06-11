@@ -69,4 +69,5 @@ package-deb: package-pkg
 package: package-linux package-osx package-win package-deb
 
 install:
+	mkdir -p $(DESTDIR)
 	cp -r $(PACKAGE_DIR)/* $(DESTDIR)
