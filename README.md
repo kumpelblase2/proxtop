@@ -38,12 +38,14 @@ Goals that I would like to implement afterwards, if I have interest in continuin
 - It is _not_ a complete frontend/replacement for proxer.me, it is just an alternative frontend for doing the most common tasks on the site, such as watching anime.
 - It is so far _not_ officially supported and thus just a community/personal effort.
 
+## Packaged releases
+
+You can find the latest packaged/stable releases under [Releases](https://github.com/kumpelblase2/proxtop/releases/latest) in the repository. There you can download the right archive for your platform. Extract it and run the `Proxtop` executable inside the directory. I currently provide packaged releases for Windows, OSX and Debian, while also providing a general Linux archive.
+
+Arch Linux users can find the PKGBUILD files at [my pkbuild repo](https://github.com/kumpelblase2/pkgbuilds) for both stable and latest versions.
+
 ## How to run
 
-### Running latest stable
-You can find the latest stable releases under [Releases](https://github.com/kumpelblase2/proxtop/releases/latest) in the repository. There you can download the right archive for your platform. Extract it and run the `Proxtop` executable inside the directory.
-
-### Running latest/development version
 First get all required dependencies (requires NPM and bower to be installed):
 ```
 make
