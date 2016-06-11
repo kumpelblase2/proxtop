@@ -3,14 +3,16 @@ PATH	:= node_modules/.bin:$(PATH)
 SOURCE_FILES = src package.json bower.json bower_components main.js
 TARGET_DIR = _dist
 BUILD_DIR = _packaged
-DESTDIR = ${BUILD_DIR}/proxtop-linux-x64-pkg
+PACKAGE_DIR = ${BUILD_DIR}/proxtop-linux-x64-pkg/
+DATA_DIR = share/proxtop
+DESTDIR = usr/
 VERSION = $(shell cat package.json | grep "version" | cut -d '"' -f4)
 
-ICON_DIR = usr/share/icons/hicolor/
+ICON_DIR = share/icons/hicolor
 ICON_48_DIR = ${ICON_DIR}/48x48/apps
 ICON_256_DIR = ${ICON_DIR}/256x256/apps
 
-DESKTOP_ENTRY_DIR = usr/share/applications/
+DESKTOP_ENTRY_DIR = share/applications
 
 setup:
 	npm install
@@ -50,18 +52,21 @@ package-win: build-windows
 	cd $(BUILD_DIR) && zip -r proxtop-$(VERSION)-win-32bit.zip proxtop-win32-ia32
 
 package-pkg: build-linux
-	mkdir -p $(DESTDIR)
-	cd $(DESTDIR) && mkdir -p opt/proxtop \
-		&& cp -r ../proxtop-linux-x64/* opt/proxtop
+	mkdir -p $(PACKAGE_DIR)
+	cd $(PACKAGE_DIR) && mkdir -p $(DATA_DIR) \
+		&& cp -r ../proxtop-linux-x64/* $(DATA_DIR)
 
-	cd $(DESTDIR) && mkdir -p usr/bin \
+	cd $(PACKAGE_DIR) \
 		&& mkdir -p ${ICON_48_DIR} && cp ../../build/proxtop_logo_48.png ${ICON_48_DIR}/proxtop.png \
 		&& mkdir -p ${ICON_256_DIR} && cp ../../build/proxtop_logo_256.png ${ICON_256_DIR}/proxtop.png \
 		&& mkdir -p ${DESKTOP_ENTRY_DIR} && cp ../../build/proxtop.desktop ${DESKTOP_ENTRY_DIR}/proxtop.desktop \
-		&& cd usr/bin \
-		&& ln -s ../../opt/proxtop/proxtop proxtop
+		&& mkdir -p bin && cd bin \
+		&& ln -s ../$(DATA_DIR)/proxtop proxtop
 
 package-deb: package-pkg
-	cd $(DESTDIR) && fpm -s dir -t deb -n proxtop -v $(VERSION) --deb-no-default-config-files . && mv proxtop_$(VERSION)_amd64.deb ..
+	cd $(PACKAGE_DIR) && fpm -s dir -t deb -n proxtop -v $(VERSION) --prefix "usr/" --deb-no-default-config-files . && mv proxtop_$(VERSION)_amd64.deb ..
 
 package: package-linux package-osx package-win package-deb
+
+install:
+	cp -r $(PACKAGE_DIR)/* $(DESTDIR)
