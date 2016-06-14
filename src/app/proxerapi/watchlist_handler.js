@@ -15,7 +15,7 @@ class WatchlistHandler extends IPCHandler {
     constructor(app, sessionHandler) {
         super();
         this.session_handler = sessionHandler;
-        this.cache = require('../db')('watchlist-cache');
+        this.cache = require('../db').get('watchlist-cache');
         this.app = app;
         this.settings = require('../settings');
         this.lastCheck = 0;
@@ -37,7 +37,7 @@ class WatchlistHandler extends IPCHandler {
                     type: 'watchlist-cache',
                     anime: result.anime,
                     manga: result.manga
-                });
+                }).value();
 
                 const onlineFilter = entry => entry.status;
 

@@ -9,11 +9,12 @@ const IPCHandler = require('./ipc_handler');
 const translate = require('../translation');
 
 class SessionHandler extends IPCHandler {
-    constructor(app, cookiePath) {
+    constructor(app, cookiePath, db) {
         super();
         this.app = app;
         this.cookiePath = cookiePath;
-        this.db = require('../db');
+        this.db = db;
+        this.cache = this.db.get('cache');
         this._online = true;
         this.translation = translate();
 
@@ -100,10 +101,10 @@ class SessionHandler extends IPCHandler {
         const url = response.request.path;
         const body = response.body;
         this.online = true;
-        if(this.db('cache').find({ url: url })) {
-            this.db('cache').chain().find({ url: url }).merge({ body: body }).value();
+        if(this.cache.find({ url: url })) {
+            this.cache.chain().find({ url: url }).merge({ body: body }).value();
         } else {
-            this.db('cache').push({ url: url, body: body });
+            this.cache.push({ url: url, body: body }).value();
         }
 
         return body;
@@ -158,12 +159,12 @@ class SessionHandler extends IPCHandler {
     }
     getCachedResponse(url) {
         LOG.info("Return cached reponse for request to " + url);
-        return this.db('cache').find({ url: url });
+        return this.cache.find({ url: url });
     }
 
     clearCache() {
         LOG.info('Clearing response cache...');
-        this.db('cache').remove();
+        this.cache.remove();
     }
 }
 module.exports = SessionHandler;

@@ -66,16 +66,16 @@ function createGetterSetter(setting) {
     const globalVar = DEFAULTS['DEFAULT_' + uppercase + '_SETTINGS'];
     return {
         getter: function() {
-            const result = db('settings').find({ type: setting });
+            const result = db.get('settings').find({ type: setting });
             if(!result) {
-                db('settings').push(globalVar);
+                db.get('settings').push(globalVar).value();
                 return globalVar;
             } else {
                 return _.defaults(result, globalVar);
             }
         },
         setter: function(value) {
-            return db('settings').chain().find({ type: setting }).merge(value).value();
+            return db.get('settings').chain().find({ type: setting }).merge(value).value();
         }
     };
 }

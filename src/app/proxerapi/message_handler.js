@@ -10,7 +10,7 @@ class MessagesHandler extends IPCHandler {
         this.session_handler = sessionHandler;
         this.settings = require('../settings');
         this.lastCheck = 0;
-        this.cache = require('../db')('messages-cache');
+        this.cache = require('../db').get('messages-cache');
         this.translation = translate();
     }
 
@@ -132,7 +132,7 @@ class MessagesHandler extends IPCHandler {
                 });
 
                 self.cache.remove();
-                notifications.forEach((not) => self.cache.push(not));
+                notifications.forEach((not) => self.cache.push(not).value());
             });
         }
     }

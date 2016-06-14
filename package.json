@@ -36,7 +36,7 @@
     "cheerio": "^0.20.0",
     "electron-window-state": "^3.0.3",
     "lodash": "^4.13.1",
-    "lowdb": "^0.12.5",
+    "lowdb": "^0.13.1",
     "moment": "^2.13.0",
     "opener": "^1.4.1",
     "request-promise": "^3.0.0",

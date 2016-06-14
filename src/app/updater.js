@@ -6,7 +6,7 @@ const db = require('./db');
 class Updater {
     constructor(check_url) {
         this.check_url = check_url;
-        this.settings = db('updater');
+        this.settings = db.get('updater');
         this.limited = this.settings.find({ name: 'limited' });
         this.has_noticed = false;
         this.timer = null;

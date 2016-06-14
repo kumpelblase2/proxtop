@@ -37,7 +37,7 @@ class LoginChecker {
     }
 
     getLoginDetails() {
-        const settings = this.db('settings').find({ type: 'account' });
+        const settings = this.db.get('settings').find({ type: 'account' });
         if(!settings) {
             return null;
         }

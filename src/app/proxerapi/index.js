@@ -9,7 +9,7 @@ const EpisodeHandler = require('./episode_handler');
 const db = require('../db');
 
 function API(app, cookiePath) {
-    this.session_handler = new SessionHandler(app, cookiePath);
+    this.session_handler = new SessionHandler(app, cookiePath, db);
     this.login_handler = new LoginHandler(this.session_handler);
     this.login_checker = new LoginChecker(app, this.session_handler, this.login_handler, db);
     this.handers = [
