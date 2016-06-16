@@ -4,7 +4,8 @@ const path = require('path');
 global.APP_NAME = "proxtop";
 global.PROXER_BASE_URL = "https://proxer.me";
 global.INDEX_LOCATION = path.join(__dirname, "../index.html");
-global.LOGO_LOCATION = path.join(__dirname, "../assets/proxtop_logo_256.png");
+global.LOGO_RELATIVE_PATH = "assets/proxtop_logo_256.png";
+global.LOGO_LOCATION = path.join(__dirname, "../", LOGO_RELATIVE_PATH);
 global.PROXER_PATHS = {
     ROOT: '/',
     LOGIN: '/component/user/?task=user.login',

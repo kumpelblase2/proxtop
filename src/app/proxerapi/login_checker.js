@@ -5,8 +5,6 @@ class LoginChecker {
     constructor(app, sessionHandler, loginHandler) {
         this.login_handler = loginHandler;
         this.app = app;
-        this.settings = app.getSettings();
-
         sessionHandler._openRequest = sessionHandler.openRequest;
         const login = this;
         sessionHandler.openRequest = (function(doRequest, checkLogin) {
@@ -36,7 +34,7 @@ class LoginChecker {
     }
 
     getLoginDetails() {
-        const account = this.settings.getAccountSettings();
+        const account = this.app.getSettings().getAccountSettings();
         if(!account) {
             return null;
         }

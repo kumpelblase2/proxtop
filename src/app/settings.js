@@ -1,5 +1,4 @@
 const ipc = require('electron').ipcMain;
-const Promise = require('bluebird');
 const _ = require('lodash');
 const { Settings } = require('./storage');
 const utils = require('./utils');

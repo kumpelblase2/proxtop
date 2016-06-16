@@ -1,7 +1,6 @@
 const loginParser = require('../../page_parser').login;
 const Promise = require('bluebird');
 const _ = require('lodash');
-const pageUtils = require('./page_utils');
 const IPCHandler = require('./ipc_handler');
 
 class LoginHandler extends IPCHandler {

@@ -1,10 +1,10 @@
 const watchlistParser = require('../../page_parser').watchlist;
-const Promise = require('bluebird');
 const util = require('util');
 const utils = require('../utils');
 const translate = require('../translation');
 const IPCHandler = require('./ipc_handler');
 const { WatchlistCache } = require('../storage');
+const settings = require('../settings');
 
 const SET_TO_CURRENT = "?format=json&type=reminder&title=reminder_this";
 const SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
@@ -17,7 +17,6 @@ class WatchlistHandler extends IPCHandler {
         super();
         this.session_handler = sessionHandler;
         this.app = app;
-        this.settings = require('../settings');
         this.lastCheck = 0;
         this.translation = translate();
     }
@@ -56,7 +55,7 @@ class WatchlistHandler extends IPCHandler {
                         type: 'new-' + type + '-ep',
                         title: 'Proxtop',
                         content: this.translation.get(`WATCHLIST.NEW_${type.toUpperCase()}`, { episode: update.episode, name: update.name }),
-                        icon: 'assets/proxtop_logo_256.png'
+                        icon: LOGO_RELATIVE_PATH
                     });
                 });
             });
@@ -97,7 +96,7 @@ class WatchlistHandler extends IPCHandler {
 
     watchLoop() {
         setTimeout(() => {
-            const time = this.settings.getWatchlistSettings().check_interval;
+            const time = settings.getWatchlistSettings().check_interval;
             if(new Date().getTime() - this.lastCheck > time * 60000 - 5000) {
                 this.checkUpdates();
             }

@@ -4,7 +4,6 @@ const utils = require('../utils');
 const pageUtils = require('./page_utils');
 const Cloudscraper = require('../cloudscraper');
 const os = require('os');
-const { Cookie } = require('tough-cookie');
 const IPCHandler = require('./ipc_handler');
 const translate = require('../translation');
 
@@ -25,7 +24,7 @@ class SessionHandler extends IPCHandler {
             this.online = state;
         });
 
-        this.provide('clear-cache', (ev) => {
+        this.provide('clear-cache', () => {
             this.cache.clearCache();
             this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.INFO), this.translation.get(ERRORS.OTHER.CACHE_CLEAR));
         });
@@ -104,7 +103,12 @@ class SessionHandler extends IPCHandler {
             throw error;
         }
 
-        LOG.warn("Error when requesting " + error.options.uri);
+        if(!error.options) { // Internal error
+            console.error(error);
+            return "";
+        }
+
+        LOG.warn("Error when requesting " + uri);
         if(error.statusCode == 525) {
             LOG.error('Received error 525 on request');
             this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.WARNING), this.translation.get(ERRORS.PROXER.OFFLINE));
