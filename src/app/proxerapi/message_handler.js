@@ -2,6 +2,7 @@ const messageParser = require('../../page_parser').message;
 const Promise = require('bluebird');
 const translate = require('../translation');
 const IPCHandler = require('./ipc_handler');
+const { MessageCache } = require('../storage');
 
 class MessagesHandler extends IPCHandler {
     constructor(app, sessionHandler) {
@@ -10,7 +11,6 @@ class MessagesHandler extends IPCHandler {
         this.session_handler = sessionHandler;
         this.settings = require('../settings');
         this.lastCheck = 0;
-        this.cache = require('../db').get('messages-cache');
         this.translation = translate();
     }
 
@@ -109,7 +109,7 @@ class MessagesHandler extends IPCHandler {
         const self = this;
         const enabled = self.settings.getGeneralSettings().message_notification;
         if(!enabled) {
-            this.cache.remove();
+            MessageCache.clear();
             return;
         }
 
@@ -120,7 +120,7 @@ class MessagesHandler extends IPCHandler {
             LOG.info("Check if new messages have arrived...");
             self.checkNotifications().then((notifications) => {
                 notifications.forEach((notification) => {
-                    if(!self.cache.find({ username: notification.username })) {
+                    if(!MessageCache.hasReceived(notification.username)) {
                         LOG.verbose('Got new message from ' + notification.username);
                         self.app.displayNotification({
                             type: 'new-message',
@@ -131,8 +131,8 @@ class MessagesHandler extends IPCHandler {
                     }
                 });
 
-                self.cache.remove();
-                notifications.forEach((not) => self.cache.push(not).value());
+                MessageCache.clear();
+                notifications.forEach((not) => MessageCache.markReceived(not.username));
             });
         }
     }

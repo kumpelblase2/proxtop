@@ -1,19 +1,13 @@
 const request = require('request-promise');
 const _ = require('lodash');
 const utils = require('./utils');
-const db = require('./db');
+const { GithubLimit } = require('./storage');
 
 class Updater {
     constructor(check_url) {
         this.check_url = check_url;
-        this.settings = db.get('updater');
-        this.limited = this.settings.find({ name: 'limited' });
         this.has_noticed = false;
         this.timer = null;
-        if(!this.limited) {
-            this.limited = { value: false, release_time: 0, name: 'limited' };
-            this.settings.push(this.limited);
-        }
     }
 
     start(current, callback) {
@@ -32,30 +26,10 @@ class Updater {
         this.has_noticed = true;
     }
 
-    saveLimitation() {
-        this.settings.chain().find({ name: 'limited' }).assign(this.limited).value();
-    }
-
-    isLimited() {
-        if(!this.limited || (this.limited && !this.limited.value)) {
-            return false;
-        }
-
-        const isReleased = this.limited.release_time * 1000 < new Date().getTime();
-        if(isReleased) {
-            this.limited.value = false;
-            this.limited.release_time = 0;
-            this.saveLimitation();
-            return false;
-        }
-
-        return true;
-    }
-
     check() {
         const self = this;
         LOG.verbose('Running update check...');
-        if(this.isLimited()) {
+        if(GithubLimit.isLimited()) {
             LOG.verbose("Still rate limited. Skipping.");
             return;
         }
@@ -85,9 +59,8 @@ class Updater {
         }).catch(function(e) {
             if(e.statusCode == 403) {
                 LOG.warn("GitHub API limit reached.");
-                self.limited.value = true;
-                self.limited.release_time = parseInt(e.response.headers['x-ratelimit-reset']);
-                self.saveLimitation();
+                GithubLimit.setLimited(parseInt(e.response.headers['x-ratelimit-reset']));
+                GithubLimit.saveLimitation();
             } else {
                 LOG.error("There was an issue doing github update check:", {
                     error: e

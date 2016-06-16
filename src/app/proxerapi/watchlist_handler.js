@@ -4,6 +4,7 @@ const util = require('util');
 const utils = require('../utils');
 const translate = require('../translation');
 const IPCHandler = require('./ipc_handler');
+const { WatchlistCache } = require('../storage');
 
 const SET_TO_CURRENT = "?format=json&type=reminder&title=reminder_this";
 const SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
@@ -15,7 +16,6 @@ class WatchlistHandler extends IPCHandler {
     constructor(app, sessionHandler) {
         super();
         this.session_handler = sessionHandler;
-        this.cache = require('../db').get('watchlist-cache');
         this.app = app;
         this.settings = require('../settings');
         this.lastCheck = 0;
@@ -31,13 +31,9 @@ class WatchlistHandler extends IPCHandler {
         LOG.info("Checking for new watchlist updates");
         this.lastCheck = new Date().getTime();
         this.loadWatchlist().then((result) => {
-            const old = this.cache.find({ type: 'watchlist-cache' });
+            const old = WatchlistCache.getOldWatchlist();
             if(!old) {
-                this.cache.push({
-                    type: 'watchlist-cache',
-                    anime: result.anime,
-                    manga: result.manga
-                }).value();
+                WatchlistCache.saveWatchlist(result);
 
                 const onlineFilter = entry => entry.status;
 
@@ -50,7 +46,7 @@ class WatchlistHandler extends IPCHandler {
             const updates = {};
             updates.anime = utils.getOnlineDiff(old.anime, result.anime);
             updates.manga = utils.getOnlineDiff(old.manga, result.manga);
-            this.cache.chain().find({ type: 'watchlist-cache' }).merge({ anime: result.anime, manga: result.manga }).value();
+            WatchlistCache.updateWatchlist(result);
             return updates;
         }).then((updates) => {
             Object.keys(updates).forEach((type) => {

@@ -9,14 +9,13 @@ const IPCHandler = require('./ipc_handler');
 const translate = require('../translation');
 
 class SessionHandler extends IPCHandler {
-    constructor(app, cookiePath, db) {
+    constructor(app, cookiePath) {
         super();
         this.app = app;
         this.cookiePath = cookiePath;
-        this.db = db;
-        this.cache = this.db.get('cache');
         this._online = true;
         this.translation = translate();
+        this.cache = require('../storage').Cache;
 
         this.provide('reload-request', ()  => {
             this.request = this.setupRequest();
@@ -27,7 +26,7 @@ class SessionHandler extends IPCHandler {
         });
 
         this.provide('clear-cache', (ev) => {
-            this.clearCache();
+            this.cache.clearCache();
             this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.INFO), this.translation.get(ERRORS.OTHER.CACHE_CLEAR));
         });
     }
@@ -92,23 +91,12 @@ class SessionHandler extends IPCHandler {
             }
 
             return response;
-        }).then(this.cacheResponse.bind(this)).catch((error) => {
+        }).then(this.cache.cacheResponse.bind(this.cache)).catch((error) => {
             return this.handleError(error, doRequest);
         });
     }
 
-    cacheResponse(response) {
-        const url = response.request.path;
-        const body = response.body;
-        this.online = true;
-        if(this.cache.find({ url: url })) {
-            this.cache.chain().find({ url: url }).merge({ body: body }).value();
-        } else {
-            this.cache.push({ url: url, body: body }).value();
-        }
-
-        return body;
-    }
+    
 
     handleError(error, doRequest) {
         if(error.statusCode == 303) { // Just rethrow to let login handle it.
@@ -148,7 +136,7 @@ class SessionHandler extends IPCHandler {
         let realUri = error.options.uri;
         realUri = realUri.substring(realUri.indexOf('/', 9));
 
-        let cached = this.getCachedResponse(realUri);
+        let cached = this.cache.getResponse(realUri);
         if(cached) {
             return cached.body;
         } else {
@@ -156,15 +144,6 @@ class SessionHandler extends IPCHandler {
             this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.SEVERE), this.translation.get(ERRORS.CONNECTION.NO_CACHE));
             return "";
         }
-    }
-    getCachedResponse(url) {
-        LOG.info("Return cached reponse for request to " + url);
-        return this.cache.find({ url: url });
-    }
-
-    clearCache() {
-        LOG.info('Clearing response cache...');
-        this.cache.remove();
     }
 }
 module.exports = SessionHandler;

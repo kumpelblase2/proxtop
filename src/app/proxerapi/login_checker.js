@@ -1,12 +1,11 @@
 const pageUtils = require('./page_utils');
-const Promise = require('bluebird');
 const _ = require('lodash');
 
 class LoginChecker {
-    constructor(app, sessionHandler, loginHandler, db) {
+    constructor(app, sessionHandler, loginHandler) {
         this.login_handler = loginHandler;
-        this.db = db;
         this.app = app;
+        this.settings = app.getSettings();
 
         sessionHandler._openRequest = sessionHandler.openRequest;
         const login = this;
@@ -37,12 +36,12 @@ class LoginChecker {
     }
 
     getLoginDetails() {
-        const settings = this.db.get('settings').find({ type: 'account' });
-        if(!settings) {
+        const account = this.settings.getAccountSettings();
+        if(!account) {
             return null;
         }
 
-        return _.pick(settings, 'keep_login', 'user');
+        return _.pick(account, 'keep_login', 'user');
     }
 }
 

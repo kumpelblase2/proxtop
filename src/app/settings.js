@@ -1,7 +1,7 @@
 const ipc = require('electron').ipcMain;
 const Promise = require('bluebird');
 const _ = require('lodash');
-const db = require('./db');
+const { Settings } = require('./storage');
 const utils = require('./utils');
 
 const DEFAULTS = {
@@ -51,7 +51,7 @@ const settings = generateSettings([
 function generateSettings(allSettings) {
     const result = {};
 
-    allSettings.forEach(function(setting) {
+    allSettings.forEach((setting) => {
         const getterSetter = createGetterSetter(setting);
         const capitalized = utils.capizalizeFirstLetter(setting);
         result['get' + capitalized + 'Settings'] = getterSetter.getter;
@@ -66,16 +66,10 @@ function createGetterSetter(setting) {
     const globalVar = DEFAULTS['DEFAULT_' + uppercase + '_SETTINGS'];
     return {
         getter: function() {
-            const result = db.get('settings').find({ type: setting });
-            if(!result) {
-                db.get('settings').push(globalVar).value();
-                return globalVar;
-            } else {
-                return _.defaults(result, globalVar);
-            }
+            return Settings.get(setting, globalVar);
         },
         setter: function(value) {
-            return db.get('settings').chain().find({ type: setting }).merge(value).value();
+            return Settings.set(setting, value);
         }
     };
 }

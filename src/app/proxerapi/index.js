@@ -6,12 +6,11 @@ const NewsHandler = require('./news_handler');
 const LoginChecker = require('./login_checker');
 const MessageHandler = require('./message_handler');
 const EpisodeHandler = require('./episode_handler');
-const db = require('../db');
 
 function API(app, cookiePath) {
-    this.session_handler = new SessionHandler(app, cookiePath, db);
+    this.session_handler = new SessionHandler(app, cookiePath);
     this.login_handler = new LoginHandler(this.session_handler);
-    this.login_checker = new LoginChecker(app, this.session_handler, this.login_handler, db);
+    this.login_checker = new LoginChecker(app, this.session_handler, this.login_handler);
     this.handers = [
         new ProfileHandler(this.session_handler),
         new WatchlistHandler(app, this.session_handler),
