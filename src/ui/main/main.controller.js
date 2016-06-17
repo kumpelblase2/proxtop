@@ -1,5 +1,5 @@
-angular.module('proxtop').controller('MainController', ['$scope', 'ipcManager', '$state', 'notification', '$mdToast', '$translate', 'settings', '$mdDialog', 'open', '$window', 'debounce',
-    function($scope, ipcManager, $state, notification, $mdToast, $translate, settings, $mdDialog, open, $window, debounce) {
+angular.module('proxtop').controller('MainController', ['$scope', 'ipcManager', '$state', '$mdToast', '$translate', 'settings',
+    function($scope, ipcManager, $state, $mdToast, $translate, settings) {
         const ipc = ipcManager($scope);
         ipc.once('check-login', function(ev, result) {
             if(result) {
