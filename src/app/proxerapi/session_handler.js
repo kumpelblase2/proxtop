@@ -6,6 +6,9 @@ const Cloudscraper = require('../util/cloudscraper');
 const os = require('os');
 const IPCHandler = require('./ipc_handler');
 const translate = require('../translation');
+const windowManager = require('../ui/window_manager');
+const { Cache } = require('../storage');
+const settings = require('../settings');
 
 class SessionHandler extends IPCHandler {
     constructor(app, cookiePath) {
@@ -14,7 +17,6 @@ class SessionHandler extends IPCHandler {
         this.cookiePath = cookiePath;
         this._online = true;
         this.translation = translate();
-        this.cache = require('../storage').Cache;
 
         this.provide('reload-request', ()  => {
             this.request = this.setupRequest();
@@ -25,8 +27,8 @@ class SessionHandler extends IPCHandler {
         });
 
         this.provide('clear-cache', () => {
-            this.cache.clearCache();
-            this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.INFO), this.translation.get(ERRORS.OTHER.CACHE_CLEAR));
+            Cache.clearCache();
+            windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.INFO), this.translation.get(ERRORS.OTHER.CACHE_CLEAR));
         });
     }
 
@@ -39,9 +41,9 @@ class SessionHandler extends IPCHandler {
         this._online = value;
         if(changed) {
             if(!value) {
-                this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.SEVERE), this.translation.get(ERRORS.CONNECTION.NO_NETWORK));
+                windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.SEVERE), this.translation.get(ERRORS.CONNECTION.NO_NETWORK));
             } else {
-                this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.INFO), this.translation.get(ERRORS.CONNECTION.NETWORK_RECONNECT));
+                windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.INFO), this.translation.get(ERRORS.CONNECTION.NETWORK_RECONNECT));
             }
         }
     }
@@ -56,7 +58,7 @@ class SessionHandler extends IPCHandler {
     }
 
     setupRequest() {
-        const disableUserAgent = this.app.getSettings().getGeneralSettings().disable_user_agent;
+        const disableUserAgent = settings.getGeneralSettings().disable_user_agent;
         const header = pageUtils.getHeaders(this.app.info.version, disableUserAgent, os.platform(), os.release());
 
         LOG.verbose('Settings useragent to: ' + header['User-Agent']);
@@ -90,7 +92,7 @@ class SessionHandler extends IPCHandler {
             }
 
             return response;
-        }).then(this.cache.cacheResponse.bind(this.cache)).catch((error) => {
+        }).then(Cache.cacheResponse.bind(Cache)).catch((error) => {
             return this.handleError(error, doRequest);
         });
     }
@@ -111,13 +113,13 @@ class SessionHandler extends IPCHandler {
         LOG.warn("Error when requesting " + uri);
         if(error.statusCode == 525) {
             LOG.error('Received error 525 on request');
-            this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.WARNING), this.translation.get(ERRORS.PROXER.OFFLINE));
+            windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.WARNING), this.translation.get(ERRORS.PROXER.OFFLINE));
         } else if(error.statusCode == 500) {
             LOG.error('Received 500 error, probably MySQL down');
-            this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.WARNING), this.translation.get(ERRORS.PROXER.MYSQL_DOWN));
+            windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.WARNING), this.translation.get(ERRORS.PROXER.MYSQL_DOWN));
         } else if(error.statusCode == 503) {
             LOG.error('Received 503 error, attempting cloudlfare circumvention');
-            this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.WARNING), this.translation.get(ERRORS.PROXER.CLOUDFLARE));
+            windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.WARNING), this.translation.get(ERRORS.PROXER.CLOUDFLARE));
             return this.cloudscraper.handle(error.response, error.response.body).then(() => this.openRequest(doRequest)).catch((error) => {
                 if(error.statusCode == 302) {
                     return this.openRequest(doRequest);
@@ -133,19 +135,19 @@ class SessionHandler extends IPCHandler {
             }
         } else {
             LOG.error('Unknown error occurred: ' + error.message);
-            this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.SEVERE), this.translation.get(ERRORS.OTHER.UNKNOWN));
+            windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.SEVERE), this.translation.get(ERRORS.OTHER.UNKNOWN));
         }
 
         LOG.verbose("Trying response cache");
         let realUri = error.options.uri;
         realUri = realUri.substring(realUri.indexOf('/', 9));
 
-        let cached = this.cache.getResponse(realUri);
+        let cached = Cache.getResponse(realUri);
         if(cached) {
             return cached.body;
         } else {
             LOG.error('No cached version found for uri ' + realUri);
-            this.app.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.SEVERE), this.translation.get(ERRORS.CONNECTION.NO_CACHE));
+            windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.SEVERE), this.translation.get(ERRORS.CONNECTION.NO_CACHE));
             return "";
         }
     }

@@ -1,8 +1,8 @@
 const { ipcMain } = require('electron');
+const windowManager = require('../ui/window_manager');
 
 class NativeNotificationProvider {
-    constructor(proxtop) {
-        this.app = proxtop;
+    constructor() {
         this.callbacks = new Map();
         ipcMain.on('__displayNotificationCallback', (event, callback_info) => {
             callback = this.callbacks.get(callback_info.id);
@@ -15,7 +15,7 @@ class NativeNotificationProvider {
     displayNotification(notification, callback) {
         notification.id = this.currentId;
         this.callbacks.set(this.currentId, callback);
-        this.app.notifyWindow('__displayNotification', notification);
+        windowManager.notifyWindow('__displayNotification', notification);
         this.currentId += 1;
     }
 }

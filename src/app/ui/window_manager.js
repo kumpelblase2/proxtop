@@ -3,8 +3,11 @@ const WindowState = require('electron-window-state');
 const openAboutWindow = require('about-window').default;
 
 class WindowManager {
-    constructor(dirs) {
+    constructor() {
         this.mainWindow = null;
+    }
+
+    setDirs(dirs) {
         this.app_dir = dirs.app;
         this.index_location = dirs.index;
         this.logo_location = dirs.logo;
@@ -50,6 +53,11 @@ class WindowManager {
             icon_path: this.logo_location
         });
     }
+
+    notifyWindow(...params) {
+        const mainWindow = this.getMainWindow();
+        mainWindow.send.apply(mainWindow, params);
+    }
 }
 
-module.exports = WindowManager;
+module.exports = new WindowManager();

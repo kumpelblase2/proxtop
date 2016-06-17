@@ -6,6 +6,7 @@ const IPCHandler = require('./ipc_handler');
 const { WatchlistCache } = require('../storage');
 const settings = require('../settings');
 const Notification = require('../notification');
+const windowManager = require('../ui/window_manager');
 
 const SET_TO_CURRENT = "?format=json&type=reminder&title=reminder_this";
 const SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
@@ -14,10 +15,9 @@ const returnMsg = (success, msg) => { return { success: success, msg: msg } };
 
 
 class WatchlistHandler extends IPCHandler {
-    constructor(app, sessionHandler) {
+    constructor(sessionHandler) {
         super();
         this.session_handler = sessionHandler;
-        this.app = app;
         this.lastCheck = 0;
         this.translation = translate();
     }
@@ -57,7 +57,7 @@ class WatchlistHandler extends IPCHandler {
                         message: this.translation.get(`WATCHLIST.NEW_${type.toUpperCase()}`, { episode: update.episode, name: update.name }),
                         icon: LOGO_RELATIVE_PATH
                     }, () => {
-                        self.app.notifyWindow('state-change', 'watch', {
+                        windowManager.notifyWindow('state-change', 'watch', {
                             id: update.id,
                             ep: update.episode,
                             sub: update.sub

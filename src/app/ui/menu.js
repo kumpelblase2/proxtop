@@ -1,4 +1,5 @@
 const { Menu } = require('electron');
+const windowManager = require('./window_manager');
 
 module.exports = function(proxtop) {
     return Menu.buildFromTemplate([
@@ -9,7 +10,7 @@ module.exports = function(proxtop) {
                     label: 'About',
                     role: 'about',
                     click: function() {
-                        proxtop.window_manager.createAboutWindow();
+                        windowManager.createAboutWindow();
                     }
                 },
                 {

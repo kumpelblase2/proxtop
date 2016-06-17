@@ -4,13 +4,13 @@ const translate = require('../translation');
 const IPCHandler = require('./ipc_handler');
 const { MessageCache } = require('../storage');
 const Notification = require('../notification');
+const windowManager = require('../ui/window_manager');
+const settings = require('../settings');
 
 class MessagesHandler extends IPCHandler {
-    constructor(app, sessionHandler) {
+    constructor(sessionHandler) {
         super();
-        this.app = app;
         this.session_handler = sessionHandler;
-        this.settings = require('../settings');
         this.lastCheck = 0;
         this.translation = translate();
     }
@@ -108,13 +108,13 @@ class MessagesHandler extends IPCHandler {
 
     messageCheck() {
         const self = this;
-        const enabled = self.settings.getGeneralSettings().message_notification;
+        const enabled = settings.getGeneralSettings().message_notification;
         if(!enabled) {
             MessageCache.clear();
             return;
         }
 
-        const interval = self.settings.getGeneralSettings().check_message_interval;
+        const interval = settings.getGeneralSettings().check_message_interval;
         const time = new Date().getTime();
         if(time - self.lastCheck > interval * 60000 - 5000) {
             this.lastCheck = time;
@@ -128,7 +128,7 @@ class MessagesHandler extends IPCHandler {
                             message: self.translation.get('MESSAGES.NEW_MESSAGE', { user: notification.username }),
                             icon: 'assets/proxtop_logo_256.png'
                         }, () => {
-                            self.app.notifyWindow('state-change', 'message', { id: notification.id });
+                            windowManager.notifyWindow('state-change', 'message', { id: notification.id });
                         });
                     }
                 });

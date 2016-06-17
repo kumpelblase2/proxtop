@@ -1,5 +1,4 @@
 const newsParser = require('../../page_parser').news;
-const Promise = require('bluebird');
 const IPCHandler = require('./ipc_handler');
 
 class NewsHandler extends IPCHandler {

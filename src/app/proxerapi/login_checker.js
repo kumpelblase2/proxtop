@@ -1,10 +1,11 @@
 const pageUtils = require('./page_utils');
 const _ = require('lodash');
+const windowManager = require('../ui/window_manager');
+const settings = require('../settings');
 
 class LoginChecker {
-    constructor(app, sessionHandler, loginHandler) {
+    constructor(sessionHandler, loginHandler) {
         this.login_handler = loginHandler;
-        this.app = app;
         sessionHandler._openRequest = sessionHandler.openRequest;
         const login = this;
         sessionHandler.openRequest = (function(doRequest, checkLogin) {
@@ -22,7 +23,7 @@ class LoginChecker {
             if(pageUtils.checkUnauthorized(body)) {
                 const details = this.getLoginDetails();
                 if(!details) {
-                    this.app.notifyWindow('check-login', false);
+                    windowManager.notifyWindow('check-login', false);
                     throw new Error(ERRORS.PROXER.NO_DETAILS_PROVIDED);
                 }
                 return this.login_handler.login(details.user.username, details.user.password, details.keep_login)
@@ -34,7 +35,7 @@ class LoginChecker {
     }
 
     getLoginDetails() {
-        const account = this.app.getSettings().getAccountSettings();
+        const account = settings.getAccountSettings();
         if(!account) {
             return null;
         }

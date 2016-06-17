@@ -12,9 +12,9 @@ class Notifications {
         return platform != 'win32' || release.startsWith('10.');
     }
     
-    setup(app, tray) {
+    setup(tray) {
         if(this.areNativelySupported()) {
-            this.provider = new NativeNotificationProvider(app);
+            this.provider = new NativeNotificationProvider();
         } else {
             this.provider = new TrayBubbleProvider(tray);
         }

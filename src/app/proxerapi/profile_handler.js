@@ -1,6 +1,4 @@
-const pageUtils = require('./page_utils');
 const profileParser = require('../../page_parser').profile;
-const Promise = require('bluebird');
 const IPCHandler = require('./ipc_handler');
 
 class ProfileHandler extends IPCHandler {

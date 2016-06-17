@@ -6,11 +6,11 @@ const ProxtopMenu = require('./ui/menu');
 const utils = require('./util/utils');
 const { ipcMain, Menu } = require('electron');
 const notification = require('./notification');
+const windowManager = require('./ui/window_manager');
 
 class Proxtop {
-    constructor(app, window_manager, updater, tray, options) {
+    constructor(app, updater, tray, options) {
         this.app = app;
-        this.window_manager = window_manager;
         this.name = options.name;
         this.app_dir = options.app_dir;
         this.proxer_url = options.proxer_url;
@@ -23,30 +23,20 @@ class Proxtop {
 
     start() {
         this.setupApp();
-        notification.setup(this, this.tray);
-        this.updater.start(this.info.version, (release) => this.notifyWindow('update', release));
+        notification.setup(this.tray);
+        this.updater.start(this.info.version, (release) => windowManager.notifyWindow('update', release));
         this.api.init();
-        const self = this;
-        return this.proxer_api.init().then(function() {
+        return this.proxer_api.init().then(() => {
             if(!utils.isNotificationSupported()) {
-                self.tray.create();
+                this.tray.create();
             }
-        }).then(function() {
-            self.openMainWindow();
+        }).then(() => {
+            windowManager.createMainWindow();
         });
     }
 
     shutdown() {
         this.updater.stop();
-    }
-
-    notifyWindow(...params) {
-        const mainWindow = this.window_manager.getMainWindow();
-        mainWindow.send.apply(mainWindow, params);
-    }
-
-    getSettings() {
-        return settings;
     }
 
     setupApp() {
@@ -61,19 +51,15 @@ class Proxtop {
         // TODO check if this still works on OSX
         this.app.on('activate-with-no-open-windows', function(event) {
             event.preventDefault();
-            self.openMainWindow();
+            windowManager.createMainWindow();
         });
 
         this.menu = ProxtopMenu(this);
         Menu.setApplicationMenu(this.menu);
 
         ipcMain.on('open-about', () => {
-            this.window_manager.createAboutWindow();
+            windowManager.createAboutWindow();
         });
-    }
-
-    openMainWindow() {
-        this.window_manager.createMainWindow();
     }
 }
 

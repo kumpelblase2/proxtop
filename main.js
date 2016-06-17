@@ -5,7 +5,7 @@ LOG.verbose('Making sure app dir exists...');
 require('./src/app/util/utils').createDirIfNotExists(APP_DIR);
 
 const Proxtop = require('./src/app/proxtop');
-const WindowManager = require('./src/app/ui/window_manager');
+const windowManager = require('./src/app/ui/window_manager');
 const Updater = require('./src/app/updater');
 const TrayManager = require('./src/app/ui/tray_manager');
 const translate = require('./src/app/translation');
@@ -20,7 +20,8 @@ translate.load(settings, {
 
 LOG.verbose('Initializing...');
 const updater = new Updater(GITHUB_RELEASES_URL);
-const windowManager = new WindowManager({
+
+windowManager.setDirs({
     app: APP_DIR,
     logo: LOGO_LOCATION,
     index: INDEX_LOCATION
@@ -28,7 +29,7 @@ const windowManager = new WindowManager({
 
 const trayManager = new TrayManager(LOGO_LOCATION);
 
-const proxtop = new Proxtop(app, windowManager, updater, trayManager, {
+const proxtop = new Proxtop(app, updater, trayManager, {
     name: APP_NAME,
     app_dir: APP_DIR,
     proxer_url: PROXER_BASE_URL,
