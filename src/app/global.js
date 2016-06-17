@@ -32,7 +32,7 @@ global.PROXER_PATHS = {
     DELETE_WATCHLIST: '/ucp?format=json&type=deleteReminder&id='
 };
 
-global.ERRORS = require('./errors');
+global.ERRORS = require('./util/errors');
 global.UPDATE_INTERVALL = 2 * 60 * 60 * 1000;
 global.GITHUB_RELEASES_URL = "https://api.github.com/repos/kumpelblase2/proxtop/releases";
 

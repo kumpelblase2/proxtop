@@ -2,12 +2,12 @@ require('./src/app/global');
 const { app } = require('electron');
 LOG.verbose('Running on ' + process.versions['electron'] + ' on chrome ' + process.versions['chrome']);
 LOG.verbose('Making sure app dir exists...');
-require('./src/app/utils').createDirIfNotExists(APP_DIR);
+require('./src/app/util/utils').createDirIfNotExists(APP_DIR);
 
 const Proxtop = require('./src/app/proxtop');
-const WindowManager = require('./src/app/window_manager');
+const WindowManager = require('./src/app/ui/window_manager');
 const Updater = require('./src/app/updater');
-const TrayManager = require('./src/app/tray_manager');
+const TrayManager = require('./src/app/ui/tray_manager');
 const translate = require('./src/app/translation');
 const settings = require('./src/app/settings');
 const path = require('path');

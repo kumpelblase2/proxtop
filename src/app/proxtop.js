@@ -2,8 +2,8 @@ const path = require('path');
 const settings = require('./settings');
 const API = require('./api');
 const ProxerAPI = require('./proxerapi');
-const ProxtopMenu = require('./menu');
-const utils = require('./utils');
+const ProxtopMenu = require('./ui/menu');
+const utils = require('./util/utils');
 const NotificationManager = require('./notification_manager');
 const { ipcMain, Menu } = require('electron');
 

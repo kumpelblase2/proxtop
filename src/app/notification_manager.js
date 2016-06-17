@@ -1,5 +1,5 @@
 const { ipcMain } = require('electron');
-const utils = require('./utils');
+const utils = require('./util/utils');
 const path = require('path');
 
 class NotificationManager {

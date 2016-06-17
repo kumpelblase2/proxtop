@@ -1,7 +1,7 @@
 const ipc = require('electron').ipcMain;
 const _ = require('lodash');
 const { Settings } = require('./storage');
-const utils = require('./utils');
+const utils = require('./util/utils');
 
 const DEFAULTS = {
     DEFAULT_ACCOUNT_SETTINGS: {

@@ -1,6 +1,6 @@
 const request = require('request-promise');
 const _ = require('lodash');
-const utils = require('./utils');
+const utils = require('./util/utils');
 const { GithubLimit } = require('./storage');
 
 class Updater {

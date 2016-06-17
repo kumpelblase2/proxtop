@@ -1,4 +1,4 @@
-var utils = require('../../src/app/utils');
+var utils = require('../../src/app/util/utils');
 var should = require('chai').should();
 const fs = require('fs');
 const os = require('os');

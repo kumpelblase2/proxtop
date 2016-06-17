@@ -1,6 +1,6 @@
 const watchlistParser = require('../../page_parser').watchlist;
 const util = require('util');
-const utils = require('../utils');
+const utils = require('../util/utils');
 const translate = require('../translation');
 const IPCHandler = require('./ipc_handler');
 const { WatchlistCache } = require('../storage');
