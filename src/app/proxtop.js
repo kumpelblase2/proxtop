@@ -3,7 +3,6 @@ const settings = require('./settings');
 const API = require('./api');
 const ProxerAPI = require('./proxerapi');
 const ProxtopMenu = require('./ui/menu');
-const utils = require('./util/utils');
 const { ipcMain, Menu } = require('electron');
 const notification = require('./notification');
 const windowManager = require('./ui/window_manager');
@@ -27,7 +26,7 @@ class Proxtop {
         this.updater.start(this.info.version, (release) => windowManager.notifyWindow('update', release));
         this.api.init();
         return this.proxer_api.init().then(() => {
-            if(!utils.isNotificationSupported()) {
+            if(!notification.areNativelySupported()) {
                 this.tray.create();
             }
         }).then(() => {
@@ -40,16 +39,15 @@ class Proxtop {
     }
 
     setupApp() {
-        const self = this;
-        this.app.on('window-all-closed', function() {
+        this.app.on('window-all-closed', () => {
             if(process.platform != 'darwin') {
-                self.shutdown();
-                self.app.quit();
+                this.shutdown();
+                this.app.quit();
             }
         });
 
         // TODO check if this still works on OSX
-        this.app.on('activate-with-no-open-windows', function(event) {
+        this.app.on('activate-with-no-open-windows', (event) => {
             event.preventDefault();
             windowManager.createMainWindow();
         });

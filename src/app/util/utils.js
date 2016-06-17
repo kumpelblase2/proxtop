@@ -51,9 +51,5 @@ module.exports = {
         }));
 
         return orderedNewerReleases[0];
-    },
-
-    isNotificationSupported: function(platform = os.platform(), release = os.release()) {
-        return platform != 'win32' || release.startsWith('10.');
     }
 };

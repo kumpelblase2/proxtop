@@ -9,10 +9,9 @@ const windowManager = require('./src/app/ui/window_manager');
 const Updater = require('./src/app/updater');
 const TrayManager = require('./src/app/ui/tray_manager');
 const translate = require('./src/app/translation');
-const settings = require('./src/app/settings');
 const path = require('path');
 
-translate.load(settings, {
+translate.load({
     path: path.join(__dirname, 'src', 'locale'),
     prefix: 'locale-',
     suffix: '.json'

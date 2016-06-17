@@ -1,10 +1,11 @@
 const path = require('path');
 const fs = require('fs');
 const _ = require('lodash');
+const settings = require('./settings');
+
 
 class Translation {
-    constructor(settings, translations) {
-        this.settings = settings;
+    constructor(translations) {
         this.translations = translations;
         this.fixed_language = null;
     }
@@ -34,10 +35,10 @@ class Translation {
     }
 
     getLanguage() {
-        return this.fixed_language || this.settings.getGeneralSettings().language;
+        return this.fixed_language || settings.getGeneralSettings().language;
     }
 
-    static load(settings, options = { path: '../', prefix: 'locale-', suffix: '.json' }) {
+    static load(options = { path: '../', prefix: 'locale-', suffix: '.json' }) {
         const translations = {};
         const files = fs.readdirSync(options.path);
         files.filter(f => {
@@ -47,23 +48,23 @@ class Translation {
             translations[lang] = JSON.parse(fs.readFileSync(path.join(options.path, f)));
         });
 
-        return new Translation(settings, translations);
+        return new Translation(translations);
     }
 }
 
 var latest;
 
-var translate = function() {
+var translate = () => {
     return latest;
-}
+};
 
-translate.setup = function(settings, options) {
+translate.setup = (settings, options) => {
     latest = new Translation(settings, options);
     return latest;
-}
+};
 
-translate.load = function(settings, options) {
-    latest = Translation.load(settings, options);
+translate.load = (options) => {
+    latest = Translation.load(options);
     return latest;
 };
 
