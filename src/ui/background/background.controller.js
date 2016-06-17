@@ -1,31 +1,11 @@
-angular.module('proxtop').controller('BackgroundController', ['$scope', 'ipcManager', '$state', 'notification', '$mdToast', '$translate', '$mdDialog', 'open', '$window', 'debounce',
-    function($scope, ipcManager, $state, notification, $mdToast, $translate, $mdDialog, open, $window, debounce) {
+angular.module('proxtop').controller('BackgroundController', ['$scope', 'ipcManager', '$state', '$mdToast', '$translate', '$mdDialog', 'open', '$window', 'debounce',
+    function($scope, ipcManager, $state, $mdToast, $translate, $mdDialog, open, $window, debounce) {
         const ipc = ipcManager($scope);
         ipc.on('error', (ev, severity, message) => {
             $mdToast.show($mdToast.simple().hideDelay(5000).textContent(severity + ':' + message));
         });
 
-        const displayNotification = (type) => {
-            return (ev, update) => {
-                notification.displayNotification(update.title, update.content, update.icon, () => {
-                    if(type == 'anime') {
-                        open.openAnime(update.id, update.episode, update.sub);
-                    } else {
-                        open.openManga(update.id, update.episode, update.sub);
-                    }
-                });
-            };
-        };
-
-        ipc.on('new-anime-ep', displayNotification('anime'));
-        ipc.on('new-manga-ep', displayNotification('manga'));
-        ipc.on('new-message', (ev, message) => {
-            notification.displayNotification(message.title, message.content, message.icon, () => {
-                $state.go('message', { id: message.id });
-            });
-        });
-
-        ipc.once('update', function(ev, release) {
+        ipc.once('update', (ev, release) => {
             const yes = "UPDATE.YES";
             const no = "UPDATE.NO";
             const newVersion = "UPDATE.NEW_VERSION";
@@ -42,6 +22,10 @@ angular.module('proxtop').controller('BackgroundController', ['$scope', 'ipcMana
                     open.openLink(release.html_url);
                 });
             });
+        });
+
+        ipc.on('state-change', (ev, state, params) => {
+            $state.go(state, params);
         });
 
         const updateOnlineState = debounce((state) => {

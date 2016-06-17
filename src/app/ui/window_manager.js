@@ -16,7 +16,6 @@ class WindowManager {
 
     createMainWindow() {
         LOG.verbose('Opening new window');
-        const self = this;
         const windowState = WindowState({
             defaultWidth: 800,
             defaultHeigth: 600,
@@ -33,11 +32,11 @@ class WindowManager {
         });
 
         this.mainWindow.loadURL('file://' + this.index_location);
-        this.mainWindow.on('closed', function() {
-            self.mainWindow = null;
+        this.mainWindow.on('closed', () => {
+            this.mainWindow = null;
         });
 
-        this.mainWindow.webContents.on('new-window', function(ev, url) {
+        this.mainWindow.webContents.on('new-window', (ev, url) => {
             LOG.verbose('Prevent new window and open externally instead.');
             ev.preventDefault();
             shell.openExternal(url);

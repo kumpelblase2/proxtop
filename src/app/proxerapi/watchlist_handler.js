@@ -5,6 +5,7 @@ const translate = require('../translation');
 const IPCHandler = require('./ipc_handler');
 const { WatchlistCache } = require('../storage');
 const settings = require('../settings');
+const Notification = require('../notification');
 
 const SET_TO_CURRENT = "?format=json&type=reminder&title=reminder_this";
 const SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
@@ -51,11 +52,16 @@ class WatchlistHandler extends IPCHandler {
             Object.keys(updates).forEach((type) => {
                 updates[type].forEach((update) => {
                     LOG.verbose('Sending watchlist update for ' + update.name);
-                    this.app.displayNotification({
-                        type: 'new-' + type + '-ep',
+                    Notification.displayNotification({
                         title: 'Proxtop',
-                        content: this.translation.get(`WATCHLIST.NEW_${type.toUpperCase()}`, { episode: update.episode, name: update.name }),
+                        message: this.translation.get(`WATCHLIST.NEW_${type.toUpperCase()}`, { episode: update.episode, name: update.name }),
                         icon: LOGO_RELATIVE_PATH
+                    }, () => {
+                        self.app.notifyWindow('state-change', 'watch', {
+                            id: update.id,
+                            ep: update.episode,
+                            sub: update.sub
+                        });
                     });
                 });
             });

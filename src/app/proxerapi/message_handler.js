@@ -3,6 +3,7 @@ const Promise = require('bluebird');
 const translate = require('../translation');
 const IPCHandler = require('./ipc_handler');
 const { MessageCache } = require('../storage');
+const Notification = require('../notification');
 
 class MessagesHandler extends IPCHandler {
     constructor(app, sessionHandler) {
@@ -122,11 +123,12 @@ class MessagesHandler extends IPCHandler {
                 notifications.forEach((notification) => {
                     if(!MessageCache.hasReceived(notification.username)) {
                         LOG.verbose('Got new message from ' + notification.username);
-                        self.app.displayNotification({
-                            type: 'new-message',
+                        Notification.displayNotification({
                             title: 'Proxtop',
-                            content: self.translation.get('MESSAGES.NEW_MESSAGE', { user: notification.username }),
+                            message: self.translation.get('MESSAGES.NEW_MESSAGE', { user: notification.username }),
                             icon: 'assets/proxtop_logo_256.png'
+                        }, () => {
+                            self.app.notifyWindow('state-change', 'message', { id: notification.id });
                         });
                     }
                 });
