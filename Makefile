@@ -12,6 +12,8 @@ ICON_DIR = share/icons/hicolor
 ICON_48_DIR = ${ICON_DIR}/48x48/apps
 ICON_256_DIR = ${ICON_DIR}/256x256/apps
 
+PACKAGER_ARGS = --overwrite --asar
+
 DESKTOP_ENTRY_DIR = share/applications
 
 setup:
@@ -31,13 +33,13 @@ prepare:
 	mkdir $(BUILD_DIR)
 
 build-windows: prepare
-	electron-packager $(TARGET_DIR) --platform=win32 --arch=all --out=$(BUILD_DIR) --overwrite --asar --icon=build/proxtop_logo_256.ico
+	electron-packager $(TARGET_DIR) --platform=win32 --arch=all --out=$(BUILD_DIR) --icon=build/proxtop_logo_256.ico $(PACKAGER_ARGS)
 
 build-linux: prepare
-	electron-packager $(TARGET_DIR) --platform=linux --arch=x64 --out=$(BUILD_DIR) --overwrite --asar --icon=build/proxtop_logo_256.png
+	electron-packager $(TARGET_DIR) --platform=linux --arch=x64 --out=$(BUILD_DIR) --icon=build/proxtop_logo_256.png $(PACKAGER_ARGS)
 
 build-osx: prepare
-	electron-packager $(TARGET_DIR) --platform=darwin --arch=x64 --out=$(BUILD_DIR) --overwrite --asar --icon=build/proxtop_logo_256.icns
+	electron-packager $(TARGET_DIR) --platform=darwin --arch=x64 --out=$(BUILD_DIR) --icon=build/proxtop_logo_256.icns $(PACKAGER_ARGS)
 
 build: build-windows build-osx build-linux
 
