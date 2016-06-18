@@ -4,9 +4,14 @@ class IPCHandler {
     handle(event, funct) {
         const localFunc = funct.bind(this);
         ipcMain.on(event, (ev, ...args) => {
-            localFunc(...args).then((...result) => {
-                ev.sender.send(event, ...result);
-            });
+            const localFuncResult = localFunc(...args);
+            if(localFuncResult.then) {
+                localFuncResult.then((...result) => {
+                    ev.sender.send(event, ...result);
+                });
+            } else {
+                ev.sender.send(event, localFuncResult);
+            }
         });
     }
 
