@@ -7,7 +7,7 @@ require('./src/app/util/utils').createDirIfNotExists(APP_DIR);
 const Proxtop = require('./src/app/proxtop');
 const windowManager = require('./src/app/ui/window_manager');
 const Updater = require('./src/app/updater');
-const TrayManager = require('./src/app/ui/tray_manager');
+const tray = require('./src/app/ui/tray_manager');
 const translate = require('./src/app/translation');
 const path = require('path');
 
@@ -26,12 +26,10 @@ windowManager.setDirs({
     index: INDEX_LOCATION
 });
 
-const trayManager = new TrayManager(LOGO_LOCATION);
+tray.icon = LOGO_LOCATION;
 
-const proxtop = new Proxtop(app, updater, trayManager, {
-    name: APP_NAME,
+const proxtop = new Proxtop(app, updater, {
     app_dir: APP_DIR,
-    proxer_url: PROXER_BASE_URL,
     info: require('./package.json')
 });
 
@@ -41,4 +39,5 @@ app.on('ready', function() {
         LOG.verbose('Off we go!');
     });
 });
+
 module.exports = proxtop;

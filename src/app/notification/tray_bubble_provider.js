@@ -1,14 +1,10 @@
-class TrayBubbleNotificationProvider {
-    constructor(tray) {
-        this.tray = tray;
-    }
+const tray = require('../ui/tray_manager');
 
-    displayNotification(notification, callback) {
-        this.tray.displayBaloon(notification.title, {
+module.exports = {
+    displayNotification: (notification, callback) => {
+        tray.displayBaloon(notification.title, {
             content: notification.message,
             onclick: callback
         });
     }
-}
-
-module.exports = TrayBubbleNotificationProvider;
+};

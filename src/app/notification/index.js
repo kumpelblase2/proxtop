@@ -12,20 +12,20 @@ class Notifications {
         return platform != 'win32' || release.startsWith('10.');
     }
     
-    setup(tray) {
+    setup() {
         if(this.areNativelySupported()) {
             this.provider = new NativeNotificationProvider();
         } else {
-            this.provider = new TrayBubbleProvider(tray);
+            this.provider = TrayBubbleProvider;
         }
     }
     
     displayNotification(notification, callback = () => {}) {
-        if(this.provider) {
-            this.provider.displayNotification(notification, callback);
-        } else {
-            LOG.warn("Wanted to display notification but no provider was registered so far");
+        if(!this.provider) {
+            this.setup();
         }
+        
+        this.provider.displayNotification(notification, callback);
     }
 }
 

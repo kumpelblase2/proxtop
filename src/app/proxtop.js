@@ -6,28 +6,25 @@ const ProxtopMenu = require('./ui/menu');
 const { ipcMain, Menu } = require('electron');
 const notification = require('./notification');
 const windowManager = require('./ui/window_manager');
+const tray = require('./ui/tray_manager');
 
 class Proxtop {
-    constructor(app, updater, tray, options) {
+    constructor(app, updater, options) {
         this.app = app;
-        this.name = options.name;
         this.app_dir = options.app_dir;
-        this.proxer_url = options.proxer_url;
         this.info = options.info;
         this.updater = updater;
         this.api = new API(settings);
         this.proxer_api = new ProxerAPI(this, path.join(this.app_dir, "cookies.json"));
-        this.tray = tray;
     }
 
     start() {
         this.setupApp();
-        notification.setup(this.tray);
         this.updater.start(this.info.version, (release) => windowManager.notifyWindow('update', release));
         this.api.init();
         return this.proxer_api.init().then(() => {
             if(!notification.areNativelySupported()) {
-                this.tray.create();
+                tray.create();
             }
         }).then(() => {
             windowManager.createMainWindow();

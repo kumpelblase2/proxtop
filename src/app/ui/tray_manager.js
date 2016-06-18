@@ -2,8 +2,8 @@ const { Tray, Menu, app } = require('electron');
 const _ = require('lodash');
 
 class ProxtopTray {
-    constructor(icon) {
-        this.icon = icon;
+    constructor() {
+        this.icon = null;
         this.last_balloon = null;
     }
 
@@ -53,4 +53,4 @@ class ProxtopTray {
     }
 }
 
-module.exports = ProxtopTray;
+module.exports = new ProxtopTray();
