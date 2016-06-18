@@ -5,12 +5,12 @@ const semver = require('semver');
 const os = require('os');
 
 module.exports = {
-    createIfNotExists: function(inPath) {
-        return fs.statAsync(inPath).catch(function(e) {
+    createIfNotExists: (inPath) => {
+        return fs.statAsync(inPath).catch(() => {
             return fs.openAsync(inPath, 'w').then(fs.closeAsync);
         });
     },
-    createDirIfNotExists: function (path) {
+    createDirIfNotExists: (path) => {
         try {
             fs.mkdirSync(path);
         } catch(e) {
@@ -20,13 +20,13 @@ module.exports = {
         }
     },
 
-    capizalizeFirstLetter: function(word) {
+    capizalizeFirstLetter: (word) => {
         return word.charAt(0).toUpperCase() + word.slice(1);
     },
 
-    getOnlineDiff: function(oldEntries, newEntries) {
+    getOnlineDiff: (oldEntries, newEntries) => {
         const updates = [];
-        newEntries.forEach(function(entry) {
+        newEntries.forEach((entry) => {
             const oldEntry = _.find(oldEntries, { id: entry.id });
             if(oldEntry) {
                 if(entry.status && !oldEntry.status) {
@@ -38,15 +38,15 @@ module.exports = {
         return updates;
     },
 
-    findLatestRelease: function(releases, current) {
+    findLatestRelease: (releases, current) => {
         const actual = _.filter(releases, { prerelease: false, draft: false });
-        const orderedNewerReleases = _.reverse(_.sortBy(_.filter(actual, function(release) {
+        const orderedNewerReleases = _.reverse(_.sortBy(_.filter(actual, (release) => {
             if(current) {
                 return semver.gt(release.tag_name, current);
             } else {
                 return true;
             }
-        }), function(release) {
+        }), (release) => {
             return new Date(release.published_at).getTime();
         }));
 
