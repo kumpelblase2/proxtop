@@ -83,6 +83,7 @@ class SessionHandler extends IPCHandler {
         };
 
         return createRequest().then((response) => {
+            LOG.silly(`Got response with code ${response.statusCode} for url ${response.request.uri.path}`);
             const body = response.body;
             if(body.includes("Bitte aktualisiere die Seite")) {
                 LOG.verbose("Proxer requested page reload.");
@@ -110,6 +111,7 @@ class SessionHandler extends IPCHandler {
             return "";
         }
 
+        const uri = error.options.uri;
         LOG.warn("Error when requesting " + uri);
         if(error.statusCode == 525) {
             LOG.error('Received error 525 on request');
@@ -139,8 +141,7 @@ class SessionHandler extends IPCHandler {
         }
 
         LOG.verbose("Trying response cache");
-        let realUri = error.options.uri;
-        realUri = realUri.substring(realUri.indexOf('/', 9));
+        const realUri = uri.substring(uri.indexOf('/', 9));
 
         let cached = Cache.getResponse(realUri);
         if(cached) {
