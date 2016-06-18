@@ -1,5 +1,6 @@
 const winston = require('winston');
 const path = require('path');
+const moment = require('moment');
 
 global.APP_NAME = "proxtop";
 global.PROXER_BASE_URL = "https://proxer.me";
@@ -52,7 +53,7 @@ global.LOG = new (winston.Logger)({
                 return new Date();
             },
             formatter: function(options) {
-                return '[' + options.level.toLowerCase() + '][' + options.timestamp() + '] ' +
+                return '[' + options.level.toLowerCase() + '][' + moment(options.timestamp()).format("DD.MM.YYYY HH:mm:ss:SS") + '] ' +
                     (undefined !== options.message ? options.message : '') +
                     (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' )
             }
