@@ -1,13 +1,13 @@
 angular.module('proxtop').service('ipcManager', ['$log',function($log) {
     class IpcManager {
         constructor(ipcMain, scope, logger) {
-            this.ipc = ipcMain
+            this.ipc = ipcMain;
             this.events = new Map();
             this.log = logger;
             scope.$on('$destroy', () => {
                 const allEvents = this.events;
                 const ipc = this.ipc;
-                this.events.forEach((listeners, event) => {
+                allEvents.forEach((listeners, event) => {
                     this.log.debug(`Remove listeners (${listeners.length}) for event ${event}`);
                     listeners.forEach((listener) => {
                         ipc.removeListener(event, listener);
@@ -28,10 +28,10 @@ angular.module('proxtop').service('ipcManager', ['$log',function($log) {
                 this.log.debug("Once event fired " + event);
                 this.removeListenerFromMap(event, newListener);
                 listener(...args);
-            }
+            };
             this.log.debug("Register new once listener for " + event);
             this.events.set(event, (this.events.get(event) || []).concat(newListener));
-            this.ipc.on(event, newListener);
+            this.ipc.once(event, newListener);
         }
 
         removeListener(event, listener) {
