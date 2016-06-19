@@ -1,9 +1,7 @@
 const newsParser = require('../../page_parser').news;
-const IPCHandler = require('./ipc_handler');
 
-class NewsHandler extends IPCHandler {
+class NewsHandler {
     constructor(sessionHandler) {
-        super();
         this.session_handler = sessionHandler;
     }
 
@@ -12,9 +10,6 @@ class NewsHandler extends IPCHandler {
             .then(newsParser.parseNewsPage);
     }
 
-    register() {
-        this.handle('news', this.loadNews);
-    }
 }
 
 module.exports = NewsHandler;

@@ -7,7 +7,7 @@ const os = require('os');
 const IPCHandler = require('./ipc_handler');
 const translate = require('../translation');
 const windowManager = require('../ui/window_manager');
-const { Cache } = require('../storage');
+const { Cache } = require('../storage/index');
 const settings = require('../settings');
 
 class SessionHandler extends IPCHandler {

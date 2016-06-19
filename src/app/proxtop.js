@@ -1,12 +1,13 @@
 const path = require('path');
 const settings = require('./settings');
 const API = require('./api');
-const ProxerAPI = require('./proxerapi');
+const proxerAPI = require('./proxerapi');
 const ProxtopMenu = require('./ui/menu');
 const { ipcMain, Menu } = require('electron');
 const notification = require('./notification');
 const windowManager = require('./ui/window_manager');
 const tray = require('./ui/tray_manager');
+const SessionHandler = require('./lib/session_handler');
 
 class Proxtop {
     constructor(app, updater, options) {
@@ -14,21 +15,18 @@ class Proxtop {
         this.app_dir = options.app_dir;
         this.info = options.info;
         this.updater = updater;
-        this.api = new API(settings);
-        this.proxer_api = new ProxerAPI(this, path.join(this.app_dir, "cookies.json"));
+        this.session_handler = new SessionHandler(this, path.join(this.app_dir, "cookies.json"));
+        this.proxer_api = proxerAPI(this.session_handler);
+        this.api = new API(this.proxer_api);
     }
 
     start() {
         this.setupApp();
         this.updater.start(this.info.version, (release) => windowManager.notifyWindow('update', release));
-        this.api.init();
-        return this.proxer_api.init().then(() => {
-            if(!notification.areNativelySupported()) {
-                tray.create();
-            }
-        }).then(() => {
-            windowManager.createMainWindow();
-        });
+
+        return this.session_handler.loadState().then(() => {
+            this.api.init();
+        }).then(windowManager.createMainWindow.bind(windowManager));
     }
 
     shutdown() {
@@ -55,6 +53,10 @@ class Proxtop {
         ipcMain.on('open-about', () => {
             windowManager.createAboutWindow();
         });
+
+        if(!notification.areNativelySupported()) {
+            tray.create();
+        }
     }
 }
 

@@ -1,19 +1,13 @@
 const profileParser = require('../../page_parser').profile;
-const IPCHandler = require('./ipc_handler');
 
-class ProfileHandler extends IPCHandler {
+class ProfileHandler {
     constructor(sessionHandler) {
-        super();
         this.session_handler = sessionHandler;
     }
 
     loadProfile() {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.OWN_PROFILE, true)
             .then(profileParser.parseProfile);
-    }
-
-    register() {
-        this.handle('profile', this.loadProfile);
     }
 }
 

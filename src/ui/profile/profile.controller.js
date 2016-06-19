@@ -14,7 +14,7 @@ angular.module('proxtop').controller('ProfileController', ['$scope', 'ipcManager
     });
 
     $scope.openNews = function(newsItem) {
-        shell.openExternal('https://proxer.me/forum/' + newsItem.catid + '/' + newsItem.mid);
+        OpenHandler.openExternal('https://proxer.me/forum/' + newsItem.catid + '/' + newsItem.mid);
     };
 
     $scope.createNewsImage = function(newsItem) {

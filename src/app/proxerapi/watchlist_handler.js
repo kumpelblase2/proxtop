@@ -2,7 +2,6 @@ const watchlistParser = require('../../page_parser').watchlist;
 const util = require('util');
 const utils = require('../util/utils');
 const translate = require('../translation');
-const IPCHandler = require('./ipc_handler');
 const { WatchlistCache } = require('../storage');
 const settings = require('../settings');
 const Notification = require('../notification');
@@ -14,9 +13,8 @@ const SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
 const returnMsg = (success, msg) => { return { success: success, msg: msg } };
 
 
-class WatchlistHandler extends IPCHandler {
+class WatchlistHandler {
     constructor(sessionHandler) {
-        super();
         this.session_handler = sessionHandler;
         this.lastCheck = 0;
         this.translation = translate();
@@ -88,16 +86,6 @@ class WatchlistHandler extends IPCHandler {
                     return msg;
                 }
             });
-    }
-
-    register() {
-        this.handle('watchlist', this.loadWatchlist);
-        this.provide('watchlist-update', () => this.checkUpdates());
-        this.handle('add-watchlist', this.updateEntry);
-        this.handle('delete-watchlist', this.deleteEntry);
-        this.handle('finish-watchlist', this.markFinished);
-
-        this.watchLoop();
     }
 
     watchLoop() {

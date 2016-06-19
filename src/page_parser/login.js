@@ -70,7 +70,6 @@ parser.parseLoginCheck = function(body) {
 };
 
 parser.checkLogin = function(page) {
-    const self = this;
     return Promise.resolve(page).then(cheerio.load)
         .then(function(page) {
             return !!isLoggedIn(page);

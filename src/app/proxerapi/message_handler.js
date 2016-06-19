@@ -1,15 +1,13 @@
 const messageParser = require('../../page_parser').message;
 const Promise = require('bluebird');
 const translate = require('../translation');
-const IPCHandler = require('./ipc_handler');
 const { MessageCache } = require('../storage');
 const Notification = require('../notification');
 const windowManager = require('../ui/window_manager');
 const settings = require('../settings');
 
-class MessagesHandler extends IPCHandler {
+class MessagesHandler {
     constructor(sessionHandler) {
-        super();
         this.session_handler = sessionHandler;
         this.lastCheck = 0;
         this.translation = translate();
@@ -137,22 +135,6 @@ class MessagesHandler extends IPCHandler {
                 notifications.forEach((not) => MessageCache.markReceived(not.username));
             });
         }
-    }
-
-    register() {
-        this.handle('conversations', this.loadConversations);
-        this.handle('conversation', this.loadConversation);
-        this.handle('conversation-write', this.sendMessage);
-        this.handle('conversation-update', this.refreshMessages);
-        this.handle('conversation-more', this.loadPreviousMessages);
-        this.handle('conversations-favorites', this.loadFavorites);
-        this.handle('conversation-favorite', this.favoriteMessage);
-        this.handle('conversation-unfavorite', this.unfavoriteMessage);
-        this.handle('conversation-block', this.blockConversation);
-        this.handle('conversation-unblock', this.unblockConversation);
-        this.handle('conversation-report', this.reportConversation);
-
-        this.messageCheckLoop();
     }
 }
 

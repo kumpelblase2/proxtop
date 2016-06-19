@@ -1,11 +1,12 @@
-const ipc = require('electron').ipcMain;
 const childProcess = require('child_process');
 const opener = require('opener');
 const util = require('util');
+const settings = require('../settings');
+const IPCHandler = require('../lib/ipc_handler');
 
-class OpenHandler {
-    constructor(settings) {
-        this.settings = settings;
+class OpenHandler extends IPCHandler {
+    constructor() {
+        super();
     }
 
     buildUrl(type, id, ep, sub) {
@@ -17,9 +18,9 @@ class OpenHandler {
     open(type, id, ep, sub) {
         var openSettings;
         if(type == 'anime') {
-            openSettings = this.settings.getAnimeSettings();
+            openSettings = settings.getAnimeSettings();
         } else {
-            openSettings = this.settings.getMangaSettings();
+            openSettings = settings.getMangaSettings();
         }
 
         const url = this.buildUrl(type, id, ep, sub);
@@ -33,9 +34,9 @@ class OpenHandler {
     openExternal(type, url) {
         var openSettings;
         if(type == 'anime') {
-            openSettings = this.settings.getAnimeSettings();
+            openSettings = settings.getAnimeSettings();
         } else {
-            openSettings = this.settings.getMangaSettings();
+            openSettings = settings.getMangaSettings();
         }
 
         LOG.info("Starting external application with url " + url);
@@ -45,16 +46,14 @@ class OpenHandler {
     }
 
     register() {
-        ipc.on('open', (event, type, id, ep, sub) => {
-            this.open(type, id, ep, sub);
+        this.provide('open', (event, ...args) => {
+            this.open(...args);
         });
-
-        ipc.on('open-external', (event, url) => {
+        this.provide('open-external', (event, url) => {
             this.openExternal('anime', url);
         });
-
-        ipc.on('open-link', (event, link) => {
-            opener(link);
+        this.provide('open-link', (event, element) => {
+            opener(element);
         });
     }
 }

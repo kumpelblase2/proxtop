@@ -1,11 +1,9 @@
 const loginParser = require('../../page_parser').login;
 const Promise = require('bluebird');
 const _ = require('lodash');
-const IPCHandler = require('./ipc_handler');
 
-class LoginHandler extends IPCHandler {
+class LoginHandler {
     constructor(sessionHandler) {
-        super();
         this.session_handler = sessionHandler;
     }
 
@@ -93,15 +91,6 @@ class LoginHandler extends IPCHandler {
     checkLogin() {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.API_LOGIN)
             .then(loginParser.parseLoginCheck);
-    }
-
-    register() {
-        this.handle('logout', this.logout);
-        this.handle('check-login', this.checkLogin);
-        this.provide('login', (event, user, keepLogin) => {
-            this.login(user.username, user.password, keepLogin)
-                .then((result) => event.sender.send('login', result));
-        });
     }
 }
 
