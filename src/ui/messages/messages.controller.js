@@ -4,9 +4,9 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManage
     $scope.hide_nonfavs = false;
     $scope.hover_id = -1;
     ipc.once('conversations', (ev, conversations) => {
-        ipc.send('conversations-favorites');
         $scope.$apply(function() {
             $scope.conversations = conversations;
+            ipc.send('conversations-favorites');
         });
     });
 
