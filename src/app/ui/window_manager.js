@@ -42,7 +42,7 @@ class WindowManager {
         this.mainWindow.webContents.on('new-window', (ev, url) => {
             LOG.verbose('Prevent new window and open externally instead.');
             ev.preventDefault();
-            OpenHandler.openExternal(url);
+            shell.openExternal(url);
         });
 
         windowState.manage(this.mainWindow);
