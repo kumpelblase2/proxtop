@@ -43,11 +43,15 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
 
     ipc.once('watch', (ev, video) => {
         $scope.$apply(() => {
-            const actualUrl = video.url;
-            video.url = $sce.trustAsResourceUrl(video.url);
-            $scope.current.video = video;
-            if(playExternal && passRaw) {
-                ipc.send('open-external', actualUrl);
+            if(video) {
+                const actualUrl = video.url;
+                video.url = $sce.trustAsResourceUrl(video.url);
+                $scope.current.video = video;
+                if (playExternal && passRaw) {
+                    ipc.send('open-external', actualUrl);
+                }
+            } else {
+                $state.go('watchlist');
             }
         });
     });

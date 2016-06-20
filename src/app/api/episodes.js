@@ -1,5 +1,6 @@
 const IPCHandler = require('../lib/ipc_handler');
 const CacheControl = require('../lib/cache_control');
+const translate = require('../translation');
 
 const EPISODE_CACHE_TIME = 900000;
 const STREAM_CACHE_TIME = 21600000;
@@ -12,6 +13,7 @@ class Episodes extends IPCHandler {
             return `${id}:${ep}:${sub}`;
         });
         this.streamCache = new CacheControl(STREAM_CACHE_TIME, this.episode.loadStream.bind(this.episode), this.episode.getStreamUrl);
+        this.translation = translate();
     }
 
     register() {

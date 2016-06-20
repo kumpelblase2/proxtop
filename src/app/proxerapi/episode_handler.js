@@ -1,11 +1,10 @@
 var { episode: episodeParser, stream: streamParser } = require('../../page_parser');
 var util = require('util');
-const translate = require('../translation');
 
 class EpisodeHandler {
     constructor(sessionHandler) {
         this.session_handler = sessionHandler;
-        this.translation = translate();
+        
     }
 
     loadEpisode(id, ep, sub) {
