@@ -32,6 +32,7 @@
         <script src="ui/providers/open.provider.js"></script>
         <script src="ui/providers/supported.provider.js"></script>
         <script src="ui/providers/avatar.provider.js"></script>
+        <script src="ui/providers/session.provider.js"></script>
         <script src="ui/main/main.js"></script>
         <script src="ui/main/main.controller.js"></script>
         <script src="ui/login/login.js"></script>
@@ -57,6 +58,11 @@
                     <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleMenu()" hide-gt-md>
                         <md-icon md-font-icon="fa-bars" class="fa"></md-icon>
                     </md-button>
+                    <span flex></span>
+                    <span ng-if="isLoggedIn()">{{ 'LOGIN.LOGGED_IN_AS' | translate:{name:getUsername()} }}</span>
+                    <md-button ng-if="isLoggedIn()" ng-click="logout()" aria-label="{{ 'MENU.LOGOUT' | translate }}">
+                        <md-icon md-font-icon="fa-sign-out" class="fa menu-icon md-avatar-icon"></md-icon>
+                    </md-button>
                 </div>
             </md-toolbar>
             <div layout="row" class="full-height">
@@ -78,10 +84,6 @@
                             <md-list-item ui-sref="settings">
                                 <md-icon md-font-icon="fa-gears" class="fa menu-icon md-avatar-icon"></md-icon>
                                 <span>{{ 'MENU.SETTINGS' | translate }}</span>
-                            </md-list-item>
-                            <md-list-item ng-click="logout();" style="margin-top: 6px; margin-bottom: 6px; margin-left: 8px; margin-right: 8px;">
-                                <md-icon md-font-icon="fa-sign-out" class="fa menu-icon md-avatar-icon"></md-icon>
-                                <span>{{ 'MENU.LOGOUT' | translate }}</span>
                             </md-list-item>
                             <md-list-item ng-click="openAbout();" style="margin-top: 6px; margin-bottom: 6px; margin-left: 8px; margin-right: 8px;">
                                 <md-icon md-font-icon="fa-info-circle" class="fa menu-icon md-avatar-icon"></md-icon>

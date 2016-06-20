@@ -1,15 +1,12 @@
-angular.module('proxtop').controller('MainController', ['$scope', 'ipcManager', '$state', '$mdToast', '$translate', 'settings',
-    function($scope, ipcManager, $state, $mdToast, $translate, settings) {
-        const ipc = ipcManager($scope);
-        ipc.once('check-login', function(ev, result) {
-            if(result) {
-                ipc.send('watchlist-update');
-                $state.go('profile');
-            } else {
-                $state.go('login');
-            }
+angular.module('proxtop').controller('MainController', ['$scope', 'ipc', '$state', '$mdToast', '$translate', 'settings', 'session',
+    function($scope, ipc, $state, $mdToast, $translate, settings, session) {
+        session.onLogin(() => {
+            ipc.send('watchlist-update');
+            $state.go('profile');
+        }, () => {
+            $state.go('login');
         });
 
         $translate.use(settings.get('general').language);
-        ipc.send('check-login');
+        session.checkLogin();
 }]);

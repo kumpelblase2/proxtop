@@ -7,7 +7,6 @@
     "NO": "Nein",
     "ARE_YOU_SURE": "Sicher?"
   },
-
   "USER": {
     "USERNAME": "Benutzername",
     "PASSWORD": "Passwort",
@@ -17,7 +16,8 @@
     "LOGIN": "Einloggen",
     "KEEP_LOGIN": "Eingeloggt bleiben",
     "SAVE_PASSWORD": "Passwort speichern",
-    "PLAINTEXT_WARNING": "Achtung: Das Passwort wird im Klartext abgespeichert"
+    "PLAINTEXT_WARNING": "Achtung: Das Passwort wird im Klartext abgespeichert",
+    "LOGGED_IN_AS": "Eingeloggt als {{name}}."
   },
   "PROFILE": {
     "SELF": "Das bist du!",

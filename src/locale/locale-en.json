@@ -17,7 +17,8 @@
     "LOGIN": "Login",
     "KEEP_LOGIN": "Keep login",
     "SAVE_PASSWORD": "Save password",
-    "PLAINTEXT_WARNING": "Warning: This stores the password in plain text."
+    "PLAINTEXT_WARNING": "Warning: This stores the password in plain text.",
+    "LOGGED_IN_AS": "Logged in as {{name}}."
   },
   "PROFILE": {
     "SELF": "This is you!",
