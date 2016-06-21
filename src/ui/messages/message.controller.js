@@ -120,6 +120,5 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
 
     $scope.$on('$destroy', () => {
         $interval.cancel($scope.state.updateTimer);
-        //ipc.removeListener('conversation-update', conversationUpdate);
     });
 }]);

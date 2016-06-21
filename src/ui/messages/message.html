@@ -26,7 +26,7 @@
             <div ng-if="conversation.messages">
                 <md-input-container layout-fill>
                     <label>{{ 'MESSAGES.WRITE_MESSAGE' | translate }}</label>
-                    <textarea ng-model="input.message" ng-disabled="{{ input.sent }}"></textarea>
+                    <textarea ng-model="state.message" ng-disabled="{{ state.sent }}"></textarea>
                 </md-input-container>
                 <md-button ng-click="sendMessage()" layout-fill>{{ 'MESSAGES.SEND' | translate }}</md-button>
             </div>
