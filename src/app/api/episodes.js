@@ -1,5 +1,4 @@
-const IPCHandler = require('../lib/ipc_handler');
-const CacheControl = require('../lib/cache_control');
+const { CacheControl, IPCHandler } = require('../lib');
 const translate = require('../translation');
 
 const EPISODE_CACHE_TIME = 900000;

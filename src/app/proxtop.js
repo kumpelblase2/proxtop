@@ -7,7 +7,7 @@ const { ipcMain, Menu } = require('electron');
 const notification = require('./notification');
 const windowManager = require('./ui/window_manager');
 const tray = require('./ui/tray_manager');
-const SessionHandler = require('./lib/session_handler');
+const { SessionHandler } = require('./lib');
 
 class Proxtop {
     constructor(app, updater, options) {

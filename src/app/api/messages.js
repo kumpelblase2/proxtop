@@ -1,5 +1,4 @@
-const IPCHandler = require('../lib/ipc_handler');
-const CacheControl = require('../lib/cache_control');
+const { IPCHandler, CacheControl } = require('../lib');
 
 const CONVERSATIONS_CACHE_TIME = 60000;
 const FAVORITE_CACHE_TIME = CONVERSATIONS_CACHE_TIME;

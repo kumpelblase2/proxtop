@@ -2,7 +2,7 @@ const childProcess = require('child_process');
 const opener = require('opener');
 const util = require('util');
 const settings = require('../settings');
-const IPCHandler = require('../lib/ipc_handler');
+const { IPCHandler } = require('../lib');
 
 class OpenHandler extends IPCHandler {
     constructor() {

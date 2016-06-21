@@ -1,4 +1,4 @@
-const IPCHandler = require('../lib/ipc_handler');
+const { IPCHandler } = require('../lib');
 
 class Login extends IPCHandler {
     constructor(loginHandler) {
