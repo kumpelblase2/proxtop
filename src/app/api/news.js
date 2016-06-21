@@ -1,6 +1,6 @@
 const { IPCHandler, CacheControl } = require('../lib');
 
-const NEWS_CACHE_TIME = 300000;
+const NEWS_CACHE_TIME = 300000; // 5 Minutes
 
 class News extends IPCHandler {
     constructor(newsHandler) {

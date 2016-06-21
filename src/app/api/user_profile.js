@@ -1,7 +1,7 @@
 const { IPCHandler, CacheControl } = require('../lib');
 const settings = require('../settings');
 
-const PROFILE_CACHE_TIME = 1800000;
+const PROFILE_CACHE_TIME = 1800000; // 30 Minutes
 
 class UserProfile extends IPCHandler {
     constructor(profileHandler) {

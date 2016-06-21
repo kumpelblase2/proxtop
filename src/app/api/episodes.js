@@ -1,8 +1,8 @@
 const { CacheControl, IPCHandler } = require('../lib');
 const translate = require('../translation');
 
-const EPISODE_CACHE_TIME = 900000;
-const STREAM_CACHE_TIME = 21600000;
+const EPISODE_CACHE_TIME = 900000; // 15 Minutes
+const STREAM_CACHE_TIME = 21600000; // 6 Hours
 
 class Episodes extends IPCHandler {
     constructor(episodeHandler) {

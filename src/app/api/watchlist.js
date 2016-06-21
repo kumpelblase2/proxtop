@@ -1,6 +1,6 @@
 const { IPCHandler, CacheControl } = require('../lib');
 
-const WATCHLIST_CACHE_TIME = 60000;
+const WATCHLIST_CACHE_TIME = 60000; // 1 Minute
 
 class Watchlist extends IPCHandler {
     constructor(watchlistHandler) {

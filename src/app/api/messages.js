@@ -1,9 +1,9 @@
 const { IPCHandler, CacheControl } = require('../lib');
 
-const CONVERSATIONS_CACHE_TIME = 60000;
+const CONVERSATIONS_CACHE_TIME = 60000; // 1 Minute
 const FAVORITE_CACHE_TIME = CONVERSATIONS_CACHE_TIME;
 const MESSAGES_CACHE_TIME = CONVERSATIONS_CACHE_TIME;
-const OLD_MESSAGE_CACHE = 300000;
+const OLD_MESSAGE_CACHE = 300000; // 5 Minutes 
 
 class Messages extends IPCHandler {
     constructor(messagesHandler) {
