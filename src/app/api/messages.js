@@ -29,6 +29,16 @@ class Messages extends IPCHandler {
         this.handle('conversation-block', this.messages.blockConversation, this.messages);
         this.handle('conversation-unblock', this.messages.unblockConversation, this.messages);
         this.handle('conversation-report', this.messages.reportConversation, this.messages);
+        this.handle('conversation-create', (conversation) => {
+            if(conversation.participants.length === 1) {
+                return this.messages.newConversation({
+                    text: conversation.text,
+                    recipient: conversation.participants[0]
+                });
+            } else {
+                return this.messages.newConference(conversation);
+            }
+        });
 
         this.messages.messageCheckLoop();
     }

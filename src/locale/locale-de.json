@@ -5,7 +5,9 @@
     "PROXTOP": "Proxtop",
     "YES": "Ja",
     "NO": "Nein",
-    "ARE_YOU_SURE": "Sicher?"
+    "ARE_YOU_SURE": "Sicher?",
+    "CANCEL": "Abbrechen",
+    "CREATE": "Erstellen"
   },
   "USER": {
     "USERNAME": "Benutzername",
@@ -90,7 +92,9 @@
     "FAVORITE": "Favorisieren",
     "UNFAVORITE": "Favorit entfernen",
     "BLOCK": "Blockieren",
-    "UNBLOCK": "Blockierung aufheben"
+    "UNBLOCK": "Blockierung aufheben",
+    "NEW_CONVERSATION": "Neue Konversation",
+    "TITLE": "Titel"
   },
   "UPDATE": {
       "NEW_VERSION": "Eine neue Version ist verfügbar",

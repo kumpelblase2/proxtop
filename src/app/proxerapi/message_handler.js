@@ -92,6 +92,31 @@ class MessagesHandler {
             .then(messageParser.parseNewMessages);
     }
 
+    newConference(conference) {
+        return this.session_handler.openRequest((request) => {
+            return request.post({
+                url: PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_NEW_CONFERENCE,
+                form: {
+                    conferenceText: conference.text,
+                    conferenceTopic: conference.title,
+                    conferenceUsers: conference.participants
+                }
+            });
+        }).then(messageParser.parseConferenceCreateResponse);
+    }
+
+    newConversation(conversation) {
+        return this.session_handler.openRequest((request) => {
+            return request.post({
+                url: PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_NEW,
+                form: {
+                    message: conversation.text,
+                    username: conversation.recipient
+                }
+            });
+        }).then(messageParser.parseConversationCreateResponse);
+    }
+
     checkNotifications() {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NOTIFICATIONS)
             .then(messageParser.parseMessagesNotification);

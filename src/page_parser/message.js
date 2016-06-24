@@ -134,4 +134,12 @@ parser.parseReported = (page) => {
     return Promise.resolve({}); //TODO: just ignoring for now, haven't seen the proper result as I haven't actually reported anyone...
 };
 
+parser.parseConferenceCreateResponse = (page) => {
+    return Promise.resolve(page).then(JSON.parse);
+};
+
+parser.parseConversationCreateResponse = (page) => {
+    return Promise.resolve(page).then(JSON.parse);
+};
+
 module.exports = parser;

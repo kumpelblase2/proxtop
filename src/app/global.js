@@ -23,6 +23,8 @@ global.PROXER_PATHS = {
     CONVERSATION_MARK_BLOCKED: '/messages/?format=json&json=block&id=',
     CONVERSATION_UNMARK_BLOCKED: '/messages/?format=json&json=unblock&id=',
     CONVERSATION_REPORT: '/messages/?s=report&format=raw&id=',
+    CONVERSATION_NEW_CONFERENCE: "/messages/?format=json&json=newConference",
+    CONVERSATION_NEW: "/messages/?format=json&json=new",
     MESSAGE_API: '/messages/?format=json&json=messages&id=',
     MESSAGE_NEW_API: '/messages/?format=json&json=newmessages&id=',
     MESSAGE_WRITE_API: '/messages/?format=json&json=answer&id=',

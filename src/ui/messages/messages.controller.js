@@ -1,4 +1,25 @@
-angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManager', '$state', 'AvatarService', function($scope, ipcManager, $state, avatar) {
+angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManager', '$state', 'AvatarService', '$mdDialog', function($scope, ipcManager, $state, avatar, $mdDialog) {
+    const DialogController = ['$scope', '$mdDialog', '$translate', function($scope, $mdDialog) {
+        $scope.currentUser = "";
+        $scope.participants = [];
+        $scope.message = {
+            title: null,
+            text: ""
+        };
+
+        $scope.create = () => {
+            $mdDialog.hide({
+                participants: $scope.participants,
+                title: $scope.message.title,
+                text: $scope.message.text
+            });
+        };
+
+        $scope.cancel = () => {
+            $mdDialog.cancel();
+        };
+    }];
+    
     const ipc = ipcManager($scope);
     $scope.conversations = null;
     $scope.hide_nonfavs = false;
@@ -23,6 +44,27 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManage
     $scope.openConversation = (conversation) => {
         $state.go('message', {
             id: conversation.id
+        });
+    };
+
+    $scope.newConversation = (ev) => {
+        $mdDialog.show({
+            controller: DialogController,
+            templateUrl: 'ui/messages/message-create.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true
+        }).then((answer) => {
+            ipc.once('conversation-create', (ev, result) => {
+                if(result.error == 0) {
+                    $scope.$apply(() => {
+                        $state.go('message', {
+                            id: result.cid
+                        });
+                    });
+                }
+            });
+            ipc.send('conversation-create', answer);
         });
     };
 
