@@ -74,7 +74,7 @@ const parser = {
 
     parseRankingColumn: function(row) {
         const text = row.children().next().text();
-        const match = /Anime: (\d+).+Manga: (\d+).*Uploads: (\d+).*Forum: (\d+).*Wiki: (\d+).*Zsp\.: (\d+).*Summe: (\d+).*- ([\w -]+)\[\?\]/.exec(text)
+        const match = /Anime: (\d+).+Manga: (\d+).*Uploads: (\d+).*Forum: (\d+).*Info: (\d+).*Zsp\.: (\d+).*Summe: (\d+).*- ([\w -]+)\[\?\]/.exec(text)
         return {
             anime: parseInt(match[1]),
             manga: parseInt(match[2]),

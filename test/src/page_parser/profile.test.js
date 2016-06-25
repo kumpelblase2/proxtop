@@ -40,7 +40,7 @@ describe('profile parser', function() {
             // For some reason new Date() uses 0 based months ...
             profileParser.parseMemberSinceColumn($('#member1')).should.eql(new Date(2015, 0, 1, 0, 0, 0, 0).getTime() / 1000);
             profileParser.parseMemberSinceColumn($('#member2')).should.eql(new Date(2009, 11, 15, 0, 0, 0, 0).getTime() / 1000);
-            profileParser.parseMemberSinceColumn($('#member3')).should.eql(new Date(2012, 08, 23, 0, 0, 0, 0).getTime() / 1000);
+            profileParser.parseMemberSinceColumn($('#member3')).should.eql(new Date(2012, 8, 23, 0, 0, 0, 0).getTime() / 1000);
         });
 
         it('should parse last online', function() {
