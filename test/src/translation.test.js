@@ -5,14 +5,14 @@ describe('transaltion', function() {
     const translations = { de: { HELLO: 'Hallo', OTHER: { VALUE: 'Haus' } }, en: { HELLO: 'Hello', OTHER: { VALUE: 'house' } } };
 
     it('should work with multiple languages', function() {
-        const translation = translate.setup(null, translations);
+        const translation = translate.setup(translations);
         translation.getAvailableLanguages().length.should.be.eql(2);
         translation.getAvailableLanguages().should.include('de');
         translation.getAvailableLanguages().should.include('en');
     });
 
     it('should set the current language', function() {
-        const translation = translate.setup(null, translations);
+        const translation = translate.setup(translations);
         translation.setLanguage('de');
         translation.getLanguage().should.eql('de');
         translation.setLanguage('en');
@@ -20,7 +20,7 @@ describe('transaltion', function() {
     });
 
     it('should get translation for current language', function() {
-        const translation = translate.setup(null, translations);
+        const translation = translate.setup(translations);
         translation.setLanguage('de');
         translation.get('HELLO').should.eql(translations.de.HELLO);
         translation.setLanguage('en');
@@ -28,7 +28,7 @@ describe('transaltion', function() {
     });
 
     it('should get translation for current language and deep keys', function() {
-        const translation = translate.setup(null, translations);
+        const translation = translate.setup(translations);
         translation.setLanguage('de');
         translation.get('OTHER.VALUE').should.eql(translations.de.OTHER.VALUE);
         translation.setLanguage('en');
@@ -36,7 +36,7 @@ describe('transaltion', function() {
     });
 
     it('should load them properly from a file', function() {
-        const translation = translate.load(null, {
+        const translation = translate.load({
             prefix: 'translation-',
             suffix: '.test.json',
             path: path.join(__dirname, '..', 'fixtures')
@@ -48,7 +48,7 @@ describe('transaltion', function() {
     });
 
     it('should get translation for current language from file', function() {
-        const translation = translate.load(null, {
+        const translation = translate.load({
             prefix: 'translation-',
             suffix: '.test.json',
             path: path.join(__dirname, '..', 'fixtures')
