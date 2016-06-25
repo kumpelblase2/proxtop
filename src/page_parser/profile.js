@@ -74,16 +74,20 @@ const parser = {
 
     parseRankingColumn: function(row) {
         const text = row.children().next().text();
-        const match = /Anime: (\d+).+Manga: (\d+).*Uploads: (\d+).*Forum: (\d+).*Info: (\d+).*Zsp\.: (\d+).*Summe: (\d+).*- ([\w -]+)\[\?\]/.exec(text)
+        const split = text.split('|').map(s => s.trim());
+        const first = split.slice(0, 5);
+        const last = split[5];
+        const generalPoints = first.map(s => /[\w\.]+: (\d+)/.exec(s)).map(match => parseInt(match[1]));
+        const lastColumn = /[\w\.]+: (\d+)\w+: (\d+) - ([\w -]+).*/.exec(last);
         return {
-            anime: parseInt(match[1]),
-            manga: parseInt(match[2]),
-            uploads: parseInt(match[3]),
-            forum: parseInt(match[4]),
-            wiki: parseInt(match[5]),
-            additional: parseInt(match[6]),
-            total: parseInt(match[7]),
-            title: match[8]
+            anime: generalPoints[0],
+            manga: generalPoints[1],
+            uploads: generalPoints[2],
+            forum: generalPoints[3],
+            wiki: generalPoints[4],
+            additional: parseInt(lastColumn[1]),
+            total: parseInt(lastColumn[2]),
+            title: lastColumn[3]
         };
     },
 
