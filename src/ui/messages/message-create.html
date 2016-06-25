@@ -3,8 +3,17 @@
     color: white;
 }
 
-.dialog-text > input{
+.dialog-text input {
     color: white;
+    width: 100%;
+}
+
+.md-chip-input-container {
+    width: 100%;
+}
+
+.md-dialog-content {
+    padding-bottom: 0 !important;
 }
 </style>
 
@@ -20,9 +29,9 @@
     </md-toolbar>
     <md-dialog-content>
         <div class="md-dialog-content" layout="column">
-            <md-chips class="dialog-text" ng-model="participants" id="new-conversation-participants" flex="100" placeholder="{{ 'MESSAGES.PARTICIPANTS' | translate }}" md-separator-keys="[188]">
+            <md-chips class="dialog-text" ng-model="participants" id="new-conversation-participants" flex="100" placeholder="{{ 'MESSAGES.INSERT_PARTICIPANTS' | translate }}" md-separator-keys="[188]">
             </md-chips>
-            <md-input-container ng-if="participants.length > 1" flex="100">
+            <md-input-container ng-if="participants.length > 1" flex="100" style="margin-bottom: 0;">
                 <label translate>MESSAGES.TITLE</label>
                 <input ng-model="message.title"/>
             </md-input-container>

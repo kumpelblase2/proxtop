@@ -94,7 +94,8 @@
     "BLOCK": "Block",
     "UNBLOCK": "Unblock",
     "NEW_CONVERSATION": "New conversation",
-    "TITLE": "Titel"
+    "TITLE": "Titel",
+    "INSERT_PARTICIPANTS": "Participants (use  a comma to separate them)"
   },
   "UPDATE": {
     "NEW_VERSION": "A new version is available",
