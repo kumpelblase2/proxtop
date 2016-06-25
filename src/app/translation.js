@@ -11,7 +11,11 @@ class Translation {
     }
 
     getAvailableLanguages() {
-        return Object.keys(this.translations);
+        if(this.translations) {
+            return Object.keys(this.translations);
+        } else {
+            return [];
+        }
     }
 
     get(key, params = {}) {
@@ -58,8 +62,8 @@ var translate = () => {
     return latest;
 };
 
-translate.setup = (settings, options) => {
-    latest = new Translation(settings, options);
+translate.setup = (translations) => {
+    latest = new Translation(translations);
     return latest;
 };
 
