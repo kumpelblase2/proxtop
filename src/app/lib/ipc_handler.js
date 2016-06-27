@@ -5,7 +5,7 @@ function isPromise(object) {
 }
 
 function isGenerator(object) {
-    return object.next && typeof(object.next) === 'function';
+    return object[Symbol.iterator] && typeof(object[Symbol.iterator]) === 'function';
 }
 
 class IPCHandler {
