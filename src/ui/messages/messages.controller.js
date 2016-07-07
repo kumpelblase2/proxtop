@@ -1,5 +1,5 @@
-angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManager', '$state', 'AvatarService', '$mdDialog', function($scope, ipcManager, $state, avatar, $mdDialog) {
-    const DialogController = ['$scope', '$mdDialog', '$translate', function($scope, $mdDialog) {
+angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManager', '$state', 'AvatarService', '$mdDialog', '$mdToast', '$translate', function($scope, ipcManager, $state, avatar, $mdDialog, $mdToast, translate) {
+    const DialogController = ['$scope', '$mdDialog', function($scope, $mdDialog) {
         $scope.currentUser = "";
         $scope.participants = [];
         $scope.message = {
@@ -61,6 +61,10 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManage
                         $state.go('message', {
                             id: result.cid
                         });
+                    });
+                } else {
+                    translate('ERROR.MESSAGE_CREATE_ERROR').then((translation) => {
+                        $mdToast.show($mdToast.simple().hideDelay(5000).textContent(translation));
                     });
                 }
             });

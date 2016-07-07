@@ -117,7 +117,8 @@
     "STREAM_NO_PARSER": "Proxtop unterstützt diesen Stream leider noch nicht :(",
     "UNKNOWN_ERROR": "Unbekannter Fehler: ",
     "CACHE_CLEAR": "Der Cache wurde geleert.",
-    "NO_STREAM_AVAILABLE": "Es existiert kein unterstützter Stream."
+    "NO_STREAM_AVAILABLE": "Es existiert kein unterstützter Stream.",
+    "MESSAGE_CREATE_ERROR": "Es ist ein Fehler beim erstellen der Nachricht aufgetreten."
   },
   "ERROR_SEVERITY": {
     "severe":"Schwerwiegend",
