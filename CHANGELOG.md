@@ -1,4 +1,15 @@
-# 0.4.0 (current)
+# 0.4.1 (current)
+Additions:
+- Better caching for requests. Proxtop should be lot more responsive an generally has to load less
+- Added button to create a new conversation for one or multiple people
+
+Fixes:
+- Fix parsing error since profile page updated
+- Fixed a wrong translation
+- Internal refactorings and dependency updates
+- Minimal ui changes
+
+# 0.4.0
 Additions:
 - Updated looks! Plus some general UI improvements
 - Pass over raw video url to external applications
