@@ -15,23 +15,25 @@
 <md-content layout="column" layout-align="start stretch">
     <loader ng-if="!conversations"></loader>
     <div layout="row" flex="50" flex-offset="25">
-        <md-button ng-click="newConversation($event)" flex="5">New</md-button>
-        <md-switch ng-model="hide_nonfavs">{{ 'MESSAGES.FAVORITES_ONLY' | translate }}</md-switch>
+        <md-button ng-click="newConversation($event)" flex="10">New</md-button>
+        <md-switch ng-model="hide_nonfavs" flex="40">{{ 'MESSAGES.FAVORITES_ONLY' | translate }}</md-switch>
     </div>
-    <div flex="50" flex-offset="25" class="messages-list">
-        <md-list>
-            <md-list-item ng-repeat="conversation in conversations" class="md-2-line" ng-click="openConversation(conversation)" ng-hide="hide_nonfavs && !conversation.favorite"
-                ng-mouseenter="hover_id = conversation.id" ng-mouseleave="hover_id = -1">
-                <img ng-src="{{getImage(conversation.image)}}" class="md-avatar" />
-                <div class="md-list-item-text">
-                    <h3>{{conversation.topic}}
-                        <i class="fa fa-star" ng-class="{ 'favorited': conversation.favorite }" ng-if="conversation.favorite || conversation.id == hover_id" ng-click="toggleFavorite(conversation, $event)"></i>
-                        <i class="fa fa-circle new-message" ng-if="conversation.read == '0'"></i>
-                    </h3>
-                    <p>{{ 'MESSAGES.LAST_MESSAGE' | translate }}: {{conversation.timestamp_end * 1000 | date:'dd.MM.yyyy HH:mm'}}</p>
-                </div>
-                <md-divider ng-if="!$last"></md-divider>
-            </md-list-item>
-        </md-list>
+    <div layout="row">
+        <div flex="50" flex-offset="25" class="messages-list">
+            <md-list>
+                <md-list-item ng-repeat="conversation in conversations" class="md-2-line" ng-click="openConversation(conversation)" ng-hide="hide_nonfavs && !conversation.favorite"
+                    ng-mouseenter="hover_id = conversation.id" ng-mouseleave="hover_id = -1">
+                    <img ng-src="{{getImage(conversation.image)}}" class="md-avatar" />
+                    <div class="md-list-item-text">
+                        <h3>{{conversation.topic}}
+                            <i class="fa fa-star" ng-class="{ 'favorited': conversation.favorite }" ng-if="conversation.favorite || conversation.id == hover_id" ng-click="toggleFavorite(conversation, $event)"></i>
+                            <i class="fa fa-circle new-message" ng-if="conversation.read == '0'"></i>
+                        </h3>
+                        <p>{{ 'MESSAGES.LAST_MESSAGE' | translate }}: {{conversation.timestamp_end * 1000 | date:'dd.MM.yyyy HH:mm'}}</p>
+                    </div>
+                    <md-divider ng-if="!$last"></md-divider>
+                </md-list-item>
+            </md-list>
+        </div>
     </div>
 </md-content>
