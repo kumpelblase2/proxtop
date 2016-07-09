@@ -1,0 +1,33 @@
+version: 0.4.1.{build}
+
+platform:
+  - x64
+
+environment:
+  GH_TOKEN:
+    secure: bSiSWEQnc6fMsjOkIkLO0jmxx7RJWr1skjKp9+9/Oj9vMS53JQQhs1PjskoB8t02
+
+cache:
+  - node_modules
+  - _dist\node_modules
+  - '%APPDATA%\npm-cache'
+  - '%USERPROFILE%\.electron'
+
+init:
+  - git config --global core.autocrlf input
+
+install:
+  - ps: Install-Product node 6 x64
+  - git reset --hard HEAD
+  - npm install npm bower -g
+  - npm install
+  - bower install
+  - npm prune
+
+build_script:
+  - node --version
+  - npm --version
+  - cmd: build\appveyor_build.bat
+
+test: off
+deploy: off
