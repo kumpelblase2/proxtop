@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "electron-mocha --opts mocha.opts",
-    "start": "./run.sh"
+    "start": "./run.sh",
+    "dist": "make package"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "devtron": "^1.2.1",
+    "electron-builder": "^5.11.2",
     "electron-mocha": "^2.3.0",
     "electron-packager": "^7.2.0",
     "electron-prebuilt": "1.2.6"
@@ -45,5 +47,33 @@
     "tough-cookie": "^2.2.2",
     "tough-cookie-filestore": "0.0.1",
     "winston": "^2.2.0"
+  },
+  "build": {
+    "appId": "de.eternalwings.proxtop",
+    "app-category-type": "public.app-category.entertainment",
+    "mac": {
+      "target": [
+        "zip",
+        "tar.gz"
+      ]
+    },
+    "win": {
+      "target": [
+        "squirrel",
+        "zip"
+      ],
+      "msi": true
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "tar.gz",
+        "pacman"
+      ]
+    }
+  },
+  "directories": {
+    "app": "_dist",
+    "output": "_packaged"
   }
 }
