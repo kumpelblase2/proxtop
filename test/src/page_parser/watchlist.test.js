@@ -111,4 +111,50 @@ describe('watchlist parser', function() {
             ]
         });
     });
+
+    it('parses an empty watchlist page', function() {
+        var $ = cheerio.load(fs.readFileSync('test/fixtures/page_parser/watchlist_empty.html'));
+        return watchlistParser.parseWatchlist($('#allClear').html()).should.eventually.be.eql({
+            anime: [],
+            manga: []
+        });
+    });
+
+    it('parses a watchlist that has only animes', function() {
+        var $ = cheerio.load(fs.readFileSync('test/fixtures/page_parser/watchlist_empty.html'));
+        return watchlistParser.parseWatchlist($('#mangaClear').html()).should.eventually.be.eql({
+            anime: [
+                {
+                    name: 'Re:Zero kara Hajimeru Isekai Seikatsu',
+                    episode: 1,
+                    sub: 'engsub',
+                    status: true,
+                    airing: true,
+                    id: 13975,
+                    entry: 33502664,
+                    url: '/watch/13975/1/engsub#top'
+                }
+            ],
+            manga: []
+        });
+    });
+
+    it('parses a watchlist that has only mangas', function() {
+        var $ = cheerio.load(fs.readFileSync('test/fixtures/page_parser/watchlist_empty.html'));
+        return watchlistParser.parseWatchlist($('#animeClear').html()).should.eventually.be.eql({
+            anime: [],
+            manga: [
+                {
+                    name: 'The Gamer',
+                    episode: 1,
+                    sub: 'englisch',
+                    status: true,
+                    airing: true,
+                    id: 7578,
+                    entry: 33502802,
+                    url: '/chapter/7578/1/en#top'
+                }
+            ]
+        });
+    });
 });
