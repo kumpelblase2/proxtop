@@ -86,13 +86,9 @@ parser.parseWatchlist = function(page) {
             }
         });
 
-        if(!data.anime) {
-            data.anime = [];
-        }
+        data.anime = data.anime || [];
+        data.manga = data.manga || [];
 
-        if(!data.manga) {
-            data.manga = [];
-        }
         return data;
     });
 };
