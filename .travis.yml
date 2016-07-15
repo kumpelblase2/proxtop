@@ -1,0 +1,51 @@
+osx_image: xcode7.3
+
+sudo: required
+dist: trusty
+
+language: c
+
+env:
+  global:
+    - secure: "Ov51tCs4cPPEFrnpenvPLDp5tOJqLVe0SYip+gypYbKy9y2JRKp8YOGHrhN4sexbw/cK2kIwvGBLnheZHbqy99fydtY7tuW6TP29dMKBIwtNNXFmc5BIpCFCKzIpXproBwzteS7caKe30luLPJF2btsco8JxnT9INANy1Up2G5t3e7bL+0Ytscw7D78S5S0xeE/pi1AfUVzD1LxnFD6uc/1ymajoPmgXBIMLsQSLAH9LkJsh0m7EPGLwoHGep1h5aed7N1LJ+xhgKS1NHeT0M3CW9evJG0QCRUEG5tBAuyTGhXydho2Umcq2Zy2cqqbSp3AJYhEmJpf0CUv6OztNSHBOL6/FLGm/7UlB4jYlilaHGlFUkn35OTAFNCebTKA7TRmiTeE7LgLutoEW6O68evu1PK6NERgwVii8LU+NVyoZrwMCPks395s4dd7pPtv2s5TAibRuEsTK4SGiQ2S77u8zQlVN5OFaLuol8aRVMnYYCIMg3HFao/HMo2qepaSHPAwcUb7ziyhsG+lVLQ5i02OC+yRfW0ernGg9sd1O/VH99lxZ5zNa76mrzotiBEg49JkQ1r6sS6O9wrkzyIRLFwjXCYVdo733traJRhEIN0sDhkM2n3zZ28KUJlBxPaCGb7vFFdM3gu2EhvdxY2xiS4uFjGDpAlzlldCWHy4bHoo="
+
+matrix:
+  include:
+    - os: osx
+    - os: linux
+      env: CC=clang CXX=clang++ npm_config_clang=1
+      compiler: clang
+
+cache:
+  directories:
+    - node_modules
+    - _dist/node_modules
+    - $HOME/.electron
+    - $HOME/.cache
+
+addons:
+  apt:
+    packages:
+      - libgnome-keyring-dev
+      - icnsutils
+      - graphicsmagick
+      - xz-utils
+      - bsdtar
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gnu-tar libicns lzip graphicsmagick; fi
+
+install:
+  - nvm install 6
+  - npm install -g bower
+  - npm install
+  - bower install
+  - npm prune
+
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then make package-linux; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then make package-dmg; fi
+
+branches:
+  except:
+    - "/^v\\d+\\.\\d+\\.\\d+.*$/"
