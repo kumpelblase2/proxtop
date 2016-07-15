@@ -112,7 +112,7 @@ describe('watchlist parser', function() {
         });
     });
 
-    it('parses an empty watchlist page', function() {
+    it('parses an empty watchlist page #100', function() {
         var $ = cheerio.load(fs.readFileSync('test/fixtures/page_parser/watchlist_empty.html'));
         return watchlistParser.parseWatchlist($('#allClear').html()).should.eventually.be.eql({
             anime: [],
@@ -120,7 +120,7 @@ describe('watchlist parser', function() {
         });
     });
 
-    it('parses a watchlist that has only animes', function() {
+    it('parses a watchlist that has only animes #100', function() {
         var $ = cheerio.load(fs.readFileSync('test/fixtures/page_parser/watchlist_empty.html'));
         return watchlistParser.parseWatchlist($('#mangaClear').html()).should.eventually.be.eql({
             anime: [
@@ -139,7 +139,7 @@ describe('watchlist parser', function() {
         });
     });
 
-    it('parses a watchlist that has only mangas', function() {
+    it('parses a watchlist that has only mangas #100', function() {
         var $ = cheerio.load(fs.readFileSync('test/fixtures/page_parser/watchlist_empty.html'));
         return watchlistParser.parseWatchlist($('#animeClear').html()).should.eventually.be.eql({
             anime: [],

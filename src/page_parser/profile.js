@@ -2,8 +2,11 @@ const cheerio = require('cheerio');
 const moment = require('moment');
 
 function proxerDateToTimestamp(time) {
+    time = time.trim();
     if(time === 'Jetzt') {
         return moment().unix();
+    } else if(time === 'Nie') {
+        return 0;
     }
     const match = /(\d+) (\w+)/.exec(time);
     time = parseInt(match[1]);

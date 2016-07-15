@@ -156,4 +156,33 @@ describe('profile parser', function() {
             allow_friends: true
         });
     });
+
+    it('should parse a newer updated profile page #102', function() {
+        var result = profileParser.parseProfile(fs.readFileSync('test/fixtures/page_parser/profile_fresh.html'));
+        return result.should.eventually.eql({
+            self: true,
+            name: 'kumpelblase2',
+            id: 137974,
+            picture: '/images/comprofiler/137974_54fa117610568.jpg',
+            ranking: {
+                title: 'Spezial-Anbu',
+                total: 1608,
+                anime: 1038,
+                manga: 59,
+                uploads: 0,
+                forum: 9,
+                wiki: 2,
+                additional: 500
+            },
+            online: true,
+            member_since: new Date(2012, 8, 23, 0, 0, 0).getTime() / 1000,
+            last_online: 0,
+            last_update: 0,
+            status: {
+                message: 'Beep beep.',
+                written: moment().subtract(11, 'months').unix()
+            },
+            allow_friends: true
+        });
+    });
 });
