@@ -32,6 +32,7 @@ clean:
 prepare:
 	mkdir -p $(TARGET_DIR)
 	cp -R $(SOURCE_FILES) $(TARGET_DIR)
+	cd $(TARGET_DIR) && npm install --production
 	mkdir -p $(BUILD_DIR)
 
 build-windows: prepare
