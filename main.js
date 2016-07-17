@@ -1,3 +1,8 @@
+const startup = require('./src/app/squirrel_startup.js');
+if(startup()) {
+    return;
+}
+
 require('./src/app/global');
 const { app } = require('electron');
 LOG.verbose('Running on ' + process.versions['electron'] + ' on chrome ' + process.versions['chrome']);
