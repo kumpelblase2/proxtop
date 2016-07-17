@@ -15,6 +15,7 @@ angular.module('proxtop').controller('MenuController', ['$scope', 'ipcManager', 
 
         $scope.logout = () => {
             ipc.send('logout');
+            ipc.send('clear-message-cache');
         };
 
         $scope.openAbout = () => {

@@ -17,6 +17,10 @@ class Episodes extends IPCHandler {
 
     register() {
         this.handle('episode', this.episodeCache.get, this.episodeCache);
+        this.provide('clear-messages-cache', () => {
+            this.episodeCache.invalidate();
+            this.streamCache.invalidate();
+        });
         this.provide('watch', (event, stream) => {
             this.streamCache.get(stream).then((stream) => {
                 event.sender.send('watch', stream);

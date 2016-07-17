@@ -29,6 +29,10 @@ class CacheController {
             return value;
         });
     }
+
+    invalidate() {
+        this.values.clear();
+    }
 }
 
 function isFresh(result, maxTime) {

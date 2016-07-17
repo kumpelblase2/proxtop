@@ -15,6 +15,10 @@ class UserProfile extends IPCHandler {
         this.handleSync('current-user', () => {
             return settings.getAccountSettings().user.username;
         });
+
+        this.provide('clear-messages-cache', () => {
+            this.profileCache.invalidate();
+        });
     }
 }
 

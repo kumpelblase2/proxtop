@@ -11,6 +11,9 @@ class News extends IPCHandler {
 
     register() {
         this.handle('news', this.newsCache.get, this.newsCache);
+        this.provide('clear-messages-cache', () => {
+            this.newsCache.invalidate();
+        });
     }
 }
 

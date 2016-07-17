@@ -40,6 +40,12 @@ class Messages extends IPCHandler {
             }
         });
 
+        this.provide('clear-messages-cache', () => {
+            [this.conversationsCache, this.favoritesCache, this.messagesCache, this.oldMessagesCache].forEach((cache) => {
+                cache.invalidate();
+            })
+        });
+
         this.messages.messageCheckLoop();
     }
 }
