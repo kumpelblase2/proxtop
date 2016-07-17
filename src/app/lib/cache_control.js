@@ -19,6 +19,12 @@ class CacheController {
         }
     }
 
+    getIfFresh(...args) {
+        const mappedValue = this.mapping(...args);
+        const lastResult = this.values.get(mappedValue);
+        return (isFresh(lastResult, this.cacheTime) ? lastResult.value : null);
+    }
+
     update(mappedValue, ...args) {
         return this.refresh(...args).then((value) => {
             const newValue = {
@@ -28,6 +34,13 @@ class CacheController {
             this.values.set(mappedValue, newValue);
             return value;
         });
+    }
+
+    replace(value, ...args) {
+        const mappedValue = this.mapping(...args);
+        const lastResult = this.values.get(mappedValue);
+        lastResult.value = value;
+        this.values.set(mappedValue, lastResult);
     }
 
     invalidate() {

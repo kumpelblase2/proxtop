@@ -16,7 +16,7 @@ class UserProfile extends IPCHandler {
             return settings.getAccountSettings().user.username;
         });
 
-        this.provide('clear-messages-cache', () => {
+        this.provide('clear-message-cache', () => {
             this.profileCache.invalidate();
         });
     }

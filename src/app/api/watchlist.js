@@ -16,6 +16,28 @@ class Watchlist extends IPCHandler {
         this.handle('finish-watchlist', this.watchlist.markFinished, this.watchlist);
         this.handle('watchlist', this.watchlistCache.get, this.watchlistCache);
 
+        const removeEntry = (event, entry) => {
+            const value = this.watchlistCache.getIfFresh();
+            if(!value) {
+                return;
+            }
+
+            const filterFunc = (current) => {
+                return current.entry !== entry;
+            };
+
+            value.anime = value.anime.filter(filterFunc);
+            value.manga = value.manga.filter(filterFunc);
+            this.watchlistCache.replace(value);
+        };
+
+        this.provide('finish-watchlist', removeEntry);
+        this.provide('delete-watchlist', removeEntry);
+
+        this.provide('add-watchlist', () => {
+            this.watchlistCache.invalidate();
+        });
+
         this.provide('clear-messages-cache', () => {
             this.watchlistCache.invalidate();
         });
