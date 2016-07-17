@@ -18,24 +18,6 @@ angular.module('proxtop').service('session', ['ipc', function(ipc) {
         return ipc.sendSync('current-user');
     };
 
-    ipc.once('check-login', (ev, result) => {
-        if(result) {
-            this.handlers.forEach((handler) => {
-                handler();
-            });
-            this.loggedIn = true;
-        } else {
-            this.errorHandlers.forEach((handler) => {
-                handler();
-            });
-
-            this.loggedIn = false;
-        }
-
-        this.handlers = [];
-        this.errorHandlers = [];
-    });
-
     ipc.on('login', (ev, result) => {
         this.loggedIn = !!(result && result.success);
     });
@@ -45,6 +27,21 @@ angular.module('proxtop').service('session', ['ipc', function(ipc) {
     });
 
     this.checkLogin = () => {
+        ipc.once('check-login', (ev, result) => {
+            if(result) {
+                this.handlers.forEach((handler) => {
+                    handler();
+                });
+                this.loggedIn = true;
+            } else {
+                this.errorHandlers.forEach((handler) => {
+                    handler();
+                });
+
+                this.loggedIn = false;
+            }
+        });
+
         ipc.send('check-login');
     };
 }]);
