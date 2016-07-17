@@ -11,7 +11,7 @@ require('./src/app/util/utils').createDirIfNotExists(APP_DIR);
 
 const Proxtop = require('./src/app/proxtop');
 const windowManager = require('./src/app/ui/window_manager');
-const Updater = require('./src/app/updater');
+const UpdaterProvider = require('./src/app/updater');
 const tray = require('./src/app/ui/tray_manager');
 const translate = require('./src/app/translation');
 const path = require('path');
@@ -23,7 +23,7 @@ translate.load({
 });
 
 LOG.verbose('Initializing...');
-const updater = new Updater(GITHUB_RELEASES_URL);
+const updater = UpdaterProvider();
 
 windowManager.setDirs({
     app: APP_DIR,
@@ -34,8 +34,7 @@ windowManager.setDirs({
 tray.icon = LOGO_LOCATION;
 
 const proxtop = new Proxtop(app, updater, {
-    app_dir: APP_DIR,
-    info: require('./package.json')
+    app_dir: APP_DIR
 });
 
 app.on('ready', function() {

@@ -59,7 +59,7 @@ class SessionHandler extends IPCHandler {
 
     setupRequest() {
         const disableUserAgent = settings.getGeneralSettings().disable_user_agent;
-        const header = pageUtils.getHeaders(this.app.info.version, disableUserAgent, os.platform(), os.release());
+        const header = pageUtils.getHeaders(disableUserAgent, os.platform(), os.release());
 
         LOG.verbose('Settings useragent to: ' + header['User-Agent']);
         return request.defaults({

@@ -38,6 +38,7 @@ global.PROXER_PATHS = {
 global.ERRORS = require('./util/errors');
 global.UPDATE_INTERVALL = 2 * 60 * 60 * 1000;
 global.GITHUB_RELEASES_URL = "https://api.github.com/repos/kumpelblase2/proxtop/releases";
+global.UPDATER_FEED_URL = "https://proxtop.eternalwings.de/update/";
 
 try {
     global.APP_DIR = path.join(require("electron").app.getPath("appData"), APP_NAME);

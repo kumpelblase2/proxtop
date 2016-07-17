@@ -1,17 +1,18 @@
 const request = require('request-promise');
-const _ = require('lodash');
 const utils = require('./util/utils');
 const { GithubLimit } = require('./storage');
+const { autoUpdater, ipcMain, app } = require('electron');
+const os = require('os');
 
-class Updater {
-    constructor(check_url) {
-        this.check_url = check_url;
+class GithubUpdater {
+    constructor(feed) {
+        this.check_url = feed;
         this.has_noticed = false;
         this.timer = null;
     }
 
-    start(current, callback) {
-        this.currentVersion = current;
+    start(callback) {
+        this.currentVersion = app.getVersion();
         this.callback = callback;
         setTimeout(() => {
             this.check();
@@ -49,7 +50,15 @@ class Updater {
         }).then((update) => {
             LOG.verbose('Update available? ' + (update ? 'Yes' : 'No'));
             if(update) {
-                self.callback(update);
+                self.callback({
+                    version: update.tag_name + " - " + update.name,
+                    content: update.body,
+                    date: new Date(update.published_at),
+                    success: {
+                        type: 'open_url',
+                        value: update.html_url
+                    }
+                });
                 this.stopBothering();
             }
         }).then(() => {
@@ -70,4 +79,60 @@ class Updater {
     }
 }
 
-module.exports = Updater;
+class AutoUpdater {
+    constructor(feed) {
+        autoUpdater.setFeedURL(feed);
+        ipcMain.on('install_update', () => {
+            autoUpdater.quitAndInstall();
+        });
+    }
+
+    start(callback) {
+        autoUpdater.on('update-downloaded', (event, notes, name, date) => {
+            if(!notes || notes == null) {
+
+            }
+
+            callback({
+                version: name,
+                content: notes,
+                date: date,
+                success: {
+                    type: 'restart'
+                }
+            });
+        });
+
+        LOG.verbose('Running update check...');
+        // https://github.com/electron/electron/issues/4306
+        if(process.argv[1] == '--squirrel-firstrun') {
+            setTimeout(() => {
+                autoUpdater.checkForUpdates();
+            }, 15000);
+        } else {
+            autoUpdater.checkForUpdates();
+        }
+    }
+
+    stop() {
+    }
+
+    stopBothering() {
+    }
+}
+
+function getUpdater() {
+    switch(os.platform()) {
+        // case 'darwin': Currently not support since it requires code signing
+        case 'win32':
+            const platform = os.platform() + "_" + os.arch();
+            const version = app.getVersion();
+            LOG.info("Auto update enabled.");
+            return new AutoUpdater(UPDATER_FEED_URL + platform + "/" + version);
+        default:
+            LOG.info("Platform not supporting auto update. Falling back to github update.");
+            return new GithubUpdater(GITHUB_RELEASES_URL);
+    }
+}
+
+module.exports = getUpdater;

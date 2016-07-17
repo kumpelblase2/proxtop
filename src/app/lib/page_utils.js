@@ -1,5 +1,7 @@
+const { app } = require('electron');
+
 module.exports = {
-    getHeaders: function(version, customDisabled, platform, release) {
+    getHeaders: function(customDisabled, platform, release) {
         var header;
         if(customDisabled) {
             var osInfo;
@@ -20,7 +22,7 @@ module.exports = {
                 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/' + process.versions['chrome'] + ' ' +
                 'Safari/537.36';
         } else {
-            header = 'Chrome/' + process.versions['chrome'] + ' Electron/' + process.versions['electron'] + ' Proxtop/' + version
+            header = 'Chrome/' + process.versions['chrome'] + ' Electron/' + process.versions['electron'] + ' Proxtop/' + app.getVersion()
         }
 
         return {

@@ -13,7 +13,6 @@ class Proxtop {
     constructor(app, updater, options) {
         this.app = app;
         this.app_dir = options.app_dir;
-        this.info = options.info;
         this.updater = updater;
         this.session_handler = new SessionHandler(this, path.join(this.app_dir, "cookies.json"));
         this.proxer_api = proxerAPI(this.session_handler);
@@ -22,7 +21,7 @@ class Proxtop {
 
     start() {
         this.setupApp();
-        this.updater.start(this.info.version, (release) => windowManager.notifyWindow('update', release));
+        this.updater.start((release) => windowManager.notifyWindow('update', release));
 
         return this.session_handler.loadState().then(() => {
             this.api.init();
