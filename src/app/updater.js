@@ -3,18 +3,26 @@ const utils = require('./util/utils');
 const { GithubLimit } = require('./storage');
 const { autoUpdater, ipcMain, app } = require('electron');
 const os = require('os');
+const translation = require('./translation');
 
 class GithubUpdater {
     constructor(feed) {
         this.check_url = feed;
         this.has_noticed = false;
         this.timer = null;
+        ipcMain.on('check-update', () => {
+            this.check();
+        });
+
+        ipcMain.on('stop-update', () => {
+            this.stop();
+        });
     }
 
     start(callback) {
         this.currentVersion = app.getVersion();
         this.callback = callback;
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
             this.check();
         }, 1000);
     }
@@ -28,29 +36,27 @@ class GithubUpdater {
     }
 
     check() {
-        const self = this;
         LOG.verbose('Running update check...');
         if(GithubLimit.isLimited()) {
             LOG.verbose("Still rate limited. Skipping.");
             return;
         }
-
         if(this.has_noticed) {
             LOG.verbose("User already knows, no need to check.");
             return;
         }
 
         request({
-            url: self.check_url,
+            url: this.check_url,
             headers: {
                 'User-Agent': 'proxtop-' + this.currentVersion
             }
-        }).then(JSON.parse).then(function(releases) {
-            return utils.findLatestRelease(releases, self.currentVersion);
+        }).then(JSON.parse).then((releases) => {
+            return utils.findLatestRelease(releases, this.currentVersion);
         }).then((update) => {
             LOG.verbose('Update available? ' + (update ? 'Yes' : 'No'));
             if(update) {
-                self.callback({
+                this.callback({
                     version: update.tag_name + " - " + update.name,
                     content: update.body,
                     date: new Date(update.published_at),
@@ -65,15 +71,13 @@ class GithubUpdater {
             this.timer = setTimeout(() => {
                 this.check();
             }, UPDATE_INTERVALL);
-        }).catch(function(e) {
+        }).catch((e) => {
             if(e.statusCode == 403) {
                 LOG.warn("GitHub API limit reached.");
                 GithubLimit.setLimited(parseInt(e.response.headers['x-ratelimit-reset']));
                 GithubLimit.saveLimitation();
             } else {
-                LOG.error("There was an issue doing github update check:", {
-                    error: e
-                });
+                LOG.error("There was an issue doing github update check:", e);
             }
         });
     }
@@ -81,17 +85,21 @@ class GithubUpdater {
 
 class AutoUpdater {
     constructor(feed) {
+        this.translate = translation();
         autoUpdater.setFeedURL(feed);
         ipcMain.on('install_update', () => {
             autoUpdater.quitAndInstall();
+        });
+
+        ipcMain.on('check-update', () => {
+            autoUpdater.checkForUpdates();
         });
     }
 
     start(callback) {
         autoUpdater.on('update-downloaded', (event, notes, name, date) => {
-            if(!notes || notes == null) {
-
-            }
+            notes = notes || this.translate.get('UPDATE.WINDOWS_UPDATE_TEXT');
+            date = date || new Date();
 
             callback({
                 version: name,
@@ -108,7 +116,7 @@ class AutoUpdater {
         if(process.argv[1] == '--squirrel-firstrun') {
             setTimeout(() => {
                 autoUpdater.checkForUpdates();
-            }, 15000);
+            }, 3000);
         } else {
             autoUpdater.checkForUpdates();
         }
