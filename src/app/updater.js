@@ -4,6 +4,7 @@ const { GithubLimit } = require('./storage');
 const { autoUpdater, ipcMain, app } = require('electron');
 const os = require('os');
 const translation = require('./translation');
+const settings = require('./settings');
 
 class GithubUpdater {
     constructor(feed) {
@@ -22,9 +23,11 @@ class GithubUpdater {
     start(callback) {
         this.currentVersion = app.getVersion();
         this.callback = callback;
-        this.timer = setTimeout(() => {
-            this.check();
-        }, 1000);
+        if(settings.getGeneralSettings().auto_update) {
+            this.timer = setTimeout(() => {
+                this.check();
+            }, 1000);
+        }
     }
 
     stop() {
@@ -110,6 +113,10 @@ class AutoUpdater {
                 }
             });
         });
+
+        if(!settings.getGeneralSettings().auto_update) {
+            return;
+        }
 
         LOG.verbose('Running update check...');
         // https://github.com/electron/electron/issues/4306

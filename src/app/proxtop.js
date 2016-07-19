@@ -21,9 +21,7 @@ class Proxtop {
 
     start() {
         this.setupApp();
-        if(settings.getGeneralSettings().auto_update) {
-            this.updater.start((release) => windowManager.notifyWindow('update', release));
-        }
+        this.updater.start((release) => windowManager.notifyWindow('update', release));
 
         return this.session_handler.loadState().then(() => {
             this.api.init();
