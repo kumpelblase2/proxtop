@@ -5,9 +5,9 @@ class NativeNotificationProvider {
     constructor() {
         this.callbacks = new Map();
         ipcMain.on('__displayNotificationCallback', (event, callback_info) => {
-            callback = this.callbacks.get(callback_info.id);
+            const callback = this.callbacks.get(callback_info);
             callback();
-            this.callbacks.delete(callback_info.id);
+            this.callbacks.delete(callback_info);
         });
         this.currentId = 1;
     }
