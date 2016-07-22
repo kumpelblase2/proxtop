@@ -139,11 +139,12 @@ class AutoUpdater {
 function getUpdater() {
     switch(os.platform()) {
         // case 'darwin': Currently not support since it requires code signing
-        case 'win32':
+        // Currently all disabled because releases are not in the right format.
+        /*case 'win32':
             const platform = os.platform() + "_" + os.arch();
             const version = app.getVersion();
             LOG.info("Auto update enabled.");
-            return new AutoUpdater(UPDATER_FEED_URL + platform + "/" + version);
+            return new AutoUpdater(UPDATER_FEED_URL + platform + "/" + version);*/
         default:
             LOG.info("Platform not supporting auto update. Falling back to github update.");
             return new GithubUpdater(GITHUB_RELEASES_URL);
