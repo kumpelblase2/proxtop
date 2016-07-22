@@ -38,6 +38,9 @@ prepare:
 build-windows: prepare
 	$(BUILD_COMMAND) -w
 
+build-windows32: prepare
+	$(BUILD_COMMAND) -w --ia32
+
 build-linux: prepare
 	$(BUILD_COMMAND) -l
 
@@ -47,7 +50,7 @@ build-osx: prepare
 build-dmg: prepare
 	$(BUILD_COMMAND) -m
 
-build: build-windows build-osx build-linux
+build: build-windows build-windows32 build-osx build-linux
 
 package-linux: build-linux
 
@@ -56,7 +59,7 @@ package-osx: build-osx
 
 package-dmg: build-dmg
 
-package-win: build-windows
+package-win: build-windows build-windows32
 
 package: package-linux package-osx package-win
 
