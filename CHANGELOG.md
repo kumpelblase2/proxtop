@@ -1,4 +1,14 @@
-# 0.4.1 (current)
+# 0.4.2 (current)
+Additions:
+- Added ability to disable automatic update checks
+
+Fixes:
+- Fix watchlist not refreshing after updating it in proxtop
+- Fixed parsing of profiles which have never been updated
+- Fixed parsing of empty watchlists
+- Fix logout not working how it's supposed to
+
+# 0.4.1
 Additions:
 - Better caching for requests. Proxtop should be lot more responsive an generally has to load less
 - Added button to create a new conversation for one or multiple people
