@@ -3,7 +3,7 @@
   "name": "proxtop",
   "productName": "Proxtop",
   "description": "A desktop client for the german anime site proxer.me",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "main": "main.js",
   "author": "kumpelblase2 <tim+github at eternalwings.de>",
   "license": "MIT",
