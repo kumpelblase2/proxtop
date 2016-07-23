@@ -1,5 +1,5 @@
 const request = require('request-promise');
-const cookieStore = require('tough-cookie-filestore');
+const cookieStore = require('./filestore');
 const utils = require('../util/utils');
 const pageUtils = require('./page_utils');
 const Cloudscraper = require('../util/cloudscraper');
