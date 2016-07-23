@@ -29,7 +29,10 @@ clean:
 	if test -d $(TARGET_DIR); then rm -r $(TARGET_DIR); fi
 	if test -d $(BUILD_DIR); then rm -r $(BUILD_DIR); fi
 
-prepare:
+update-build-package:
+	node build/update_dependencies.js
+
+prepare: update-build-package
 	mkdir -p $(TARGET_DIR)
 	cp -R $(SOURCE_FILES) $(TARGET_DIR)
 	cd $(TARGET_DIR) && npm install --production
