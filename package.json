@@ -54,7 +54,8 @@
     "mac": {
       "target": [
         "zip",
-        "tar.gz"
+        "tar.gz",
+        "dmg"
       ]
     },
     "win": {
