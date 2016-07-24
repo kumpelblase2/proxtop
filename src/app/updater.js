@@ -145,7 +145,6 @@ class AutoUpdater {
 function getUpdater() {
     switch(os.platform()) {
         // case 'darwin': Currently not support since it requires code signing
-        // Currently all disabled because releases are not in the right format.
         case 'win32':
             const platform = os.platform();
             const version = app.getVersion();
