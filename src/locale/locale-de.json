@@ -102,7 +102,7 @@
     "NEW_VERSION": "Eine neue Version ist verfügbar",
     "NO": "Nein, Danke",
     "YES": "Anzeigen",
-    "WINDOWS_UPDATE_TEXT": "Es steht eine neue Version von Proxtop zur Installation bereit. Zum installieren einfach auf \"Anzeigen\" klicken oder die Anwendung neu starten.\n\nDie Änderungen in dieser Version sind unter https://github.com/kumpelblase2/proxtop/releases/latest zu finden, oder die Komplette Versionsgeschichte unter https://github.com/kumpelblase2/proxtop/blob/master/CHANGELOG.md.\n\nFalls nicht mehr automatisch nach Aktualisierungen gesucht werden soll, kann dies in den Einstellungen umgestellt werden."
+    "WINDOWS_UPDATE_TEXT": "Es steht eine neue Version von Proxtop zur Installation bereit. Zum installieren einfach auf \"Anzeigen\" klicken oder die Anwendung neu starten.\r\n\r\nDie Änderungen in dieser Version sind unter den <a href=\"https://github.com/kumpelblase2/proxtop/releases/latest\">Releases</a> zu finden, oder die Komplette Versionsgeschichte im <a href=\"https://github.com/kumpelblase2/proxtop/blob/master/CHANGELOG.md\">Changelog</a>.\r\n\r\nFalls nicht mehr automatisch nach Aktualisierungen gesucht werden soll, kann dies in den Einstellungen umgestellt werden."
   },
   "ERROR": {
     "CONNECTION_NO_NETWORK": "Fehler bei der Anfrage; Konnte keine Verbindung zum Netzwerk herstellen.",

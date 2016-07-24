@@ -102,7 +102,7 @@
     "NEW_VERSION": "A new version is available",
     "NO": "No, thanks",
     "YES": "Show me",
-    "WINDOWS_UPDATE_TEXT": "There's a new version of proxtop available for installing. Either click \"Show me\" or restart the app to install it.\n\nYou can view the changelog for this version at https://github.com/kumpelblase2/proxtop/releases/latest or view the full changelog at https://github.com/kumpelblase2/proxtop/blob/master/CHANGELOG.md.\n\nIf you don't like automatic updates, you can just to the settings and disable it there."
+    "WINDOWS_UPDATE_TEXT": "There's a new version of proxtop available for installing. Either click \"Show me\" or restart the app to install it.\r\n\r\nYou can view the changelog for this version at the <a href=\"https://github.com/kumpelblase2/proxtop/releases/latest\">release</a> or view the full changelog at <a href=\"https://github.com/kumpelblase2/proxtop/blob/master/CHANGELOG.md\">the repository</a>.\r\n\r\nIf you don't like automatic updates, you can just to the settings and disable it there."
   },
   "ERROR": {
     "CONNECTION_NO_NETWORK": "Could not perform request, no network available.",
