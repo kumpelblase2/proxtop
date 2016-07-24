@@ -39,7 +39,7 @@ class GithubUpdater {
     }
 
     check() {
-        LOG.verbose('Running update check...');
+        LOG.info('Running update check...');
         if(GithubLimit.isLimited()) {
             LOG.verbose("Still rate limited. Skipping.");
             return;
@@ -59,6 +59,7 @@ class GithubUpdater {
         }).then((update) => {
             LOG.verbose('Update available? ' + (update ? 'Yes' : 'No'));
             if(update) {
+                LOG.info("Update is available, notifying user.");
                 this.callback({
                     version: update.tag_name + " - " + update.name,
                     content: update.body,
@@ -101,6 +102,7 @@ class AutoUpdater {
 
     start(callback) {
         autoUpdater.on('update-downloaded', (event, notes, name, date) => {
+            LOG.info("Update ready, notifiying user.");
             notes = notes || this.translate.get('UPDATE.WINDOWS_UPDATE_TEXT');
             date = date || new Date();
 
@@ -112,6 +114,10 @@ class AutoUpdater {
                     type: 'restart'
                 }
             });
+        });
+
+        autoUpdater.on('update-available', () => {
+            LOG.info('New update found, downloading.');
         });
 
         if(!settings.getGeneralSettings().auto_update) {
