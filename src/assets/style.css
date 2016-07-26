@@ -40,6 +40,10 @@ md-icon.md-font {
     width: 100%;
 }
 
+.multiline {
+    white-space: pre-wrap;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
     width: 6px;

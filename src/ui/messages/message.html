@@ -17,7 +17,7 @@
                         <h3>{{message.username}}</h3>
                         <h4>{{message.timestamp * 1000 | date:'HH:mm:ss d.M.yyyy'}}</h4>
                     </div>
-                    <p ng-bind-html="message.message | linky:'_system'"></p>
+                    <p class="multiline" ng-bind-html="message.message | linky:'_system'"></p>
                     <md-divider ng-if="!$last"></md-divider>
                 </div>
             </md-list-item>
