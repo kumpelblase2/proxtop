@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager', '$stateParams', 'AvatarService', '$interval', '$rootScope', '$mdDialog', '$translate', function($scope, ipcManager, $stateParams, avatar, $interval, $rootScope, $mdDialog, $translate) {
+angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager', '$stateParams', 'AvatarService', '$interval', '$rootScope', '$mdDialog', '$translate', '$timeout', function($scope, ipcManager, $stateParams, avatar, $interval, $rootScope, $mdDialog, $translate, $timeout) {
     const ipc = ipcManager($scope);
     const MESSAGE_UPDATE_DELAY = 15000;
 
@@ -17,6 +17,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
             $scope.conversation = conversation;
             $scope.conversation.messages = _.sortBy(conversation.messages, (m) => { return parseInt(m.id); });
             $scope.refreshLast();
+            $scope.scrollToBottom();
         });
     });
 
@@ -113,6 +114,13 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         });
 
         ipc.send(eventName, $stateParams.id);
+    };
+
+    $scope.scrollToBottom = () => {
+        $timeout(() => {
+            const list = document.getElementById("messages-view");
+            list.scrollTop = list.scrollHeight;
+        });
     };
 
     ipc.send('conversation', $stateParams.id);

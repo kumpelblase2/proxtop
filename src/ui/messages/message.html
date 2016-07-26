@@ -1,4 +1,4 @@
-<md-content layout="row" layout-align="space-around start">
+<md-content id="messages-view" layout="row" layout-align="space-around start">
     <style>
     a {
         color: inherit;
@@ -13,7 +13,7 @@
             <md-list-item ng-repeat="message in conversation.messages" class="md-2-line long-text-list" style="margin-bottom: 10px;">
                 <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
                 <div class="md-list-item-text" style="word-wrap: break-word; min-width: 0;">
-                    <div layout="row" layout-align="space-between start"
+                    <div layout="row" layout-align="space-between start">
                         <h3>{{message.username}}</h3>
                         <h4>{{message.timestamp * 1000 | date:'HH:mm:ss d.M.yyyy'}}</h4>
                     </div>
