@@ -37,6 +37,7 @@ prepare: update-build-package
 	cp -R $(SOURCE_FILES) $(TARGET_DIR)
 	cd $(TARGET_DIR) && npm install --production
 	mkdir -p $(BUILD_DIR)
+	@sed -i -e "s/api_key_here/$(PROXTOP_API_KEY)/" $(TARGET_DIR)/main.js
 
 build-windows: prepare
 	$(BUILD_COMMAND) -w

@@ -11,9 +11,10 @@ const { Cache } = require('../storage/index');
 const settings = require('../settings');
 
 class SessionHandler extends IPCHandler {
-    constructor(app, cookiePath) {
+    constructor(app, apiKey, cookiePath) {
         super();
         this.app = app;
+        this.apiKey = apiKey;
         this.cookiePath = cookiePath;
         this._online = true;
         this.translation = translate();
