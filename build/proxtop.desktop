@@ -2,6 +2,9 @@
 Version=1.0
 Type=Application
 Name=Proxtop
+GenericName=Proxer
+Comment=A desktop client for the german anime site proxer.me
+Categories=Network;Application;
 Path=/opt/proxtop
 Exec=proxtop
 Icon=proxtop
