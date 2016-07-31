@@ -7,13 +7,17 @@ language: c
 
 env:
   global:
-    - secure: "Ov51tCs4cPPEFrnpenvPLDp5tOJqLVe0SYip+gypYbKy9y2JRKp8YOGHrhN4sexbw/cK2kIwvGBLnheZHbqy99fydtY7tuW6TP29dMKBIwtNNXFmc5BIpCFCKzIpXproBwzteS7caKe30luLPJF2btsco8JxnT9INANy1Up2G5t3e7bL+0Ytscw7D78S5S0xeE/pi1AfUVzD1LxnFD6uc/1ymajoPmgXBIMLsQSLAH9LkJsh0m7EPGLwoHGep1h5aed7N1LJ+xhgKS1NHeT0M3CW9evJG0QCRUEG5tBAuyTGhXydho2Umcq2Zy2cqqbSp3AJYhEmJpf0CUv6OztNSHBOL6/FLGm/7UlB4jYlilaHGlFUkn35OTAFNCebTKA7TRmiTeE7LgLutoEW6O68evu1PK6NERgwVii8LU+NVyoZrwMCPks395s4dd7pPtv2s5TAibRuEsTK4SGiQ2S77u8zQlVN5OFaLuol8aRVMnYYCIMg3HFao/HMo2qepaSHPAwcUb7ziyhsG+lVLQ5i02OC+yRfW0ernGg9sd1O/VH99lxZ5zNa76mrzotiBEg49JkQ1r6sS6O9wrkzyIRLFwjXCYVdo733traJRhEIN0sDhkM2n3zZ28KUJlBxPaCGb7vFFdM3gu2EhvdxY2xiS4uFjGDpAlzlldCWHy4bHoo="
+    - secure: "laFAop1GPxes5SSDYdzw3nfLTyHRMf2nk06gNGXOaBT7ln0Fd5Izeuj4aSKlbkjkCwfEgs25EZhePKILNjNamYDh04nasJQodw1HvKtyS6PugBvuvA8LKY1O2qwdItJSNR6XW7bY+D/zS6TD57x2YKngSMB/GnzcrI6Gos9bLlBBkQzoT94ZoRWmAL+yDfZ8jljgzEtM6oVSawaE2f8B4DJ0eKFHc4aF/YBwS1J9a0YLlTa0fd6ngilPSwx6vrHLTJ/t/QHnXKpATzDNyVssYIfol51CHGKb3giY7sT0Dqz5X/UQ1enro6BL9jJBz6nmlvDA27WXWCmlA3asUJ49Q4JZOQsxNVei1Lo458Y924t4pGPqvjS8oJ4gYInbYhqIn7nk0e16cEprazfD9s9YiWP4Agk9WhRR4TFyPtjt4I4+xVGq5Vp+KqGTzwqw9LMIygnuCrK/Ls52P68G6xRVVAILROGqv2h+q3AAYr0jE9bq+SGVEqJZkyMCRrMh3xJfmpckMe2oE/t3e/My7ndeQlnWVX4o91zWLgMrIivQJACIXXxPXLeeYMUa+U0PoTJAq0/xNg3zT0KMZuehLi/SsMEGzzMY1FiOihMURn2f4bjG8CBY0mtSv+JSlq7UWweCN/I4rDSWrmevf1OctA6dkhWrr/Wgme/y5qV3k18Q+JY="
 
 matrix:
   include:
     - os: osx
+      env: BUILD_TYPE=osx
     - os: linux
-      env: CC=clang CXX=clang++ npm_config_clang=1
+      env: CC=clang CXX=clang++ npm_config_clang=1 BUILD_TYPE=linux
+      compiler: clang
+    - os: linux
+      env: CC=clang CXX=clang++ npm_config_clang=1 BUILD_TYPE=win
       compiler: clang
 
 cache:
@@ -26,14 +30,15 @@ cache:
 addons:
   apt:
     packages:
-      - libgnome-keyring-dev
-      - icnsutils
-      - graphicsmagick
-      - xz-utils
-      - bsdtar
+    - libgnome-keyring-dev
+    - icnsutils
+    - graphicsmagick
+    - bsdtar
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gnu-tar libicns lzip graphicsmagick; fi
+  - if [[ "$BUILD_TYPE" == "osx" ]]; then ./build/cidependencies_osx.sh; fi
+  - if [[ "$BUILD_TYPE" == "win" ]]; then ./build/cidependencies_windows.sh; fi
+  - if [[ "$BUILD_TYPE" == "linux" ]]; then ./build/cidependencies_linux.sh; fi
 
 install:
   - nvm install 6
@@ -43,9 +48,25 @@ install:
   - npm prune
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then make package-linux; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then make package-dmg; fi
+  - if [[ "$BUILD_TYPE" == "linux" ]]; then make package-linux; fi
+  - if [[ "$BUILD_TYPE" == "osx" ]]; then make package-osx; fi
+  - if [[ "$BUILD_TYPE" == "win" ]]; then make package-win; fi
 
 branches:
   except:
     - "/^v\\d+\\.\\d+\\.\\d+.*$/"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "rfG3Oyct4ztbqnFHyTkladrKa9SinMZrBlWU7P6Xnx39IBNQvOcszuEJQk8v3hnuc9gEbmY/GzWiavvvDL4tb9VQlLOrKfKnLNRP+YKw0LjtkAcxZEw2xkPf1PsEKugrd6vEHG2EmREQJcd3DvIhO8+Ou+rCS6EyqUYj0WbwRr6QBzXHP2FV9Y+CYK3Sqqgz0r22xUwrCYTMK5N0NnoivweagSpAQg4MUvrAcXh+/zZ3JTydSiqKaAIj9G91fvmyJwzxzhFmnYFurb4bBRyNE/kZfa3o5YpOr+Vlj4iu9GpQzGdw+V6BUDpxXuxnYKFHMsaQr2qe537qS2Acp7AiaQk25to4C5H6ipRR17Ga1BD1onFJxlQyyDu7IkqNIp/gZDp/G8fCYTDn8F29vkd+ljaqedX7Iw/qtz70Xp/KFwmLjrIAeo0QvRhkIoZef7fMlC5KLNFFeLMTThQ8Q9xyFNKx1jZNy/G9e58S5GCHa8pP9opOx053Z14kZAfjO7SBTUOGfbkrYUVNur2te70FIQAaDMzzdmbASvcaKfmQb5IfBrfcJaK3ej7zIiWlUMVcmwOTBVudkl2WyhT7qC45xUHxoLc6UV1T8QWoRvp3QapxbsI3GD2XeYafSBxAGBnPA8RNPmPHbbkDB+c7ezaIouxHQIyosAkhfEoph0KFfqo="
+  skip_cleanup: true
+  file_glob: true
+  file:
+    - "_packaged/win/*"
+    - "_packaged/mac/*"
+    - "_packaged/*.zip"
+    - "_packaged/*.deb"
+    - "_packaged/*.tar.gz"
+  on:
+    tags: true

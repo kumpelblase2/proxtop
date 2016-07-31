@@ -14,7 +14,7 @@ class Proxtop {
         this.app = app;
         this.app_dir = options.app_dir;
         this.updater = updater;
-        this.session_handler = new SessionHandler(this, path.join(this.app_dir, "cookies.json"));
+        this.session_handler = new SessionHandler(this, options.api_key, path.join(this.app_dir, "cookies.json"));
         this.proxer_api = proxerAPI(this.session_handler);
         this.api = new API(this.proxer_api);
     }

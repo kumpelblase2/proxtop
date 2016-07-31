@@ -44,6 +44,8 @@ You can find the latest packaged/stable releases under [Releases](https://github
 
 ## How to run
 
+To Run this application you first need an API key from proxer. See [the thread](https://proxer.me/forum/18-ankuendigungen-und-projekte/378833-die-wiedergeburt-der-proxer-api) for details.
+
 First get all required dependencies (requires NPM and bower to be installed):
 ```
 make
@@ -58,15 +60,15 @@ npm test
 
 Run the application via:
 ```
-npm start
+PROXER_API_KEY=your_proxer_api_key npm start
 ```
 
 Or if you want to build the application:
 ```
 make clean
-make build
+PROXER_API_KEY=your_proxer_api_key make build
 # And if you want to package it:
-make package
+PROXER_API_KEY=your_proxer_api_key make package
 ```
 
 ## FAQ

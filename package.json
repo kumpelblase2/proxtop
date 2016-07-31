@@ -64,13 +64,6 @@
         "zip"
       ],
       "msi": true
-    },
-    "linux": {
-      "target": [
-        "deb",
-        "tar.gz",
-        "pacman"
-      ]
     }
   },
   "directories": {
