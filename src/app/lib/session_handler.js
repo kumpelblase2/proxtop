@@ -9,6 +9,7 @@ const translate = require('../translation');
 const windowManager = require('../ui/window_manager');
 const { Cache } = require('../storage/index');
 const settings = require('../settings');
+const APIError = require('./api_error');
 
 class SessionHandler extends IPCHandler {
     constructor(app, apiKey, cookiePath) {
@@ -60,7 +61,7 @@ class SessionHandler extends IPCHandler {
 
     setupRequest() {
         const disableUserAgent = settings.getGeneralSettings().disable_user_agent;
-        const header = pageUtils.getHeaders(disableUserAgent, os.platform(), os.release());
+        const header = pageUtils.getHeaders(disableUserAgent, os.platform(), os.release(), this.apiKey);
 
         LOG.verbose('Settings useragent to: ' + header['User-Agent']);
         return request.defaults({
@@ -99,7 +100,24 @@ class SessionHandler extends IPCHandler {
         });
     }
 
-    
+    openApiRequest(doRequest) {
+        const normalRequest = this.openRequest(doRequest);
+        return normalRequest.then((response) => {
+            LOG.verbose(response);
+            let parsed;
+            try {
+                parsed = JSON.parse(response);
+            } catch(e) {
+                throw new Error("Invalid response")
+            }
+
+            if (parsed.error == 1) {
+                throw new APIError(parsed.code, parsed.message);
+            } else {
+                return parsed;
+            }
+        });
+    }
 
     handleError(error, doRequest) {
         if(error.statusCode == 303) { // Just rethrow to let login handle it.
