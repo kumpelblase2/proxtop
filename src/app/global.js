@@ -4,6 +4,7 @@ const moment = require('moment');
 
 global.APP_NAME = "proxtop";
 global.PROXER_BASE_URL = "https://proxer.me";
+global.PROXER_API_BASE_URL = "https://proxer.me/api/v1";
 global.INDEX_LOCATION = path.join(__dirname, "../index.html");
 global.LOGO_RELATIVE_PATH = "assets/proxtop_logo_256.png";
 global.LOGO_LOCATION = path.join(__dirname, "../", LOGO_RELATIVE_PATH);
@@ -33,6 +34,21 @@ global.PROXER_PATHS = {
     VIEW_MANGA: '/chapter/%d/%d/%s',
     LOGOUT: '/component/users/?task=user.logout',
     DELETE_WATCHLIST: '/ucp?format=json&type=deleteReminder&id='
+};
+
+global.API_PATHS = {
+    USER: {
+        LOGIN: "/user/login",
+        LOGOUT: "/user/logout",
+        PROFILE: "/user/userinfo"
+    },
+    WATCHLIST: {
+        GET: "/ucp/reminder",
+        REMOVE: "/ucp/deletereminder"
+    },
+    ANIME: {
+        UPDATE_STATUS: "/info/setuserinfo"
+    }
 };
 
 global.ERRORS = require('./util/errors');

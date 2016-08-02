@@ -7,7 +7,32 @@ class LoginHandler {
         this.session_handler = sessionHandler;
     }
 
-    login(username, password, keepLogin = false) {
+    login(username, password) {
+        LOG.verbose("Logging in via API");
+        return this.session_handler.openApiRequest((request) => {
+            return request.post({
+                url: PROXER_API_BASE_URL + API_PATHS.USER.LOGIN,
+                form: {
+                    username,
+                    password
+                }
+            });
+        }).then((content) => {
+            LOG.verbose("Login success");
+            this.session_handler.setSession(content.data);
+            return { success: true, reason: null }
+        }).catch((ex) => ({ success: false, reason: ex }));
+    }
+
+    logout() {
+        return this.session_handler.openApiRequest((request) => {
+            return request.post({
+                url: PROXER_API_BASE_URL + API_PATHS.USER.LOGOUT
+            });
+        });
+    }
+
+    login_(username, password, keepLogin = false) {
         const self = this;
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.ROOT)
             .then(loginParser.parseLogin)
@@ -54,7 +79,7 @@ class LoginHandler {
             });
     }
 
-    logout() {
+    logout_() {
         const self = this;
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.ROOT)
             .then(loginParser.parseLogout)

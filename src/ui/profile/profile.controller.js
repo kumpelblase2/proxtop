@@ -1,4 +1,4 @@
-angular.module('proxtop').controller('ProfileController', ['$scope', 'ipcManager', '$state', 'ProgressService', 'shell', function($scope, ipcManager, $state, progressService, shell) {
+angular.module('proxtop').controller('ProfileController', ['$scope', 'ipcManager', '$state', 'ProgressService', 'shell', 'session', function($scope, ipcManager, $state, progressService, shell, session) {
     const ipc = ipcManager($scope);
     ipc.once('profile', (ev, profile) => {
         $scope.profile = profile;
@@ -17,6 +17,8 @@ angular.module('proxtop').controller('ProfileController', ['$scope', 'ipcManager
         return 'https://cdn.proxer.me/news/' + newsItem.nid + "_" + newsItem.image_id + '.png';
     };
 
-    ipc.send('profile');
+    $scope.myRank = () => progressService.getCurrentRank($scope.profile.ranking.total);
+
+    ipc.send('profile', session.getUser());
     ipc.send('news');
 }]);
