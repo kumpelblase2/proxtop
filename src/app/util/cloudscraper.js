@@ -52,7 +52,7 @@ Cloudscraper.prototype.solveChallenge = function(response, body) {
     challenge_pass = body.match(/name="pass" value="(.+?)"/)[1];
 
     challenge = challenge[1];
-    challenge = challenge.replace(/a\.value =(.+?) \+ .+?;/i, '$1');
+    challenge = challenge.replace(/a\.value =(.+?) \+ .+?;( '.+')?/i, '$1');
     challenge = challenge.replace(/\s{3,}[a-z](?: = |\.).+/g, '');
 
     return Promise.try(function() {
