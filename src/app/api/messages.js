@@ -1,4 +1,5 @@
 const { IPCHandler, CacheControl } = require('../lib');
+const { MessagesStorage } = require('../storage');
 
 const CONVERSATIONS_CACHE_TIME = 60000; // 1 Minute
 const FAVORITE_CACHE_TIME = CONVERSATIONS_CACHE_TIME;
@@ -18,8 +19,6 @@ class Messages extends IPCHandler {
     }
 
     register() {
-        this.handle('conversations', this.conversationsCache.get, this.conversationsCache);
-        this.handle('conversation', this.messagesCache.get, this.messagesCache);
         this.handle('conversation-write', this.messages.sendMessage, this.messages);
         this.handle('conversation-update', this.messages.refreshMessages, this.messages);
         this.handle('conversation-more', this.oldMessagesCache.get, this.oldMessagesCache);
@@ -38,6 +37,25 @@ class Messages extends IPCHandler {
             } else {
                 return this.messages.newConference(conversation);
             }
+        });
+
+        this.handle('conversations', function*() {
+            yield MessagesStorage.getAllConversations();
+            yield this.messages.loadConversations().then((result) => {
+                MessagesStorage.addConversationsIfNotExists(result);
+                return MessagesStorage.getAllConversations();
+            });
+        });
+
+        this.handle('conversation', function*(id) {
+            id = parseInt(id);
+            yield MessagesStorage.getConversation(id);
+            yield this.messages.loadConversation(id).then((result) => {
+                MessagesStorage.addMessages(id, result.messages, result.has_more);
+                MessagesStorage.markConversationFavorite(id, result.favorite);
+                MessagesStorage.markConversationBlocked(id, result.blocked);
+                return MessagesStorage.getConversation(id);
+            });
         });
 
         this.provide('clear-messages-cache', () => {

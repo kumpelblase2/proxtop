@@ -12,7 +12,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         reported: false
     };
 
-    ipc.once('conversation', (ev, conversation) => {
+    ipc.on('conversation', (ev, conversation) => {
         $scope.conversation = conversation;
         $scope.conversation.messages = _.sortBy(conversation.messages, (m) => { return parseInt(m.id); });
         $scope.refreshLast();

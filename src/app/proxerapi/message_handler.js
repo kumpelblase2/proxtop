@@ -1,7 +1,7 @@
 const messageParser = require('../../page_parser').message;
 const Promise = require('bluebird');
 const translate = require('../translation');
-const { MessageCache } = require('../storage');
+const { MessageReadCache } = require('../storage');
 const Notification = require('../notification');
 const windowManager = require('../ui/window_manager');
 const settings = require('../settings');
@@ -133,7 +133,7 @@ class MessagesHandler {
         const self = this;
         const enabled = settings.getGeneralSettings().message_notification;
         if(!enabled) {
-            MessageCache.clear();
+            MessageReadCache.clear();
             return;
         }
 
@@ -144,7 +144,7 @@ class MessagesHandler {
             LOG.info("Check if new messages have arrived...");
             self.checkNotifications().then((notifications) => {
                 notifications.forEach((notification) => {
-                    if(!MessageCache.hasReceived(notification.username)) {
+                    if(!MessageReadCache.hasReceived(notification.username)) {
                         LOG.verbose('Got new message from ' + notification.username);
                         Notification.displayNotification({
                             title: 'Proxtop',
@@ -156,8 +156,8 @@ class MessagesHandler {
                     }
                 });
 
-                MessageCache.clear();
-                notifications.forEach((not) => MessageCache.markReceived(not.username));
+                MessageReadCache.clear();
+                notifications.forEach((not) => MessageReadCache.markReceived(not.username));
             });
         }
     }

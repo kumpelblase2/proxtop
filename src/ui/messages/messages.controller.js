@@ -24,12 +24,12 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManage
     $scope.conversations = null;
     $scope.hide_nonfavs = false;
     $scope.hover_id = -1;
-    ipc.once('conversations', (ev, conversations) => {
+    ipc.on('conversations', (ev, conversations) => {
         $scope.conversations = conversations;
         ipc.send('conversations-favorites');
     });
 
-    ipc.once('conversations-favorites', (ev, favorites) => {
+    ipc.on('conversations-favorites', (ev, favorites) => {
         const ids = favorites.map((fav) => fav.id);
         $scope.conversations = $scope.conversations.map(function(conv) {
             conv.favorite = ids.includes(conv.id);

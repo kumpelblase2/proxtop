@@ -3,6 +3,36 @@ const Promise = require('bluebird');
 const cheerio = require('cheerio');
 const moment = require('moment');
 
+function sanitizeConversation(json) {
+    const { id, topic, count, conference, timestamp_end, read, image } = json;
+    return {
+        id: parseInt(id),
+        topic,
+        image,
+        last_timestamp: timestamp_end,
+        participant_count: parseInt(count),
+        is_conference: conference === "1",
+        read: read === "1"
+    };
+}
+
+function sanitizeMessage(json) {
+    const { id, fromid, message, action, timestamp, device, username, avatar, block } = json;
+    return {
+        id: parseInt(id),
+        message,
+        timestamp,
+        device,
+        sender: {
+            id: fromid,
+            username: username,
+            avatar: avatar,
+            blocked: block === "1"
+        },
+        action: action && action.length() > 0 ? action : null
+    }
+}
+
 const parser = {
     parseConversationParticipants: function($, participants) {
         const users = [];
@@ -52,10 +82,7 @@ parser.parseMessagesList = function(page) {
                 throw new Error(data.msg);
             }
 
-            return data.conferences.map((conv) => {
-                conv.id = parseInt(conv.id);
-                return conv;
-            });
+            return data.conferences.map(sanitizeConversation);
         });
 };
 
@@ -68,7 +95,7 @@ parser.parseNewMessages = function(page) {
 
             return {
                 conversation_id: data.uid,
-                messages: data.messages,
+                messages: data.messages.map(sanitizeMessage),
                 has_more: data.messages.length == 15
             };
         });
@@ -102,7 +129,7 @@ parser.parseConversation = function(page) {
             }
 
             return {
-                messages: data.messages,
+                messages: data.messages.map(sanitizeMessage),
                 has_more: data.messages.length == 15,
                 favorite: data.favour == "1",
                 blocked: data.block == "1"
