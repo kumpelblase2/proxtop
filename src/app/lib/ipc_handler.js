@@ -1,11 +1,11 @@
 const { ipcMain } = require('electron');
 
 function isPromise(object) {
-    return object.then && typeof(object.then) === 'function';
+    return object && object.then && typeof(object.then) === 'function';
 }
 
 function isGenerator(object) {
-    return object[Symbol.iterator] && typeof(object[Symbol.iterator]) === 'function';
+    return object && object[Symbol.iterator] && typeof(object[Symbol.iterator]) === 'function';
 }
 
 class IPCHandler {
@@ -19,7 +19,13 @@ class IPCHandler {
                 });
             } else if(isGenerator(localFuncResult)) {
                 for(let result of localFuncResult) {
-                    ev.sender.send(event, result);
+                    if(isPromise(result)) {
+                        result.then((...result) => {
+                            ev.sender.send(event, ...result);
+                        });
+                    } else {
+                        ev.sender.send(event, result);
+                    }
                 }
             } else {
                 ev.sender.send(event, localFuncResult);
