@@ -16,6 +16,7 @@ class SessionHandler extends IPCHandler {
         super();
         this.app = app;
         this.apiKey = apiKey;
+        this.token = null;
         this.cookiePath = cookiePath;
         this._online = true;
         this.translation = translate();
@@ -111,7 +112,7 @@ class SessionHandler extends IPCHandler {
                 throw new Error("Invalid response")
             }
 
-            if (parsed.error == 1) {
+            if (parsed.error === "1") {
                 throw new APIError(parsed.code, parsed.message);
             } else {
                 return parsed;
@@ -170,6 +171,10 @@ class SessionHandler extends IPCHandler {
             windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.SEVERE), this.translation.get(ERRORS.CONNECTION.NO_CACHE));
             return "";
         }
+    }
+
+    setSession(loginData) {
+        this.token = loginData.token;
     }
 }
 module.exports = SessionHandler;
