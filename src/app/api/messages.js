@@ -19,12 +19,19 @@ class Messages extends IPCHandler {
     }
 
     register() {
+        const self = this;
         this.handle('conversation-write', this.messages.sendMessage, this.messages);
         this.handle('conversation-update', this.messages.refreshMessages, this.messages);
         this.handle('conversation-more', this.oldMessagesCache.get, this.oldMessagesCache);
         this.handle('conversations-favorites', this.favoritesCache.get, this.favoritesCache);
-        this.handle('conversation-favorite', this.messages.favoriteMessage, this.messages);
-        this.handle('conversation-unfavorite', this.messages.unfavoriteMessage, this.messages);
+        this.handle('conversation-favorite', (id) => {
+            MessagesStorage.markConversationFavorite(id, true);
+            return this.messages.favoriteMessage(id);
+        });
+        this.handle('conversation-unfavorite', (id) => {
+            MessagesStorage.markConversationFavorite(id, false);
+            return this.messages.unfavoriteMessage(id);
+        });
         this.handle('conversation-block', this.messages.blockConversation, this.messages);
         this.handle('conversation-unblock', this.messages.unblockConversation, this.messages);
         this.handle('conversation-report', this.messages.reportConversation, this.messages);
@@ -41,7 +48,7 @@ class Messages extends IPCHandler {
 
         this.handle('conversations', function*() {
             yield MessagesStorage.getAllConversations();
-            yield this.messages.loadConversations().then((result) => {
+            yield self.messages.loadConversations().then((result) => {
                 MessagesStorage.addConversationsIfNotExists(result);
                 return MessagesStorage.getAllConversations();
             });
@@ -54,6 +61,7 @@ class Messages extends IPCHandler {
                 MessagesStorage.addMessages(id, result.messages, result.has_more);
                 MessagesStorage.markConversationFavorite(id, result.favorite);
                 MessagesStorage.markConversationBlocked(id, result.blocked);
+                MessagesStorage.updateParticipants(id, result.participants);
                 return MessagesStorage.getConversation(id);
             });
         });
