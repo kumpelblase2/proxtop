@@ -11,10 +11,10 @@
                 <md-button ng-click="loadMore()" layout-fill>{{ 'MESSAGES.LOAD_MORE' | translate }}</md-button>
             </md-list-item>
             <md-list-item ng-repeat="message in conversation.messages" class="md-2-line long-text-list" style="margin-bottom: 10px;">
-                <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
+                <img ng-src="{{getAvatar(message.sender.avatar)}}" class="md-avatar" />
                 <div class="md-list-item-text" style="word-wrap: break-word; min-width: 0;">
                     <div layout="row" layout-align="space-between start">
-                        <h3>{{message.username}}</h3>
+                        <h3>{{message.sender.username}}</h3>
                         <h4>{{message.timestamp * 1000 | date:'HH:mm:ss d.M.yyyy'}}</h4>
                     </div>
                     <p class="multiline" ng-bind-html="message.message | linky:'_system'"></p>
