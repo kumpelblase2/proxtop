@@ -2,7 +2,6 @@ const { IPCHandler, CacheControl } = require('../lib');
 const { MessagesStorage } = require('../storage');
 
 const CONVERSATIONS_CACHE_TIME = 60000; // 1 Minute
-const FAVORITE_CACHE_TIME = CONVERSATIONS_CACHE_TIME;
 const MESSAGES_CACHE_TIME = CONVERSATIONS_CACHE_TIME;
 const OLD_MESSAGE_CACHE = 300000; // 5 Minutes 
 
@@ -11,7 +10,6 @@ class Messages extends IPCHandler {
         super();
         this.messages = messagesHandler;
         this.conversationsCache = new CacheControl(CONVERSATIONS_CACHE_TIME, this.messages.loadConversations.bind(this.messages));
-        this.favoritesCache = new CacheControl(FAVORITE_CACHE_TIME, this.messages.loadFavorites.bind(this.messages));
         this.messagesCache = new CacheControl(MESSAGES_CACHE_TIME, this.messages.loadConversation.bind(this.messages), (id) => id);
         this.oldMessagesCache = new CacheControl(OLD_MESSAGE_CACHE, this.messages.loadPreviousMessages.bind(this.messages), (id, page) => {
             return `${id}:${page}`;
@@ -23,7 +21,6 @@ class Messages extends IPCHandler {
         this.handle('conversation-write', this.messages.sendMessage, this.messages);
         this.handle('conversation-update', this.messages.refreshMessages, this.messages);
         this.handle('conversation-more', this.oldMessagesCache.get, this.oldMessagesCache);
-        this.handle('conversations-favorites', this.favoritesCache.get, this.favoritesCache);
         this.handle('conversation-favorite', (id) => {
             MessagesStorage.markConversationFavorite(id, true);
             return this.messages.favoriteMessage(id);
@@ -50,14 +47,19 @@ class Messages extends IPCHandler {
             yield MessagesStorage.getAllConversations();
             yield self.messages.loadConversations().then((result) => {
                 MessagesStorage.addConversationsIfNotExists(result);
-                return MessagesStorage.getAllConversations();
+                return this.messages.loadFavorites().then((favorites) => {
+                    favorites.forEach((fav) => {
+                        MessagesStorage.markConversationFavorite(fav.id, true);
+                    });
+                    return MessagesStorage.getAllConversations();
+                });
             });
         });
 
         this.handle('conversation', function*(id) {
             id = parseInt(id);
             yield MessagesStorage.getConversation(id);
-            yield this.messages.loadConversation(id).then((result) => {
+            yield self.messages.loadConversation(id).then((result) => {
                 MessagesStorage.addMessages(id, result.messages, result.has_more);
                 MessagesStorage.markConversationFavorite(id, result.favorite);
                 MessagesStorage.markConversationBlocked(id, result.blocked);
@@ -67,7 +69,7 @@ class Messages extends IPCHandler {
         });
 
         this.provide('clear-messages-cache', () => {
-            [this.conversationsCache, this.favoritesCache, this.messagesCache, this.oldMessagesCache].forEach((cache) => {
+            [this.conversationsCache, this.messagesCache, this.oldMessagesCache].forEach((cache) => {
                 cache.invalidate();
             })
         });
