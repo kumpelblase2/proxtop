@@ -6,7 +6,8 @@
   "scripts": {
     "test": "electron-mocha --opts mocha.opts",
     "start": "./run.sh",
-    "dist": "make package"
+    "dist": "make package",
+    "debug": "electron --debug ."
   },
   "repository": {
     "type": "git",
