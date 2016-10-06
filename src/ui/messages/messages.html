@@ -15,7 +15,7 @@
 <md-content layout="column" layout-align="start stretch">
     <loader ng-if="!conversations"></loader>
     <div layout="row" flex="50" flex-offset="25">
-        <md-button ng-click="newConversation($event)" flex="10">New</md-button>
+        <md-button ng-click="newConversation($event)">{{ 'MESSAGES.NEW_CONVERSATION' | translate }}</md-button>
         <md-switch ng-model="hide_nonfavs" flex="40">{{ 'MESSAGES.FAVORITES_ONLY' | translate }}</md-switch>
     </div>
     <div layout="row">
