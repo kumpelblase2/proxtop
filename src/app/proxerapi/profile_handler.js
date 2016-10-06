@@ -14,7 +14,6 @@ function totalPoints(user) {
 
 function alterUser(user) {
     user = fixPoints(user.data);
-    console.log(user);
     return {
         uid: user.uid,
         username: user.username,
