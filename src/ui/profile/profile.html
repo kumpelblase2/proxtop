@@ -70,7 +70,7 @@
         </div>
         <div id="stats" class="md-whiteframe-4dp" flex="50">
             <md-content layout-padding translate-namespace="PROFILE">
-                <p>{{ 'PROFILE.TITLE' | translate }}: {{myRank()}}</p>
+                <p>{{ 'PROFILE.TITLE' | translate }}: {{ myRank().title }}</p>
                 <p>{{ 'PROFILE.POINTS' | translate }}: {{profile.ranking.total}}</p>
                 <p>{{ 'PROFILE.ANIME' | translate }}: {{profile.ranking.anime}}</p>
                 <p>{{ 'PROFILE.MANGA' | translate }}: {{profile.ranking.manga}}</p>
