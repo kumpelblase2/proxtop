@@ -1,26 +1,29 @@
-const { IPCHandler, CacheControl } = require('../lib');
+const { IPCHandler } = require('../lib');
 const { MessagesStorage } = require('../storage');
-
-const CONVERSATIONS_CACHE_TIME = 60000; // 1 Minute
-const MESSAGES_CACHE_TIME = CONVERSATIONS_CACHE_TIME;
 
 class Messages extends IPCHandler {
     constructor(messagesHandler) {
         super();
         this.messages = messagesHandler;
-        this.conversationsCache = new CacheControl(CONVERSATIONS_CACHE_TIME, this.messages.loadConversations.bind(this.messages));
-        this.messagesCache = new CacheControl(MESSAGES_CACHE_TIME, this.messages.loadConversation.bind(this.messages), (id) => id);
     }
 
     register() {
         const self = this;
         this.handle('conversation-write', this.messages.sendMessage, this.messages);
-        this.handle('conversation-update', this.messages.refreshMessages, this.messages);
-        this.provide('conversation-more', function(id, page, event) {
+        this.provide('conversation-update', (event, id) => {
+            const lastMessage = MessagesStorage.getLastMessage(id);
+            this.messages.refreshMessages(id, lastMessage.id).then((newMessages) => {
+                MessagesStorage.addMessages(id, newMessages.messages);
+                event.sender.send('conversation', MessagesStorage.getConversation(id));
+            });
+        });
+        this.provide('conversation-more', (event, id, page) => {
             if(MessagesStorage.hasMore(id)) {
-                const newMessages = this.messages.loadPreviousMessages(id, page);
-                MessagesStorage.addPage(id, newMessages.messages, newMessages.has_more);
-                event.sender.send('conversation', oldMessages);
+                this.messages.loadPreviousMessages(id, page).then((newMessages) => {
+                    MessagesStorage.addPage(id, newMessages.messages, newMessages.has_more, page);
+                    event.sender.send('conversation', MessagesStorage.getConversation(id));
+                });
+
             }
         });
         this.handle('conversation-favorite', (id) => {
@@ -68,12 +71,6 @@ class Messages extends IPCHandler {
                 MessagesStorage.updateParticipants(id, result.participants);
                 return MessagesStorage.getConversation(id);
             });
-        });
-
-        this.provide('clear-messages-cache', () => {
-            [this.conversationsCache, this.messagesCache].forEach((cache) => {
-                cache.invalidate();
-            })
         });
 
         this.messages.messageCheckLoop();
