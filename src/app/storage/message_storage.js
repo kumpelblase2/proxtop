@@ -8,7 +8,7 @@ class MessagesStorage extends Storage {
     }
 
     saveNewConversation(id, messages, topic = "", read = false, participants = [], favorite = false, image = null) {
-        this.storage.push({ id, messages, topic, read, participants, image, favorite, has_more: true }).value();
+        this.storage.push({ id, messages, topic, read, participants, image, favorite, has_more: true, last_page: 0 }).value();
     }
 
     addMessages(id, newMessages, has_more = true) {
@@ -17,7 +17,13 @@ class MessagesStorage extends Storage {
         this.storage.find({ id }).assign({ messages: total, has_more }).value();
     }
 
-   markConversationFavorite(id, state = false) {
+    addPage(id, newMessages, has_more = true) {
+        this.addMessages(id, newMessages, has_more);
+        const conv = this.getConversation(id);
+        this.storage.find({ id }).assign({ last_page: conv.last_page + 1 });
+    }
+
+    markConversationFavorite(id, state = false) {
         this.storage.find({ id }).assign({ favorite: state }).value();
     }
 
@@ -60,6 +66,11 @@ class MessagesStorage extends Storage {
         conversations.forEach((conversation) => {
             this.updateConversation(conversation.id, [], conversation.topic, conversation.read, [], false, conversation.image);
         });
+    }
+
+    hasMore(id) {
+        const conversation = this.getConversation(id);
+        return conversation && conversation.has_more;
     }
 }
 

@@ -8,7 +8,6 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         sent: false,
         lastReceived: 0,
         updateTimer: null,
-        last_page: 0,
         reported: false
     };
 
@@ -53,15 +52,8 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
     };
 
     $scope.loadMore = () => {
-        const page = $scope.state.last_page + 1;
-        $scope.state.last_page = page;
+        const page = $scope.conversation.last_page + 1;
         ipc.send('conversation-more', $stateParams.id, page);
-        ipc.once('conversation-more', (ev, messages) => {
-            $scope.conversation.has_more = messages.has_more
-            messages.messages.forEach(function(message) {
-                $scope.conversation.messages.unshift(message);
-            });
-        });
     };
 
     $scope.report = (ev) => {

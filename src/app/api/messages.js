@@ -11,16 +11,19 @@ class Messages extends IPCHandler {
         this.messages = messagesHandler;
         this.conversationsCache = new CacheControl(CONVERSATIONS_CACHE_TIME, this.messages.loadConversations.bind(this.messages));
         this.messagesCache = new CacheControl(MESSAGES_CACHE_TIME, this.messages.loadConversation.bind(this.messages), (id) => id);
-        this.oldMessagesCache = new CacheControl(OLD_MESSAGE_CACHE, this.messages.loadPreviousMessages.bind(this.messages), (id, page) => {
-            return `${id}:${page}`;
-        });
     }
 
     register() {
         const self = this;
         this.handle('conversation-write', this.messages.sendMessage, this.messages);
         this.handle('conversation-update', this.messages.refreshMessages, this.messages);
-        this.handle('conversation-more', this.oldMessagesCache.get, this.oldMessagesCache);
+        this.provide('conversation-more', function(id, page, event) {
+            if(MessagesStorage.hasMore(id)) {
+                const newMessages = this.messages.loadPreviousMessages(id, page);
+                MessagesStorage.addPage(id, newMessages.messages, newMessages.has_more);
+                event.sender.send('conversation', oldMessages);
+            }
+        });
         this.handle('conversation-favorite', (id) => {
             MessagesStorage.markConversationFavorite(id, true);
             return this.messages.favoriteMessage(id);
@@ -69,7 +72,7 @@ class Messages extends IPCHandler {
         });
 
         this.provide('clear-messages-cache', () => {
-            [this.conversationsCache, this.messagesCache, this.oldMessagesCache].forEach((cache) => {
+            [this.conversationsCache, this.messagesCache].forEach((cache) => {
                 cache.invalidate();
             })
         });
