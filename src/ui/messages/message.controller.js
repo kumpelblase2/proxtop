@@ -36,14 +36,14 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
                 $scope.state.sent = false;
             });
             $scope.state.sent = true;
-            ipc.send('conversation-write', $stateParams.id, $scope.state.message);
-            ipc.send('conversation-update', $stateParams.id, $scope.state.lastReceived);
+            ipc.send('conversation-write', $scope.conversation.id, $scope.state.message);
+            ipc.send('conversation-update', $scope.conversation.id, $scope.state.lastReceived);
         }
     };
 
     $scope.updateMessages = () => {
         console.log("updating messages - " + $scope.state.lastReceived);
-        ipc.send('conversation-update', $stateParams.id, $scope.state.lastReceived);
+        ipc.send('conversation-update', $scope.conversation.id, $scope.state.lastReceived);
     };
 
     $scope.refreshLast = () => {
@@ -53,7 +53,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
 
     $scope.loadMore = () => {
         const page = $scope.conversation.last_page + 1;
-        ipc.send('conversation-more', $stateParams.id, page);
+        ipc.send('conversation-more', $scope.conversation.id, page);
     };
 
     $scope.report = (ev) => {
@@ -70,7 +70,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
                       .ok(translations[yes])
                       .cancel(translations[no]);
             $mdDialog.show(confirm).then(() => {
-                ipc.send('conversation-report', $stateParams.id);
+                ipc.send('conversation-report', $scope.conversation.id);
                 $scope.state.reported = true;
             }, () => {});
         });
@@ -83,7 +83,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
             $scope.conversation.favorite = !$scope.conversation.favorite;
         });
 
-        ipc.send(eventName, $stateParams.id);
+        ipc.send(eventName, $scope.conversation.id);
     };
 
     $scope.toggleBlock = () => {
@@ -93,7 +93,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
             $scope.conversation.blocked = !$scope.conversation.blocked;
         });
 
-        ipc.send(eventName, $stateParams.id);
+        ipc.send(eventName, $scope.conversation.id);
     };
 
     $scope.scrollToBottom = () => {
