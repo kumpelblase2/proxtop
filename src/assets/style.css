@@ -10,6 +10,8 @@ md-icon.md-font {
     height: auto;
     width: auto;
     margin-left: 0;
+    margin-top: 11px !important;
+    margin-bottom: 11px !important;
 }
 
 .menu {
