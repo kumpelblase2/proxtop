@@ -10,6 +10,7 @@ const windowManager = require('../ui/window_manager');
 const { Cache } = require('../storage/index');
 const settings = require('../settings');
 const APIError = require('./api_error');
+const APILimiter = require('./api_limits');
 
 class SessionHandler extends IPCHandler {
     constructor(app, apiKey, cookiePath) {
@@ -19,6 +20,7 @@ class SessionHandler extends IPCHandler {
         this.token = null;
         this.cookiePath = cookiePath;
         this._online = true;
+        this.apiLimits = new APILimiter();
         this.translation = translate();
 
         this.provide('reload-request', ()  => {
@@ -101,22 +103,29 @@ class SessionHandler extends IPCHandler {
         });
     }
 
-    openApiRequest(doRequest) {
-        const normalRequest = this.openRequest(doRequest);
-        return normalRequest.then((response) => {
-            LOG.verbose(response);
-            let parsed;
-            try {
-                parsed = JSON.parse(response);
-            } catch(e) {
-                throw new Error("Invalid response")
-            }
+    openApiRequest(doRequest, queryParams = {}) {
+        if(typeof(doRequest) == 'string') {
+            doRequest = doRequest + this._createParamsString(queryParams);
+        }
 
-            if (parsed.error === "1") {
-                throw new APIError(parsed.code, parsed.message);
-            } else {
-                return parsed;
-            }
+        return this.apiLimits.awaitFreeLimit().then(() => {
+            this.apiLimits.makeRequest();
+            const normalRequest = this.openRequest(doRequest);
+            return normalRequest.then((response) => {
+                LOG.verbose(response);
+                let parsed;
+                try {
+                    parsed = JSON.parse(response);
+                } catch(e) {
+                    throw new Error("Invalid response")
+                }
+
+                if (parsed.error === 1) {
+                    throw new APIError(parsed.code, parsed.message);
+                } else {
+                    return parsed;
+                }
+            });
         });
     }
 
@@ -175,6 +184,17 @@ class SessionHandler extends IPCHandler {
 
     setSession(loginData) {
         this.token = loginData.token;
+    }
+
+    _createParamsString(params) {
+        const keys = Object.keys(params);
+        if(keys.length === 0) {
+            return "";
+        }
+
+        return "?" + keys.map((key) => {
+            return key + "=" + encodeURIComponent(params[key]);
+        }).join("&");
     }
 }
 module.exports = SessionHandler;
