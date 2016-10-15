@@ -4,7 +4,7 @@ function getMessageFromCode(code) {
         case 1001: return "API version was removed";
         case 1002: return "API type does not exist";
         case 1003: return "API call does not exist";
-        case 1004: return "Token does not authorized";
+        case 1004: return "Token is not authorized to perform this action";
         case 1005: return "Invalid login token";
 
         case 2000: return "Ip was blocked";
