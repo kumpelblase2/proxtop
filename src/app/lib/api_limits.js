@@ -29,7 +29,9 @@ class APILimiter {
         if(this.canMakeRequest()) {
             return Promise.resolve();
         } else {
-            return Promise.delay(PERIOD_TIME - (currentTime() - this.lastPeriod));
+            return Promise.delay(PERIOD_TIME - (currentTime() - this.lastPeriod)).then(() => {
+                return this.awaitFreeLimit();
+            });
         }
     }
 
