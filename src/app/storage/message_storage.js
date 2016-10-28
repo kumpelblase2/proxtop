@@ -3,29 +3,38 @@ const _ = require('lodash');
 
 const DB_NAME = 'messages';
 
+function filterNull(arr) {
+    return arr.filter((elem) => elem != null);
+}
+
 class MessagesStorage extends Storage {
     constructor(db) {
         super(db, DB_NAME);
     }
 
-    saveNewConversation(id, messages, topic = "", read = false, participants = [], favorite = false, image = null) {
-        this.storage.push({ id, messages, topic, read, participants, image, favorite, has_more: true, last_page: 0 }).value();
+    saveNewConversation(id, messages = [], topic = "", read = false, participants = [], favorite = false, image = null, last_read = -1) {
+        messages = filterNull(messages);
+
+        if(last_read < 0 && messages.length > 0 && read) {
+            last_read = messages[messages.length - 1].message_id;
+        } else {
+            last_read = 0;
+        }
+
+        this.storage.push({ id, messages, topic, read, participants, image, favorite, last_read, has_more: true }).value();
     }
 
-    addMessages(id, newMessages, has_more) {
+    addMessages(id, newMessages, has_more = null) {
+        newMessages = filterNull(newMessages);
         const old = this.getConversation(id).messages;
-        const total = _.uniqBy(old.concat(newMessages), 'id').sort((a, b) => a.id - b.id);
+        const diff = _.differenceBy(newMessages, old, 'message_id');
+        const total = _.uniqBy(old.concat(newMessages), 'message_id').sort((a, b) => a.message_id - b.message_id);
         let update = this.storage.find({ id }).assign({ messages: total });
-        if(typeof(has_more) !== 'undefined') {
+        if(has_more != null) {
             update = update.assign({ has_more: has_more });
         }
         update.value();
-    }
-
-    addPage(id, newMessages, has_more = true, page = 0) {
-        this.addMessages(id, newMessages, has_more);
-        const lastPage = page <= 0 ? this.getConversation(id).last_page + 1 : page;
-        this.storage.find({ id }).assign({ last_page: lastPage }).value();
+        return diff;
     }
 
     markConversationFavorite(id, state = false) {
@@ -59,17 +68,47 @@ class MessagesStorage extends Storage {
         this.storage.remove().value();
     }
 
-    updateConversation(id, messages, topic = "", read = false, participants = [], favorite = false, image = null) {
-        if(this.storage.find({ id }).size().value() > 0) {
-            this.storage.find({ id }).assign({ messages, topic, read, participants, favorite, image });
-        } else {
-            this.saveNewConversation(id, messages, topic, read, participants, favorite, image);
+    updateConversation(id, messages = null, topic = null, read = null, participants = null, favorite = null, image = null, last_read = null) {
+        let query = this.storage.find({ id });
+        if(messages != null) {
+            messages = filterNull(messages);
+            query = query.assign({ messages });
         }
+
+        if(topic != null) {
+            query = query.assign({ topic });
+        }
+
+        if(read != null) {
+            query = query.assign({ read });
+        }
+
+        if(participants != null) {
+            query = query.assign({ participants });
+        }
+
+        if(favorite != null) {
+            query = query.assign({ favorite });
+        }
+
+        if(image != null) {
+            query = query.assign({ image });
+        }
+
+        if(last_read != null) {
+            query = query.assign({ last_read });
+        }
+
+        query.value();
     }
 
     addConversationsIfNotExists(conversations) {
         conversations.forEach((conversation) => {
-            this.updateConversation(conversation.id, [], conversation.topic, conversation.read, [], false, conversation.image);
+            if(!this._hasConversation(conversation.id)) {
+                this.saveNewConversation(conversation.id, [], conversation.topic, conversation.read, [], false, conversation.image, conversation.read_mid);
+            } else {
+                this.updateConversation(conversation.id, null, conversation.topic, conversation.read, null, null, conversation.image, conversation.read_mid);
+            }
         });
     }
 
@@ -85,6 +124,10 @@ class MessagesStorage extends Storage {
         } else {
             return null;
         }
+    }
+
+    _hasConversation(id) {
+        return this.getConversation(id) != null;
     }
 }
 
