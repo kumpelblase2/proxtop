@@ -6,15 +6,12 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
     $scope.state = {
         message: "",
         sent: false,
-        lastReceived: 0,
         updateTimer: null,
         reported: false
     };
 
     ipc.on('conversation', (ev, conversation) => {
         $scope.conversation = conversation;
-        $scope.conversation.messages = _.sortBy(conversation.messages, (m) => { return parseInt(m.id); });
-        $scope.refreshLast();
         $scope.scrollToBottom();
     });
 
@@ -24,31 +21,36 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         } else {
             $scope.conversation.messages = conversation.messages;
         }
-        $scope.refreshLast();
     });
 
-    $scope.getAvatar = avatar.getAvatarForID.bind(avatar);
+    $scope.getAvatar = (username) => {
+        return avatar.getAvatarForID($scope.getParticipant(username).avatar);
+    };
+
+    $scope.getParticipant = (username) => {
+        return $scope.conversation.participants.filter((part) => part.username === username)[0];
+    };
 
     $scope.sendMessage = () => {
         if($scope.state.message.length > 0 && !$scope.state.sent) {
             ipc.once('conversation-write', (event, result) => {
                 $scope.state.message = "";
                 $scope.state.sent = false;
+
+                if(result != null && result.length > 0) {
+                    alert(result); //TODO
+                } else {
+                    ipc.send('conversation-update', $scope.conversation.id);
+                }
             });
             $scope.state.sent = true;
             ipc.send('conversation-write', $scope.conversation.id, $scope.state.message);
-            ipc.send('conversation-update', $scope.conversation.id, $scope.state.lastReceived);
         }
     };
 
     $scope.updateMessages = () => {
-        console.log("updating messages - " + $scope.state.lastReceived);
-        ipc.send('conversation-update', $scope.conversation.id, $scope.state.lastReceived);
-    };
-
-    $scope.refreshLast = () => {
-        const last = _.last($scope.conversation.messages);
-        $scope.state.lastReceived = (last ? last.id : 0);
+        console.log("updating messages - " + $scope.conversation.id);
+        ipc.send('conversation-update', $scope.conversation.id);
     };
 
     $scope.loadMore = () => {
@@ -101,6 +103,15 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
             const list = document.getElementById("messages-view");
             list.scrollTop = list.scrollHeight;
         });
+    };
+
+    $scope.parseTimestamp = (timestamp) => {
+        try {
+            const intTimestamp = parseInt(timestamp);
+            return intTimestamp * 1000;
+        } catch(e) {
+            return 0;
+        }
     };
 
     ipc.send('conversation', $stateParams.id);

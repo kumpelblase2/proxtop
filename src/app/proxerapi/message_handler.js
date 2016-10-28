@@ -1,26 +1,54 @@
 const messageParser = require('../../page_parser').message;
 const Promise = require('bluebird');
-const translate = require('../translation');
-const { MessageReadCache } = require('../storage');
-const Notification = require('../notification');
-const windowManager = require('../ui/window_manager');
-const settings = require('../settings');
 
 class MessagesHandler {
     constructor(sessionHandler) {
         this.session_handler = sessionHandler;
-        this.lastCheck = 0;
-        this.translation = translate();
+        this.constants = {
+            maxTextLength: -1,
+            conferencePageSize: -1,
+            messagesPageSize: -1,
+            maxConferenceParticipants: -1,
+            maxTopicLength: -1
+        };
     }
 
-    loadConversations() {
+    _loadConversations() {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATIONS_API)
             .then(messageParser.parseMessagesList);
     }
 
-    loadFavorites() {
+    loadConversations(type = 'default', page = 0) {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.CONFERENCES, {
+            type: type,
+            p: page
+        }).then((full) => full.data).then((conversations) => {
+            return conversations.map((conv) => {
+                conv.id = parseInt(conv.id);
+                return conv;
+            });
+        });
+    }
+
+    _loadFavorites() {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_FAVORITES)
             .then(messageParser.parseFavoriteMessages);
+    }
+
+    loadMessages(id = 0, beforeMessage = 0) {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.MESSAGES, {
+            conference_id: id,
+            message_id: beforeMessage
+        }).then((full) => full.data).then((messages) => {
+            return messages.map((message) => {
+                message.message_id = parseInt(message.message_id);
+                message.conference_id = parseInt(message.conference_id);
+                message.user_id = parseInt(message.user_id);
+                message.timestamp = parseInt(message.timestamp);
+
+                return message;
+            });
+        });
     }
 
     favoriteMessage(id) {
@@ -63,7 +91,7 @@ class MessagesHandler {
             });
     }
 
-    loadConversation(id) {
+    _loadConversation(id) {
         return Promise.join(this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id).then(messageParser.parseConversation),
                 this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_PAGE + id).then(messageParser.parseConversationPage),
             (conversation, participants) => {
@@ -73,12 +101,27 @@ class MessagesHandler {
         );
     }
 
-    loadPreviousMessages(id, page) {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id + "&p=" + page)
-            .then(messageParser.parseConversation);
+    loadConversation(id) {
+        return Promise.join(this.loadConversationInfo(id), this.loadMessages(id),
+            (conv_info, messages) => {
+                conv_info.messages = messages;
+                return conv_info;
+            });
     }
 
-    sendMessage(id, content) {
+    loadConversationInfo(id) {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.CONFERENCE_INFO, {
+            conference_id: id
+        }).then((full) => full.data).then((info) => {
+            info.users = info.users.map((user) => {
+                user.uid = parseInt(user.uid);
+                return user;
+            });
+            return info;
+        });
+    }
+
+    _sendMessage(id, content) {
         return this.session_handler.openRequest(function(request) {
             return request.post({
                 url: PROXER_BASE_URL + PROXER_PATHS.MESSAGE_WRITE_API + id,
@@ -87,12 +130,28 @@ class MessagesHandler {
         }).then(messageParser.parseMessagePostResponse);
     }
 
-    refreshMessages(id, last_id = 0) {
+    sendMessage(id, content) {
+        return this.session_handler.openApiRequest((req) => {
+            return req.post({
+                url: PROXER_API_BASE_URL + API_PATHS.MESSAGES.WRITE_MESSAGE,
+                form: {
+                    conference_id: id,
+                    text: content
+                }
+            });
+        }).then((full) => full.data);
+    }
+
+    _refreshMessages(id, last_id = 0) {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NEW_API + id + "&mid=" + last_id)
             .then(messageParser.parseNewMessages);
     }
 
-    newConference(conference) {
+    refreshMessages(_id, lastMessageId) {
+        return this.loadMessages(0, lastMessageId);
+    }
+
+    _newConference(conference) {
         return this.session_handler.openRequest((request) => {
             return request.post({
                 url: PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_NEW_CONFERENCE,
@@ -105,7 +164,20 @@ class MessagesHandler {
         }).then(messageParser.parseConferenceCreateResponse);
     }
 
-    newConversation(conversation) {
+    newConference(conference) {
+        return this.session_handler.openApiRequest((request) => {
+            return request.post({
+                url: PROXER_API_BASE_URL + API_PATHS.MESSAGES.NEW_CONFERENCE,
+                form: {
+                    users: conference.participants,
+                    topic: conference.title,
+                    text: conference.text
+                }
+            });
+        }).then((full) => { return { error: full.error, id: full.data }; });
+    }
+
+    _newConversation(conversation) {
         return this.session_handler.openRequest((request) => {
             return request.post({
                 url: PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_NEW,
@@ -117,49 +189,37 @@ class MessagesHandler {
         }).then(messageParser.parseConversationCreateResponse);
     }
 
-    checkNotifications() {
+    newConversation(conversation) {
+        return this.session_handler.openApiRequest((request) => {
+            return request.post({
+                url: PROXER_API_BASE_URL + API_PATHS.MESSAGES.NEW_CONVERSATION,
+                form: {
+                    username: conversation.recipient,
+                    text: conversation.text
+                }
+            });
+        }).then((full) => { return { error: full.error, id: full.data }; });
+    }
+
+    _checkNotifications() {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NOTIFICATIONS)
             .then(messageParser.parseMessagesNotification);
     }
 
-    messageCheckLoop() {
-        setTimeout(() => {
-            this.messageCheck();
-            this.messageCheckLoop();
-        }, 30000);
-    }
+    retrieveConstants() {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.CONSTANTS)
+            .then((full) => full.data)
+            .then((officialConstants) => {
+                this.constants = {
+                    maxTextLength: officialConstants.textCount,
+                    conferencePageSize: officialConstants.conferenceLimit,
+                    messagesPageSize: officialConstants.messagesLimit,
+                    maxConferenceParticipants: officialConstants.userLimit,
+                    maxTopicLength: officialConstants.topicCount
+                };
 
-    messageCheck() {
-        const self = this;
-        const enabled = settings.getGeneralSettings().message_notification;
-        if(!enabled) {
-            MessageReadCache.clear();
-            return;
-        }
-
-        const interval = settings.getGeneralSettings().check_message_interval;
-        const time = new Date().getTime();
-        if(time - self.lastCheck > interval * 60000 - 5000) {
-            this.lastCheck = time;
-            LOG.info("Check if new messages have arrived...");
-            self.checkNotifications().then((notifications) => {
-                notifications.forEach((notification) => {
-                    if(!MessageReadCache.hasReceived(notification.username)) {
-                        LOG.verbose('Got new message from ' + notification.username);
-                        Notification.displayNotification({
-                            title: 'Proxtop',
-                            message: self.translation.get('MESSAGES.NEW_MESSAGE', { user: notification.username }),
-                            icon: 'assets/proxtop_logo_256.png'
-                        }, () => {
-                            windowManager.notifyWindow('state-change', 'message', { id: notification.id });
-                        });
-                    }
-                });
-
-                MessageReadCache.clear();
-                notifications.forEach((not) => MessageReadCache.markReceived(not.username));
+                LOG.info("Updating constants to: ", this.constants);
             });
-        }
     }
 }
 

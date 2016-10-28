@@ -1,30 +1,30 @@
-const { IPCHandler } = require('../lib');
+const { IPCHandler, MessageChecker } = require('../lib');
 const { MessagesStorage } = require('../storage');
+const _ = require('lodash');
+
+const FAVORITE_MESSAGES = 'favour';
 
 class Messages extends IPCHandler {
     constructor(messagesHandler) {
         super();
         this.messages = messagesHandler;
+        this.lastMessageId = 0;
+        this.messageChecker = new MessageChecker(this.messages, this);
     }
 
     register() {
+        this.messages.retrieveConstants();
         const self = this;
         this.handle('conversation-write', this.messages.sendMessage, this.messages);
         this.provide('conversation-update', (event, id) => {
-            const lastMessage = MessagesStorage.getLastMessage(id);
-            this.messages.refreshMessages(id, lastMessage.id).then((newMessages) => {
-                MessagesStorage.addMessages(id, newMessages.messages);
+            this.updateConversation(id).then(() => {
                 event.sender.send('conversation', MessagesStorage.getConversation(id));
             });
         });
-        this.provide('conversation-more', (event, id, page) => {
-            if(MessagesStorage.hasMore(id)) {
-                this.messages.loadPreviousMessages(id, page).then((newMessages) => {
-                    MessagesStorage.addPage(id, newMessages.messages, newMessages.has_more, page);
-                    event.sender.send('conversation', MessagesStorage.getConversation(id));
-                });
-
-            }
+        this.provide('conversation-more', (event, id) => {
+            this.loadPreviousMessages(id).then(() => {
+                event.sender.send('conversation', MessagesStorage.getConversation(id));
+            });
         });
         this.handle('conversation-favorite', (id) => {
             MessagesStorage.markConversationFavorite(id, true);
@@ -52,7 +52,7 @@ class Messages extends IPCHandler {
             yield MessagesStorage.getAllConversations();
             yield self.messages.loadConversations().then((result) => {
                 MessagesStorage.addConversationsIfNotExists(result);
-                return this.messages.loadFavorites().then((favorites) => {
+                return this.messages.loadConversations(FAVORITE_MESSAGES).then((favorites) => {
                     favorites.forEach((fav) => {
                         MessagesStorage.markConversationFavorite(fav.id, true);
                     });
@@ -64,16 +64,69 @@ class Messages extends IPCHandler {
         this.handle('conversation', function*(id) {
             id = parseInt(id);
             yield MessagesStorage.getConversation(id);
-            yield self.messages.loadConversation(id).then((result) => {
-                MessagesStorage.addMessages(id, result.messages, result.has_more);
-                MessagesStorage.markConversationFavorite(id, result.favorite);
-                MessagesStorage.markConversationBlocked(id, result.blocked);
-                MessagesStorage.updateParticipants(id, result.participants);
+            yield this.refreshConversation(id).then(() => {
                 return MessagesStorage.getConversation(id);
             });
         });
 
-        this.messages.messageCheckLoop();
+        this.handleSync('message-constants', () => this.messages.constants);
+
+        setTimeout(() => {
+            this.messageChecker.start();
+        }, 30000);
+    }
+
+    refreshConversation(id) {
+        return self.messages.loadConversation(id).then((info) => {
+            const users = info.users.map((user) => {
+                user.owner = user.uid == info.conference.leader;
+                return user;
+            });
+
+            MessagesStorage.updateConversation(id, null, info.conference.topic, null, users, null, null, null);
+            const hasMore = this.isMaximumMessageAmount(info.messages);
+            MessagesStorage.addMessages(id, info.messages, hasMore);
+        });
+    }
+
+    updateConversation(id) {
+        const lastMessage = MessagesStorage.getLastMessage(id);
+        return this.messages.refreshMessages(id, lastMessage.id).then((newMessages) => {
+            MessagesStorage.addMessages(id, newMessages.messages);
+        });
+    }
+
+    loadPreviousMessages(id) {
+        const conv = MessagesStorage.getConversation(id);
+        return this.messages.loadMessages(id, conv.messages[0].message_id).then((newMessages) => {
+            const hasMore = this.isMaximumMessageAmount(newMessages);
+            MessagesStorage.addMessages(id, newMessages, hasMore);
+        });
+    }
+
+    loadLatestMessages() {
+        return this.messages.loadMessages(0, this.lastMessageId).then((messages) => {
+            messages = messages.sort((first, second) => first.timestamp - second.timestamp);
+            if(messages.length > 0) {
+                this.lastMessageId = messages[messages.length - 1].message_id;
+            }
+
+            const groupedMessages = _.groupBy(messages, 'conversation_id');
+            const unknownMessages = [];
+            for(const convId in groupedMessages) {
+                const newForConversation = MessagesStorage.addMessages(convId, groupedMessages[convId]);
+                unknownMessages.push(...newForConversation);
+            }
+
+            return {
+                hasMore: this.isMaximumMessageAmount(messages),
+                messages: unknownMessages
+            };
+        });
+    }
+
+    isMaximumMessageAmount(messages) {
+        return messages.length >= this.messages.constants.messagesPageSize;
     }
 }
 
