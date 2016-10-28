@@ -48,6 +48,34 @@ global.API_PATHS = {
     },
     ANIME: {
         UPDATE_STATUS: "/info/setuserinfo"
+    },
+    QUERY: {
+        USERS: "/user/list",
+        SEARCH: "/list/entrysearch",
+    },
+    MESSAGES: {
+        CONSTANTS: "/messenger/constants",
+        CONFERENCES: "/messenger/conferences",
+        CONFERENCE_INFO: "/messenger/conferenceinfo",
+        MESSAGES: "/messenger/messages",
+        WRITE_MESSAGE: "/messenger/setmessage",
+        NEW_CONVERSATION: "/messenger/newconference",
+        NEW_CONFERENCE: "/messenger/newconferencegroup",
+        REPORT: "/messenger/report",
+        MARK_READ: "/messenger/setread",
+        MARK_UNREAD: "/messenger/setunread",
+        BLOCK: "/messenger/setblock",
+        UNBLOCK: "/messenger/setunblock",
+        FAVORITE: "/messenger/setfavour",
+        UNFAVORITE: "/messenger/setunfavour"
+    },
+    NOTIFICATIONS: {
+        NEWS: "/notifications/news",
+        AMOUNT: "/notifications/count",
+        CLEAR: "/notifications/delete"
+    },
+    UCP: {
+        ANIME_MANGA_LIST: "/ucp/list"
     }
 };
 
