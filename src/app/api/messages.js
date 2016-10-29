@@ -73,11 +73,11 @@ class Messages extends IPCHandler {
 
         setTimeout(() => {
             this.messageChecker.start();
-        }, 30000);
+        }, 10000);
     }
 
     refreshConversation(id) {
-        return self.messages.loadConversation(id).then((info) => {
+        return this.messages.loadConversation(id).then((info) => {
             const users = info.users.map((user) => {
                 user.owner = user.uid == info.conference.leader;
                 return user;

@@ -4,7 +4,7 @@ const _ = require('lodash');
 const DB_NAME = 'messages';
 
 function filterNull(arr) {
-    return arr.filter((elem) => elem != null);
+    return arr ? arr.filter((elem) => elem != null) : [];
 }
 
 class MessagesStorage extends Storage {
