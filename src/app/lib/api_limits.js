@@ -29,7 +29,9 @@ class APILimiter {
         if(this.canMakeRequest()) {
             return Promise.resolve();
         } else {
-            return Promise.delay(PERIOD_TIME - (currentTime() - this.lastPeriod)).then(() => {
+            const requiredDelay = PERIOD_TIME - (currentTime() - this.lastPeriod);
+            LOG.info("We're at the limit! Queueing request for " + requiredDelay + "ms");
+            return Promise.delay(requiredDelay).then(() => {
                 return this.awaitFreeLimit();
             });
         }
@@ -42,6 +44,7 @@ class APILimiter {
     _beginPeriod() {
         this.lastPeriod = currentTime();
         this.requests = 0;
+        LOG.debug("Starting new API limit period.");
     }
 
     _isPeriodTimedOut() {

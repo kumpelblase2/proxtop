@@ -4,6 +4,8 @@ const windowManager = require('../ui/window_manager');
 const Notification = require('../notification');
 const translate = require('../translation');
 
+const CHECK_DELAY = 5000;
+
 class MessageChecker {
     constructor(messageHandler, messageService) {
         this.messages = messageHandler;
@@ -38,7 +40,7 @@ class MessageChecker {
 
         this.lastTimer = setTimeout(() => {
             this._loop();
-        }, 10000);
+        }, CHECK_DELAY);
     }
 
     _check() {
