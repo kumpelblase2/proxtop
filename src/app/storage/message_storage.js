@@ -24,6 +24,15 @@ class MessagesStorage extends Storage {
         this.storage.push({ id, messages, topic, read, participants, image, favorite, last_read, has_more: true }).value();
     }
 
+    addMessagesOrCreate(id, newMessages) {
+        if(!this._hasConversation(id)) {
+            this.saveNewConversation(id, newMessages);
+            return newMessages;
+        } else {
+            return this.addMessages(id, newMessages);
+        }
+    }
+
     addMessages(id, newMessages, has_more = null) {
         newMessages = filterNull(newMessages);
         const old = this.getConversation(id).messages;

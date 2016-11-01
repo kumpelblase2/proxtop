@@ -73,8 +73,9 @@ class MessageChecker {
 
     _passedInterval() {
         const interval = settings.getGeneralSettings().check_message_interval;
+        const intervalMilliseconds = interval * 60000 - 5000;
         const time = new Date().getTime();
-        return time - this.lastCheck > interval * 60000 - 5000;
+        return time - this.lastCheck > intervalMilliseconds;
     }
 
     static _isEnabled() {

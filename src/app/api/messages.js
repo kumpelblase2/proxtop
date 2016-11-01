@@ -4,6 +4,10 @@ const _ = require('lodash');
 
 const FAVORITE_MESSAGES = 'favour';
 
+function sortMessages(messages) {
+    return messages.sort((messageA, messageB) => messageA.message_id - messageB.message_id);
+}
+
 class Messages extends IPCHandler {
     constructor(messagesHandler) {
         super();
@@ -90,9 +94,18 @@ class Messages extends IPCHandler {
     }
 
     updateConversation(id) {
-        const lastMessage = MessagesStorage.getLastMessage(id);
-        return this.messages.refreshMessages(id, lastMessage.id).then((newMessages) => {
-            MessagesStorage.addMessages(id, newMessages.messages);
+        return this._loadUntilKnown(id, 0);
+    }
+
+    _loadUntilKnown(id, start) {
+        return this.messages.loadMessages(id, start).then((newMessages) => {
+            const addedMessages = MessagesStorage.addMessages(id, newMessages.messages);
+            if(addedMessages.length === newMessages.length && this.isMaximumMessageAmount(addedMessages)) {
+                const sorted = sortMessages(addedMessages);
+                return this._loadUntilKnown(id, sorted[0]);
+            } else {
+                return newMessages;
+            }
         });
     }
 
@@ -106,7 +119,7 @@ class Messages extends IPCHandler {
 
     loadLatestMessages() {
         return this.messages.loadMessages(0, this.lastMessageId).then((messages) => {
-            messages = messages.sort((first, second) => first.timestamp - second.timestamp);
+            messages = sortMessages(messages);
             if(messages.length > 0) {
                 this.lastMessageId = messages[messages.length - 1].message_id;
             }
@@ -114,7 +127,7 @@ class Messages extends IPCHandler {
             const groupedMessages = _.groupBy(messages, 'conversation_id');
             const unknownMessages = [];
             for(const convId in groupedMessages) {
-                const newForConversation = MessagesStorage.addMessages(convId, groupedMessages[convId]);
+                const newForConversation = MessagesStorage.addMessagesOrCreate(convId, groupedMessages[convId]);
                 unknownMessages.push(...newForConversation);
             }
 

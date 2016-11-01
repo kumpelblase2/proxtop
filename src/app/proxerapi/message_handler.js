@@ -35,10 +35,11 @@ class MessagesHandler {
             .then(messageParser.parseFavoriteMessages);
     }
 
-    loadMessages(id = 0, beforeMessage = 0) {
+    loadMessages(id = 0, beforeMessage = 0, markRead = false) {
         return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.MESSAGES, {
             conference_id: id,
-            message_id: beforeMessage
+            message_id: beforeMessage,
+            read: markRead.toString() // Should be string according to API
         }).then((full) => full.data).then((messages) => {
             return messages.map((message) => {
                 message.message_id = parseInt(message.message_id);
@@ -101,8 +102,8 @@ class MessagesHandler {
         );
     }
 
-    loadConversation(id) {
-        return Promise.join(this.loadConversationInfo(id), this.loadMessages(id),
+    loadConversation(id, markRead = false) {
+        return Promise.join(this.loadConversationInfo(id), this.loadMessages(id, 0, markRead),
             (conv_info, messages) => {
                 conv_info.messages = messages;
                 return conv_info;
