@@ -114,6 +114,16 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         }
     };
 
+    $scope.checkMarkRead = (elem) => {
+        const htmlElem = elem[0];
+        if($scope.conversation.id) {
+            if(htmlElem.scrollTop + htmlElem.offsetHeight >= htmlElem.scrollHeight - htmlElem.scrollHeight * 0.02) {
+                ipc.send('conversation-read', $scope.conversation.id);
+                console.log('marking conversation read');
+            }
+        }
+    };
+
     ipc.send('conversation', $stateParams.id);
     $scope.state.updateTimer = $interval(() => { $scope.updateMessages(); }, MESSAGE_UPDATE_DELAY);
 

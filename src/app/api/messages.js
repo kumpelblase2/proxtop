@@ -38,6 +38,14 @@ class Messages extends IPCHandler {
             MessagesStorage.markConversationFavorite(id, false);
             return this.messages.unfavoriteMessage(id);
         });
+        this.handle('conversation-read', (id) => {
+            MessagesStorage.markConversationRead(id, true);
+            return this.messages.markConversationRead(id);
+        });
+        this.handle('conversation-unread', (id) => {
+            MessagesStorage.markConversationRead(id, false);
+            return this.messages.markConversationUnread(id);
+        });
         this.handle('conversation-block', this.messages.blockConversation, this.messages);
         this.handle('conversation-unblock', this.messages.unblockConversation, this.messages);
         this.handle('conversation-report', this.messages.reportConversation, this.messages);

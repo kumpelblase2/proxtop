@@ -52,6 +52,18 @@ class MessagesHandler {
         });
     }
 
+    markConversationRead(id) {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.MARK_READ, {
+            conference_id: id
+        });
+    }
+
+    markConversationUnread(id) {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.MARK_UNREAD, {
+            conference_id: id
+        });
+    }
+
     favoriteMessage(id) {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_MARK_FAVORITE + id)
             .then(messageParser.parseMarkFavorite).then(function(result) {
