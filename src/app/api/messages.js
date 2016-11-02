@@ -38,13 +38,21 @@ class Messages extends IPCHandler {
             MessagesStorage.markConversationFavorite(id, false);
             return this.messages.unfavoriteMessage(id);
         });
-        this.handle('conversation-read', (id) => {
-            MessagesStorage.markConversationRead(id, true);
-            return this.messages.markConversationRead(id);
+        this.provide('conversation-read', (event, id) => {
+            if(!MessagesStorage.hasRead(id)) {
+                MessagesStorage.markConversationRead(id, true);
+                this.messages.markConversationRead(id).then(() => {
+                    event.sender.send('conversation', MessagesStorage.getConversation(id));
+                });
+            }
         });
-        this.handle('conversation-unread', (id) => {
-            MessagesStorage.markConversationRead(id, false);
-            return this.messages.markConversationUnread(id);
+        this.provide('conversation-unread', (event, id) => {
+            if(MessagesStorage.hasRead(id)) {
+                MessagesStorage.markConversationRead(id, false);
+                this.messages.markConversationUnread(id).then(() => {
+                    event.sender.send('conversation', MessagesStorage.getConversation(id));
+                });
+            }
         });
         this.handle('conversation-block', this.messages.blockConversation, this.messages);
         this.handle('conversation-unblock', this.messages.unblockConversation, this.messages);

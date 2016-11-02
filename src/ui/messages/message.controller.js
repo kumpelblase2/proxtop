@@ -7,14 +7,20 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         message: "",
         sent: false,
         updateTimer: null,
-        reported: false
+        reported: false,
+        markedRead: false
     };
 
     ipc.on('conversation', (ev, conversation) => {
         const hadLoaded = $scope.conversation && !!$scope.conversation.messages;
+        const newMessages = hadLoaded && $scope.conversation.messages.length !== conversation.messages.length;
         $scope.conversation = conversation;
         if(!hadLoaded) {
             $scope.scrollToBottom();
+        }
+
+        if(newMessages) {
+            $scope.markedRead = false;
         }
     });
 
@@ -119,9 +125,10 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
 
     $scope.checkMarkRead = (elem) => {
         const htmlElem = elem[0];
-        if($scope.conversation.id) {
+        if($scope.conversation.id && !$scope.markedRead) {
             if(htmlElem.scrollTop + htmlElem.offsetHeight >= htmlElem.scrollHeight - htmlElem.scrollHeight * 0.02) {
                 ipc.send('conversation-read', $scope.conversation.id);
+                $scope.$apply(() => $scope.markedRead = true);
                 console.log('marking conversation read');
             }
         }
