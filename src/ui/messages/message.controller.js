@@ -11,8 +11,11 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
     };
 
     ipc.on('conversation', (ev, conversation) => {
+        const hadLoaded = $scope.conversation && !!$scope.conversation.messages;
         $scope.conversation = conversation;
-        $scope.scrollToBottom();
+        if(!hadLoaded) {
+            $scope.scrollToBottom();
+        }
     });
 
     ipc.on('conversation-update', (ev, conversation) => {
