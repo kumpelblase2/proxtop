@@ -13,23 +13,19 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
     };
 
     ipc.once('conversation', (ev, conversation) => {
-        $scope.$apply(() => {
-            $scope.conversation = conversation;
-            $scope.conversation.messages = _.sortBy(conversation.messages, (m) => { return parseInt(m.id); });
-            $scope.refreshLast();
-            $scope.scrollToBottom();
-        });
+        $scope.conversation = conversation;
+        $scope.conversation.messages = _.sortBy(conversation.messages, (m) => { return parseInt(m.id); });
+        $scope.refreshLast();
+        $scope.scrollToBottom();
     });
 
     ipc.on('conversation-update', (ev, conversation) => {
-        $scope.$apply(() => {
-            if($scope.conversation.messages) {
-                Array.prototype.push.apply($scope.conversation.messages, conversation.messages);
-            } else {
-                $scope.conversation.messages = conversation.messages;
-            }
-            $scope.refreshLast();
-        });
+        if($scope.conversation.messages) {
+            Array.prototype.push.apply($scope.conversation.messages, conversation.messages);
+        } else {
+            $scope.conversation.messages = conversation.messages;
+        }
+        $scope.refreshLast();
     });
 
     $scope.getAvatar = avatar.getAvatarForID.bind(avatar);
@@ -37,10 +33,8 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
     $scope.sendMessage = () => {
         if($scope.state.message.length > 0 && !$scope.state.sent) {
             ipc.once('conversation-write', (event, result) => {
-                $scope.$apply(() => {
-                    $scope.state.message = "";
-                    $scope.state.sent = false;
-                });
+                $scope.state.message = "";
+                $scope.state.sent = false;
             });
             $scope.state.sent = true;
             ipc.send('conversation-write', $stateParams.id, $scope.state.message);
@@ -63,11 +57,9 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         $scope.state.last_page = page;
         ipc.send('conversation-more', $stateParams.id, page);
         ipc.once('conversation-more', (ev, messages) => {
-            $scope.$apply(() => {
-                $scope.conversation.has_more = messages.has_more
-                messages.messages.forEach(function(message) {
-                    $scope.conversation.messages.unshift(message);
-                });
+            $scope.conversation.has_more = messages.has_more
+            messages.messages.forEach(function(message) {
+                $scope.conversation.messages.unshift(message);
             });
         });
     };
@@ -96,9 +88,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         const prefix = $scope.conversation.favorite ? "un" : '';
         const eventName = `conversation-${prefix}favorite`;
         ipc.once(eventName, () => {
-            $scope.$apply(() => {
-                $scope.conversation.favorite = !$scope.conversation.favorite;
-            });
+            $scope.conversation.favorite = !$scope.conversation.favorite;
         });
 
         ipc.send(eventName, $stateParams.id);
@@ -108,9 +98,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         const prefix = $scope.conversation.blocked ? "un" : '';
         const eventName = `conversation-${prefix}block`;
         ipc.once(eventName, () => {
-            $scope.$apply(() => {
-                $scope.conversation.blocked = !$scope.conversation.blocked;
-            });
+            $scope.conversation.blocked = !$scope.conversation.blocked;
         });
 
         ipc.send(eventName, $stateParams.id);

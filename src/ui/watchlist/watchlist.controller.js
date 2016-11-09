@@ -1,10 +1,8 @@
 angular.module('proxtop').controller('WatchlistController', ['$scope', 'ipcManager', '$state', 'open', function($scope, ipcManager, $state, open) {
     const ipc = ipcManager($scope);
     $scope.watchlist = null;
-    ipc.once('watchlist', function(ev, watchlist) {
-        $scope.$apply(function() {
-            $scope.watchlist = watchlist;
-        });
+    ipc.once('watchlist', (ev, watchlist) => {
+        $scope.watchlist = watchlist;
     });
 
     $scope.clickAnime = function(entry) {
@@ -20,17 +18,15 @@ angular.module('proxtop').controller('WatchlistController', ['$scope', 'ipcManag
     };
 
     ipc.on('delete-watchlist', function(ev, result) {
-        $scope.$apply(function() {
-            let index = _.findIndex($scope.watchlist.anime, { entry: result.entry });
-            if(index >= 0) {
-                $scope.watchlist.anime.splice(index, 1);
-            }
+        let index = _.findIndex($scope.watchlist.anime, { entry: result.entry });
+        if(index >= 0) {
+            $scope.watchlist.anime.splice(index, 1);
+        }
 
-            index = _.findIndex($scope.watchlist.manga, { entry: result.entry });
-            if(index >= 0) {
-                $scope.watchlist.manga.splice(index, 1);
-            }
-        });
+        index = _.findIndex($scope.watchlist.manga, { entry: result.entry });
+        if(index >= 0) {
+            $scope.watchlist.manga.splice(index, 1);
+        }
     });
 
     ipc.send('watchlist');

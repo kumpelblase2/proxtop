@@ -15,23 +15,46 @@ angular.module('proxtop').service('ipcManager', ['$log',function($log) {
                 });
                 this.events.clear();
             });
+            this.scope = scope;
         }
 
-        on(event, listener) {
+        on(event, listener, apply = true) {
+            if(apply) {
+                listener = this._callApply(listener);
+            }
+
             this.log.debug("Register new listener for " + event);
-            this.events.set(event, (this.events.get(event) || []).concat(listener));
+            this._addListener(event, listener);
             this.ipc.on(event, listener);
+            return listener;
         }
 
-        once(event, listener) {
+        once(event, listener, apply = true) {
+            if(apply) {
+                listener = this._callApply(listener);
+            }
+
             const newListener = (...args) => {
                 this.log.debug("Once event fired " + event);
                 this.removeListenerFromMap(event, newListener);
                 listener(...args);
             };
             this.log.debug("Register new once listener for " + event);
-            this.events.set(event, (this.events.get(event) || []).concat(newListener));
+            this._addListener(event, newListener);
             this.ipc.once(event, newListener);
+            return newListener;
+        }
+
+        _addListener(event, newListener) {
+            this.events.set(event, (this.events.get(event) || []).concat(newListener));
+        }
+
+        _callApply(listener) {
+            return (...args) => {
+                this.scope.$apply(() => {
+                    listener(...args);
+                });
+            };
         }
 
         removeListener(event, listener) {

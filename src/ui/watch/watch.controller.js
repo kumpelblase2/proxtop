@@ -15,24 +15,22 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
     $scope.current.display = !playExternal;
 
     ipc.once('episode', (ev, result) => {
-        $scope.$apply(() => {
-            $scope.current.info = result;
-            const supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
-            $scope.current.info.streams = supported;
-            if(supported && supported.length == 0) {
-                $translate('ERROR.NO_STREAM_AVAILABLE').then((translation) => {
-                    $mdToast.show($mdToast.simple().textContent(translation));
-                    $state.go('watchlist');
-                });
-            } else if(supported && supported.length == 1) {
-                $scope.select(supported[0]);
-            } else {
-                const found = _.filter(supported, { type: preferredStream });
-                if(found && found[0]) {
-                    $scope.select(found[0]);
-                }
+        $scope.current.info = result;
+        const supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
+        $scope.current.info.streams = supported;
+        if(supported && supported.length == 0) {
+            $translate('ERROR.NO_STREAM_AVAILABLE').then((translation) => {
+                $mdToast.show($mdToast.simple().textContent(translation));
+                $state.go('watchlist');
+            });
+        } else if(supported && supported.length == 1) {
+            $scope.select(supported[0]);
+        } else {
+            const found = _.filter(supported, { type: preferredStream });
+            if(found && found[0]) {
+                $scope.select(found[0]);
             }
-        });
+        }
     });
 
     $scope.select = (stream) => {
@@ -42,18 +40,16 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
     };
 
     ipc.once('watch', (ev, video) => {
-        $scope.$apply(() => {
-            if(video) {
-                const actualUrl = video.url;
-                video.url = $sce.trustAsResourceUrl(video.url);
-                $scope.current.video = video;
-                if (playExternal && passRaw) {
-                    ipc.send('open-external', actualUrl);
-                }
-            } else {
-                $state.go('watchlist');
+        if(video) {
+            const actualUrl = video.url;
+            video.url = $sce.trustAsResourceUrl(video.url);
+            $scope.current.video = video;
+            if (playExternal && passRaw) {
+                ipc.send('open-external', actualUrl);
             }
-        });
+        } else {
+            $state.go('watchlist');
+        }
     });
 
     $scope.hasVideo = () => {

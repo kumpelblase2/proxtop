@@ -3,7 +3,7 @@ angular.module('proxtop').controller('BackgroundController', ['$scope', 'ipcMana
         const ipc = ipcManager($scope);
         ipc.on('error', (ev, severity, message) => {
             $mdToast.show($mdToast.simple().hideDelay(5000).textContent(severity + ':' + message));
-        });
+        }, false);
 
         ipc.once('update', (ev, release) => {
             const yes = "UPDATE.YES";
@@ -26,11 +26,11 @@ angular.module('proxtop').controller('BackgroundController', ['$scope', 'ipcMana
                     }
                 });
             });
-        });
+        }, false);
 
         ipc.on('state-change', (ev, state, params) => {
             $state.go(state, params);
-        });
+        }, false);
 
         const updateOnlineState = debounce((state) => {
             ipc.send('connectivity', state);

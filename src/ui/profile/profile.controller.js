@@ -1,16 +1,12 @@
 angular.module('proxtop').controller('ProfileController', ['$scope', 'ipcManager', '$state', 'ProgressService', 'shell', function($scope, ipcManager, $state, progressService, shell) {
     const ipc = ipcManager($scope);
-    ipc.once('profile', function(ev, profile) {
-        $scope.$apply(function() {
-            $scope.profile = profile;
-            $scope.profile.progress = progressService.getProgressToNextRank($scope.profile.ranking.total);
-        });
+    ipc.once('profile', (ev, profile) => {
+        $scope.profile = profile;
+        $scope.profile.progress = progressService.getProgressToNextRank($scope.profile.ranking.total);
     });
 
-    ipc.once('news', function(ev, news) {
-        $scope.$apply(function() {
-            $scope.news = news;
-        });
+    ipc.once('news', (ev, news) => {
+        $scope.news = news;
     });
 
     $scope.openNews = function(newsItem) {
