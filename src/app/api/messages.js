@@ -140,10 +140,11 @@ class Messages extends IPCHandler {
                 this.lastMessageId = messages[messages.length - 1].message_id;
             }
 
-            const groupedMessages = _.groupBy(messages, 'conversation_id');
+            const groupedMessages = _.groupBy(messages, 'conference_id');
             const unknownMessages = [];
             for(const convId in groupedMessages) {
-                const newForConversation = MessagesStorage.addMessagesOrCreate(convId, groupedMessages[convId]);
+                const intId = parseInt(convId); // JS automatically turns int keys into strings... Fuck you JS.
+                const newForConversation = MessagesStorage.addMessagesOrCreate(intId, groupedMessages[intId]);
                 unknownMessages.push(...newForConversation);
             }
 

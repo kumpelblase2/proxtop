@@ -130,6 +130,7 @@ class MessagesHandler {
                 user.uid = parseInt(user.uid);
                 return user;
             });
+            info.id = parseInt(info.id);
             return info;
         });
     }
