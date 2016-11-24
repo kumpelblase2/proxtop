@@ -51,8 +51,8 @@
   },
   "build": {
     "appId": "de.eternalwings.proxtop",
-    "app-category-type": "public.app-category.entertainment",
     "mac": {
+      "category": "public.app-category.entertainment",
       "target": [
         "zip",
         "tar.gz",
