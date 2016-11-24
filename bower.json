@@ -20,15 +20,15 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "1.5.8",
+    "angular": "1.5.9",
     "angular-material": "1.1.1",
-    "angular-ui-router": "0.3.1",
-    "lodash": "4.16.4",
+    "angular-ui-router": "0.3.2",
+    "lodash": "4.17.2",
     "angular-progress-arc": "1.0.0",
-    "font-awesome": "4.6.3",
-    "angular-translate": "2.12.1",
-    "angular-translate-loader-static-files": "2.12.1",
-    "angular-sanitize": "1.5.8",
+    "font-awesome": "4.7.0",
+    "angular-translate": "2.13.0",
+    "angular-translate-loader-static-files": "2.13.0",
+    "angular-sanitize": "1.5.9",
     "ng-debounce": "0.1.7"
   }
 }
