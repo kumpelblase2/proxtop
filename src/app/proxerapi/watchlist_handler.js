@@ -20,15 +20,15 @@ function alterWatchlist(list) {
             name: entry.name,
             status: entry.state,
             episode: entry.episode,
-            entry: entriy.eid,
+            entry: entry.eid,
             sub: entry.language,
             id: entry.id
         };
     }).forEach((entry) => {
         if(entry.type === "anime") {
-            result.anime.push(altered);
+            result.anime.push(entry);
         } else {
-            result.manga.push(altered);
+            result.manga.push(entry);
         }
     });
 
@@ -44,7 +44,7 @@ class WatchlistHandler {
 
     loadWatchlist() {
         return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.WATCHLIST.GET)
-            .then(alterWatchlist);
+            .then((data) => data.data).then(alterWatchlist);
     }
 
     checkUpdates() {
