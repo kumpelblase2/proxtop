@@ -113,9 +113,15 @@ class LoginHandler {
             });
     }
 
-    checkLogin() {
+    _checkLogin() {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.API_LOGIN)
             .then(loginParser.parseLoginCheck);
+    }
+
+    checkLogin() {
+        const hasSession = this.session_handler.hasSession();
+        LOG.debug("Is session alive? " + hasSession);
+        return hasSession;
     }
 }
 

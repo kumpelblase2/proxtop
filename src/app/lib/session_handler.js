@@ -7,7 +7,7 @@ const os = require('os');
 const IPCHandler = require('./ipc_handler');
 const translate = require('../translation');
 const windowManager = require('../ui/window_manager');
-const { Cache } = require('../storage/index');
+const { Cache, SessionStorage } = require('../storage');
 const settings = require('../settings');
 const APIError = require('./api_error');
 const APILimiter = require('./api_limits');
@@ -17,7 +17,6 @@ class SessionHandler extends IPCHandler {
         super();
         this.app = app;
         this.apiKey = apiKey;
-        this.token = null;
         this.cookiePath = cookiePath;
         this._online = true;
         this.apiLimits = new APILimiter();
@@ -112,6 +111,8 @@ class SessionHandler extends IPCHandler {
             this.apiLimits.makeRequest();
             const normalRequest = this.openRequest(doRequest);
             return normalRequest.then((response) => {
+                SessionStorage.refreshSession();
+
                 LOG.verbose(response);
                 let parsed;
                 try {
@@ -183,7 +184,16 @@ class SessionHandler extends IPCHandler {
     }
 
     setSession(loginData) {
-        this.token = loginData.token;
+        const { uid, avatar, token } = loginData;
+        SessionStorage.startSession(token, uid, avatar);
+    }
+
+    hasSession() {
+        return SessionStorage.hasValidSession();
+    }
+
+    getSession() {
+        return SessionStorage.getSession();
     }
 
     _createParamsString(params) {
