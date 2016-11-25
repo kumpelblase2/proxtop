@@ -1,5 +1,3 @@
-const profileParser = require('../../page_parser').profile;
-
 function fixPoints(user) {
     ['points_uploads', 'points_anime', 'points_manga', 'points_info', 'points_forum', 'points_misc'].forEach((name) => {
         user[name] = parseInt(user[name]);

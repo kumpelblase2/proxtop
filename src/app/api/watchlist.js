@@ -34,10 +34,6 @@ class Watchlist extends IPCHandler {
         this.provide('finish-watchlist', removeEntry);
         this.provide('delete-watchlist', removeEntry);
 
-        this.provide('add-watchlist', () => {
-            this.watchlistCache.invalidate();
-        });
-
         this.provide('clear-messages-cache', () => {
             this.watchlistCache.invalidate();
         });

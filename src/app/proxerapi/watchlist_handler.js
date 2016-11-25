@@ -88,9 +88,23 @@ class WatchlistHandler {
         });
     }
 
-    updateEntry(id, ep, sub) {
+    _updateEntry(id, ep, sub) {
         return this.session_handler.openRequest(PROXER_BASE_URL + util.format(PROXER_PATHS.WATCH_ANIME, id, ep, sub) + SET_TO_CURRENT)
             .then(watchlistParser.parseUpdateReponse).then((msg) => returnMsg(true, msg.msg)).catch(() => returnMsg(false, "Not Found"));
+    }
+
+    updateEntry(kat, id, episode, language) {
+        return this.session_handler.openApiRequest((request) => {
+            return request.post({
+                url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.SET,
+                form: {
+                    id,
+                    kat,
+                    episode,
+                    language
+                }
+            });
+        }).then(() => returnMsg(true, "")).catch(() => returnMsg(false, "Not found"));
     }
 
     markFinished(id) {

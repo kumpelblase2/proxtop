@@ -44,7 +44,8 @@ global.API_PATHS = {
     },
     WATCHLIST: {
         GET: "/ucp/reminder",
-        REMOVE: "/ucp/deletereminder"
+        REMOVE: "/ucp/deletereminder",
+        SET: "/ucp/setreminder"
     },
     ANIME: {
         UPDATE_STATUS: "/info/setuserinfo"
