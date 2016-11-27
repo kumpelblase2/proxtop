@@ -64,6 +64,11 @@ class SessionHandler extends IPCHandler {
     setupRequest() {
         const disableUserAgent = settings.getGeneralSettings().disable_user_agent;
         const header = pageUtils.getHeaders(disableUserAgent, os.platform(), os.release(), this.apiKey);
+        if(this.hasSession()) {
+            const token = this.getSession().token;
+            LOG.debug("Setting session token to: " + token.substring(0, 6) + "...");
+            header['proxer-api-token'] = token;
+        }
 
         LOG.verbose('Settings useragent to: ' + header['User-Agent']);
         return request.defaults({
@@ -186,6 +191,8 @@ class SessionHandler extends IPCHandler {
     setSession(loginData) {
         const { uid, avatar, token } = loginData;
         SessionStorage.startSession(token, uid, avatar);
+        LOG.debug("Setting up request again due to new session available.");
+        this.request = this.setupRequest();
     }
 
     hasSession() {

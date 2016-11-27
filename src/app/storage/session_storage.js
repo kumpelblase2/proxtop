@@ -14,6 +14,7 @@ class SessionStorage extends Storage {
     hasValidSession() {
         const data = this._getSessionData();
         if(!data) {
+            LOG.debug("No session available");
             return false;
         }
 
@@ -31,6 +32,7 @@ class SessionStorage extends Storage {
     }
 
     invalidateSession() {
+        LOG.debug("Invalidating session.");
         this.storage.remove().value();
     }
 
@@ -39,6 +41,8 @@ class SessionStorage extends Storage {
         if(data) {
             data.lastUsed = Date.now();
             this._updateSession(data);
+        } else {
+            LOG.warn("Refreshing empty session!");
         }
     }
 
@@ -47,9 +51,10 @@ class SessionStorage extends Storage {
         this.storage.push(session).value();
     }
 
-    startSession(key, uid, avatar) {
+    startSession(token, uid, avatar) {
+        LOG.debug("Got new session");
         this._updateSession({
-            key,
+            token,
             uid,
             avatar,
             created: Date.now(),
