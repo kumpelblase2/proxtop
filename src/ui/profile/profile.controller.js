@@ -1,19 +1,20 @@
-angular.module('proxtop').controller('ProfileController', ['$scope', 'ipcManager', '$state', 'ProgressService', 'shell', 'session', function($scope, ipcManager, $state, progressService, shell, session) {
+angular.module('proxtop').controller('ProfileController', ['$scope', 'ipcManager', '$state', 'ProgressService', 'shell', 'session', 'AvatarService', function($scope, ipcManager, $state, progressService, shell, session, avatarService) {
     const ipc = ipcManager($scope);
     ipc.once('profile', (ev, profile) => {
         $scope.profile = profile;
         $scope.profile.progress = progressService.getProgressToNextRank($scope.profile.ranking.total);
+        $scope.profile.avatarUrl = avatarService.getAvatarForID(profile.avatar);
     });
 
     ipc.once('news', (ev, news) => {
         $scope.news = news;
     });
 
-    $scope.openNews = function(newsItem) {
+    $scope.openNews = (newsItem) => {
         shell.openExternal('https://proxer.me/forum/' + newsItem.catid + '/' + newsItem.mid);
     };
 
-    $scope.createNewsImage = function(newsItem) {
+    $scope.createNewsImage = (newsItem) => {
         return 'https://cdn.proxer.me/news/' + newsItem.nid + "_" + newsItem.image_id + '.png';
     };
 
