@@ -1,4 +1,21 @@
-angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager', '$stateParams', 'AvatarService', '$interval', '$rootScope', '$mdDialog', '$translate', '$timeout', function($scope, ipcManager, $stateParams, avatar, $interval, $rootScope, $mdDialog, $translate, $timeout) {
+angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager', '$stateParams', 'AvatarService', '$interval', '$rootScope', '$mdDialog', '$translate', '$timeout', '$mdToast', function($scope, ipcManager, $stateParams, avatar, $interval, $rootScope, $mdDialog, $translate, $timeout, $mdToast) {
+    const ReportController = ['$scope', '$mdDialog', function($scope, $mdDialog) {
+        $scope.report = {
+            text: ""
+        };
+
+        $scope.create = () => {
+            $mdDialog.hide({
+                text: $scope.report.text
+            });
+        };
+
+        $scope.cancel = () => {
+            $mdDialog.cancel();
+        };
+    }];
+
+
     const ipc = ipcManager($scope);
     const MESSAGE_UPDATE_DELAY = 15000;
 
@@ -68,22 +85,22 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
     };
 
     $scope.report = (ev) => {
-        const sure = "GENERAL.ARE_YOU_SURE";
-        const title = "MESSAGES.REPORT";
-        const yes = "GENERAL.YES";
-        const no = "GENERAL.NO";
-        $translate([sure, title, yes, no]).then((translations) => {
-            const confirm = $mdDialog.confirm()
-                      .title(translations[title] + "?")
-                      .textContent(translations[sure])
-                      .ariaLabel(translations[title])
-                      .targetEvent(ev)
-                      .ok(translations[yes])
-                      .cancel(translations[no]);
-            $mdDialog.show(confirm).then(() => {
-                ipc.send('conversation-report', $scope.conversation.id);
-                $scope.state.reported = true;
-            }, () => {});
+        const reportScope = $scope.$new(true);
+        $mdDialog.show({
+            controller: ReportController,
+            templateUrl: 'ui/messages/message-report.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            scope: reportScope
+        }).then((answer) => {
+            ipc.once('conversation-report', (ev, result) => {
+                $translate('MESSAGES.REPORT_SENT').then((translation) => {
+                    $mdToast.show($mdToast.simple().hideDelay(5000).textContent(translation));
+                });
+            });
+
+            ipc.send('conversation-report', $scope.conversation.id, answer.text);
         });
     };
 

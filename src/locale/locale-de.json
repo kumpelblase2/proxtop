@@ -96,7 +96,9 @@
     "UNBLOCK": "Blockierung aufheben",
     "NEW_CONVERSATION": "Neue Konversation",
     "TITLE": "Titel",
-    "INSERT_PARTICIPANTS": "Teilnehmer (Jeweils getrennt durch ein Komma)"
+    "INSERT_PARTICIPANTS": "Teilnehmer (Jeweils getrennt durch ein Komma)",
+    "REPORT_REASON": "Grund für die Meldung",
+    "REPORT_SENT": "Meldung wurde abgegeben."
   },
   "UPDATE": {
     "NEW_VERSION": "Eine neue Version ist verfügbar",

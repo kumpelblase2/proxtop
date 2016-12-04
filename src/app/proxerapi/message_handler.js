@@ -64,7 +64,7 @@ class MessagesHandler {
         });
     }
 
-    favoriteMessage(id) {
+    _favoriteMessage(id) {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_MARK_FAVORITE + id)
             .then(messageParser.parseMarkFavorite).then(function(result) {
                 result.id = id;
@@ -72,7 +72,7 @@ class MessagesHandler {
             });
     }
 
-    unfavoriteMessage(id) {
+    _unfavoriteMessage(id) {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_UNMARK_FAVORITE + id)
             .then(messageParser.parseMarkFavorite).then(function(result) {
                 result.id = id;
@@ -80,7 +80,19 @@ class MessagesHandler {
             });
     }
 
-    blockConversation(id) {
+    favoriteMessage(id) {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.FAVORITE, {
+            conference_id: id
+        });
+    }
+
+    unfavoriteMessage(id) {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.UNFAVORITE, {
+            conference_id: id
+        });
+    }
+
+    _blockConversation(id) {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_MARK_BLOCKED + id)
             .then(messageParser.parseMarkBlocked).then(function(result) {
                 result.id = id;
@@ -88,7 +100,7 @@ class MessagesHandler {
             });
     }
 
-    unblockConversation(id) {
+    _unblockConversation(id) {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_UNMARK_BLOCKED + id)
             .then(messageParser.parseMarkBlocked).then(function(result) {
                 result.id = id;
@@ -96,12 +108,36 @@ class MessagesHandler {
             });
     }
 
-    reportConversation(id) {
+    blockConversation(id) {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.BLOCK, {
+            conference_id: id
+        });
+    }
+
+    unblockConversation(id) {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.UNBLOCK, {
+            conference_id: id
+        });
+    }
+
+    _reportConversation(id) {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_REPORT + id)
             .then(messageParser.parseReported).then((result) => {
                 result.id = id;
                 return result;
             });
+    }
+
+    reportConversation(id, message) {
+        return this.session_handler.openApiRequest((request) => {
+            return request.post({
+                url: PROXER_API_BASE_URL + API_PATHS.MESSAGES.REPORT,
+                form: {
+                    conversation_id: id,
+                    text: message
+                }
+            });
+        });
     }
 
     _loadConversation(id) {

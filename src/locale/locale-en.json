@@ -96,7 +96,9 @@
     "UNBLOCK": "Unblock",
     "NEW_CONVERSATION": "New conversation",
     "TITLE": "Titel",
-    "INSERT_PARTICIPANTS": "Participants (use  a comma to separate them)"
+    "INSERT_PARTICIPANTS": "Participants (use  a comma to separate them)",
+    "REPORT_REASON": "Reason for the report",
+    "REPORT_SENT": "Report has been sent."
   },
   "UPDATE": {
     "NEW_VERSION": "A new version is available",
