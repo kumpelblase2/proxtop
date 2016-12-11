@@ -30,5 +30,8 @@
     "angular-translate-loader-static-files": "2.13.0",
     "angular-sanitize": "1.5.9",
     "ng-debounce": "0.1.7"
+  },
+  "resolutions": {
+    "angular": "1.5.9"
   }
 }
