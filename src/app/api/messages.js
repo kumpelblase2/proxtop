@@ -1,6 +1,7 @@
-const { IPCHandler, MessageChecker } = require('../lib');
+const { IPCHandler, MessageChecker, DelayTracker } = require('../lib');
 const { MessagesStorage } = require('../storage');
 const _ = require('lodash');
+const Promise = require('bluebird');
 
 const FAVORITE_MESSAGES = 'favour';
 
@@ -14,6 +15,10 @@ class Messages extends IPCHandler {
         this.messages = messagesHandler;
         this.lastMessageId = 0;
         this.messageChecker = new MessageChecker(this.messages, this);
+        this.trackingId = 0;
+        this.delayTracker = new DelayTracker();
+        this.delayTracker.name = "-single message update-";
+        this.lastUpdate = 0;
     }
 
     register() {
@@ -21,7 +26,19 @@ class Messages extends IPCHandler {
         const self = this;
         this.handle('conversation-write', this.messages.sendMessage, this.messages);
         this.provide('conversation-update', (event, id) => {
-            this.updateConversation(id).then(() => {
+            if(this.trackingId != id) {
+                this.trackingId = id;
+                this.delayTracker.reset();
+            }
+
+            let promise;
+            if(this.lastUpdate + this.delayTracker.delay <= Date.now()) {
+                promise = this.updateConversation(id);
+            } else {
+                promise = Promise.resolve();
+            }
+
+            promise.then(() => {
                 event.sender.send('conversation', MessagesStorage.getConversation(id));
             });
         });
@@ -110,7 +127,14 @@ class Messages extends IPCHandler {
     }
 
     updateConversation(id) {
-        return this._loadUntilKnown(id, 0);
+        this.lastUpdate = Date.now();
+        return this._loadUntilKnown(id, 0).then((newMessages) => {
+            if(newMessages.length > 0) {
+                this.delayTracker.reset();
+            } else {
+                this.delayTracker.increase();
+            }
+        });
     }
 
     _loadUntilKnown(id, start) {
@@ -118,9 +142,11 @@ class Messages extends IPCHandler {
             const addedMessages = MessagesStorage.addMessages(id, newMessages.messages);
             if(addedMessages.length === newMessages.length && this.isMaximumMessageAmount(addedMessages)) {
                 const sorted = sortMessages(addedMessages);
-                return this._loadUntilKnown(id, sorted[0]);
+                return this._loadUntilKnown(id, sorted[0]).then((newMessages) => {
+                    return addedMessages.concat(newMessages);
+                });
             } else {
-                return newMessages;
+                return addedMessages;
             }
         });
     }

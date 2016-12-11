@@ -17,9 +17,9 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
 
 
     const ipc = ipcManager($scope);
-    const MESSAGE_UPDATE_DELAY = 15000;
-
+    const MESSAGE_UPDATE_DELAY = 1000;
     $scope.conversation = {};
+
     $scope.state = {
         message: "",
         sent: false,
@@ -75,7 +75,6 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
     };
 
     $scope.updateMessages = () => {
-        console.log("updating messages - " + $scope.conversation.id);
         ipc.send('conversation-update', $scope.conversation.id);
     };
 
@@ -152,6 +151,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
     };
 
     ipc.send('conversation', $stateParams.id);
+
     $scope.state.updateTimer = $interval(() => { $scope.updateMessages(); }, MESSAGE_UPDATE_DELAY);
 
     $scope.$on('$destroy', () => {

@@ -3,8 +3,7 @@ const { MessageReadCache } = require('../storage');
 const windowManager = require('../ui/window_manager');
 const Notification = require('../notification');
 const translate = require('../translation');
-
-const CHECK_DELAY = 5000;
+const DelayTracker = require('./delay_tracker');
 
 class MessageChecker {
     constructor(messageHandler, messageService) {
@@ -14,6 +13,8 @@ class MessageChecker {
         this.lastCheck = 0;
         this.lastTimer = null;
         this.translation = translate();
+        this.delayTracker = new DelayTracker();
+        this.delayTracker.name = "-all message updater-";
     }
 
     start() {
@@ -40,7 +41,7 @@ class MessageChecker {
 
         this.lastTimer = setTimeout(() => {
             this._loop();
-        }, CHECK_DELAY);
+        }, this.delayTracker.delay);
     }
 
     _check() {
@@ -60,6 +61,12 @@ class MessageChecker {
                     });
                 }
             });
+
+            if(notifications.length > 0) {
+                this.delayTracker.reset();
+            } else {
+                this.delayTracker.increase();
+            }
 
             MessageReadCache.clear();
             notifications.forEach((not) => MessageReadCache.markReceived(not.username));

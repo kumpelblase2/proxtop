@@ -4,5 +4,6 @@ module.exports = {
     IPCHandler: require('./ipc_handler'),
     pageUtils: require('./page_utils'),
     ensureLogin: require('./login_checker'),
-    MessageChecker: require('./message_checker')
+    MessageChecker: require('./message_checker'),
+    DelayTracker: require('./delay_tracker')
 };
