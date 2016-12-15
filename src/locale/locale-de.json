@@ -118,6 +118,7 @@
     "PROXER_NO_DETAILS": "Keine Zugangsdaten angegeben, bitte manuell neu einloggen.",
     "PROXER_MYSQL_ERROR": "Proxer hatte einen Datenbankfehler, bitte erneut versuchen.",
     "PROXER_CLOUDFLARE_PROTECTION": "Cloudflare ist eingeschaltet, Proxtop könnte nicht mehr komplett funktionieren.",
+    "PROXER_API_LIMIT": "Proxer API Limit erreicht. Bitte etwas Geduld ~",
     "STREAM_NO_PARSER": "Proxtop unterstützt diesen Stream leider noch nicht :(",
     "UNKNOWN_ERROR": "Unbekannter Fehler: ",
     "CACHE_CLEAR": "Der Cache wurde geleert.",

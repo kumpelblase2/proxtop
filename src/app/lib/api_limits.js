@@ -1,4 +1,6 @@
 const Promise = require('bluebird');
+const windowManager = require('../ui/window_manager');
+const translate = require('../translation');
 
 const PERIOD_TIME = 30000;
 const REQUESTS_PER_PERIOD = 10;
@@ -11,6 +13,8 @@ class APILimiter {
     constructor() {
         this.lastPeriod = 0;
         this.requests = 0;
+        this.hasDisplayedWarning = false;
+        this.translation = translate();
     }
 
     makeRequest() {
@@ -22,6 +26,10 @@ class APILimiter {
 
         if(this.requests >= REQUESTS_PER_PERIOD) {
             LOG.warn("Max requests reached! Requests are getting delayed.");
+            if(!this.hasDisplayedWarning) {
+                this.hasDisplayedWarning = true;
+                windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.WARNING), this.translation.get(ERRORS.PROXER.API_LIMIT_REACHED));
+            }
         }
     }
 
@@ -44,6 +52,7 @@ class APILimiter {
     _beginPeriod() {
         this.lastPeriod = currentTime();
         this.requests = 0;
+        this.hasDisplayedWarning = false;
         LOG.debug("Starting new API limit period.");
     }
 

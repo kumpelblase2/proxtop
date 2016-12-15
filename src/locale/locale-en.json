@@ -118,6 +118,7 @@
     "PROXER_NO_DETAILS": "No details provided to login. Please login manually.",
     "PROXER_MYSQL_ERROR": "Proxer has thrown a database error.",
     "PROXER_CLOUDFLARE_PROTECTION": "Cloudflare protection is on so Proxtop might not work properly.",
+    "PROXER_API_LIMIT": "Proxer API limit reached. Please be patient ~",
     "STREAM_NO_PARSER": "Proxtop does not support this stream yet :(",
     "UNKNOWN_ERROR": "Unknown error occurred: ",
     "CACHE_CLEAR": "Cache has been cleared.",
