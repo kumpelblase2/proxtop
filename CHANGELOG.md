@@ -1,3 +1,15 @@
+# 1.0.0 (beta)
+
+Additions:
+- Use Proxer.me API
+- Improve messages storage capabilities
+- Scroll to bottom of conversation if new messages are available
+
+Fixes:
+- (Linux) Add some more info to desktop file, thanks @cuechan
+- Fix cloudflare circumvention
+- Fix some UI stylings
+
 # 0.4.2 (current)
 Additions:
 - Added ability to disable automatic update checks
