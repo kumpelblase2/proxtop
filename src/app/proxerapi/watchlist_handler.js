@@ -112,7 +112,7 @@ class WatchlistHandler {
         }).then(() => returnMsg(true, "")).catch(() => returnMsg(false, "Not found"));
     }
 
-    markFinished(id) {
+    _markFinished(id) {
         return this.session_handler.openApiRequest((request) => {
             return request.post({
                 url: PROXER_API_BASE_URL + API_PATHS.ANIME.UPDATE_STATUS,
@@ -122,6 +122,18 @@ class WatchlistHandler {
                 }
             });
         }).then(() => returnMsg(true, "")).catch(() => returnMsg(false, "Not Found"));
+    }
+
+    markFinished(_category, id, ep) {
+        return this.session_handler.openApiRequest((request) => {
+            return request.post({
+                url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.SET_EPISODE,
+                form: {
+                    id,
+                    value: parseInt(ep) + 1
+                }
+            });
+        });
     }
 
     deleteEntry(entry) {

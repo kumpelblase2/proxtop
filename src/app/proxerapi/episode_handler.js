@@ -1,5 +1,5 @@
-var { episode: episodeParser, stream: streamParser } = require('../../page_parser');
-var util = require('util');
+const { episode: episodeParser, stream: streamParser } = require('../../page_parser');
+const util = require('util');
 
 class EpisodeHandler {
     constructor(sessionHandler) {
@@ -33,7 +33,7 @@ class EpisodeHandler {
     }
 
     getStreamUrl(stream) {
-        var url;
+        let url;
         if(stream.type === 'link') {
             url = stream.code;
         } else {

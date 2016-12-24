@@ -102,7 +102,7 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
     };
 
     $scope.finishWatching = () => {
-        ipc.send('finish-watchlist', $stateParams.id, $stateParams.ep, $stateParams.sub);
+        ipc.send('finish-watchlist', 'anime', $stateParams.id, $stateParams.ep, $stateParams.sub);
     };
 
     ipc.on('add-watchlist', (ev, response) => {
