@@ -7,7 +7,7 @@ class UserProfile extends IPCHandler {
     constructor(profileHandler) {
         super();
         this.profile = profileHandler;
-        this.profileCache = new CacheControl(PROFILE_CACHE_TIME, this.profile.loadProfile.bind(this.profile));
+        this.profileCache = new CacheControl(PROFILE_CACHE_TIME, this.profile.loadProfile.bind(this.profile), (a) => a);
     }
     
     register() {

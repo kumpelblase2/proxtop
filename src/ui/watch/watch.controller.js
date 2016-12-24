@@ -92,16 +92,17 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
         return $scope.current.info && $scope.current.info.next;
     };
 
+    // We have to pass over 'anime' below as it's expecting a category. Since we currently only support viewing anime and not manga, this can be static
     $scope.addToWatchlist = () => {
-        ipc.send('add-watchlist', $stateParams.id, $stateParams.ep, $stateParams.sub);
+        ipc.send('add-watchlist', 'anime', $stateParams.id, $stateParams.ep, $stateParams.sub);
     };
 
     $scope.addNextToWatchlist = () => {
-        ipc.send('add-watchlist', $stateParams.id, $scope.current.info.next, $stateParams.sub);
+        ipc.send('add-watchlist', 'anime', $stateParams.id, $scope.current.info.next, $stateParams.sub);
     };
 
     $scope.finishWatching = () => {
-        ipc.send('finish-watchlist', $stateParams.id, $stateParams.ep, $stateParams.sub);
+        ipc.send('finish-watchlist', 'anime', $stateParams.id, $stateParams.ep, $stateParams.sub);
     };
 
     ipc.on('add-watchlist', (ev, response) => {

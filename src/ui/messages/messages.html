@@ -27,9 +27,9 @@
                     <div class="md-list-item-text">
                         <h3>{{conversation.topic}}
                             <i class="fa fa-star" ng-class="{ 'favorited': conversation.favorite }" ng-if="conversation.favorite || conversation.id == hover_id" ng-click="toggleFavorite(conversation, $event)"></i>
-                            <i class="fa fa-circle new-message" ng-if="conversation.read == '0'"></i>
+                            <i class="fa fa-circle new-message" ng-if="!conversation.read"></i>
                         </h3>
-                        <p>{{ 'MESSAGES.LAST_MESSAGE' | translate }}: {{conversation.timestamp_end * 1000 | date:'dd.MM.yyyy HH:mm'}}</p>
+                        <p>{{ 'MESSAGES.LAST_MESSAGE' | translate }}: {{getLastMessageDate(conversation) | date:'dd.MM.yyyy HH:mm'}}</p>
                     </div>
                     <md-divider ng-if="!$last"></md-divider>
                 </md-list-item>

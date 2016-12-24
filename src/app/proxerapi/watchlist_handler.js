@@ -7,17 +7,42 @@ const settings = require('../settings');
 const Notification = require('../notification');
 const windowManager = require('../ui/window_manager');
 
-const SET_TO_CURRENT = "?format=json&type=reminder&title=reminder_this";
-const SET_FINISHED = "?format=json&type=reminder&title=reminder_finish";
-
 const returnMsg = (success, msg) => { return { success: success, msg: msg } };
 
+function alterWatchlist(list) {
+    const result = { anime: [], manga: [] };
+
+    list.map((entry) => {
+        return {
+            type: entry.kat,
+            name: entry.name,
+            status: entry.state,
+            episode: entry.episode,
+            entry: entry.eid,
+            sub: entry.language,
+            id: entry.id
+        };
+    }).forEach((entry) => {
+        if(entry.type === "anime") {
+            result.anime.push(entry);
+        } else {
+            result.manga.push(entry);
+        }
+    });
+
+    return result;
+}
 
 class WatchlistHandler {
     constructor(sessionHandler) {
         this.session_handler = sessionHandler;
         this.lastCheck = 0;
         this.translation = translate();
+    }
+
+    apiLoadWatchlist() {
+        return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.WATCHLIST.GET)
+            .then((data) => data.data).then(alterWatchlist);
     }
 
     loadWatchlist() {
@@ -33,7 +58,7 @@ class WatchlistHandler {
             if(!old) {
                 WatchlistCache.saveWatchlist(result);
 
-                const onlineFilter = entry => entry.status;
+                const onlineFilter = entry => !!entry.status;
 
                 return {
                     anime: result.anime.filter(onlineFilter),
@@ -66,26 +91,41 @@ class WatchlistHandler {
         });
     }
 
-    updateEntry(id, ep, sub) {
-        return this.session_handler.openRequest(PROXER_BASE_URL + util.format(PROXER_PATHS.WATCH_ANIME, id, ep, sub) + SET_TO_CURRENT)
-            .then(watchlistParser.parseUpdateReponse).then((msg) => returnMsg(true, msg.msg)).catch(() => returnMsg(false, "Not Found"));
+    updateEntry(kat, id, episode, language) {
+        return this.session_handler.openApiRequest((request) => {
+            return request.post({
+                url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.SET,
+                form: {
+                    id,
+                    kat,
+                    episode,
+                    language
+                }
+            });
+        }).then(() => returnMsg(true, "")).catch(() => returnMsg(false, "Not found"));
     }
 
-    markFinished(id, ep, sub) {
-        return this.session_handler.openRequest(PROXER_BASE_URL + util.format(PROXER_PATHS.WATCH_ANIME, id, ep, sub) + SET_FINISHED)
-            .then(watchlistParser.parseFinishResponse).then((msg) => returnMsg(true, msg.msg)).catch(() => returnMsg(false, "Not Found"));
+    markFinished(_category, id, ep) {
+        return this.session_handler.openApiRequest((request) => {
+            return request.post({
+                url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.SET_EPISODE,
+                form: {
+                    id,
+                    value: parseInt(ep) + 1
+                }
+            });
+        });
     }
 
     deleteEntry(entry) {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.DELETE_WATCHLIST + entry)
-            .then(watchlistParser.parseDeleteResponse).then((msg) => {
-                if(msg.error == 1) {
-                    throw "Could not update watchlist";
-                } else {
-                    msg.entry = entry;
-                    return msg;
+        return this.session_handler.openApiRequest((request) => {
+            return request.post({
+                url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.REMOVE,
+                form: {
+                    id: entry
                 }
             });
+        }).then(() => ({ entry: entry }));
     }
 
     watchLoop() {

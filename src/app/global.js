@@ -4,6 +4,7 @@ const moment = require('moment');
 
 global.APP_NAME = "proxtop";
 global.PROXER_BASE_URL = "https://proxer.me";
+global.PROXER_API_BASE_URL = "https://proxer.me/api/v1";
 global.INDEX_LOCATION = path.join(__dirname, "../index.html");
 global.LOGO_RELATIVE_PATH = "assets/proxtop_logo_256.png";
 global.LOGO_LOCATION = path.join(__dirname, "../", LOGO_RELATIVE_PATH);
@@ -33,6 +34,51 @@ global.PROXER_PATHS = {
     VIEW_MANGA: '/chapter/%d/%d/%s',
     LOGOUT: '/component/users/?task=user.logout',
     DELETE_WATCHLIST: '/ucp?format=json&type=deleteReminder&id='
+};
+
+global.API_PATHS = {
+    USER: {
+        LOGIN: "/user/login",
+        LOGOUT: "/user/logout",
+        PROFILE: "/user/userinfo"
+    },
+    WATCHLIST: {
+        GET: "/ucp/reminder",
+        REMOVE: "/ucp/deletereminder",
+        SET: "/ucp/setreminder",
+        SET_EPISODE: "/ucp/setcommentstate"
+    },
+    ANIME: {
+        UPDATE_STATUS: "/info/setuserinfo"
+    },
+    QUERY: {
+        USERS: "/user/list",
+        SEARCH: "/list/entrysearch",
+    },
+    MESSAGES: {
+        CONSTANTS: "/messenger/constants",
+        CONFERENCES: "/messenger/conferences",
+        CONFERENCE_INFO: "/messenger/conferenceinfo",
+        MESSAGES: "/messenger/messages",
+        WRITE_MESSAGE: "/messenger/setmessage",
+        NEW_CONVERSATION: "/messenger/newconference",
+        NEW_CONFERENCE: "/messenger/newconferencegroup",
+        REPORT: "/messenger/report",
+        MARK_READ: "/messenger/setread",
+        MARK_UNREAD: "/messenger/setunread",
+        BLOCK: "/messenger/setblock",
+        UNBLOCK: "/messenger/setunblock",
+        FAVORITE: "/messenger/setfavour",
+        UNFAVORITE: "/messenger/setunfavour"
+    },
+    NOTIFICATIONS: {
+        NEWS: "/notifications/news",
+        AMOUNT: "/notifications/count",
+        CLEAR: "/notifications/delete"
+    },
+    UCP: {
+        ANIME_MANGA_LIST: "/ucp/list"
+    }
 };
 
 global.ERRORS = require('./util/errors');

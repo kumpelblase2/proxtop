@@ -1,4 +1,4 @@
-<md-content id="messages-view" layout="row" layout-align="space-around start">
+<md-content id="messages-view" layout="row" layout-align="space-around start" on-scroll="checkMarkRead">
     <style>
     a {
         color: inherit;
@@ -11,11 +11,11 @@
                 <md-button ng-click="loadMore()" layout-fill>{{ 'MESSAGES.LOAD_MORE' | translate }}</md-button>
             </md-list-item>
             <md-list-item ng-repeat="message in conversation.messages" class="md-2-line long-text-list" style="margin-bottom: 10px;">
-                <img ng-src="{{getAvatar(message.avatar)}}" class="md-avatar" />
+                <img ng-src="{{getAvatar(message.username)}}" class="md-avatar" />
                 <div class="md-list-item-text" style="word-wrap: break-word; min-width: 0;">
                     <div layout="row" layout-align="space-between start">
                         <h3>{{message.username}}</h3>
-                        <h4>{{message.timestamp * 1000 | date:'HH:mm:ss d.M.yyyy'}}</h4>
+                        <h4>{{parseTimestamp(message.timestamp) | date:'HH:mm:ss d.M.yyyy'}}</h4>
                     </div>
                     <p class="multiline" ng-bind-html="message.message | linky:'_system'"></p>
                     <md-divider ng-if="!$last"></md-divider>
@@ -35,7 +35,7 @@
     <md-list flex="20" ng-if="conversation.messages" class="md-whiteframe-2dp" style="max-height: 50vh; overflow-y: auto;">
         <md-subheader class="md-no-sticky">{{ 'MESSAGES.PARTICIPANTS' | translate }}</md-subheader>
         <md-list-item ng-repeat="participant in conversation.participants" class="md-2-line">
-            <img ng-src="{{'https:' + participant.avatar}}" class="md-avatar" />
+            <img ng-src="{{getAvatar(participant.username)}}" class="md-avatar" />
             <div class="md-list-item-text">
                 <h3>{{participant.username}}</h3>
                 <p ng-bind="participant.status"></p>

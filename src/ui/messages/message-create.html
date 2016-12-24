@@ -33,15 +33,15 @@
     </md-toolbar>
     <md-dialog-content>
         <div class="md-dialog-content" layout="column">
-            <md-chips class="dialog-text" ng-model="participants" id="new-conversation-participants" flex="100" placeholder="{{ 'MESSAGES.INSERT_PARTICIPANTS' | translate }}" md-separator-keys="[188]">
+            <md-chips class="dialog-text" ng-model="participants" id="new-conversation-participants" flex="100" placeholder="{{ 'MESSAGES.INSERT_PARTICIPANTS' | translate }}" md-separator-keys="[188]" md-max-chips="limits.maxConferenceParticipants">
             </md-chips>
             <md-input-container ng-if="participants.length > 1" flex="100" style="margin-bottom: 0;">
                 <label translate>MESSAGES.TITLE</label>
-                <input ng-model="message.title"/>
+                <input ng-model="message.title" ng-maxlength="limits.maxTopicLength" />
             </md-input-container>
             <md-input-container flex="100">
                 <label translate>MESSAGES.WRITE_MESSAGE</label>
-                <textarea ng-model="message.text"></textarea>
+                <textarea ng-model="message.text" ng-maxlength="limits.maxTextLength"></textarea>
             </md-input-container>
         </div>
     </md-dialog-content>

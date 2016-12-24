@@ -24,17 +24,8 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManage
     $scope.conversations = null;
     $scope.hide_nonfavs = false;
     $scope.hover_id = -1;
-    ipc.once('conversations', (ev, conversations) => {
+    ipc.on('conversations', (ev, conversations) => {
         $scope.conversations = conversations;
-        ipc.send('conversations-favorites');
-    });
-
-    ipc.once('conversations-favorites', (ev, favorites) => {
-        const ids = favorites.map((fav) => fav.id);
-        $scope.conversations = $scope.conversations.map(function(conv) {
-            conv.favorite = ids.includes(conv.id);
-            return conv;
-        });
     });
 
     $scope.openConversation = (conversation) => {
@@ -44,17 +35,20 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManage
     };
 
     $scope.newConversation = (ev) => {
+        const dialogScope = $scope.$new(true);
+        dialogScope.limits = ipc.sendSync('message-constants');
         $mdDialog.show({
             controller: DialogController,
             templateUrl: 'ui/messages/message-create.html',
             parent: angular.element(document.body),
             targetEvent: ev,
-            clickOutsideToClose: true
+            clickOutsideToClose: true,
+            scope: dialogScope
         }).then((answer) => {
             ipc.once('conversation-create', (ev, result) => {
                 if(result.error == 0) {
                     $state.go('message', {
-                        id: result.cid
+                        id: result.id
                     });
                 } else {
                     translate('ERROR.MESSAGE_CREATE_ERROR').then((translation) => {
@@ -71,6 +65,15 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManage
         const prefix = (conversation.favorite ? 'un' : '');
         const event = `conversation-${prefix}favorite`;
         ipc.send(event, conversation.id);
+    };
+
+    $scope.getLastMessageDate = (conv) => {
+        const messages = conv.messages || [];
+        if(messages.length > 0) {
+            return parseInt(messages[messages.length - 1].timestamp) * 1000;
+        } else {
+            return 0;
+        }
     };
 
     const toggleFav = (value) => {

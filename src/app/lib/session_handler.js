@@ -7,8 +7,10 @@ const os = require('os');
 const IPCHandler = require('./ipc_handler');
 const translate = require('../translation');
 const windowManager = require('../ui/window_manager');
-const { Cache } = require('../storage/index');
+const { Cache, SessionStorage } = require('../storage');
 const settings = require('../settings');
+const APIError = require('./api_error');
+const APILimiter = require('./api_limits');
 
 class SessionHandler extends IPCHandler {
     constructor(app, apiKey, cookiePath) {
@@ -17,6 +19,7 @@ class SessionHandler extends IPCHandler {
         this.apiKey = apiKey;
         this.cookiePath = cookiePath;
         this._online = true;
+        this.apiLimits = new APILimiter();
         this.translation = translate();
 
         this.provide('reload-request', ()  => {
@@ -60,7 +63,12 @@ class SessionHandler extends IPCHandler {
 
     setupRequest() {
         const disableUserAgent = settings.getGeneralSettings().disable_user_agent;
-        const header = pageUtils.getHeaders(disableUserAgent, os.platform(), os.release());
+        const header = pageUtils.getHeaders(disableUserAgent, os.platform(), os.release(), this.apiKey);
+        if(this.hasSession()) {
+            const token = this.getSession().token;
+            LOG.debug("Setting session token to: " + token.substring(0, 6) + "...");
+            header['proxer-api-token'] = token;
+        }
 
         LOG.verbose('Settings useragent to: ' + header['User-Agent']);
         return request.defaults({
@@ -99,7 +107,33 @@ class SessionHandler extends IPCHandler {
         });
     }
 
-    
+    openApiRequest(doRequest, queryParams = {}) {
+        if(typeof(doRequest) == 'string') {
+            doRequest = doRequest + this._createParamsString(queryParams);
+        }
+
+        return this.apiLimits.awaitFreeLimit().then(() => {
+            this.apiLimits.makeRequest();
+            const normalRequest = this.openRequest(doRequest);
+            return normalRequest.then((response) => {
+                SessionStorage.refreshSession();
+
+                LOG.verbose(response);
+                let parsed;
+                try {
+                    parsed = JSON.parse(response);
+                } catch(e) {
+                    throw new Error("Invalid response")
+                }
+
+                if (parsed.error === 1) {
+                    throw new APIError(parsed.code, parsed.message);
+                } else {
+                    return parsed;
+                }
+            });
+        });
+    }
 
     handleError(error, doRequest) {
         if(error.statusCode == 303) { // Just rethrow to let login handle it.
@@ -152,6 +186,32 @@ class SessionHandler extends IPCHandler {
             windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.SEVERE), this.translation.get(ERRORS.CONNECTION.NO_CACHE));
             return "";
         }
+    }
+
+    setSession(loginData) {
+        const { uid, avatar, token } = loginData;
+        SessionStorage.startSession(token, uid, avatar);
+        LOG.debug("Setting up request again due to new session available.");
+        this.request = this.setupRequest();
+    }
+
+    hasSession() {
+        return SessionStorage.hasValidSession();
+    }
+
+    getSession() {
+        return SessionStorage.getSession();
+    }
+
+    _createParamsString(params) {
+        const keys = Object.keys(params);
+        if(keys.length === 0) {
+            return "";
+        }
+
+        return "?" + keys.map((key) => {
+            return key + "=" + encodeURIComponent(params[key]);
+        }).join("&");
     }
 }
 module.exports = SessionHandler;

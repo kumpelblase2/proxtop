@@ -1,7 +1,7 @@
 const { app } = require('electron');
 
 module.exports = {
-    getHeaders: function(customDisabled, platform, release) {
+    getHeaders: function(customDisabled, platform, release, apiKey) {
         var header;
         if(customDisabled) {
             var osInfo;
@@ -26,7 +26,8 @@ module.exports = {
         }
 
         return {
-            'User-Agent': header
+            'User-Agent': header,
+            'proxer-api-key': apiKey
         };
     },
 

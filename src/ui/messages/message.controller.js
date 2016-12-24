@@ -1,22 +1,44 @@
-angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager', '$stateParams', 'AvatarService', '$interval', '$rootScope', '$mdDialog', '$translate', '$timeout', function($scope, ipcManager, $stateParams, avatar, $interval, $rootScope, $mdDialog, $translate, $timeout) {
-    const ipc = ipcManager($scope);
-    const MESSAGE_UPDATE_DELAY = 15000;
+angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager', '$stateParams', 'AvatarService', '$interval', '$rootScope', '$mdDialog', '$translate', '$timeout', '$mdToast', function($scope, ipcManager, $stateParams, avatar, $interval, $rootScope, $mdDialog, $translate, $timeout, $mdToast) {
+    const ReportController = ['$scope', '$mdDialog', function($scope, $mdDialog) {
+        $scope.report = {
+            text: ""
+        };
 
+        $scope.create = () => {
+            $mdDialog.hide({
+                text: $scope.report.text
+            });
+        };
+
+        $scope.cancel = () => {
+            $mdDialog.cancel();
+        };
+    }];
+
+
+    const ipc = ipcManager($scope);
+    const MESSAGE_UPDATE_DELAY = 1000;
     $scope.conversation = {};
+
     $scope.state = {
         message: "",
         sent: false,
-        lastReceived: 0,
         updateTimer: null,
-        last_page: 0,
-        reported: false
+        reported: false,
+        markedRead: false
     };
 
-    ipc.once('conversation', (ev, conversation) => {
+    ipc.on('conversation', (ev, conversation) => {
+        const hadLoaded = $scope.conversation && !!$scope.conversation.messages;
+        const newMessages = hadLoaded && $scope.conversation.messages.length !== conversation.messages.length;
         $scope.conversation = conversation;
-        $scope.conversation.messages = _.sortBy(conversation.messages, (m) => { return parseInt(m.id); });
-        $scope.refreshLast();
-        $scope.scrollToBottom();
+        if(!hadLoaded) {
+            $scope.scrollToBottom();
+        }
+
+        if(newMessages) {
+            $scope.markedRead = false;
+        }
     });
 
     ipc.on('conversation-update', (ev, conversation) => {
@@ -25,62 +47,59 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         } else {
             $scope.conversation.messages = conversation.messages;
         }
-        $scope.refreshLast();
     });
 
-    $scope.getAvatar = avatar.getAvatarForID.bind(avatar);
+    $scope.getAvatar = (username) => {
+        return avatar.getAvatarForID($scope.getParticipant(username).avatar);
+    };
+
+    $scope.getParticipant = (username) => {
+        return $scope.conversation.participants.filter((part) => part.username === username)[0];
+    };
 
     $scope.sendMessage = () => {
         if($scope.state.message.length > 0 && !$scope.state.sent) {
             ipc.once('conversation-write', (event, result) => {
                 $scope.state.message = "";
                 $scope.state.sent = false;
+
+                if(result != null && result.length > 0) {
+                    alert(result); //TODO
+                } else {
+                    ipc.send('conversation-update', $scope.conversation.id);
+                }
             });
             $scope.state.sent = true;
-            ipc.send('conversation-write', $stateParams.id, $scope.state.message);
-            ipc.send('conversation-update', $stateParams.id, $scope.state.lastReceived);
+            ipc.send('conversation-write', $scope.conversation.id, $scope.state.message);
         }
     };
 
     $scope.updateMessages = () => {
-        console.log("updating messages - " + $scope.state.lastReceived);
-        ipc.send('conversation-update', $stateParams.id, $scope.state.lastReceived);
-    };
-
-    $scope.refreshLast = () => {
-        const last = _.last($scope.conversation.messages);
-        $scope.state.lastReceived = (last ? last.id : 0);
+        ipc.send('conversation-update', $scope.conversation.id);
     };
 
     $scope.loadMore = () => {
-        const page = $scope.state.last_page + 1;
-        $scope.state.last_page = page;
-        ipc.send('conversation-more', $stateParams.id, page);
-        ipc.once('conversation-more', (ev, messages) => {
-            $scope.conversation.has_more = messages.has_more
-            messages.messages.forEach(function(message) {
-                $scope.conversation.messages.unshift(message);
-            });
-        });
+        const page = $scope.conversation.last_page + 1;
+        ipc.send('conversation-more', $scope.conversation.id, page);
     };
 
     $scope.report = (ev) => {
-        const sure = "GENERAL.ARE_YOU_SURE";
-        const title = "MESSAGES.REPORT";
-        const yes = "GENERAL.YES";
-        const no = "GENERAL.NO";
-        $translate([sure, title, yes, no]).then((translations) => {
-            const confirm = $mdDialog.confirm()
-                      .title(translations[title] + "?")
-                      .textContent(translations[sure])
-                      .ariaLabel(translations[title])
-                      .targetEvent(ev)
-                      .ok(translations[yes])
-                      .cancel(translations[no]);
-            $mdDialog.show(confirm).then(() => {
-                ipc.send('conversation-report', $stateParams.id);
-                $scope.state.reported = true;
-            }, () => {});
+        const reportScope = $scope.$new(true);
+        $mdDialog.show({
+            controller: ReportController,
+            templateUrl: 'ui/messages/message-report.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            scope: reportScope
+        }).then((answer) => {
+            ipc.once('conversation-report', (ev, result) => {
+                $translate('MESSAGES.REPORT_SENT').then((translation) => {
+                    $mdToast.show($mdToast.simple().hideDelay(5000).textContent(translation));
+                });
+            });
+
+            ipc.send('conversation-report', $scope.conversation.id, answer.text);
         });
     };
 
@@ -91,7 +110,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
             $scope.conversation.favorite = !$scope.conversation.favorite;
         });
 
-        ipc.send(eventName, $stateParams.id);
+        ipc.send(eventName, $scope.conversation.id);
     };
 
     $scope.toggleBlock = () => {
@@ -101,7 +120,7 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
             $scope.conversation.blocked = !$scope.conversation.blocked;
         });
 
-        ipc.send(eventName, $stateParams.id);
+        ipc.send(eventName, $scope.conversation.id);
     };
 
     $scope.scrollToBottom = () => {
@@ -111,7 +130,28 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
         });
     };
 
+    $scope.parseTimestamp = (timestamp) => {
+        try {
+            const intTimestamp = parseInt(timestamp);
+            return intTimestamp * 1000;
+        } catch(e) {
+            return 0;
+        }
+    };
+
+    $scope.checkMarkRead = (elem) => {
+        const htmlElem = elem[0];
+        if($scope.conversation.id && !$scope.markedRead) {
+            if(htmlElem.scrollTop + htmlElem.offsetHeight >= htmlElem.scrollHeight - htmlElem.scrollHeight * 0.02) {
+                ipc.send('conversation-read', $scope.conversation.id);
+                $scope.$apply(() => $scope.markedRead = true);
+                console.log('marking conversation read');
+            }
+        }
+    };
+
     ipc.send('conversation', $stateParams.id);
+
     $scope.state.updateTimer = $interval(() => { $scope.updateMessages(); }, MESSAGE_UPDATE_DELAY);
 
     $scope.$on('$destroy', () => {
