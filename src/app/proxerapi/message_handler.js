@@ -1,4 +1,3 @@
-const messageParser = require('../../page_parser').message;
 const Promise = require('bluebird');
 
 class MessagesHandler {
@@ -13,11 +12,6 @@ class MessagesHandler {
         };
     }
 
-    _loadConversations() {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATIONS_API)
-            .then(messageParser.parseMessagesList);
-    }
-
     loadConversations(type = 'default', page = 0) {
         return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.CONFERENCES, {
             type: type,
@@ -28,11 +22,6 @@ class MessagesHandler {
                 return conv;
             });
         });
-    }
-
-    _loadFavorites() {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_FAVORITES)
-            .then(messageParser.parseFavoriteMessages);
     }
 
     loadMessages(id = 0, beforeMessage = 0, markRead = false) {
@@ -64,22 +53,6 @@ class MessagesHandler {
         });
     }
 
-    _favoriteMessage(id) {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_MARK_FAVORITE + id)
-            .then(messageParser.parseMarkFavorite).then(function(result) {
-                result.id = id;
-                return result;
-            });
-    }
-
-    _unfavoriteMessage(id) {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_UNMARK_FAVORITE + id)
-            .then(messageParser.parseMarkFavorite).then(function(result) {
-                result.id = id;
-                return result;
-            });
-    }
-
     favoriteMessage(id) {
         return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.FAVORITE, {
             conference_id: id
@@ -90,22 +63,6 @@ class MessagesHandler {
         return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.UNFAVORITE, {
             conference_id: id
         });
-    }
-
-    _blockConversation(id) {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_MARK_BLOCKED + id)
-            .then(messageParser.parseMarkBlocked).then(function(result) {
-                result.id = id;
-                return result;
-            });
-    }
-
-    _unblockConversation(id) {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_UNMARK_BLOCKED + id)
-            .then(messageParser.parseMarkBlocked).then(function(result) {
-                result.id = id;
-                return result;
-            });
     }
 
     blockConversation(id) {
@@ -120,14 +77,6 @@ class MessagesHandler {
         });
     }
 
-    _reportConversation(id) {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_REPORT + id)
-            .then(messageParser.parseReported).then((result) => {
-                result.id = id;
-                return result;
-            });
-    }
-
     reportConversation(id, message) {
         return this.session_handler.openApiRequest((request) => {
             return request.post({
@@ -138,16 +87,6 @@ class MessagesHandler {
                 }
             });
         });
-    }
-
-    _loadConversation(id) {
-        return Promise.join(this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_API + id).then(messageParser.parseConversation),
-                this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_PAGE + id).then(messageParser.parseConversationPage),
-            (conversation, participants) => {
-                conversation.participants = participants;
-                return conversation;
-            }
-        );
     }
 
     loadConversation(id, markRead = false) {
@@ -171,15 +110,6 @@ class MessagesHandler {
         });
     }
 
-    _sendMessage(id, content) {
-        return this.session_handler.openRequest(function(request) {
-            return request.post({
-                url: PROXER_BASE_URL + PROXER_PATHS.MESSAGE_WRITE_API + id,
-                form: { message: content }
-            });
-        }).then(messageParser.parseMessagePostResponse);
-    }
-
     sendMessage(id, content) {
         return this.session_handler.openApiRequest((req) => {
             return req.post({
@@ -192,26 +122,8 @@ class MessagesHandler {
         }).then((full) => full.data);
     }
 
-    _refreshMessages(id, last_id = 0) {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NEW_API + id + "&mid=" + last_id)
-            .then(messageParser.parseNewMessages);
-    }
-
     refreshMessages(_id, lastMessageId) {
         return this.loadMessages(0, lastMessageId);
-    }
-
-    _newConference(conference) {
-        return this.session_handler.openRequest((request) => {
-            return request.post({
-                url: PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_NEW_CONFERENCE,
-                form: {
-                    conferenceText: conference.text,
-                    conferenceTopic: conference.title,
-                    conferenceUsers: conference.participants
-                }
-            });
-        }).then(messageParser.parseConferenceCreateResponse);
     }
 
     newConference(conference) {
@@ -227,18 +139,6 @@ class MessagesHandler {
         }).then((full) => { return { error: full.error, id: full.data }; });
     }
 
-    _newConversation(conversation) {
-        return this.session_handler.openRequest((request) => {
-            return request.post({
-                url: PROXER_BASE_URL + PROXER_PATHS.CONVERSATION_NEW,
-                form: {
-                    message: conversation.text,
-                    username: conversation.recipient
-                }
-            });
-        }).then(messageParser.parseConversationCreateResponse);
-    }
-
     newConversation(conversation) {
         return this.session_handler.openApiRequest((request) => {
             return request.post({
@@ -249,11 +149,6 @@ class MessagesHandler {
                 }
             });
         }).then((full) => { return { error: full.error, id: full.data }; });
-    }
-
-    _checkNotifications() {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.MESSAGE_NOTIFICATIONS)
-            .then(messageParser.parseMessagesNotification);
     }
 
     retrieveConstants() {
