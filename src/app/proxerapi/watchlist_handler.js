@@ -42,9 +42,14 @@ class WatchlistHandler {
         this.translation = translate();
     }
 
-    loadWatchlist() {
+    apiLoadWatchlist() {
         return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.WATCHLIST.GET)
             .then((data) => data.data).then(alterWatchlist);
+    }
+
+    loadWatchlist() {
+        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.WATCHLIST)
+            .then(watchlistParser.parseWatchlist);
     }
 
     checkUpdates() {
