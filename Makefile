@@ -82,7 +82,7 @@ prepare-linux-package: build-linux
 		&& ln -s ../$(DATA_DIR)/proxtop proxtop
 
 package-deb: prepare-linux-package
-	cd $(PACKAGE_DIR) && fpm -s dir -t deb -n proxtop -v $(VERSION) --prefix "usr/" --deb-no-default-config-files . && mv proxtop_$(VERSION)_amd64.deb ../proxtop-$(VERSION)-amd64.deb
+	cd $(PACKAGE_DIR) && fpm -s dir -t deb -n proxtop -v $(VERSION) --prefix "$(DESTDIR)" --deb-no-default-config-files . && mv proxtop_$(VERSION)_amd64.deb ../proxtop-$(VERSION)-amd64.deb
 
 package: package-linux package-deb package-win
 
