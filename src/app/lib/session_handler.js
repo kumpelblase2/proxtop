@@ -78,7 +78,7 @@ class SessionHandler extends IPCHandler {
         });
     }
 
-    openRequest(doRequest) {
+    openRequest(doRequest, cache = true) {
         const createRequest = () => {
             let promise;
             if(typeof(doRequest) == 'string') {
@@ -91,7 +91,7 @@ class SessionHandler extends IPCHandler {
             return promise;
         };
 
-        return createRequest().then((response) => {
+        let request = createRequest().then((response) => {
             LOG.silly(`Got response with code ${response.statusCode} for url ${response.request.uri.path}`);
             const body = response.body;
             if(body.includes("Bitte aktualisiere die Seite")) {
@@ -102,19 +102,27 @@ class SessionHandler extends IPCHandler {
             }
 
             return response;
-        }).then(Cache.cacheResponse.bind(Cache)).catch((error) => {
+        });
+
+        if(cache){
+            request = request.then(Cache.cacheResponse.bind(Cache));
+        }
+
+        request = request.catch((error) => {
             return this.handleError(error, doRequest);
         });
+
+        return request;
     }
 
-    openApiRequest(doRequest, queryParams = {}) {
+    openApiRequest(doRequest, queryParams = {}, cache = true) {
         if(typeof(doRequest) == 'string') {
             doRequest = doRequest + this._createParamsString(queryParams);
         }
 
         return this.apiLimits.awaitFreeLimit().then(() => {
             this.apiLimits.makeRequest();
-            const normalRequest = this.openRequest(doRequest);
+            const normalRequest = this.openRequest(doRequest, cache);
             return normalRequest.then((response) => {
                 SessionStorage.refreshSession();
 

@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 class LoginHandler {
     constructor(sessionHandler) {
         this.session_handler = sessionHandler;
@@ -15,7 +13,7 @@ class LoginHandler {
                     password
                 }
             });
-        }).then((content) => {
+        }, {}, false).then((content) => {
             LOG.verbose("Login success");
             this.session_handler.setSession(content.data);
             return { success: true, reason: null }
@@ -27,7 +25,7 @@ class LoginHandler {
             return request.post({
                 url: PROXER_API_BASE_URL + API_PATHS.USER.LOGOUT
             });
-        });
+        }, {}, false);
     }
 
     checkLogin() {
