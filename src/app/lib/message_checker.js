@@ -5,6 +5,8 @@ const Notification = require('../notification');
 const translate = require('../translation');
 const DelayTracker = require('./delay_tracker');
 
+const LOGIN_ERROR = 3023;
+
 class MessageChecker {
     constructor(messageHandler, messageService) {
         this.messages = messageHandler;
@@ -75,6 +77,12 @@ class MessageChecker {
                 LOG.debug("Seems like more messages are available, checking again.");
                 this._check();
             }
+        }).catch(function (error) {
+            if (!(error.code && error.code === LOGIN_ERROR)) {
+                // rethrow since this is some general other error
+                throw error;
+            }
+            // Don't do anything here. We're not logged in so just try again next time
         });
     }
 
