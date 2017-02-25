@@ -2,7 +2,6 @@ const OpenHandler = require('./open_handler');
 const UserProfileManager = require('./user_profile');
 const EpisodeManager = require('./episodes');
 const LoginManager = require('./login');
-const { ensureLogin } = require('../lib');
 const WatchlistManager = require('./watchlist');
 const NewsManager = require('./news');
 const MessageManager = require('./messages');
@@ -10,7 +9,6 @@ const MessageManager = require('./messages');
 class API {
     constructor(proxerAPI) {
         this.proxer = proxerAPI;
-        ensureLogin(this.proxer.session_handler, this.proxer.login);
         this.handers = [
             new OpenHandler(),
             new UserProfileManager(proxerAPI.profile),
