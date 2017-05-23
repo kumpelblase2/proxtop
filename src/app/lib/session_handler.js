@@ -81,7 +81,7 @@ class SessionHandler extends IPCHandler {
     openRequest(doRequest, cache = true) {
         const createRequest = () => {
             let promise;
-            if(typeof(doRequest) == 'string') {
+            if(typeof(doRequest) === 'string') {
                 LOG.silly('Doing request for url ' + doRequest);
                 promise = this.request(doRequest);
             } else {
@@ -106,6 +106,8 @@ class SessionHandler extends IPCHandler {
 
         if(cache){
             request = request.then(Cache.cacheResponse.bind(Cache));
+        } else {
+            request = request.then(req => req.body);
         }
 
         request = request.catch((error) => {
@@ -116,7 +118,7 @@ class SessionHandler extends IPCHandler {
     }
 
     openApiRequest(doRequest, queryParams = {}, cache = true) {
-        if(typeof(doRequest) == 'string') {
+        if(typeof(doRequest) === 'string') {
             doRequest = doRequest + this._createParamsString(queryParams);
         }
 
