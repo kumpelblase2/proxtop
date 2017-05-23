@@ -19,7 +19,9 @@
     "KEEP_LOGIN": "Eingeloggt bleiben",
     "SAVE_PASSWORD": "Passwort speichern",
     "PLAINTEXT_WARNING": "Achtung: Das Passwort wird im Klartext abgespeichert",
-    "LOGGED_IN_AS": "Eingeloggt als {{name}}."
+    "LOGGED_IN_AS": "Eingeloggt als {{name}}.",
+    "2FA_REQUIRED": "Secret key wird gebraucht",
+    "2FA_TOKEN": "Secret key"
   },
   "PROFILE": {
     "SELF": "Das bist du!",

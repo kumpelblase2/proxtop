@@ -9,8 +9,8 @@ class Login extends IPCHandler {
     register() {
         this.handle('logout', this.login.logout, this.login);
         this.handle('check-login', this.login.checkLogin, this.login);
-        this.handle('login', (user, keepLogin) => {
-            return this.login.login(user.username, user.password, keepLogin);
+        this.handle('login', (user, secondFactor) => {
+            return this.login.login(user.username, user.password, secondFactor);
         });
     }
 }

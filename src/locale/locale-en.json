@@ -19,7 +19,9 @@
     "KEEP_LOGIN": "Keep login",
     "SAVE_PASSWORD": "Save password",
     "PLAINTEXT_WARNING": "Warning: This stores the password in plain text.",
-    "LOGGED_IN_AS": "Logged in as {{name}}."
+    "LOGGED_IN_AS": "Logged in as {{name}}.",
+    "2FA_REQUIRED": "Security token is required",
+    "2FA_TOKEN": "2FA Token"
   },
   "PROFILE": {
     "SELF": "This is you!",

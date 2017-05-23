@@ -55,6 +55,7 @@ function getMessageFromCode(code) {
 
         case 3035: return "Invalid language";
         case 3036: return "Invalid type";
+        case 3038: return "Missing 2FA token";
 
         default: return "No error specified";
     }
