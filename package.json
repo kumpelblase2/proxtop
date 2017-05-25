@@ -30,9 +30,10 @@
     "chai-as-promised": "6.0.0",
     "devtron": "1.4.0",
     "electron": "1.4.12",
-    "electron-builder": "8.6.0",
-    "electron-mocha": "3.2.1",
-    "electron-packager": "8.3.0"
+    "electron-builder": "^18.0.1",
+    "electron-builder-squirrel-windows": "^18.0.0",
+    "electron-mocha": "3.4.0",
+    "electron-packager": "8.7.0"
   },
   "dependencies": {
     "about-window": "1.6.1",
@@ -63,12 +64,11 @@
       "target": [
         "squirrel",
         "zip"
-      ],
-      "msi": true
+      ]
+    },
+    "directories": {
+      "app": "_dist",
+      "output": "_packaged"
     }
-  },
-  "directories": {
-    "app": "_dist",
-    "output": "_packaged"
   }
 }
