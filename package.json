@@ -30,7 +30,7 @@
     "chai-as-promised": "6.0.0",
     "devtron": "1.4.0",
     "electron": "1.4.12",
-    "electron-builder": "^18.0.1",
+    "electron-builder": "19.3.0",
     "electron-builder-squirrel-windows": "^18.0.0",
     "electron-mocha": "3.4.0",
     "electron-packager": "8.7.0"
