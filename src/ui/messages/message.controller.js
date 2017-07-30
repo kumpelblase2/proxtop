@@ -50,7 +50,12 @@ angular.module('proxtop').controller('MessageController', ['$scope', 'ipcManager
     });
 
     $scope.getAvatar = (username) => {
-        return avatar.getAvatarForID($scope.getParticipant(username).avatar);
+        const participant = $scope.getParticipant(username);
+        if(participant) {
+            return avatar.getAvatarForID(participant.avatar);
+        } else {
+            return avatar.getDefaultAvatar();
+        }
     };
 
     $scope.getParticipant = (username) => {
