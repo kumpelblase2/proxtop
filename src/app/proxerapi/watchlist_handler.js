@@ -128,15 +128,20 @@ class WatchlistHandler {
         }).then(() => ({ entry: entry }));
     }
 
-    watchLoop() {
+    watchLoop(interval = 30000) {
         setTimeout(() => {
-            const time = settings.getWatchlistSettings().check_interval;
-            if(new Date().getTime() - this.lastCheck > time * 60000 - 5000) {
-                this.checkUpdates();
-            }
+            if(this.session_handler.hasSession()) {
+                const time = settings.getWatchlistSettings().check_interval;
+                if (new Date().getTime() - this.lastCheck > time * 60000 - 5000) {
+                    this.checkUpdates();
+                }
 
-            this.watchLoop();
-        }, 30000);
+                this.watchLoop();
+            } else {
+                LOG.verbose("Not logged in yet, skipping watchlist check.");
+                this.watchLoop(5000);
+            }
+        }, interval);
     }
 }
 
