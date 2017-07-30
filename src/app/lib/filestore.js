@@ -42,17 +42,22 @@ class FileStore extends MemoryCookieStore {
     load() {
         const data = fs.readFileSync(this.file, 'utf8');
         if (data.length >= 2) {
-            if (data[0] == '{' && data[data.length - 1] == '}') {
-                let json = data && data.length > 0 ? JSON.parse(data) : {};
-                iterateProperties(json, (domain, paths) => {
-                    iterateProperties(paths, (path, cookies) => {
-                        iterateProperties(cookies, (cookieName, cookie) => {
-                            json[domain][path][cookieName] = tough.fromJSON(JSON.stringify(cookie));
+            if (data[0] === '{' && data[data.length - 1] === '}') {
+                try {
+                    let json = data && data.length > 0 ? JSON.parse(data) : {};
+                    iterateProperties(json, (domain, paths) => {
+                        iterateProperties(paths, (path, cookies) => {
+                            iterateProperties(cookies, (cookieName, cookie) => {
+                                json[domain][path][cookieName] = tough.fromJSON(JSON.stringify(cookie));
+                            });
                         });
                     });
-                });
 
-                this.idx = json;
+                    this.idx = json;
+                } catch (exception) {
+                    LOG.error("Error reading cookies: " + exception);
+                    this.idx = {};
+                }
             } else {
                 LOG.warn("Encountered old cookies. Ignoring.");
                 this.idx = {};
