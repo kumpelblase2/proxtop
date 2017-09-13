@@ -70,7 +70,7 @@ class SessionHandler extends IPCHandler {
             header['proxer-api-token'] = token;
         }
 
-        LOG.verbose('Settings useragent to: ' + header['User-Agent']);
+        LOG.verbose('Setting useragent to: ' + header['User-Agent']);
         return request.defaults({
             jar: this.cookieJar,
             headers: header,

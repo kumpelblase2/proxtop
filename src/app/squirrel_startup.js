@@ -24,7 +24,7 @@ function startup() {
     }
 
     const { app } = require('electron');
-    var squirrelEvent = process.argv[1];
+    const squirrelEvent = process.argv[1];
     switch (squirrelEvent) {
         case '--squirrel-install':
             install(app.quit);

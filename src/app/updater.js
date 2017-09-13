@@ -44,6 +44,7 @@ class GithubUpdater {
             LOG.verbose("Still rate limited. Skipping.");
             return;
         }
+
         if(this.has_noticed) {
             LOG.verbose("User already knows, no need to check.");
             return;
