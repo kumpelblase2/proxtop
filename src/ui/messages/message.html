@@ -32,15 +32,17 @@
             </div>
         </div>
     </div>
-    <md-list flex="20" ng-if="conversation.messages" class="md-whiteframe-2dp" style="max-height: 50vh; overflow-y: auto;">
+    <md-list ng-if="conversation.messages" class="md-whiteframe-2dp" style="max-height: 95vh; position: fixed; left: 80%; width: 18%">
         <md-subheader class="md-no-sticky">{{ 'MESSAGES.PARTICIPANTS' | translate }}</md-subheader>
-        <md-list-item ng-repeat="participant in conversation.participants" class="md-2-line">
-            <img ng-src="{{getAvatar(participant.username)}}" class="md-avatar" />
-            <div class="md-list-item-text">
-                <h3>{{participant.username}}</h3>
-                <p ng-bind="participant.status"></p>
-            </div>
-        </md-list-item>
+        <div style="max-height: 70vh; overflow-y: scroll">
+            <md-list-item ng-repeat="participant in conversation.participants" class="md-2-line">
+                <img ng-src="{{getAvatar(participant.username)}}" class="md-avatar"/>
+                <div class="md-list-item-text">
+                    <h3>{{participant.username}}</h3>
+                    <p ng-bind="participant.status"></p>
+                </div>
+            </md-list-item>
+        </div>
         <md-divider></md-divider>
         <md-list-item ng-click="toggleFavorite()">
             <p ng-if="conversation.favorite" translate>MESSAGES.UNFAVORITE</p>
