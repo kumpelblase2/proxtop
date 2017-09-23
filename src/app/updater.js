@@ -126,14 +126,7 @@ class AutoUpdater {
         }
 
         LOG.verbose('Running update check...');
-        // https://github.com/electron/electron/issues/4306
-        if(process.argv[1] == '--squirrel-firstrun') {
-            setTimeout(() => {
-                autoUpdater.checkForUpdates();
-            }, 3000);
-        } else {
-            autoUpdater.checkForUpdates();
-        }
+        autoUpdater.checkForUpdates();
     }
 
     stop() {
