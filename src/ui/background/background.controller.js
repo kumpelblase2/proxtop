@@ -22,7 +22,7 @@ angular.module('proxtop').controller('BackgroundController', ['$scope', 'ipcMana
                     if(release.success && release.success.type === 'open_url') {
                         open.openLink(release.success.value);
                     } else if(release.success && release.success.type === 'restart') {
-                        ipc.send('install_update');
+                        ipc.send('install-update');
                     }
                 });
             });

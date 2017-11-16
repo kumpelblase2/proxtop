@@ -92,7 +92,7 @@ class AutoUpdater {
     constructor(feed) {
         this.translate = translation();
         autoUpdater.setFeedURL(feed);
-        ipcMain.on('install_update', () => {
+        ipcMain.on('install-update', () => {
             autoUpdater.quitAndInstall();
         });
 
