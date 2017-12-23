@@ -1,3 +1,13 @@
+# 1.0.0
+
+Additions:
+- Support for 2FA
+
+Fixes:
+- No longer request messages & watchlist if not logged in
+- Fix possible issues with old cookies
+- Fix error when author of message no longer exist
+
 # 1.0.0 (beta)
 
 Additions:
