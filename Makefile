@@ -63,11 +63,11 @@ package-linux: build-linux
 	cd $(BUILD_DIR) && tar -czf proxtop-$(VERSION)-linux.tar.gz Proxtop-linux-x64
 
 package-osx: build-osx
-	$(PACKAGE_COMMAND) -m
+	$(PACKAGE_COMMAND) -m -p never
 
 package-win: build-windows
-	$(PACKAGE_COMMAND) -w
-	$(PACKAGE_COMMAND) -w --ia32
+	$(PACKAGE_COMMAND) -w -p never
+	$(PACKAGE_COMMAND) -w --ia32 -p never
 
 prepare-linux-package: build-linux
 	mkdir -p $(PACKAGE_DIR)
