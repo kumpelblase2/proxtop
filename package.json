@@ -2,7 +2,7 @@
   "name": "proxtop",
   "version": "1.1.0-beta",
   "description": "A desktop application for proxer.me",
-  "main": "main.js",
+  "main": "src/main/index.js",
   "scripts": {
     "test": "electron-mocha --opts mocha.opts",
     "start": "./run.sh",
@@ -31,10 +31,13 @@
     "devtron": "1.4.0",
     "electron": "1.7.9",
     "electron-builder": "19.45.5",
-    "electron-builder-squirrel-windows": "19.46.0",
     "electron-builder-lib": "19.46.1",
+    "electron-builder-squirrel-windows": "19.46.0",
     "electron-mocha": "3.4.0",
-    "electron-packager": "9.1.0"
+    "electron-packager": "9.1.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^2.30.1",
+    "webpack": "^3.11.0"
   },
   "dependencies": {
     "about-window": "1.6.1",
@@ -42,9 +45,9 @@
     "cheerio": "0.22.0",
     "electron-window-state": "4.0.0",
     "lodash": "4.17.2",
-    "lowdb": "0.14.0",
+    "lowdb": "0.16.0",
     "moment": "2.17.1",
-    "opener": "1.4.2",
+    "opn": "^5.2.0",
     "request": "2.79.0",
     "request-promise": "4.1.1",
     "semver": "5.3.0",

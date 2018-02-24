@@ -1,4 +1,4 @@
-require('../../src/app/global');
+require('../../src/main/app/global');
 
 describe('global namespace', function() {
     it('should expose the APP_NAME', function() {

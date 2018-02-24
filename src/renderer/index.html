@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html ng-app="proxtop">
+    <head>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <title>Proxtop</title>
+        <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css" />
+        <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="../static/assets/style.css" />
+    </head>
+    <body>
+        <script src="../bower_components/angular/angular.js"></script>
+        <script src="../bower_components/angular-aria/angular-aria.js"></script>
+        <script src="../bower_components/angular-animate/angular-animate.js"></script>
+        <script src="../bower_components/angular-material/angular-material.js"></script>
+        <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="../bower_components/lodash/lodash.js"></script>
+        <script src="../bower_components/angular-progress-arc/angular-progress-arc.js"></script>
+        <script src="../bower_components/angular-translate/angular-translate.js"></script>
+        <script src="../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+        <script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="../bower_components/ng-debounce/angular-debounce.js"></script>
+
+        <div ng-controller="BackgroundController"></div>
+        <div layout="column" layout-fill ng-controller="MenuController">
+            <md-toolbar class="md-hue-2">
+                <div class="md-toolbar-tools" md-whiteframe="4">
+                    <md-button class="md-icon-button" aria-label="Menu" ng-click="toggleMenu()" hide-gt-md>
+                        <md-icon md-font-icon="fa-bars" class="fa"></md-icon>
+                    </md-button>
+                    <span flex></span>
+                    <span ng-if="isLoggedIn()">{{ 'LOGIN.LOGGED_IN_AS' | translate:{name:getUsername()} }}</span>
+                    <md-button ng-if="isLoggedIn()" ng-click="logout()" aria-label="{{ 'MENU.LOGOUT' | translate }}">
+                        <md-icon md-font-icon="fa-sign-out" class="fa menu-icon md-avatar-icon"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <div layout="row" class="full-height">
+                <md-sidenav md-component-id="left" class="md-sidenav-left" md-is-locked-open="$mdMedia('gt-md')" md-whiteframe="4">
+                    <md-content>
+                        <md-list>
+                            <md-list-item ui-sref="profile">
+                                <md-icon md-font-icon="fa-user" class="fa menu-icon"></md-icon>
+                                <span>{{ 'MENU.PROFILE' | translate }}</span>
+                            </md-list-item>
+                            <md-list-item ui-sref="watchlist">
+                                <md-icon md-font-icon="fa-bookmark" class="fa menu-icon"></md-icon>
+                                <span>{{ 'MENU.WATCHLIST' | translate }}</span>
+                            </md-list-item>
+                            <md-list-item ui-sref="messages">
+                                <md-icon md-font-icon="fa-envelope" class="fa menu-icon"></md-icon>
+                                <span>{{ 'MENU.MESSAGES' | translate }}</span>
+                            </md-list-item>
+                            <md-list-item ui-sref="settings">
+                                <md-icon md-font-icon="fa-gears" class="fa menu-icon"></md-icon>
+                                <span>{{ 'MENU.SETTINGS' | translate }}</span>
+                            </md-list-item>
+                            <md-list-item ng-click="openAbout();" style="">
+                                <md-icon md-font-icon="fa-info-circle" class="fa menu-icon"></md-icon>
+                                <span>{{ 'MENU.ABOUT' | translate }}</span>
+                            </md-list-item>
+                        </md-list>
+                    </md-content>
+                </md-sidenav>
+                <md-content ui-view id="mainWindow" layout-padding layout="column" class="full-width">
+                </md-content>
+            </div>
+        </div>
+    </body>
+</html>

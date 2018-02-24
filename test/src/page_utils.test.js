@@ -1,4 +1,4 @@
-var utils = require('../../src/app/lib/page_utils');
+var utils = require('../../src/main/app/lib/page_utils');
 var os = require('os');
 
 describe('page_utils#getHeaders', function() {

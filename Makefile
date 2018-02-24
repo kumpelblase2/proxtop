@@ -1,6 +1,7 @@
 PATH	:= node_modules/.bin:$(PATH)
 
-SOURCE_FILES = src build/package.json bower.json bower_components main.js
+GENERATE_DIR = dist
+SOURCE_FILES = build/package.json bower.json bower_components static ${GENERATE_DIR}/*
 TARGET_DIR = _dist
 BUILD_DIR = _packaged
 PACKAGE_DIR = ${BUILD_DIR}/proxtop-linux-x64-pkg/
@@ -17,6 +18,7 @@ ICON_256_DIR = ${ICON_DIR}/128x128/apps
 PACKAGER_ARGS = --overwrite --asar
 BUILD_COMMAND = electron-packager $(TARGET_DIR) --out=$(BUILD_DIR) $(PACKAGER_ARGS)
 PACKAGE_COMMAND = ./node_modules/.bin/build
+WEBPACK_COMMAND = ./node_modules/.bin/webpack-cli
 
 DESKTOP_ENTRY_DIR = share/applications
 
@@ -24,11 +26,11 @@ default: setup update-build-package
 
 setup:
 	npm install
-	bower install
 
 clean:
 	if test -d $(TARGET_DIR); then rm -r $(TARGET_DIR); fi
 	if test -d $(BUILD_DIR); then rm -r $(BUILD_DIR); fi
+	if test -d $(GENERATE_DIR); then rm -r $(GENERATE_DIR); fi
 
 install:
 	mkdir -p $(DESTDIR)
@@ -39,10 +41,10 @@ update-build-package:
 
 prepare: update-build-package
 	mkdir -p $(TARGET_DIR)
+	./node_modules/.bin/webpack-cli --mode=production
 	cp -R $(SOURCE_FILES) $(TARGET_DIR)
-	cd $(TARGET_DIR) && npm install --production
 	mkdir -p $(BUILD_DIR)
-	@sed -i -e "s/api_key_here/$(PROXTOP_API_KEY)/" $(TARGET_DIR)/main.js
+	@sed -i -e "s/api_key_here/$(PROXTOP_API_KEY)/" $(TARGET_DIR)/index.js
 
 
 

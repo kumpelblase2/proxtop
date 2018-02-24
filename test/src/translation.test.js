@@ -1,4 +1,4 @@
-const translate = require('../../src/app/translation');
+const translate = require('../../src/main/app/translation');
 const path = require('path');
 
 describe('transaltion', function() {
