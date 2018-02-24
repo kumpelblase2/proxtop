@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' , '$stateParams', '$sce', 'settings', '$state', '$mdToast', '$translate', 'SupportedProviderService', function($scope, ipcManager, $stateParams, $sce, settings, $state, $mdToast, $translate, SupportedProviderService) {
     const ipc = ipcManager($scope);
     $scope.current = {

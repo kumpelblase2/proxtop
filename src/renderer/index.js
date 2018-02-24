@@ -1,3 +1,19 @@
+import 'angular-material/angular-material.css';
+import 'font-awesome/css/font-awesome.css';
+import '../../static/assets/style.css';
+
+
+import 'angular';
+import 'angular-aria';
+import 'angular-animate';
+import 'angular-messages';
+import 'angular-material';
+import 'angular-sanitize';
+import 'angular-translate';
+import 'angular-progress-arc';
+import 'angular-debounce';
+import '@uirouter/angularjs';
+
 import './background/notifications.js';
 
 import './app.js';

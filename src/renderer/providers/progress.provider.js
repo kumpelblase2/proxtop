@@ -23,11 +23,11 @@ const ranks = [
 
 angular.module('proxtop').service('ProgressService', function() {
     this.getNextRank = (points = 0) => {
-        return _.find(ranks, (rank) => rank.points > points);
+        return ranks.find((rank) => rank.points > points);
     };
 
     this.getCurrentRank = (points = 0) => {
-        for(var i = 1; i < ranks.length; i++) {
+        for(let i = 1; i < ranks.length; i++) {
             const curr = ranks[i];
             if(curr.points > points) {
                 return ranks[i - 1];

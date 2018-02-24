@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 angular.module('proxtop').controller('LoginController', ['$scope', 'settings', 'ipcManager', '$state', '$mdToast', '$rootScope', '$mdDialog', '$translate', function($scope, settings, ipcManager, $state, $mdToast, $rootScope, $mdDialog, $translate) {
     let loggedIn = false;
     const ipc = ipcManager($scope);

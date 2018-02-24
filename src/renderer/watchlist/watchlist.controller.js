@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 angular.module('proxtop').controller('WatchlistController', ['$scope', 'ipcManager', '$state', 'open', function($scope, ipcManager, $state, open) {
     const ipc = ipcManager($scope);
     $scope.watchlist = null;

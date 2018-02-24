@@ -1,7 +1,7 @@
 PATH	:= node_modules/.bin:$(PATH)
 
 GENERATE_DIR = dist
-SOURCE_FILES = build/package.json bower.json bower_components static ${GENERATE_DIR}/*
+SOURCE_FILES = build/package.json static ${GENERATE_DIR}/*
 TARGET_DIR = _dist
 BUILD_DIR = _packaged
 PACKAGE_DIR = ${BUILD_DIR}/proxtop-linux-x64-pkg/
