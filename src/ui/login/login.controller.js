@@ -9,7 +9,11 @@ angular.module('proxtop').controller('LoginController', ['$scope', 'settings', '
         } else if(result.reason === '2fa_enabled') {
             $scope.open2FARequest();
         } else {
-            $mdToast.show($mdToast.simple().textContent('Could not login: ' + result.reason));
+            let message = result.reason;
+            if(message instanceof Object && (message.raw || message.code)) {
+                message = `Error(${message.code}): ${message.raw}`;
+            }
+            $mdToast.show($mdToast.simple().textContent('Could not login: ' + message));
         }
     });
 
