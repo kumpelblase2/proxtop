@@ -1,7 +1,6 @@
-const ipc = require('electron').ipcMain;
-const _ = require('lodash');
-const { Settings } = require('./storage');
-const utils = require('./util/utils');
+import { ipcMain } from "electron";
+import { capitalizeFirstLetter } from "./util/utils";
+import { Settings } from "./storage";
 
 const DEFAULTS = {
     DEFAULT_ACCOUNT_SETTINGS: {
@@ -53,7 +52,7 @@ function generateSettings(allSettings) {
 
     allSettings.forEach((setting) => {
         const getterSetter = createGetterSetter(setting);
-        const capitalized = utils.capizalizeFirstLetter(setting);
+        const capitalized = capitalizeFirstLetter(setting);
         result['get' + capitalized + 'Settings'] = getterSetter.getter;
         result['set' + capitalized + 'Settings'] = getterSetter.setter;
     });
@@ -74,8 +73,8 @@ function createGetterSetter(setting) {
     };
 }
 
-ipc.on('settings', function(event, type, value) {
-    const func = settings[(value ? 'set' : 'get') + utils.capizalizeFirstLetter(type) + 'Settings'];
+ipcMain.on('settings', function(event, type, value) {
+    const func = settings[(value ? 'set' : 'get') + capitalizeFirstLetter(type) + 'Settings'];
     if(func) {
         event.returnValue = func(value);
     } else {
@@ -83,4 +82,4 @@ ipc.on('settings', function(event, type, value) {
     }
 });
 
-module.exports = settings;
+export default settings;

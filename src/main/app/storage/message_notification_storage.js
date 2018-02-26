@@ -1,8 +1,8 @@
-const Storage = require('./storage');
+import Storage from "./storage";
 
 const DB_NAME = 'messages-cache';
 
-class MessageReceivedStorage extends Storage {
+export default class MessageReceivedStorage extends Storage {
     constructor(db) {
         super(db, DB_NAME);
     }
@@ -19,5 +19,3 @@ class MessageReceivedStorage extends Storage {
         this.storage.push({ username: user }).write();
     }
 }
-
-module.exports = MessageReceivedStorage;

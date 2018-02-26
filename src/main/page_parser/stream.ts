@@ -1,18 +1,26 @@
-const cheerio = require('cheerio');
-const Promise = require('bluebird');
-const request = require('request-promise');
-const _ = require('lodash');
+import * as cheerio from 'cheerio';
+import * as Promise from "bluebird";
+import * as request from 'request-promise';
+import * as _ from 'lodash';
+
+export type VideoFormat = "mp4"
+
+export type VideoSource = {
+    url: string,
+    type: VideoFormat
+};
 
 const MP4UPLOAD_TEMPLATE_REGEX = /eval\(function\([^)]+\) *{[^}]+}\((.+)\)/;
 const MP4UPLOAD_STRING_REGEX = /'((\\'|[^'])+)'/g;
 const MP4UPLOAD_SRC_REGEX = /src:"([^"]+)"/;
 
-function extractProxer(options) {
+function extractProxer(options): Promise<VideoSource> {
     const $ = cheerio.load(options.page);
-    return {
+    const result: VideoSource = {
         url: $('source').attr('src'),
         type: 'mp4'
     };
+    return Promise.resolve(result);
 }
 
 // This is partly taken from the mp4 page and replaced with better names to understand it.
@@ -26,7 +34,7 @@ function mp4UploadScriptGenerator(template, base, counter, dictionary) {
     return template;
 }
 
-function extractMP4Upload(options) {
+function extractMP4Upload(options): Promise<VideoSource> {
     const $ = cheerio.load(options.page);
     const scripts = $('script');
     let found;
@@ -78,16 +86,17 @@ function extractMP4Upload(options) {
     const sourceMatch = MP4UPLOAD_SRC_REGEX.exec(resultingScript);
 
     if(sourceMatch != null) {
-        return {
+        const stream: VideoSource = {
             url: sourceMatch[1],
             type: 'mp4'
         };
+        return Promise.resolve(stream);
     } else {
         throw "Could not extract, missing source.";
     }
 }
 
-function extractYourUpload(options) {
+function extractYourUpload(options): Promise<VideoSource> {
     const $ = cheerio.load(options.page);
     const body = $('body').html();
     const video = /file *: *'(.+)',/m.exec(body);
@@ -110,7 +119,7 @@ function extractYourUpload(options) {
     }
 }
 
-function extractStreamCloud(options) {
+function extractStreamCloud(options): Promise<VideoSource> {
     const $ = cheerio.load(options.page);
     const inputs = $('#login').find('form').serializeArray();
     const form = inputs.reduce(function(prev, curr) {
@@ -118,18 +127,18 @@ function extractStreamCloud(options) {
         return prev;
     }, {});
 
-    return Promise.delay(12000).then(function() {
+    return Promise.delay(12000).then(() => {
         return request({
             method: 'POST',
             url: options.url,
             form: form
-        }).then(function(body) {
+        }).then((body) => {
             const video = /file *: *"(.+)",/m.exec(body);
             if(video) {
                 return {
                     url: video[1],
                     type: 'mp4'
-                };
+                } as VideoSource;
             } else {
                 throw "Could not extract.";
             }
@@ -137,45 +146,45 @@ function extractStreamCloud(options) {
     });
 }
 
-function extractDailymotion(options) {
-    const bodyJson = /\(document\.getElementById\(\'player'\), (\{.*\})\);/m.exec(options.page);
+function extractDailymotion(options): Promise<VideoSource> {
+    const bodyJson = /\(document\.getElementById\('player'\), ({.*})\);/m.exec(options.page);
     if(!bodyJson) {
         throw "Could not extract."
     }
 
     const json = JSON.parse(bodyJson[1]);
     const qualities = json.metadata.qualities;
-    const availableQualities = _.sortBy(_.filter(Object.keys(qualities), function(key) { return parseInt(key); }));
+    const allQualities = Object.keys(qualities);
+    const numberedQualities: string[] = _.filter(allQualities, (quality: string) => !!parseInt(quality));
+    const availableQualities = _.sortBy(numberedQualities);
     const best = qualities[availableQualities[availableQualities.length - 1]][0];
-    return {
+    const stream: VideoSource = {
         url: best.url,
         type: 'mp4'
     };
+    return Promise.resolve(stream);
 }
 
-const parser = {
-    extractors: {
-        'proxer-stream': extractProxer,
-        'mp4upload': extractMP4Upload,
-        'yourupload': extractYourUpload,
-        'streamcloud2': extractStreamCloud,
-        'dailymotion': extractDailymotion
-    },
-    findExtractor: function(stream) {
-        if(this.extractors[stream.type]) {
-            return parser.extractors[stream.type];
-        } else {
-            return function() {
-                throw "Cannot find extractor for type " + stream.type;
-            };
-        }
+const extractors: { [name: string]: (object) => Promise<VideoSource> } = {
+    'proxer-stream': extractProxer,
+    'mp4upload': extractMP4Upload,
+    'yourupload': extractYourUpload,
+    'streamcloud2': extractStreamCloud,
+    'dailymotion': extractDailymotion
+};
+
+export function findExtractor(stream): (object) => Promise<VideoSource> {
+    if(extractors[stream.type]) {
+        return extractors[stream.type];
+    } else {
+        return () => {
+            throw "Cannot find extractor for type " + stream.type;
+        };
     }
-};
+}
 
-parser.parseVideo = function(options) {
-    return Promise.resolve(options).then(function(opt) {
-        return parser.findExtractor(opt.stream)(opt);
+export function parseVideo(options): Promise<VideoSource> {
+    return Promise.resolve(options).then((opt) => {
+        return findExtractor(opt.stream)(opt);
     });
-};
-
-module.exports = parser;
+}

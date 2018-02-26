@@ -1,4 +1,4 @@
-const { ipcMain } = require('electron');
+import { ipcMain } from "electron";
 
 function isPromise(object) {
     return object && object.then && typeof(object.then) === 'function';
@@ -8,8 +8,11 @@ function isGenerator(object) {
     return object && object[Symbol.iterator] && typeof(object[Symbol.iterator]) === 'function';
 }
 
-class IPCHandler {
-    handle(event, funct, binding = this) {
+export default class IPCHandler {
+    handle(event, funct, binding) {
+        if(binding == null) {
+            binding = this;
+        }
         const localFunc = funct.bind(binding);
         ipcMain.on(event, (ev, ...args) => {
             const localFuncResult = localFunc(...args);
@@ -33,7 +36,10 @@ class IPCHandler {
         });
     }
 
-    handleSync(event, funct, binding = this) {
+    handleSync(event, funct, binding) {
+        if(binding == null) {
+            binding = this;
+        }
         const localFunc = funct.bind(binding);
         ipcMain.on(event, (ev, ...args) => {
             const localFuncResult = localFunc(...args);
@@ -51,6 +57,7 @@ class IPCHandler {
         const localFunc = func.bind(this);
         ipcMain.on(event, localFunc);
     }
-}
 
-module.exports = IPCHandler;
+    register() {
+    }
+}

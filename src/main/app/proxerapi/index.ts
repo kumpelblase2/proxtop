@@ -1,11 +1,11 @@
-const LoginHandler = require('./login_handler');
-const ProfileHandler = require('./profile_handler');
-const WatchlistHandler = require('./watchlist_handler');
-const NewsHandler = require('./news_handler');
-const MessageHandler = require('./message_handler');
-const EpisodeHandler = require('./episode_handler');
+import LoginHandler from "./login_handler";
+import ProfileHandler from "./profile_handler";
+import WatchlistHandler from "./watchlist_handler";
+import NewsHandler from "./news_handler";
+import MessageHandler from "./message_handler";
+import EpisodeHandler from "./episode_handler";
 
-function setup(sessionHandler) {
+export default function setup(sessionHandler) {
     return {
         session_handler: sessionHandler,
         login: new LoginHandler(sessionHandler),
@@ -16,5 +16,3 @@ function setup(sessionHandler) {
         episode: new EpisodeHandler(sessionHandler)
     };
 }
-
-module.exports = setup;

@@ -1,5 +1,7 @@
+import { API_PATHS, PROXER_API_BASE_URL } from "../globals";
+
 function fixPoints(user) {
-    ['points_uploads', 'points_anime', 'points_manga', 'points_info', 'points_forum', 'points_misc'].forEach((name) => {
+    ['points_uploads', 'points_anime', 'points_manga', 'points_info', 'points_forum', 'points_misc'].forEach(name => {
         user[name] = parseInt(user[name]);
     });
 
@@ -10,7 +12,7 @@ function totalPoints(user) {
     return user.points_uploads + user.points_anime + user.points_manga + user.points_info + user.points_forum + user.points_misc
 }
 
-function alterUser(user) {
+function alterUser(user): Profile {
     user = fixPoints(user.data);
     return {
         uid: user.uid,
@@ -32,18 +34,37 @@ function alterUser(user) {
     }
 }
 
-class ProfileHandler {
+export type Profile = {
+    uid: number,
+    username: string,
+    avatar: string,
+    status: {
+        message: string,
+        time: number,
+    },
+    ranking: {
+        total: number,
+        anime: number
+        manga: number
+        additional: number
+        uploads: number
+        forum: number
+        wiki: number
+    }
+}
+
+export default class ProfileHandler {
+    session_handler: any;
+
     constructor(sessionHandler) {
         this.session_handler = sessionHandler;
     }
 
-    loadProfile(username) {
+    loadProfile(username: string): Promise<Profile> {
         return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.USER.PROFILE + "?username=" + username).then(alterUser);
     }
 
-    loadProfileByID(id) {
+    loadProfileByID(id: number): Promise<Profile> {
         return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.USER.PROFILE + "?uid=" + id).then(alterUser);
     }
 }
-
-module.exports = ProfileHandler;

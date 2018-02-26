@@ -1,5 +1,5 @@
-const Storage = require('./storage');
-const _ = require('lodash');
+import Storage from "./storage";
+import _ from "lodash";
 
 const DB_NAME = 'messages';
 
@@ -7,7 +7,7 @@ function filterNull(arr) {
     return arr ? arr.filter((elem) => elem != null) : [];
 }
 
-class MessagesStorage extends Storage {
+export default class MessagesStorage extends Storage {
     constructor(db) {
         super(db, DB_NAME);
     }
@@ -139,5 +139,3 @@ class MessagesStorage extends Storage {
         return this.getConversation(id) != null;
     }
 }
-
-module.exports = MessagesStorage;

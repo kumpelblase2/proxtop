@@ -1,11 +1,12 @@
-const watchlistParser = require('../../page_parser').watchlist;
-const util = require('util');
-const utils = require('../util/utils');
-const translate = require('../translation');
-const { WatchlistCache } = require('../storage');
-const settings = require('../settings');
-const Notification = require('../notification');
-const windowManager = require('../ui/window_manager');
+import { getOnlineDiff } from "../util/utils";
+import { Instance as Notification } from "../notification";
+import windowManager from "../ui/window_manager";
+import settings from "../settings";
+import Log from "../util/log";
+import translate from "../translation";
+import watchlistParser from "../../page_parser/watchlist"
+import { WatchlistCache } from "../storage";
+import {PROXER_API_BASE_URL, PROXER_BASE_URL,API_PATHS, PROXER_PATHS, LOGO_RELATIVE_PATH} from "../globals";
 
 const returnMsg = (success, msg) => { return { success: success, msg: msg } };
 
@@ -33,7 +34,7 @@ function alterWatchlist(list) {
     return result;
 }
 
-class WatchlistHandler {
+export default class WatchlistHandler {
     constructor(sessionHandler) {
         this.session_handler = sessionHandler;
         this.lastCheck = 0;
@@ -51,7 +52,7 @@ class WatchlistHandler {
     }
 
     checkUpdates() {
-        LOG.info("Checking for new watchlist updates");
+        Log.info("Checking for new watchlist updates");
         this.lastCheck = new Date().getTime();
         this.loadWatchlist().then((result) => {
             const old = WatchlistCache.getOldWatchlist();
@@ -67,14 +68,14 @@ class WatchlistHandler {
             }
 
             const updates = {};
-            updates.anime = utils.getOnlineDiff(old.anime, result.anime);
-            updates.manga = utils.getOnlineDiff(old.manga, result.manga);
+            updates.anime = getOnlineDiff(old.anime, result.anime);
+            updates.manga = getOnlineDiff(old.manga, result.manga);
             WatchlistCache.updateWatchlist(result);
             return updates;
         }).then((updates) => {
             Object.keys(updates).forEach((type) => {
                 updates[type].forEach((update) => {
-                    LOG.verbose('Sending watchlist update for ' + update.name);
+                    Log.verbose('Sending watchlist update for ' + update.name);
                     Notification.displayNotification({
                         title: 'Proxtop',
                         message: this.translation.get(`WATCHLIST.NEW_${type.toUpperCase()}`, { episode: update.episode, name: update.name }),
@@ -138,11 +139,9 @@ class WatchlistHandler {
 
                 this.watchLoop();
             } else {
-                LOG.verbose("Not logged in yet, skipping watchlist check.");
+                Log.verbose("Not logged in yet, skipping watchlist check.");
                 this.watchLoop(5000);
             }
         }, interval);
     }
 }
-
-module.exports = WatchlistHandler;

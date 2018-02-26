@@ -1,6 +1,6 @@
-const Promise = require('bluebird');
+import Promise from "bluebird";
 
-class CacheController {
+export default class CacheController {
     constructor(cacheTime, refresh, mapping = () => '__default') {
         this.values = new Map();
         this.cacheTime = cacheTime;
@@ -51,5 +51,3 @@ class CacheController {
 function isFresh(result, maxTime) {
     return !!result && !!result.value && Date.now() - result.accessTime < maxTime;
 }
-
-module.exports = CacheController;

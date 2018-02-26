@@ -1,5 +1,10 @@
-class Storage {
-    constructor(db, name) {
+import Low from "lowdb";
+
+export default class Storage {
+    db: Low;
+    db_name: string;
+
+    constructor(db: Low, name: string) {
         this.db = db;
         this.db_name = name;
         if(!this.db.has(name).value()) {
@@ -11,5 +16,3 @@ class Storage {
         return this.db.get(this.db_name);
     }
 }
-
-module.exports = Storage;

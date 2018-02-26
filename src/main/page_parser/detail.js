@@ -1,5 +1,4 @@
-const cheerio = require('cheerio');
-const _ = require('lodash');
+import cheerio from "cheerio";
 
 /*
 RESULT:
@@ -145,4 +144,4 @@ parser.parseDetail = function(page) {
     });
 };
 
-module.exports = parser;
+export default parser;

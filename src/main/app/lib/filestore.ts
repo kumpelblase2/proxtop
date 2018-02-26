@@ -1,8 +1,10 @@
-const tough = require('tough-cookie');
-const { MemoryCookieStore } = require('tough-cookie/lib/memstore');
-const fs = require('fs');
+import { readFileSync, writeFile } from "fs";
+import Log from "../util/log";
+import { fromJSON } from "tough-cookie";
+import { MemoryCookieStore } from "tough-cookie/lib/memstore";
 
-function iterateProperties(obj, cb) {
+
+function iterateProperties(obj: object, cb) {
     for(let elem in obj) {
         if(obj.hasOwnProperty(elem)) {
             cb(elem, obj[elem])
@@ -10,14 +12,16 @@ function iterateProperties(obj, cb) {
     }
 }
 
-class FileStore extends MemoryCookieStore {
+export default class FileStore extends MemoryCookieStore {
+    file: string;
+    jsonData: any;
     constructor(file) {
         super();
         this.file = file;
         this.load();
     }
 
-    createSaveCallback(callback) {
+    createSaveCallback(callback: (err?: any) => void) {
         return (err) => {
             if(err) {
                 callback(err);
@@ -40,7 +44,7 @@ class FileStore extends MemoryCookieStore {
     }
 
     load() {
-        const data = fs.readFileSync(this.file, 'utf8');
+        const data = readFileSync(this.file, 'utf8');
         if (data.length >= 2) {
             if (data[0] === '{' && data[data.length - 1] === '}') {
                 try {
@@ -48,30 +52,30 @@ class FileStore extends MemoryCookieStore {
                     iterateProperties(json, (domain, paths) => {
                         iterateProperties(paths, (path, cookies) => {
                             iterateProperties(cookies, (cookieName, cookie) => {
-                                json[domain][path][cookieName] = tough.fromJSON(JSON.stringify(cookie));
+                                json[domain][path][cookieName] = fromJSON(JSON.stringify(cookie));
                             });
                         });
                     });
 
-                    this.idx = json;
+                    this.jsonData = json;
                 } catch (exception) {
-                    LOG.error("Error reading cookies: " + exception);
-                    this.idx = {};
+                    Log.error("Error reading cookies: " + exception);
+                    this.jsonData = {};
                 }
             } else {
-                LOG.warn("Encountered old cookies. Ignoring.");
-                this.idx = {};
+                Log.warn("Encountered old cookies. Ignoring.");
+                this.jsonData = {};
                 this.save(() => {
                 });
             }
         } else {
-            this.idx = {};
+            this.jsonData = {};
         }
     }
 
-    save(callback) {
-        const data = JSON.stringify(this.idx);
-        fs.writeFile(this.file, data, (err) => {
+    save(callback: () => void) {
+        const data = JSON.stringify(this.jsonData);
+        writeFile(this.file, data, (err) => {
             if(err) {
                 throw err;
             } else {
@@ -80,5 +84,3 @@ class FileStore extends MemoryCookieStore {
         });
     }
 }
-
-module.exports = FileStore;

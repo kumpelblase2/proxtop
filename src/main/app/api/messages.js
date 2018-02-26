@@ -1,5 +1,8 @@
-const { IPCHandler, MessageChecker, DelayTracker } = require('../lib');
-const { MessagesStorage } = require('../storage');
+import IPCHandler from "../lib/ipc_handler";
+import DelayTracker from "../lib/delay_tracker";
+import MessageChecker from "../lib/message_checker";
+import { MessagesStorage } from "../storage";
+
 const _ = require('lodash');
 const Promise = require('bluebird');
 
@@ -9,7 +12,7 @@ function sortMessages(messages) {
     return messages.sort((messageA, messageB) => messageA.message_id - messageB.message_id);
 }
 
-class Messages extends IPCHandler {
+export default class Messages extends IPCHandler {
     constructor(messagesHandler) {
         super();
         this.messages = messagesHandler;
@@ -185,5 +188,3 @@ class Messages extends IPCHandler {
         return messages.length >= this.messages.constants.messagesPageSize;
     }
 }
-
-module.exports = Messages;

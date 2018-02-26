@@ -1,29 +1,29 @@
-const startup = require('./app/squirrel_startup.js');
+import { createDirIfNotExists } from "./app/util/utils";
+import { app } from "electron";
+import translationDE from '../common/locale/locale-de.json';
+import translationEN from '../common/locale/locale-en.json';
+import startup from "./app/squirrel_startup";
+import windowManager from "./app/ui/window_manager";
+import tray from "./app/ui/tray_manager";
+import Log from './app/util/log';
+import UpdaterProvider from "./app/updater";
+import { APP_DIR, INDEX_LOCATION, LOGO_LOCATION } from "./app/globals";
+import Proxtop from "./app/proxtop";
+import { setup as setupTranslation } from "./app/translation";
+
 if(startup()) {
     process.exit(0);
 }
 
-require('./app/global');
-const { app } = require('electron');
-LOG.verbose('Running on ' + process.versions['electron'] + ' on chrome ' + process.versions['chrome']);
-LOG.verbose('Making sure app dir exists...');
-require('./app/util/utils').createDirIfNotExists(APP_DIR);
-
-const Proxtop = require('./app/proxtop');
-const windowManager = require('./app/ui/window_manager');
-const UpdaterProvider = require('./app/updater');
-const tray = require('./app/ui/tray_manager');
-const translate = require('./app/translation');
-
-import translationDE from '../common/locale/locale-de';
-import translationEN from '../common/locale/locale-en';
-
-translate.setup({
+Log.verbose(`Running on ${process.versions['electron']} on chrome ${process.versions['chrome']}`);
+Log.verbose('Making sure app dir exists...');
+createDirIfNotExists(APP_DIR);
+setupTranslation({
     de: translationDE,
     en: translationEN
 });
 
-LOG.verbose('Initializing...');
+Log.verbose('Initializing...');
 const updater = UpdaterProvider();
 
 windowManager.setDirs({
@@ -40,11 +40,9 @@ const proxtop = new Proxtop(app, updater, {
     api_key: apiKey
 });
 
-app.on('ready', function() {
-    LOG.verbose('Starting up...');
-    proxtop.start().then(function() {
-        LOG.verbose('Off we go!');
-    });
+app.on('ready', () => {
+    Log.verbose('Starting up...');
+    proxtop.start().then(() => Log.verbose('Off we go!'));
 });
 
-module.exports = proxtop;
+export default proxtop;

@@ -61,12 +61,10 @@ function getMessageFromCode(code) {
     }
 }
 
-class APIError extends Error {
+export default class APIError extends Error {
     constructor(code, rawMessage) {
         super(getMessageFromCode(code));
         this.code = code;
         this.raw = rawMessage;
     }
 }
-
-module.exports = APIError;

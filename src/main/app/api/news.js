@@ -1,8 +1,9 @@
-const { IPCHandler, CacheControl } = require('../lib');
+import IPCHandler from "../lib/ipc_handler";
+import CacheControl from "../lib/cache_control";
 
 const NEWS_CACHE_TIME = 300000; // 5 Minutes
 
-class News extends IPCHandler {
+export default class News extends IPCHandler {
     constructor(newsHandler) {
         super();
         this.news = newsHandler;
@@ -16,5 +17,3 @@ class News extends IPCHandler {
         });
     }
 }
-
-module.exports = News;

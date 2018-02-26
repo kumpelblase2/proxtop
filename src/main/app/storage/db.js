@@ -1,7 +1,8 @@
-const low = require('lowdb');
-const path = require('path');
-const storage = require('lowdb/lib/storages/file-sync');
+import low from "lowdb";
+import path from "path";
+import storage from "lowdb/lib/storages/file-sync";
+import { APP_DIR } from "../globals";
 
-module.exports = new low(path.join(APP_DIR, 'cache.db'), {
+export default new low(path.join(APP_DIR, 'cache.db'), {
     storage: storage
 });

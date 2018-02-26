@@ -1,9 +1,14 @@
-const { IPCHandler, CacheControl } = require('../lib');
+import IPCHandler from "../lib/ipc_handler";
+import CacheControl from "../lib/cache_control";
+import WatchlistHandler from "../proxerapi/watchlist_handler";
 
 const WATCHLIST_CACHE_TIME = 60000; // 1 Minute
 
-class Watchlist extends IPCHandler {
-    constructor(watchlistHandler) {
+export default class Watchlist extends IPCHandler {
+    watchlist: WatchlistHandler;
+    watchlistCache: CacheControl;
+
+    constructor(watchlistHandler: WatchlistHandler) {
         super();
         this.watchlist = watchlistHandler;
         this.watchlistCache = new CacheControl(WATCHLIST_CACHE_TIME, this.watchlist.loadWatchlist.bind(this.watchlist));
@@ -41,5 +46,3 @@ class Watchlist extends IPCHandler {
         this.watchlist.watchLoop();
     }
 }
-
-module.exports = Watchlist;

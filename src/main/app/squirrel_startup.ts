@@ -1,24 +1,24 @@
-const os = require('os');
-const path = require('path');
-const child = require('child_process');
+import * as os from 'os';
+import * as path from "path";
+import * as child from "child_process";
 
-function runSquirrel(args, callback) {
+function runSquirrel(args, callback: () => void) {
     const updateExec = path.resolve(path.dirname(process.execPath), "..", "update.exe");
     const proc = child.spawn(updateExec, args, { detached: true });
     proc.on('close', callback);
 }
 
-function install(callback) {
+function install(callback: () => void) {
     const target = path.basename(process.execPath);
     runSquirrel(['--createShortcut', target], callback);
 }
 
-function uninstall(callback) {
+function uninstall(callback: () => void) {
     const target = path.basename(process.execPath);
     runSquirrel(['--removeShortcut', target], callback);
 }
 
-function startup() {
+export default function startup() {
     if(os.platform() !== 'win32') {
         return false;
     }
@@ -42,5 +42,3 @@ function startup() {
             return false;
     }
 }
-
-module.exports = startup;

@@ -1,10 +1,13 @@
-const { CacheControl, IPCHandler } = require('../lib');
-const translate = require('../translation');
+import IPCHandler from "../lib/ipc_handler";
+import Log from "../util/log";
+import translate from "../translation";
+import CacheControl from "../lib/cache_control"
+import { Errors as ERRORS } from "../globals";
 
 const EPISODE_CACHE_TIME = 900000; // 15 Minutes
 const STREAM_CACHE_TIME = 21600000; // 6 Hours
 
-class Episodes extends IPCHandler {
+export default class Episodes extends IPCHandler {
     constructor(episodeHandler) {
         super();
         this.episode = episodeHandler;
@@ -25,12 +28,10 @@ class Episodes extends IPCHandler {
             this.streamCache.get(stream).then((stream) => {
                 event.sender.send('watch', stream);
             }).catch((e) => {
-                LOG.error("Error extracting stream", e);
+                Log.error("Error extracting stream", e);
                 event.sender.send('watch', null);
                 event.sender.send('error', this.translation.get(ERRORS.SEVERITY.WARNING), this.translation.get(ERRORS.STREAMS.CANNOT_PARSE));
             });
         });
     }
 }
-
-module.exports = Episodes;

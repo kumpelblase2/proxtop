@@ -1,20 +1,22 @@
-const Storage = require('./storage');
+import Storage from "./storage";
+import Log from "../util/log";
 
+const DB_NAME = "session";
 const HOUR_IN_MS = 1000 * 60 * 60;
 const DAY_IN_MS = HOUR_IN_MS * 24;
 const MINIMAL_VALID_TIME = DAY_IN_MS * 7;
 const MAX_TIME_AFTER_CREATION = DAY_IN_MS * 30;
 const MAX_TIME_IN_USE_AFTER_EXPIRY = HOUR_IN_MS;
 
-class SessionStorage extends Storage {
+export default class SessionStorage extends Storage {
     constructor(db) {
-        super(db, "session");
+        super(db, DB_NAME);
     }
 
     hasValidSession() {
         const data = this._getSessionData();
         if(!data) {
-            LOG.debug("No session available");
+            Log.debug("No session available");
             return false;
         }
 
@@ -32,7 +34,7 @@ class SessionStorage extends Storage {
     }
 
     invalidateSession() {
-        LOG.debug("Invalidating session.");
+        Log.debug("Invalidating session.");
         this.storage.remove().write();
     }
 
@@ -42,7 +44,7 @@ class SessionStorage extends Storage {
             data.lastUsed = Date.now();
             this._updateSession(data);
         } else {
-            LOG.warn("Refreshing empty session!");
+            Log.warn("Refreshing empty session!");
         }
     }
 
@@ -52,7 +54,7 @@ class SessionStorage extends Storage {
     }
 
     startSession(token, uid, avatar) {
-        LOG.debug("Got new session");
+        Log.debug("Got new session");
         this._updateSession({
             token,
             uid,
@@ -70,5 +72,3 @@ class SessionStorage extends Storage {
         return this.storage.find({}).value();
     }
 }
-
-module.exports = SessionStorage;

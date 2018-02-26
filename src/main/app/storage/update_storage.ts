@@ -1,9 +1,19 @@
-const Storage = require('./storage');
+import Storage from "./storage";
+import Log from "../util/log";
+import Low from "lowdb";
 
 const DB_NAME = 'updater';
 
-class UpdaterStorage extends Storage {
-    constructor(db) {
+type Limitation = {
+    value: boolean,
+    release_time: number,
+    name: string
+};
+
+export default class UpdaterStorage extends Storage {
+    limited: Limitation;
+
+    constructor(db: Low) {
         super(db, DB_NAME);
         this.limited = this.storage.find({ name: 'limited' }).value();
         if(!this.limited) {
@@ -25,7 +35,7 @@ class UpdaterStorage extends Storage {
         if(isReleased) {
             this.limited.value = false;
             this.limited.release_time = 0;
-            LOG.silly("GitHub API limit release time reached; Resetting.");
+            Log.silly("GitHub API limit release time reached; Resetting.");
             this.saveLimitation();
             return false;
         }
@@ -36,8 +46,6 @@ class UpdaterStorage extends Storage {
     setLimited(endTime) {
         this.limited.value = true;
         this.limited.release_time = endTime;
-        LOG.silly("Set GitHub API release time to " + endTime);
+        Log.silly("Set GitHub API release time to " + endTime);
     }
 }
-
-module.exports = UpdaterStorage;

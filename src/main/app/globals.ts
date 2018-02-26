@@ -1,14 +1,25 @@
-const winston = require('winston');
-const path = require('path');
-const moment = require('moment');
+import * as path from 'path';
 
-global.APP_NAME = "proxtop";
-global.PROXER_BASE_URL = "https://proxer.me";
-global.PROXER_API_BASE_URL = "https://proxer.me/api/v1";
-global.INDEX_LOCATION = __dirname + "/index.html";
-global.LOGO_RELATIVE_PATH = "assets/proxtop_logo_256.png";
-global.LOGO_LOCATION = path.join(__dirname, "../", LOGO_RELATIVE_PATH);
-global.PROXER_PATHS = {
+export const UPDATE_INTERVALL = 2 * 60 * 60 * 1000;
+export const GITHUB_RELEASES_URL = "https://api.github.com/repos/kumpelblase2/proxtop/releases";
+export const UPDATER_FEED_URL = "https://proxtop.eternalwings.de/update/";
+
+export const APP_NAME = "proxtop";
+export const PROXER_BASE_URL = "https://proxer.me";
+export const PROXER_API_BASE_URL = "https://proxer.me/api/v1";
+export const INDEX_LOCATION = __dirname + "/index.html";
+export const LOGO_RELATIVE_PATH = "static/assets/proxtop_logo_256.png";
+export const LOGO_LOCATION = path.join(__dirname, "../", LOGO_RELATIVE_PATH);
+
+let appDir: string;
+try {
+    appDir = path.join(require("electron").app.getPath("appData"), APP_NAME);
+} catch (e) {
+    appDir = path.join(__dirname, '..', '..', APP_NAME);
+}
+export const APP_DIR = appDir;
+
+export const PROXER_PATHS = {
     ROOT: '/',
     LOGIN: '/component/user/?task=user.login',
     API_LOGIN: '/login?format=json&action=login',
@@ -36,7 +47,7 @@ global.PROXER_PATHS = {
     DELETE_WATCHLIST: '/ucp?format=json&type=deleteReminder&id='
 };
 
-global.API_PATHS = {
+export const API_PATHS = {
     USER: {
         LOGIN: "/user/login",
         LOGOUT: "/user/logout",
@@ -81,34 +92,33 @@ global.API_PATHS = {
     }
 };
 
-global.ERRORS = require('./util/errors');
-global.UPDATE_INTERVALL = 2 * 60 * 60 * 1000;
-global.GITHUB_RELEASES_URL = "https://api.github.com/repos/kumpelblase2/proxtop/releases";
-global.UPDATER_FEED_URL = "https://proxtop.eternalwings.de/update/";
-
-try {
-    global.APP_DIR = path.join(require("electron").app.getPath("appData"), APP_NAME);
-} catch(e) {
-    global.APP_DIR = path.join(__dirname, '..', '..', APP_NAME);
-}
-
-const logPath = path.join(APP_DIR, "app.log");
-console.log("Setting logfile to " + logPath);
-global.LOG = new (winston.Logger)({
-    transports: [
-        new (winston.transports.Console)({
-            level: 'silly',
-            timestamp: function() {
-                return new Date();
-            },
-            formatter: function(options) {
-                return '[' + options.level.toLowerCase() + '][' + moment(options.timestamp()).format("DD.MM.YYYY HH:mm:ss:SS") + '] ' +
-                    (undefined !== options.message ? options.message : '') +
-                    (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' )
-            }
-        }),
-        new (winston.transports.File)({
-            filename: logPath
-        })
-    ]
-});
+export const Errors = {
+    CONNECTION: {
+        NO_NETWORK: 'ERROR.CONNECTION_NO_NETWORK',
+        UNABLE_TO_RESOLVE: 'ERROR.CONNECTION_NO_RESOLVE',
+        TIMEOUT: 'ERROR.CONNECTION_TIMEOUT',
+        NOT_FOUND: 'ERROR.CONNECTION_NOT_FOUND',
+        NO_CACHE: 'ERROR.CONNECTION_NO_CACHE_AVAILABLE',
+        NETWORK_RECONNECT: 'ERROR.CONNECTION_RECONNECT'
+    },
+    PROXER: {
+        OFFLINE: 'ERROR.PROXER_OFFLINE',
+        INVALID_CREDENTIALS: 'ERROR.PROXER_INVALID_CREDENTIALS',
+        NO_DETAILS_PROVIDED: 'ERROR.PROXER_NO_DETAILS',
+        MYSQL_DOWN: 'ERROR.PROXER_MYSQL_ERROR',
+        CLOUDFLARE: 'ERROR.PROXER_CLOUDFLARE_PROTECTION',
+        API_LIMIT_REACHED: 'ERROR.PROXER_API_LIMIT'
+    },
+    STREAMS: {
+        CANNOT_PARSE: 'ERROR.STREAM_NO_PARSER'
+    },
+    OTHER: {
+        UNKNOWN: 'ERROR.UNKNOWN_ERROR',
+        CACHE_CLEAR: 'ERROR.CACHE_CLEAR'
+    },
+    SEVERITY: {
+        SEVERE: 'ERROR_SEVERITY.severe',
+        WARNING: 'ERROR_SEVERITY.warn',
+        INFO: 'ERROR_SEVERITY.info'
+    }
+};

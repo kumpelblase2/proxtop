@@ -20,6 +20,18 @@ module.exports = [
         output: {
             path: PATHS.output,
             filename: "index.js"
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/
+                }
+            ]
+        },
+        resolve: {
+            extensions: ['.tsx', '.js', '.js', '.ts']
         }
     },
     {

@@ -1,6 +1,5 @@
-const cheerio = require('cheerio');
-const Promise = require('bluebird');
-const _ = require('lodash');
+import cheerio from "cheerio";
+import Promise from "bluebird";
 
 const parser = {
     parseAiringColumn: function(column) {
@@ -103,4 +102,4 @@ parser.parseFinishResponse = function(response) {
 
 parser.parseDeleteResponse = parser.parseUpdateReponse;
 
-module.exports = parser;
+export default parser;

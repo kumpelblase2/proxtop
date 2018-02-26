@@ -1,18 +1,17 @@
-const db = require('./db');
-const SettingsStorage = require('./settings_storage');
-const UpdaterLimitStorage = require('./update_storage');
-const CacheStorage = require('./cache_storage');
-const MessagesCache = require('./message_notification_storage');
-const WatchlistCache = require('./watchlist_storage');
-const MessagesStorage = require('./message_storage');
-const SessionStorage = require('./session_storage');
+import db from "./db";
 
-module.exports = {
-    Cache: new CacheStorage(db),
-    Settings: new SettingsStorage(db),
-    GithubLimit: new UpdaterLimitStorage(db),
-    MessageReadCache: new MessagesCache(db),
-    MessagesStorage: new MessagesStorage(db),
-    WatchlistCache: new WatchlistCache(db),
-    SessionStorage: new SessionStorage(db)
-};
+import SettingsStorage from "./settings_storage";
+import UpdaterLimitStorage from "./update_storage";
+import CacheStorage from "./cache_storage";
+import MessagesCache from "./message_notification_storage";
+import WatchlistCacheBackend from "./watchlist_storage";
+import MessagesStorageBackend from "./message_storage";
+import SessionStorageBackend from "./session_storage";
+
+export const Cache = new CacheStorage(db);
+export const Settings = new SettingsStorage(db);
+export const GithubLimit = new UpdaterLimitStorage(db);
+export const MessageReadCache = new MessagesCache(db);
+export const MessagesStorage = new MessagesStorageBackend(db);
+export const WatchlistCache = new WatchlistCacheBackend(db);
+export const SessionStorage = new SessionStorageBackend(db);

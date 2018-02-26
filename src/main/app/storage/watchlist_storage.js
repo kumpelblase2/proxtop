@@ -1,8 +1,8 @@
-const Storage = require('./storage');
+import Storage from "./storage";
 
 const DB_NAME = 'watchlist-cache';
 
-class WatchlistStorage extends Storage {
+export default class WatchlistStorage extends Storage {
     constructor(db) {
         super(db, DB_NAME);
     }
@@ -25,5 +25,3 @@ class WatchlistStorage extends Storage {
         this.storage.find({ type: 'watchlist-cache' }).assign({ anime: watchlist.anime, manga: watchlist.manga }).write();
     }
 }
-
-module.exports = WatchlistStorage;

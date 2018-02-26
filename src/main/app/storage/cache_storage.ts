@@ -1,19 +1,23 @@
-const Storage = require('./storage');
+import Storage from "./storage";
+import Low from "lowdb";
+import Log from "../util/log";
 
 const DB_NAME = 'cache';
 
-class CacheStorage extends Storage {
-    constructor(db) {
+export default class CacheStorage extends Storage {
+    online = true;
+
+    constructor(db: Low) {
         super(db, DB_NAME);
     }
 
     clearCache() {
-        LOG.info('Clearing response cache...');
+        Log.info('Clearing response cache...');
         this.storage.remove().write();
     }
 
     getResponse(url) {
-        LOG.info("Return cached response for request to " + url);
+        Log.info("Return cached response for request to " + url);
         return this.storage.find({ url: url }).value();
     }
 
@@ -30,5 +34,3 @@ class CacheStorage extends Storage {
         return body;
     }
 }
-
-module.exports = CacheStorage;

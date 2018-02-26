@@ -1,5 +1,5 @@
-const cheerio = require('cheerio');
-const moment = require('moment');
+import cheerio from "cheerio";
+import moment from "moment";
 
 function proxerDateToTimestamp(time) {
     time = time.trim();
@@ -150,4 +150,4 @@ parser.parseProfile = function(page) {
     });
 };
 
-module.exports = parser;
+export default parser;

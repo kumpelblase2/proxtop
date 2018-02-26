@@ -1,21 +1,20 @@
-const path = require('path');
-const settings = require('./settings');
-const API = require('./api');
-const proxerAPI = require('./proxerapi');
-const ProxtopMenu = require('./ui/menu');
-const { ipcMain, Menu } = require('electron');
-const notification = require('./notification');
-const windowManager = require('./ui/window_manager');
-const tray = require('./ui/tray_manager');
-const { SessionHandler } = require('./lib');
+import path from "path";
+import { areNotificationsNativelySupported } from "./notification";
+import { ipcMain, Menu } from "electron";
+import SessionHandler from "./lib/session_handler";
+import API from "./api";
+import windowManager from "./ui/window_manager";
+import tray from "./ui/tray_manager";
+import createProxtopMenu from "./ui/menu";
+import createProxerApi from "./proxerapi";
 
-class Proxtop {
+export default class Proxtop {
     constructor(app, updater, options) {
         this.app = app;
         this.app_dir = options.app_dir;
         this.updater = updater;
         this.session_handler = new SessionHandler(this, options.api_key, path.join(this.app_dir, "cookies.json"));
-        this.proxer_api = proxerAPI(this.session_handler);
+        this.proxer_api = createProxerApi(this.session_handler);
         this.api = new API(this.proxer_api);
     }
 
@@ -34,7 +33,7 @@ class Proxtop {
 
     setupApp() {
         this.app.on('window-all-closed', () => {
-            if(process.platform != 'darwin') {
+            if(process.platform !== 'darwin') {
                 this.shutdown();
                 this.app.quit();
             }
@@ -46,17 +45,15 @@ class Proxtop {
             windowManager.createMainWindow();
         });
 
-        this.menu = ProxtopMenu(this);
+        this.menu = createProxtopMenu(this);
         Menu.setApplicationMenu(this.menu);
 
         ipcMain.on('open-about', () => {
             windowManager.createAboutWindow();
         });
 
-        if(!notification.areNativelySupported()) {
+        if(!areNotificationsNativelySupported()) {
             tray.create();
         }
     }
 }
-
-module.exports = Proxtop;

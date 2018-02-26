@@ -1,7 +1,12 @@
-const { Menu } = require('electron');
-const windowManager = require('./window_manager');
+import windowManager from "./window_manager";
 
-module.exports = function(proxtop) {
+const { Menu } = require('electron');
+
+function isOSX(platform) {
+    return platform === 'darwin';
+}
+
+export default function createMenu(proxtop) {
     return Menu.buildFromTemplate([
         {
             label: 'Proxtop',
@@ -16,7 +21,7 @@ module.exports = function(proxtop) {
                 {
                     label: 'Toggle Developer Tools',
                     accelerator: (function() {
-                        if (process.platform == 'darwin') {
+                        if (isOSX(process.platform)) {
                             return 'Alt+Command+I';
                         } else {
                             return 'Ctrl+Shift+I';
@@ -31,7 +36,7 @@ module.exports = function(proxtop) {
                 {
                     label: 'Reload',
                     accelerator: (function() {
-                        if (process.platform == 'darwin') {
+                        if (isOSX(process.platform)) {
                             return 'Command+R';
                         } else {
                             return 'Ctrl+R';
@@ -49,7 +54,7 @@ module.exports = function(proxtop) {
                 {
                     label: 'Quit',
                     accelerator: (function() {
-                        if (process.platform == 'darwin') {
+                        if (isOSX(process.platform)) {
                             return 'Command+Q';
                         } else {
                             return 'Ctrl+Q';
@@ -63,4 +68,4 @@ module.exports = function(proxtop) {
             ]
         }
     ]);
-}
+};

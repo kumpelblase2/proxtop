@@ -1,10 +1,20 @@
-class LoginHandler {
+import { API_PATHS, PROXER_API_BASE_URL } from "../globals";
+import Log from "../util/log";
+
+export type LoginResult = {
+    success: boolean,
+    reason: string | null
+}
+
+export default class LoginHandler {
+    session_handler: any;
+
     constructor(sessionHandler) {
         this.session_handler = sessionHandler;
     }
 
-    login(username, password, secondFactor = null) {
-        LOG.verbose("Logging in via API");
+    login(username, password, secondFactor = null): Promise<LoginResult> {
+        Log.verbose("Logging in via API");
 
         let form = {
             username,
@@ -12,7 +22,8 @@ class LoginHandler {
         };
 
         if(secondFactor) {
-            LOG.debug("Using login with 2FA token");
+            Log.debug("Using login with 2FA token");
+            // @ts-ignore
             form.secretkey = secondFactor;
         }
 
@@ -22,12 +33,12 @@ class LoginHandler {
                 form
             });
         }, {}, false).then((content) => {
-            LOG.verbose("Login success");
+            Log.verbose("Login success");
             this.session_handler.setSession(content.data);
             return { success: true, reason: null }
         }).catch((ex) => {
             if(ex && ex.code === 3038) {
-                LOG.info("2FA is enabled for the user.");
+                Log.info("2FA is enabled for the user.");
                 return {
                     success: false,
                     reason: '2fa_enabled'
@@ -38,7 +49,7 @@ class LoginHandler {
         });
     }
 
-    logout() {
+    logout(): Promise<void> {
         return this.session_handler.openApiRequest((request) => {
             return request.post({
                 url: PROXER_API_BASE_URL + API_PATHS.USER.LOGOUT
@@ -46,11 +57,9 @@ class LoginHandler {
         }, {}, false);
     }
 
-    checkLogin() {
+    checkLogin(): boolean {
         const hasSession = this.session_handler.hasSession();
-        LOG.debug("Is session alive? " + hasSession);
+        Log.debug("Is session alive? " + hasSession);
         return hasSession;
     }
 }
-
-module.exports = LoginHandler;

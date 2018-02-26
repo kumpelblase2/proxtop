@@ -1,16 +1,15 @@
-const path = require('path');
-const fs = require('fs');
-const _ = require('lodash');
-const settings = require('./settings');
-
+import { get as getByPath } from "lodash";
+import settings from "./settings";
 
 class Translation {
+    fixed_language?: string = null;
+    translations: { [language: string]: object };
+
     constructor(translations) {
         this.translations = translations;
-        this.fixed_language = null;
     }
 
-    getAvailableLanguages() {
+    getAvailableLanguages(): Array<string> {
         if(this.translations) {
             return Object.keys(this.translations);
         } else {
@@ -18,40 +17,38 @@ class Translation {
         }
     }
 
-    get(key, params = {}) {
+    get(key: string, params: { [key: string]: string } = {}): string {
         const lang = this.getLanguage();
-        let value = this.translations[lang];
-        if(!value) {
+        let languageValues = this.translations[lang];
+        if(!languageValues) {
             return null;
         }
 
-        value = _.get(value, key);
+        let value = getByPath(languageValues, key);
 
-        for(var param of Object.keys(params)) {
+        for(let param of Object.keys(params)) {
             value = value.replace(`{{${param}}}`, params[param]);
         }
 
         return value;
     }
 
-    setLanguage(lang) {
+    setLanguage(lang: string) {
         this.fixed_language = lang;
     }
 
-    getLanguage() {
+    getLanguage(): string {
         return this.fixed_language || settings.getGeneralSettings().language;
     }
 }
 
-var latest;
+let latest;
 
-var translate = () => {
+export default function get() {
     return latest;
-};
+}
 
-translate.setup = (translations) => {
+export function setup(translations) {
     latest = new Translation(translations);
     return latest;
-};
-
-module.exports = translate;
+}

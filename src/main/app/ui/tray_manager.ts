@@ -1,18 +1,24 @@
-const { Tray, Menu, app } = require('electron');
-const _ = require('lodash');
+import { APP_NAME } from "../globals";
+import * as _ from "lodash";
+import { app, Menu, Tray, NativeImage, DisplayBalloonOptions } from 'electron';
 
 class ProxtopTray {
+    tray: Tray;
+    lastBalloon: DisplayBalloonOptions;
+    icon: NativeImage | string;
+    menu: Menu;
+
     constructor() {
-        this.icon = null;
-        this.last_balloon = null;
     }
 
     create() {
         this.tray = this.tray || new Tray(this.icon);
         this.tray.setToolTip(APP_NAME);
         this.tray.on('balloon-click', () => {
-            if(this.last_balloon.onclick) {
-                this.last_balloon.onclick();
+            // @ts-ignore
+            if(this.lastBalloon.onclick) { // TODO: why does this _ever_ had onclick?
+                // @ts-ignore
+                this.lastBalloon.onclick();
             }
         });
         this.setupContextMenu();
@@ -32,25 +38,25 @@ class ProxtopTray {
     }
 
     destroy() {
-        if(this.tray) {
+        if(this.exists()) {
             this.tray.destroy();
         }
     }
 
-    exists() {
-        return this.tray;
+    exists(): boolean {
+        return this.tray != null;
     }
 
-    displayBaloon(title, options) {
+    displayBaloon(title: string, options) {
         if(!this.exists()) {
             this.create();
         }
 
         options = _.defaults(options, { icon: this.icon, content: "" });
         options.title = title;
-        this.last_balloon = options;
-        return this.tray.displayBalloon(options);
+        this.lastBalloon = options;
+        this.tray.displayBalloon(options);
     }
 }
 
-module.exports = new ProxtopTray();
+export default new ProxtopTray();

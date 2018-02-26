@@ -1,6 +1,9 @@
+import Log from "../util/log";
+import { PROXER_API_BASE_URL, API_PATHS } from "../globals";
+
 const Promise = require('bluebird');
 
-class MessagesHandler {
+export default class MessagesHandler {
     constructor(sessionHandler) {
         this.session_handler = sessionHandler;
         this.constants = {
@@ -163,9 +166,7 @@ class MessagesHandler {
                     maxTopicLength: officialConstants.topicCount
                 };
 
-                LOG.info("Updating constants to: ", this.constants);
+                Log.info("Updating constants to: ", this.constants);
             });
     }
 }
-
-module.exports = MessagesHandler;

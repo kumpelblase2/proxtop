@@ -1,9 +1,10 @@
-const { IPCHandler, CacheControl } = require('../lib');
-const settings = require('../settings');
+import IPCHandler from '../lib/ipc_handler';
+import CacheControl from '../lib/cache_control';
+import settings from "../settings";
 
 const PROFILE_CACHE_TIME = 1800000; // 30 Minutes
 
-class UserProfile extends IPCHandler {
+export default class UserProfile extends IPCHandler {
     constructor(profileHandler) {
         super();
         this.profile = profileHandler;
@@ -21,5 +22,3 @@ class UserProfile extends IPCHandler {
         });
     }
 }
-
-module.exports = UserProfile;

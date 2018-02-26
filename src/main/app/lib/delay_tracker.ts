@@ -1,9 +1,18 @@
+import Log from "../util/log";
+
 const INIT_DELAY = 5000;
 const MAX_DELAY = 600000;
 const DELAY_INCREASE = 5000;
 
-class DelayTracker {
-    constructor(initDelay = INIT_DELAY, maxDelay = MAX_DELAY, increase = DELAY_INCREASE) {
+export default class DelayTracker {
+    initDelay: number;
+    delay: number;
+    maxDelay: number;
+    increaseRate: number;
+    failTicks: number;
+    name?: string;
+
+    constructor(initDelay: number = INIT_DELAY, maxDelay: number = MAX_DELAY, increase: number = DELAY_INCREASE) {
         this.initDelay = initDelay;
         this.delay = initDelay;
         this.maxDelay = maxDelay;
@@ -15,13 +24,13 @@ class DelayTracker {
     increase() {
         this.failTicks += 1;
         this._updateDelay();
-        LOG.debug("Delay " + (this.name ? this.name + " " : "") + "increase");
+        Log.debug("Delay " + (this.name ? this.name + " " : "") + "increase");
     }
 
     reset() {
         this.delay = this.initDelay;
         this.failTicks = 0;
-        LOG.debug("Delay " + (this.name ? this.name + " " : "") + "reset");
+        Log.debug("Delay " + (this.name ? this.name + " " : "") + "reset");
     }
 
     _updateDelay() {
@@ -29,5 +38,3 @@ class DelayTracker {
         this.delay = Math.min(next, this.maxDelay);
     }
 }
-
-module.exports = DelayTracker;

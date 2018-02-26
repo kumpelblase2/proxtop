@@ -1,13 +1,15 @@
-const settings = require('../settings');
-const { MessageReadCache } = require('../storage');
-const windowManager = require('../ui/window_manager');
-const Notification = require('../notification');
-const translate = require('../translation');
-const DelayTracker = require('./delay_tracker');
+import settings from "../settings";
+import windowManager from "../ui/window_manager";
+import { Instance as Notification } from "../notification";
+import translate from "../translation";
+import DelayTracker from "./delay_tracker";
+import Log from "../util/log";
+import { MessageReadCache } from "../storage";
+
 
 const LOGIN_ERROR = 3023;
 
-class MessageChecker {
+export default class MessageChecker {
     constructor(messageHandler, messageService) {
         this.messages = messageHandler;
         this.messageService = messageService;
@@ -48,12 +50,12 @@ class MessageChecker {
 
     _check() {
         this.lastCheck = new Date().getTime();
-        LOG.info("Check if new messages have arrived...");
+        Log.info("Check if new messages have arrived...");
         this.messageService.loadLatestMessages().then((update) => {
             const { hasMore, messages: notifications } = update;
             notifications.forEach((notification) => {
                 if(!MessageReadCache.hasReceived(notification.username)) {
-                    LOG.verbose('Got new message from ' + notification.username);
+                    Log.verbose('Got new message from ' + notification.username);
                     Notification.displayNotification({
                         title: 'Proxtop',
                         message: this.translation.get('MESSAGES.NEW_MESSAGE', { user: notification.username }),
@@ -74,7 +76,7 @@ class MessageChecker {
             notifications.forEach((not) => MessageReadCache.markReceived(not.username));
 
             if(hasMore) {
-                LOG.debug("Seems like more messages are available, checking again.");
+                Log.debug("Seems like more messages are available, checking again.");
                 this._check();
             }
         }).catch(function (error) {
@@ -97,5 +99,3 @@ class MessageChecker {
         return settings.getGeneralSettings().message_notification;
     }
 }
-
-module.exports = MessageChecker;
