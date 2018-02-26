@@ -3,6 +3,10 @@ const Promise = require('bluebird');
 const request = require('request-promise');
 const _ = require('lodash');
 
+const MP4UPLOAD_TEMPLATE_REGEX = /eval\(function\([^)]+\) *{[^}]+}\((.+)\)/;
+const MP4UPLOAD_STRING_REGEX = /'((\\'|[^'])+)'/g;
+const MP4UPLOAD_SRC_REGEX = /src:"([^"]+)"/;
+
 function extractProxer(options) {
     const $ = cheerio.load(options.page);
     return {
@@ -11,17 +15,75 @@ function extractProxer(options) {
     };
 }
 
+// This is partly taken from the mp4 page and replaced with better names to understand it.
+function mp4UploadScriptGenerator(template, base, counter, dictionary) {
+    while(counter--) {
+        if(dictionary[counter]) {
+            template = template.replace(new RegExp('\\b' + counter.toString(base) + '\\b', 'g'), dictionary[counter]);
+        }
+    }
+
+    return template;
+}
+
 function extractMP4Upload(options) {
     const $ = cheerio.load(options.page);
-    const source = $('#player_code').html();
-    const video = /'file' *: *'(.+)',/m.exec(source);
-    if(video) {
+    const scripts = $('script');
+    let found;
+    for(let i = 0; i < scripts.length; i++) {
+        if(scripts[i].children.length === 1) {
+            const script = scripts[i].children[0].data;
+            if(MP4UPLOAD_TEMPLATE_REGEX.test(script)) {
+                found = script;
+            }
+        }
+    }
+
+    if(found == null) {
+        throw "Could not extract, no matching script found.";
+    }
+
+    const parameterMatch = MP4UPLOAD_TEMPLATE_REGEX.exec(found);
+    if(parameterMatch == null) {
+        throw "Could not extract, full template not found.";
+    }
+
+    const parameters = parameterMatch[1];
+    const firstParameter = MP4UPLOAD_STRING_REGEX.exec(parameters);
+    if(firstParameter == null) {
+        throw "Could not extract, no parameter string found (1).";
+    }
+
+    const template = firstParameter[1];
+    MP4UPLOAD_STRING_REGEX.lastIndex = template.length + 2;
+    const lastParameter = MP4UPLOAD_STRING_REGEX.exec(parameters);
+    if(lastParameter == null) {
+        throw "Could not extract, no parameter string found (2).";
+    }
+
+    const dictionary = lastParameter[1];
+    // By default we add 2 to each length because of the opening and closing `'`.
+    // We offset the start by 1 more so we get rid of the initial `,`
+    // This is still not quite perfect, since we're missing a `.split('|')` in the regex, so the numbersString
+    // will contain some garbage that we don't need. But whatever.
+    const numbersString = parameters.substr(template.length + 3, parameters.length - (template.length + 2 + dictionary.length + 2));
+    const numbers = numbersString.split(',');
+    if(numbers == null || numbers.length < 2) {
+        throw "Could not extract, numbers not found.";
+    }
+
+    const base = parseInt(numbers[0].trim());
+    const counterStart = parseInt(numbers[1].trim());
+    const resultingScript = mp4UploadScriptGenerator(template, base, counterStart, dictionary.split("|"));
+    const sourceMatch = MP4UPLOAD_SRC_REGEX.exec(resultingScript);
+
+    if(sourceMatch != null) {
         return {
-            url: video[1],
+            url: sourceMatch[1],
             type: 'mp4'
         };
     } else {
-        throw "Could not extract.";
+        throw "Could not extract, missing source.";
     }
 }
 
