@@ -69,15 +69,15 @@
     "cheerio": "0.22.0",
     "electron-window-state": "4.0.0",
     "font-awesome": "^4.7.0",
-    "lodash": "4.17.2",
+    "lodash": "4.17.11",
     "lowdb": "1.0.0",
-    "moment": "2.17.1",
-    "opn": "5.2.0",
+    "moment": "2.22.2",
+    "opn": "5.4.0",
     "request": "2.79.0",
     "request-promise": "4.1.1",
-    "semver": "5.3.0",
-    "tough-cookie": "2.3.2",
-    "winston": "2.3.0"
+    "semver": "5.5.1",
+    "tough-cookie": "2.4.3",
+    "winston": "2.4.4"
   },
   "build": {
     "appId": "de.eternalwings.proxtop",
