@@ -32,9 +32,9 @@ angular.module('proxtop').controller('BackgroundController', ['$scope', 'ipcMana
             $state.go(state, params);
         }, false);
 
-        const updateOnlineState = debounce((state) => {
+        const updateOnlineState = debounce(200, (state) => {
             ipc.send('connectivity', state);
-        }, 200);
+        });
 
         $window.addEventListener('online', () => {
             updateOnlineState(true);

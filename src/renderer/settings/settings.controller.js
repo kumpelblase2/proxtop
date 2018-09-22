@@ -39,7 +39,7 @@ angular.module('proxtop').controller('SettingsController', ['$scope', 'settings'
         $scope.saveSettings();
     }, true);
 
-    $scope.saveSettings = debounce(() => {
+    $scope.saveSettings = debounce(1000, function() {
         $translate.use($scope.settings.general.language);
 
         settings.set('account', {
@@ -69,5 +69,5 @@ angular.module('proxtop').controller('SettingsController', ['$scope', 'settings'
         $translate('SETTINGS.SAVED').then((saved) => {
             $mdToast.show($mdToast.simple().hideDelay(1500).textContent(saved));
         });
-    }, 1000, false, true);
+    }, true);
 }]);

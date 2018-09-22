@@ -6,9 +6,9 @@ angular.module('proxtop').directive('onScroll', ['debounce', function(debounce) 
         },
         link: function(scope, elem) {
             const expression = scope.scroll();
-            elem.on('scroll', debounce(() => {
+            elem.on('scroll', debounce(1000, () => {
                 expression(elem);
-            }, 1000, false, true));
+            }, true));
         }
     };
 }]);
