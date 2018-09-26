@@ -114,7 +114,7 @@
     "CONNECTION_NO_NETWORK": "Fehler bei der Anfrage; Konnte keine Verbindung zum Netzwerk herstellen.",
     "CONNECTION_NO_RESOLVE": "Fehler bei der Anfrage; Konnte den Host nicht auflösen.",
     "CONNECTION_TIMEOUT": "Die Abfrage konnte in der gegebenen Zeit nicht vollendet werden.",
-    "CONNECTION_NOT_FOUND": "Die gewünschte REsource wurde nicht gefunden.",
+    "CONNECTION_NOT_FOUND": "Die gewünschte Resource wurde nicht gefunden.",
     "CONNECTION_NO_CACHE_AVAILABLE": "Weder die online noch offline Version sind vorhanden.",
     "CONNECTION_RECONNECT": "Internet wieder verbunden.",
     "PROXER_OFFLINE": "Proxer ist im Moment offline, die Anfrage konnte nicht vollzogen werden.",
