@@ -64,7 +64,9 @@
       "EXTERNAL": "External",
       "PREFERRED_PROVIDER": "Preferred stream provider",
       "APPLICATION": "Application",
-      "PASS_RAW": "Pass direct video url to application"
+      "PASS_RAW": "Pass direct video url to application",
+      "MARK_NEXT_EPISODE": "Automatically mark next episode",
+      "MARK_NEXT_EPISODE_PERCENTAGE": "Watch percentage at which to mark"
     },
     "WATCHLIST": {
       "WATCHLIST": "@:MENU.WATCHLIST",

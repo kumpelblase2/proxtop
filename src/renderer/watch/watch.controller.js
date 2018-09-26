@@ -6,13 +6,16 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
         info: null,
         stream: null,
         video: null,
-        canPlay: false
+        canPlay: false,
+        markedNext: false
     };
 
     const animeSettings = settings.get('anime');
     const preferredStream = animeSettings.preferred_stream;
     const playExternal = animeSettings.open_with === 'external';
     const passRaw = animeSettings.pass_raw_url;
+    const markNext = animeSettings.mark_next_episode;
+    const markNextPercent = animeSettings.mark_next_episode_percent;
 
     $scope.current.display = !playExternal;
 
@@ -54,8 +57,16 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
         }
     });
 
+    $scope.updateTime = (currentTime, totalTime) => {
+        if(markNext && $scope.hasNext() && !$scope.current.markedNext && currentTime / totalTime >= markNextPercent / 100) {
+            console.debug("Marking next episode since we passed the watch percentage.");
+            $scope.markedNext = true;
+            $scope.addNextToWatchlist();
+        }
+    };
+
     $scope.hasVideo = () => {
-        return $scope.current.video && $scope.current.video.type == 'mp4';
+        return $scope.current.video && $scope.current.video.type === 'mp4';
     };
 
     $scope.isReadyForPlayback = () => {

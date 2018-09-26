@@ -17,7 +17,9 @@ const DEFAULTS = {
         open_with: 'system',
         external_path: 'proxer-mpv',
         pass_raw_url: true,
-        preferred_stream: 'proxer-stream'
+        preferred_stream: 'proxer-stream',
+        mark_next_episode: false,
+        mark_next_episode_percent: 100
     },
     DEFAULT_WATCHLIST_SETTINGS: {
         type: 'watchlist',

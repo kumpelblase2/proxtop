@@ -2,7 +2,8 @@ angular.module('proxtop').directive('videoReady', function($timeout) {
     return {
         restrict: 'AR',
         scope: {
-            ready: '='
+            ready: '=',
+            watchProgress: '&'
         },
         link: function(scope, elem, attrs) {
             scope.ready = false;
@@ -10,6 +11,10 @@ angular.module('proxtop').directive('videoReady', function($timeout) {
                 $timeout(function() {
                     scope.ready = true;
                 });
+            });
+
+            elem.on('timeupdate', (ev) => {
+                scope.watchProgress({ time: Math.round(ev.target.currentTime), total: ev.target.duration });
             });
         }
     };
