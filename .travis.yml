@@ -61,7 +61,7 @@ deploy:
   skip_cleanup: true
   file_glob: true
   file:
-    - "_packaged/win/*"
+    - "_packaged/squirrel-windows/*"
     - "_packaged/mac/*"
     - "_packaged/*.zip"
     - "_packaged/*.deb"
