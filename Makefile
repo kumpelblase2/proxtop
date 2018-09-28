@@ -81,7 +81,7 @@ prepare-linux-package: build-linux
 		&& mkdir -p ${ICON_256_DIR} && cp ../../build/icons/256x256.png ${ICON_256_DIR}/proxtop.png \
 		&& mkdir -p ${DESKTOP_ENTRY_DIR} && cp ../../build/proxtop.desktop ${DESKTOP_ENTRY_DIR}/proxtop.desktop \
 		&& mkdir -p bin && cd bin \
-		&& ln -s ../$(DATA_DIR)/proxtop proxtop
+		&& ln -s ../$(DATA_DIR)/Proxtop proxtop
 
 package-deb: prepare-linux-package
 	cd $(PACKAGE_DIR) && fpm -s dir -t deb -n proxtop -v $(VERSION) --prefix "$(DESTDIR)" --deb-no-default-config-files . && mv proxtop_$(VERSION)_amd64.deb ../proxtop-$(VERSION)-amd64.deb
