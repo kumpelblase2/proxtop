@@ -93,6 +93,7 @@ export default class WatchlistHandler {
     }
 
     updateEntry(kat, id, episode, language) {
+        Log.debug(`Updating entry with ID ${id} to episode ${episode}.`);
         return this.session_handler.openApiRequest((request) => {
             return request.post({
                 url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.SET,
@@ -107,18 +108,21 @@ export default class WatchlistHandler {
     }
 
     markFinished(_category, id, ep) {
+        const finishValue = parseInt(ep) + 1;
+        Log.debug(`Marking anime with ID ${id} as finished. (Setting Episode value to ${finishValue})`);
         return this.session_handler.openApiRequest((request) => {
             return request.post({
                 url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.SET_EPISODE,
                 form: {
                     id,
-                    value: parseInt(ep) + 1
+                    value: parseInt(finishValue) + 1
                 }
             });
         });
     }
 
     deleteEntry(entry) {
+        Log.debug(`Removing reminder with id ${entry}.`);
         return this.session_handler.openApiRequest((request) => {
             return request.post({
                 url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.REMOVE,
