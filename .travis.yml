@@ -42,9 +42,7 @@ before_install:
 
 install:
   - nvm install 6
-  - npm install -g bower
   - npm install
-  - bower install
   - npm prune
 
 script:
@@ -63,7 +61,7 @@ deploy:
   skip_cleanup: true
   file_glob: true
   file:
-    - "_packaged/win/*"
+    - "_packaged/squirrel-windows/*"
     - "_packaged/mac/*"
     - "_packaged/*.zip"
     - "_packaged/*.deb"

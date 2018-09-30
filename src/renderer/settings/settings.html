@@ -1,0 +1,166 @@
+<style scoped>
+.password-warning {
+    color: red;
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+md-card md-card-content {
+    padding-top: 0;
+}
+</style>
+
+<div>
+    <div flex="70" flex-sm="80" flex-xs="80" flex-md="80" flex-offset="15" flex-offset-sm="10" flex-offset-xs="10" flex-offset-md="10">
+        <center><h4 translate>SETTINGS.AUTOSAVE_INFO</h4></center>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <h2 translate>SETTINGS.GENERAL</h2>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <md-list>
+                    <md-list-item>
+                        <p translate>SETTINGS.GENERAL.LANGUAGE</p>
+                        <md-radio-group class="md-secondary" layout="row" ng-model="settings.general.language">
+                            <md-radio-button value="de">{{ 'SETTINGS.GENERAL.LANGUAGE.DE' | translate }}</md-radio-button>
+                            <md-radio-button value="en">{{ 'SETTINGS.GENERAL.LANGUAGE.EN' | translate }}</md-radio-button>
+                        </md-radio-group>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.GENERAL.DISABLE_USER_AGENT</p>
+                        <md-switch ng-model="settings.general.disable_user_agent" class="md-secondary" aira-label="Custom Header?" ng-change="toggleRequestUpdate()"></md-switch>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.GENERAL.MESSAGE_CHECK</p>
+                        <md-input-container class="md-secondary">
+                            <label translate>SETTINGS.MINUTE_INTERVAL</label>
+                            <input ng-model="settings.general.check_message_interval" type="number" step="5" min="1"/>
+                        </md-input-container>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.DISPLAY_NOTIFICATION</p>
+                        <md-switch class="md-secondary" ng-model="settings.general.message_notification" aria-label="Display Notification"></md-switch>
+                    </md-list-item>
+                    <md-list-item ng-click="requestCacheClear()">
+                        <p translate>SETTINGS.GENERAL.CLEAR_CACHE</p>
+                        <md-icon md-font-icon="fa-trash" class="fa"></md-icon>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.GENERAL.AUTOMATIC_UPDATES</p>
+                        <md-switch class="md-secondary" ng-model="settings.general.auto_update" aria-label="Auto Update"></md-switch>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <h2 translate>USER.ACCOUNT</h2>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <md-list>
+                    <md-list-item>
+                        <p translate>USER.USERNAME</p>
+                        <md-input-container class="md-secondary">
+                            <label translate>USER.USERNAME</label>
+                            <input ng-model="settings.account.user.username" />
+                        </md-input-container>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>USER.PASSWORD</p>
+                        <md-input-container class="md-secondary">
+                            <label translate>USER.PASSWORD</label>
+                            <input ng-model="settings.account.user.password" type="password" />
+                        </md-input-container>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>LOGIN.KEEP_LOGIN</p>
+                        <md-switch class="md-secondary" ng-model="settings.account.keep_login" aria-label="Keep Login"></md-switch>
+                    </md-list-item>
+                    <md-list-item ng-class="{ 'md-2-line': settings.account.store_password }">
+                        <div class="md-list-item-text">
+                            <p translate>LOGIN.SAVE_PASSWORD</p>
+                            <span class="password-warning" ng-if="settings.account.store_password" translate>LOGIN.PLAINTEXT_WARNING</span>
+                        </div>
+                        <md-switch class="md-secondary" ng-model="settings.account.store_password" aria-label="Save Password"></md-switch>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <h2 translate>SETTINGS.ANIME.ANIME</h2>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <md-list>
+                    <md-list-item>
+                        <p translate>SETTINGS.ANIME.OPEN_IN</p>
+                        <md-radio-group class="md-secondary" ng-model="settings.anime.open_with" layout="row">
+                            <md-radio-button value="internal">{{ 'GENERAL.PROXTOP' | translate }}</md-radio-button>
+                            <md-radio-button value="system">{{ 'SETTINGS.ANIME.SYSTEM_BROWSER' | translate }}</md-radio-button>
+                            <md-radio-button value="external">{{ 'SETTINGS.ANIME.EXTERNAL' | translate }}</md-radio-button>
+                        </md-radio-group>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.ANIME.APPLICATION</p>
+                        <md-input-container class="md-secondary">
+                            <label translate>SETTINGS.ANIME.APPLICATION</label>
+                            <input ng-disabled="settings.anime.open_with != 'external'" ng-model="settings.anime.external_path" />
+                        </md-input-container>
+                    </md-list-item>
+                    <md-list-item ng-if="settings.anime.open_with == 'external'">
+                        <p translate>SETTINGS.ANIME.PASS_RAW</p>
+                        <md-switch class="md-secondary" ng-model="settings.anime.pass_raw_url"></md-switch>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.ANIME.PREFERRED_PROVIDER</p>
+                        <md-select class="md-secondary" ng-model="settings.anime.preferred_stream" aria-label="Preferred Stream Provider">
+                            <md-option ng-repeat="provider in providers" value="{{provider.toLowerCase()}}">{{provider}}</md-option>
+                        </md-select>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.ANIME.MARK_NEXT_EPISODE</p>
+                        <md-switch class="md-secondary" ng-model="settings.anime.mark_next_episode"></md-switch>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.ANIME.MARK_NEXT_EPISODE_PERCENTAGE</p>
+                        <md-input-container class="md-secondary">
+                            <input ng-disabled="!settings.anime.mark_next_episode" ng-model="settings.watchlist.mark_next_episode_percent"
+                                   type="number" step="5" min="5"/>
+                        </md-input-container>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <h2 translate>SETTINGS.WATCHLIST</h2>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content layout="column">
+                <md-list>
+                    <md-list-item>
+                        <p translate>SETTINGS.WATCHLIST.CHECK</p>
+                        <md-input-container class="md-secondary">
+                            <label translate>SETTINGS.MINUTE_INTERVAL</label>
+                            <input ng-model="settings.watchlist.check_interval" type="number" step="5" min="1"/>
+                        </md-input-container>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.DISPLAY_NOTIFICATION</p>
+                        <md-switch class="md-secondary" ng-model="settings.watchlist.display_notification" aria-label="Display Notification"></md-switch>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

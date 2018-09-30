@@ -1,0 +1,137 @@
+{
+  "GENERAL": {
+    "ANIME": "Anime",
+    "MANGA": "Manga",
+    "PROXTOP": "Proxtop",
+    "YES": "Yes",
+    "NO": "No",
+    "ARE_YOU_SURE": "Are you sure?",
+    "CANCEL": "Cancel",
+    "CREATE": "Create"
+  },
+  "USER": {
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "ACCOUNT": "Account"
+  },
+  "LOGIN": {
+    "LOGIN": "Login",
+    "KEEP_LOGIN": "Keep login",
+    "SAVE_PASSWORD": "Save password",
+    "PLAINTEXT_WARNING": "Warning: This stores the password in plain text.",
+    "LOGGED_IN_AS": "Logged in as {{name}}.",
+    "2FA_REQUIRED": "Security token is required",
+    "2FA_TOKEN": "2FA Token"
+  },
+  "PROFILE": {
+    "SELF": "This is you!",
+    "NAME": "Name",
+    "TITLE": "Title",
+    "POINTS": "Points",
+    "ANIME": "@:GENERAL.ANIME",
+    "MANGA": "@:GENERAL.MANGA",
+    "NEWS": "News",
+    "WRITTEN_BY": "written by"
+  },
+  "MENU": {
+    "PROFILE": "Profile",
+    "WATCHLIST": "Watchlist",
+    "MESSAGES": "Messages",
+    "SETTINGS": "Settings",
+    "LOGOUT": "Log out",
+    "ABOUT": "About"
+  },
+  "WATCHLIST": {
+    "NEW_ANIME": "Episode {{episode}} from {{name}} is now available!",
+    "NEW_MANGA": "Chapter {{episode}} from {{name}} is now available!",
+    "ADD_CURRENT": "Add to watchlist",
+    "ADD_NEXT": "Add next to watchlist",
+    "UPDATE_FINISHED": "Updated entry",
+    "FINISH": "Finish",
+    "MARKED_FINISHED": "Successfully marked as finished",
+    "OPENED_EXTERNAL": "The items was opened in an external application"
+  },
+  "SETTINGS": {
+    "SAVE": "Save",
+    "SAVED": "Settings saved.",
+    "MINUTE_INTERVAL": "Intervall in minutes",
+    "DISPLAY_NOTIFICATION": "Display notification",
+    "AUTOSAVE_INFO": "Settings will automatically save after a short time.",
+    "ANIME": {
+      "ANIME": "@:GENERAL.ANIME",
+      "OPEN_IN": "Open with",
+      "SYSTEM_BROWSER": "System (Browser)",
+      "EXTERNAL": "External",
+      "PREFERRED_PROVIDER": "Preferred stream provider",
+      "APPLICATION": "Application",
+      "PASS_RAW": "Pass direct video url to application",
+      "MARK_NEXT_EPISODE": "Automatically mark next episode",
+      "MARK_NEXT_EPISODE_PERCENTAGE": "Watch percentage at which to mark"
+    },
+    "WATCHLIST": {
+      "WATCHLIST": "@:MENU.WATCHLIST",
+      "CHECK": "Check interval"
+    },
+    "GENERAL": {
+      "GENERAL": "General",
+      "LANGUAGE": {
+        "LANGUAGE": "Language",
+        "EN": "English",
+        "DE": "German"
+      },
+      "DISABLE_USER_AGENT": "Use universal user agent",
+      "MESSAGE_CHECK": "Message check intervall",
+      "CLEAR_CACHE": "Clear cache",
+      "AUTOMATIC_UPDATES": "Automatically search for updates"
+    }
+  },
+  "MESSAGES": {
+    "LAST_MESSAGE": "Last message",
+    "WRITE_MESSAGE": "Write a message",
+    "SEND": "Send",
+    "PARTICIPANTS": "Participants",
+    "LOAD_MORE": "Load more",
+    "NEW_MESSAGE": "New message from {{user}}!",
+    "FAVORITES_ONLY": "Show favorites only",
+    "REPORT": "Report",
+    "FAVORITE": "Favorite",
+    "UNFAVORITE": "Unfavorite",
+    "BLOCK": "Block",
+    "UNBLOCK": "Unblock",
+    "NEW_CONVERSATION": "New conversation",
+    "TITLE": "Titel",
+    "INSERT_PARTICIPANTS": "Participants (use  a comma to separate them)",
+    "REPORT_REASON": "Reason for the report",
+    "REPORT_SENT": "Report has been sent."
+  },
+  "UPDATE": {
+    "NEW_VERSION": "A new version is available",
+    "NO": "No, thanks",
+    "YES": "Show me",
+    "WINDOWS_UPDATE_TEXT": "There's a new version of proxtop available for installing. Either click \"Show me\" or restart the app to install it.\r\n\r\nYou can view the changelog for this version at the <a href=\"https://github.com/kumpelblase2/proxtop/releases/latest\">release</a> or view the full changelog at <a href=\"https://github.com/kumpelblase2/proxtop/blob/master/CHANGELOG.md\">the repository</a>.\r\n\r\nIf you don't like automatic updates, you can just to the settings and disable it there."
+  },
+  "ERROR": {
+    "CONNECTION_NO_NETWORK": "Could not perform request, no network available.",
+    "CONNECTION_NO_RESOLVE": "Could not resolve host to perform request.",
+    "CONNECTION_TIMEOUT": "Request timed out.",
+    "CONNECTION_NOT_FOUND": "Requested resource was not found.",
+    "CONNECTION_NO_CACHE_AVAILABLE": "Neither online nor offline versions were available.",
+    "CONNECTION_RECONNECT": "Reconnected to the internet.",
+    "PROXER_OFFLINE": "Could not perform request, Proxer is currently offline.",
+    "PROXER_INVALID_CREDENTIALS": "The provided credentials were invalid.",
+    "PROXER_NO_DETAILS": "No details provided to login. Please login manually.",
+    "PROXER_MYSQL_ERROR": "Proxer has thrown a database error.",
+    "PROXER_CLOUDFLARE_PROTECTION": "Cloudflare protection is on so Proxtop might not work properly.",
+    "PROXER_API_LIMIT": "Proxer API limit reached. Please be patient ~",
+    "STREAM_NO_PARSER": "Proxtop does not support this stream yet :(",
+    "UNKNOWN_ERROR": "Unknown error occurred: ",
+    "CACHE_CLEAR": "Cache has been cleared.",
+    "NO_STREAM_AVAILABLE": "No supported stream exists.",
+    "MESSAGE_CREATE_ERROR": "An error occurred while creating the message."
+  },
+  "ERROR_SEVERITY": {
+    "severe": "Severe",
+    "warn": "Warning",
+    "info": "Information"
+  }
+}

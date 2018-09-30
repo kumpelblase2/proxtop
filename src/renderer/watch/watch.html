@@ -1,0 +1,22 @@
+<div ng-if="!current.stream && current.info && current.info.streams">
+    <div layout="column">
+        <md-button ng-repeat="stream in current.info.streams" ng-click="select(stream)">{{stream.name}}</md-button>
+    </div>
+</div>
+<div ng-if="!shouldShowControls()">
+    <loader></loader>
+</div>
+<div layout="row" ng-if="shouldShowControls()" layout-fill layout-align="center center" tabindex="0" key-controls>
+    <md-button class="md-fab" ng-if="hasPrevious()" ng-click="previous()"><i class="fa fa-chevron-left"></i></md-button>
+    <div layout="column" layout-fill>
+        <video width="100%" height="100%" video-ready ready="current.canPlay" autoplay controls ng-attr-src="{{current.video.url}}"
+               ng-class="{ 'no-display': !current.canPlay }" ng-if="current.display" watch-progress="updateTime(time, total)"></video>
+        <p ng-if="!current.display" style="text-align: center;" translate>WATCHLIST.OPENED_EXTERNAL</p>
+        <div layout="row" layout-align="center start">
+            <md-button ng-click="addToWatchlist()">{{ 'WATCHLIST.ADD_CURRENT' | translate }}</md-button>
+            <md-button ng-if="hasNext()" ng-click="addNextToWatchlist()">{{ 'WATCHLIST.ADD_NEXT' | translate }}</md-button>
+            <md-button ng-if="!hasNext()" ng-click="finishWatching()">{{ 'WATCHLIST.FINISH' | translate }}</md-button>
+        </div>
+    </div>
+    <md-button class="md-fab" ng-if="hasNext()" ng-click="next()"><i class="fa fa-chevron-right"></i></md-button>
+</div>

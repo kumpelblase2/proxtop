@@ -1,4 +1,5 @@
-require('../../src/app/global');
+import {APP_DIR, PROXER_BASE_URL,APP_NAME} from "../../src/main/app/globals";
+import Log from "../../src/main/app/util/log";
 
 describe('global namespace', function() {
     it('should expose the APP_NAME', function() {
@@ -15,8 +16,8 @@ describe('global namespace', function() {
     });
 
     it('should expose a logger', function() {
-        LOG.should.be.a('object');
-        LOG.should.respondTo('log');
-        LOG.should.respondTo('info');
+        Log.should.be.a('object');
+        Log.should.respondTo('log');
+        Log.should.respondTo('info');
     });
 });
