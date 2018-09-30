@@ -74,6 +74,35 @@ PROXER_API_KEY=your_proxer_api_key make build
 PROXER_API_KEY=your_proxer_api_key make package
 ```
 
+## Debugging/Development
+
+Proxtop is running inside Electron using TypeScript/JavaScript and is split in two halves: the "backend" and the "frontend". The backend is doing 
+all the heavy lifting, e.g. doing API requests, caching data and checking for new releases. On the other hand, the frontend is mostly for 
+displaying the information it receives from the backend and taking in user interaction, it shouldn't do many logic on its own.
+
+These two communicate using the IPC provided by electron which is essentially events with a JSON payload.
+
+The source is split accordingly, under `src/main` is the backend and under `src/renderer` is the frontend code.
+
+As with this split, the application also needs to be debugged separately. The frontend can be debugged by pressing `Ctrl+Shift+I` while the app is 
+running to bring up Chrome Dev Tools which allows for client side debugging. While this is straight forward, it has one downside: Making a change 
+in the code requires you yo restart the application. Since this is not ideal, you can instead start the application in the following way. This 
+requires two consoles/shells as it requires two commands to be running concurrently.
+
+In the first shell, run the following:
+```
+npm run webpack
+```
+Then in the second shell, you need to run this:
+```
+npm run debug
+```
+
+The first command starts webpack and tell it to watch for changes. Any time you now change a file, you can just reload the app (`Ctrl+R`) to reload
+ the changes. Sadly, the backend doesn't support that, so for backend changes an app restart is still necessary.
+Additionally to webpack watching for files, the second command instructs electron to open a debug port at `5858` which can be used by your 
+IDE/editor to attach and debug the backend process. Once you're attached you can set breakpoints and debug along.
+
 ## FAQ
 
 > This seems like a hard and terrible way to do it!
