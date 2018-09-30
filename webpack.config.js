@@ -11,6 +11,7 @@ const PATHS = {
 
 module.exports = [
     {
+        devtool: "source-map",
         entry: PATHS.main,
         target: "electron-main",
         node: {
