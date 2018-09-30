@@ -44,13 +44,14 @@ You can find the latest packaged/stable releases under [Releases](https://github
 
 ## How to run
 
-To Run this application you first need an API key from proxer. See [the thread](https://proxer.me/forum/18-ankuendigungen-und-projekte/378833-die-wiedergeburt-der-proxer-api) for details.
+To run this application from source you first need an API key from proxer. See 
+[the thread](https://proxer.me/forum/18-ankuendigungen-und-projekte/378833-die-wiedergeburt-der-proxer-api) for details.
 
-First get all required dependencies (requires NPM and bower to be installed):
+First get all required dependencies (requires NPM to be installed):
 ```
 make
 # Or this:
-npm install && bower install
+npm install
 ```
 
 Run tests via:
@@ -61,6 +62,8 @@ npm test
 Run the application via:
 ```
 PROXER_API_KEY=your_proxer_api_key npm start
+# Or
+PROXER_API_KEY=your_proxer_api_key ./run.sh
 ```
 
 Or if you want to build the application:
@@ -81,7 +84,7 @@ You might say that and you wouldn't be wrong. However, until the API is out, whi
 
 This is a reasonable question, so let me tell you this:
 
-1. In the browser the page is fixed, meaning the layout, menu and style are not really modifyable by me. If I don't like the style or if I want to make certain workflows faster, how would I do that? I don't want to end up with millions of lines of injected js code to change the site and get totally thrown off once the design changes. I'll probably end up with the same thing here, but in a separate app it's far easier to manage than a hacky script that ends up getting injected.
+1. In the browser the page is fixed, meaning the layout, menu and style are not really modifiable by me. If I don't like the style or if I want to make certain workflows faster, how would I do that? I don't want to end up with millions of lines of injected js code to change the site and get totally thrown off once the design changes. I'll probably end up with the same thing here, but in a separate app it's far easier to manage than a hacky script that ends up getting injected.
 2. I cannot easily embed the content of the web page into other things, like a video player. There's no nice way for example to open the video in my local media player. Why would I want this? Better video controls, less memory footprint (some of the player are just ... ugh, shitty. Do you remember flash?) and brings more flexibility.
 3. I can easily add new functionality without, again, fiddling with content scripts or maybe even doing things totally different.
 
@@ -91,7 +94,7 @@ TL;DR: Convenience, because I like to do things differently.
 
 Page load: Page load is a concern, as this is a hobby website and thus only limited resources are available. However, this is not really a concern as this app does similar/identical requests to the page as if a user would do the same steps. However, with convenience features like watchlist notification, this might be less true, as it has to check in the background if new ones are available which would cause more page loads to happen. I do believe however this is no big concern as by default these requests do not happen often.
 
-Advertisments: There are three cases
+Advertisements: There are three cases
 1. You donate to the creators already, which results in no ads on the site, thus no difference.
 2. You have an adblocker installed so you there's no difference either.
 3. You have no adblocker installed and would normally see ads. This is the only case ad revenue would be missed.
