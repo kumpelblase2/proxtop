@@ -1,10 +1,6 @@
 import windowManager from "./window_manager";
-
-const { Menu } = require('electron');
-
-function isOSX(platform) {
-    return platform === 'darwin';
-}
+import { Menu } from "electron";
+import { isOnOSX } from '../util/is_osx';
 
 export default function createMenu(proxtop) {
     return Menu.buildFromTemplate([
@@ -20,13 +16,7 @@ export default function createMenu(proxtop) {
                 },
                 {
                     label: 'Toggle Developer Tools',
-                    accelerator: (function() {
-                        if (isOSX(process.platform)) {
-                            return 'Alt+Command+I';
-                        } else {
-                            return 'Ctrl+Shift+I';
-                        }
-                    })(),
+                    accelerator: useUnlessOnOsx('Ctrl+Shift+I', 'Alt+Command+I'),
                     click: function(item, focusedWindow) {
                         if (focusedWindow) {
                             focusedWindow.toggleDevTools();
@@ -35,13 +25,7 @@ export default function createMenu(proxtop) {
                 },
                 {
                     label: 'Reload',
-                    accelerator: (function() {
-                        if (isOSX(process.platform)) {
-                            return 'Command+R';
-                        } else {
-                            return 'Ctrl+R';
-                        }
-                    })(),
+                    accelerator: useUnlessOnOsx('Ctrl+R', 'Command+R'),
                     click: function(item, focusedWindow) {
                         if (focusedWindow) {
                             focusedWindow.reload();
@@ -53,13 +37,7 @@ export default function createMenu(proxtop) {
                 },
                 {
                     label: 'Quit',
-                    accelerator: (function() {
-                        if (isOSX(process.platform)) {
-                            return 'Command+Q';
-                        } else {
-                            return 'Ctrl+Q';
-                        }
-                    })(),
+                    accelerator: useUnlessOnOsx('Ctrl+Q', 'Command+Q'),
                     click: function() {
                         proxtop.shutdown();
                         proxtop.app.quit();
@@ -69,3 +47,11 @@ export default function createMenu(proxtop) {
         }
     ]);
 };
+
+function useUnlessOnOsx(normalShortcut, osxShortcut) {
+    if(isOnOSX) {
+        return osxShortcut;
+    } else {
+        return normalShortcut;
+    }
+}
