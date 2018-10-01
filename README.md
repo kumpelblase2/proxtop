@@ -1,6 +1,6 @@
 # Proxtop - A proxer.me desktop client
 
-![icon](src/assets/proxtop_logo_256.png)
+![icon](static/assets/proxtop_logo_256.png)
 
 Proxtop is an experimental attempt to create a desktop client for the popular german anime site [proxer.me](https://proxer.me).
 
