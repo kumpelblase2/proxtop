@@ -27,7 +27,7 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManage
     $scope.hide_nonfavs = false;
     $scope.hover_id = -1;
     ipc.on('conversations', (ev, conversations) => {
-        $scope.conversations = conversations;
+        $scope.conversations = sortConversations(conversations);
     });
 
     $scope.openConversation = (conversation) => {
@@ -69,18 +69,11 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManage
         ipc.send(event, conversation.id);
     };
 
-    $scope.getLastMessageDate = (conv) => {
-        const messages = conv.messages || [];
-        if(messages.length > 0) {
-            return parseInt(messages[messages.length - 1].timestamp) * 1000;
-        } else {
-            return 0;
-        }
-    };
+    $scope.getLastMessageDate = getLatestMessageTimestamp;
 
     const toggleFav = (value) => {
         return (ev, result) => {
-            for(var i = 0; i < $scope.conversations.length; i++) {
+            for(let i = 0; i < $scope.conversations.length; i++) {
                 if($scope.conversations[i].id == result.id) {
                     $scope.conversations[i].favorite = value;
                     return;
@@ -96,3 +89,20 @@ angular.module('proxtop').controller('MessagesController', ['$scope', 'ipcManage
 
     ipc.send('conversations');
 }]);
+
+function sortConversations(conversations) {
+    return conversations.sort((a, b) => {
+        // We do it the other way around compared to normal, so we already get a reversed array.
+        // i.e. the lowest will be the newest.
+        return getLatestMessageTimestamp(b) - getLatestMessageTimestamp(a);
+    });
+}
+
+function getLatestMessageTimestamp(conversation) {
+    const sortedTimestamps = conversation.messages.map(message => message.timestamp).sort();
+    if(sortedTimestamps.length === 0) {
+        return 0;
+    }
+
+    return sortedTimestamps[sortedTimestamps.length - 1] * 1000;
+}
