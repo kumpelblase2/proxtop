@@ -18,7 +18,9 @@ const DEFAULTS = {
         pass_raw_url: true,
         preferred_stream: 'proxer-stream',
         mark_next_episode: false,
-        mark_next_episode_percent: 100
+        mark_next_episode_percent: 100,
+        automatically_start_next: true,
+        time_before_next: 10
     },
     DEFAULT_WATCHLIST_SETTINGS: {
         type: 'watchlist',

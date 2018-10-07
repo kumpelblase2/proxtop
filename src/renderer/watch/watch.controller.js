@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' , '$stateParams', '$sce', 'settings', '$state', '$mdToast', '$translate', 'SupportedProviderService', function($scope, ipcManager, $stateParams, $sce, settings, $state, $mdToast, $translate, SupportedProviderService) {
+angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager', '$stateParams', '$sce', 'settings', '$state', '$mdToast', '$translate', 'SupportedProviderService', '$interval', function($scope, ipcManager, $stateParams, $sce, settings, $state, $mdToast, $translate, SupportedProviderService, $interval) {
     const ipc = ipcManager($scope);
     $scope.current = {
         info: null,
@@ -16,6 +16,12 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
     const passRaw = animeSettings.pass_raw_url;
     const markNext = animeSettings.mark_next_episode;
     const markNextPercent = animeSettings.mark_next_episode_percent;
+    const autostartNext = animeSettings.automatically_start_next;
+    const timeBeforeNext = animeSettings.time_before_next;
+
+    $scope.displayTimer = false;
+    $scope.remainingTimeTillNext = timeBeforeNext;
+    let timerRunnable = null;
 
     $scope.current.display = !playExternal;
 
@@ -23,12 +29,12 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
         $scope.current.info = result;
         const supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
         $scope.current.info.streams = supported;
-        if(supported && supported.length == 0) {
+        if(supported && supported.length === 0) {
             $translate('ERROR.NO_STREAM_AVAILABLE').then((translation) => {
                 $mdToast.show($mdToast.simple().textContent(translation));
                 $state.go('watchlist');
             });
-        } else if(supported && supported.length == 1) {
+        } else if(supported && supported.length === 1) {
             $scope.select(supported[0]);
         } else {
             const found = _.filter(supported, { type: preferredStream });
@@ -49,7 +55,7 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
             const actualUrl = video.url;
             video.url = $sce.trustAsResourceUrl(video.url);
             $scope.current.video = video;
-            if (playExternal && passRaw) {
+            if(playExternal && passRaw) {
                 ipc.send('open-external', actualUrl);
             }
         } else {
@@ -62,6 +68,10 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
             console.debug("Marking next episode since we passed the watch percentage.");
             $scope.markedNext = true;
             $scope.addNextToWatchlist();
+        }
+
+        if(autostartNext && totalTime - currentTime <= timeBeforeNext && !$scope.displayTimer) {
+            $scope.startTimerForNext();
         }
     };
 
@@ -118,6 +128,30 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
         ipc.send('finish-watchlist', 'anime', $stateParams.id, $stateParams.ep, $stateParams.sub);
     };
 
+    $scope.timerPercentage = () => {
+        return 100 - ($scope.remainingTimeTillNext / timeBeforeNext) * 100;
+    };
+
+    $scope.startTimerForNext = () => {
+        if(timeBeforeNext === 0) {
+            $scope.next();
+        }
+
+        $scope.displayTimer = true;
+        timerRunnable = $interval(() => {
+            $scope.remainingTimeTillNext -= 1;
+            if($scope.remainingTimeTillNext <= 0) {
+                $scope.next();
+                $interval.cancel(timerRunnable);
+            }
+        }, 1000);
+    };
+
+    $scope.cancelAutostart = () => {
+        $interval.cancel(timerRunnable);
+        $scope.displayTimer = false;
+    };
+
     ipc.on('add-watchlist', (ev, response) => {
         $translate('WATCHLIST.UPDATE_FINISHED').then(function(translation) {
             $mdToast.show($mdToast.simple().textContent(translation));
@@ -131,4 +165,8 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager' 
     });
 
     ipc.send('episode', $stateParams.id, $stateParams.ep, $stateParams.sub);
+
+    $scope.$on('$destroy', () => {
+        $interval.cancel(timerRunnable);
+    });
 }]);

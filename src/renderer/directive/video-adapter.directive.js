@@ -1,4 +1,4 @@
-angular.module('proxtop').directive('videoReady', function($timeout) {
+angular.module('proxtop').directive('videoAdapter', function($timeout) {
     return {
         restrict: 'AR',
         scope: {

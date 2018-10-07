@@ -123,6 +123,17 @@ md-card md-card-content {
                                    type="number" step="5" min="5"/>
                         </md-input-container>
                     </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.ANIME.AUTOMATICALLY_START_NEXT</p>
+                        <md-switch class="md-secondary" ng-model="settings.anime.automatically_start_next"></md-switch>
+                    </md-list-item>
+                    <md-list-item>
+                        <p translate>SETTINGS.ANIME.TIME_BEFORE_NEXT</p>
+                        <md-input-container class="md-secondary">
+                            <input ng-disabled="!settings.anime.automatically_start_next" ng-model="settings.anime.time_before_next"
+                                   type="number" step="1" min="0"/>
+                        </md-input-container>
+                    </md-list-item>
                 </md-list>
             </md-card-content>
         </md-card>

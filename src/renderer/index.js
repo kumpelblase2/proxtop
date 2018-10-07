@@ -20,7 +20,7 @@ import './app.js';
 import './themes.js';
 
 import './directive/loader.directive.js';
-import './directive/video-ready.directive.js';
+import './directive/video-adapter.directive.js';
 import './directive/key-controls.directive.js';
 import './directive/on-scroll.directive.js';
 import './providers/ipcManager.provider.js';

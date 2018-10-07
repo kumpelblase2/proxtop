@@ -47,7 +47,8 @@
     "UPDATE_FINISHED": "Eintrag erneuert",
     "FINISH": "Abschließen",
     "MARKED_FINISHED": "Erfolgreich als Abgeschlossen markiert",
-    "OPENED_EXTERNAL": "Das Element wurde in einer externen Anwendung geöffnet"
+    "OPENED_EXTERNAL": "Das Element wurde in einer externen Anwendung geöffnet",
+    "TIME_UNTIL_NEXT": "Nächste Episode startet in {{time}} Sekunden ..."
   },
   "SETTINGS": {
     "SAVE": "Speichern",
@@ -64,7 +65,9 @@
       "APPLICATION": "Anwendung",
       "PASS_RAW": "Direkten Video-Url an Anwendung leiten",
       "MARK_NEXT_EPISODE": "Nächste Episode automatisch markieren",
-      "MARK_NEXT_EPISODE_PERCENTAGE": "Prozent bis zum markieren"
+      "MARK_NEXT_EPISODE_PERCENTAGE": "Prozent bis zum markieren",
+      "AUTOMATICALLY_START_NEXT": "Automatisch nächste Episode starten",
+      "TIME_BEFORE_NEXT": "Zeit bevor die nächste Episode gestartet wird"
     },
     "WATCHLIST": {
       "WATCHLIST": "@:MENU.WATCHLIST",

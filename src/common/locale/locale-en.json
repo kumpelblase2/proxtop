@@ -47,7 +47,8 @@
     "UPDATE_FINISHED": "Updated entry",
     "FINISH": "Finish",
     "MARKED_FINISHED": "Successfully marked as finished",
-    "OPENED_EXTERNAL": "The items was opened in an external application"
+    "OPENED_EXTERNAL": "The items was opened in an external application",
+    "TIME_UNTIL_NEXT": "Next episode starts in {{time}} seconds..."
   },
   "SETTINGS": {
     "SAVE": "Save",
@@ -64,7 +65,9 @@
       "APPLICATION": "Application",
       "PASS_RAW": "Pass direct video url to application",
       "MARK_NEXT_EPISODE": "Automatically mark next episode",
-      "MARK_NEXT_EPISODE_PERCENTAGE": "Watch percentage at which to mark"
+      "MARK_NEXT_EPISODE_PERCENTAGE": "Watch percentage at which to mark",
+      "AUTOMATICALLY_START_NEXT": "Automatically start next episode",
+      "TIME_BEFORE_NEXT": "Time before starting next episode"
     },
     "WATCHLIST": {
       "WATCHLIST": "@:MENU.WATCHLIST",
