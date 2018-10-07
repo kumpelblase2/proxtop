@@ -28,12 +28,6 @@ form > * {
             <md-checkbox ng-model="keepLogin" aria-label="Keep Login">
                 {{ 'LOGIN.KEEP_LOGIN' | translate }}
             </md-checkbox>
-            <md-checkbox ng-model="storePassword" aria-label="Save Password">
-                {{ 'LOGIN.SAVE_PASSWORD' | translate }}
-                <span class="password-warning" ng-if="storePassword">
-                    {{ 'LOGIN.PLAINTEXT_WARNING' | translate }}
-                </span>
-            </md-checkbox>
             <md-button class="md-primary" type="submit" aria-label="Login">{{'LOGIN.LOGIN' | translate}}</md-button>
         </form>
     </div>

@@ -180,9 +180,7 @@ export default class SessionHandler extends IPCHandler {
         } else if(/getaddr/.test(error.message)) {
             Log.error('Other error but contained "getaddr" so it\'s probably no network:');
             Log.error(error.message);
-            if(this.online) {
-                this.online = false;
-            }
+            this.online = false;
         } else {
             Log.error('Unknown error occurred: ' + error.message);
             windowManager.notifyWindow('error', this.translation.get(ERRORS.SEVERITY.SEVERE), this.translation.get(ERRORS.OTHER.UNKNOWN));

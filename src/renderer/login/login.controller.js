@@ -45,7 +45,6 @@ angular.module('proxtop').controller('LoginController', ['$scope', 'settings', '
     $scope.login = function() {
         settings.set('account', {
             keep_login: $scope.keepLogin,
-            store_password: $scope.storePassword,
             user: {
                 username: $scope.user.username,
                 password: ($scope.storePassword ? $scope.user.password : "")
@@ -58,5 +57,4 @@ angular.module('proxtop').controller('LoginController', ['$scope', 'settings', '
     $scope.user = loaded.user;
     $scope.secondFactor = null;
     $scope.keepLogin = loaded.keep_login;
-    $scope.storePassword = loaded.store_password;
 }]);

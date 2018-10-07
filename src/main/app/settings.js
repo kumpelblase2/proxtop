@@ -6,7 +6,6 @@ const DEFAULTS = {
     DEFAULT_ACCOUNT_SETTINGS: {
         type: 'account',
         keep_login: true,
-        store_password: false,
         user: {
             username: '',
             password: ''

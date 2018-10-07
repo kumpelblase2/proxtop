@@ -73,22 +73,8 @@ md-card md-card-content {
                         </md-input-container>
                     </md-list-item>
                     <md-list-item>
-                        <p translate>USER.PASSWORD</p>
-                        <md-input-container class="md-secondary">
-                            <label translate>USER.PASSWORD</label>
-                            <input ng-model="settings.account.user.password" type="password" />
-                        </md-input-container>
-                    </md-list-item>
-                    <md-list-item>
                         <p translate>LOGIN.KEEP_LOGIN</p>
                         <md-switch class="md-secondary" ng-model="settings.account.keep_login" aria-label="Keep Login"></md-switch>
-                    </md-list-item>
-                    <md-list-item ng-class="{ 'md-2-line': settings.account.store_password }">
-                        <div class="md-list-item-text">
-                            <p translate>LOGIN.SAVE_PASSWORD</p>
-                            <span class="password-warning" ng-if="settings.account.store_password" translate>LOGIN.PLAINTEXT_WARNING</span>
-                        </div>
-                        <md-switch class="md-secondary" ng-model="settings.account.store_password" aria-label="Save Password"></md-switch>
                     </md-list-item>
                 </md-list>
             </md-card-content>
