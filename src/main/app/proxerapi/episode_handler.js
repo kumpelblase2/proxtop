@@ -7,7 +7,6 @@ import { parseEpisode } from "../../page_parser/episode";
 export default class EpisodeHandler {
     constructor(sessionHandler) {
         this.session_handler = sessionHandler;
-        
     }
 
     loadEpisode(id, ep, sub) {

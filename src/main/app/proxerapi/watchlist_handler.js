@@ -6,7 +6,7 @@ import Log from "../util/log";
 import translate from "../translation";
 import watchlistParser from "../../page_parser/watchlist"
 import { WatchlistCache } from "../storage";
-import {PROXER_API_BASE_URL, PROXER_BASE_URL,API_PATHS, PROXER_PATHS, LOGO_RELATIVE_PATH} from "../globals";
+import {PROXER_API_BASE_URL, PROXER_BASE_URL, API_PATHS, PROXER_PATHS, LOGO_RELATIVE_PATH} from "../globals";
 
 const returnMsg = (success, msg) => { return { success: success, msg: msg } };
 
