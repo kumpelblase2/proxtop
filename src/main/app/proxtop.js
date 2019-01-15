@@ -39,10 +39,10 @@ export default class Proxtop {
             }
         });
 
-        // TODO check if this still works on OSX
-        this.app.on('activate-with-no-open-windows', (event) => {
-            event.preventDefault();
-            windowManager.createMainWindow();
+        this.app.on('activate', () => {
+            if(!windowManager.hasWindowOpen()) {
+                windowManager.createMainWindow();
+            }
         });
 
         this.menu = createProxtopMenu(this);

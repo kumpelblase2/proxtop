@@ -25,6 +25,10 @@ export class WindowManager {
         return this.mainWindow;
     }
 
+    hasWindowOpen(): boolean {
+        return this.getMainWindow() != null;
+    }
+
     createMainWindow() {
         Logger.verbose('Opening new window');
         const windowState = WindowState({
