@@ -63,6 +63,11 @@ module.exports = [
                 {
                     test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                     loader: "file-loader"
+                },
+                {
+                    test: /\.tsx?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/
                 }
             ]
         },
@@ -70,6 +75,9 @@ module.exports = [
             new HtmlWebpackPlugin({
                 template: 'src/renderer/index.html'
             })
-        ]
+        ],
+        resolve: {
+            extensions: ['.tsx', '.js', '.json', '.ts']
+        }
     }
 ];
