@@ -119,7 +119,7 @@ class AutoUpdater implements Updater {
     translate = translation();
 
     constructor(public feed: string) {
-        autoUpdater.setFeedURL(feed);
+        autoUpdater.setFeedURL({ url: feed });
         ipcMain.on('install-update', () => {
             autoUpdater.quitAndInstall();
         });
@@ -130,6 +130,10 @@ class AutoUpdater implements Updater {
     }
 
     start(callback) {
+        autoUpdater.on('error', message => {
+            Logger.error("Had an issue while trying to update: ", message);
+        });
+
         autoUpdater.on('update-downloaded', (event, notes, name, date) => {
             Logger.info("Update ready, notifying user.");
             notes = notes || this.translate.get('UPDATE.WINDOWS_UPDATE_TEXT');
