@@ -88,7 +88,8 @@ export const API_PATHS = {
         CLEAR: "/notifications/delete"
     },
     UCP: {
-        ANIME_MANGA_LIST: "/ucp/list"
+        ANIME_MANGA_LIST: "/ucp/list",
+        SET_COMMENT_STATE: "/ucp/setcommentstate"
     }
 };
 

@@ -6,9 +6,11 @@ import Log from "../util/log";
 import translate from "../translation";
 import watchlistParser from "../../page_parser/watchlist"
 import { WatchlistCache } from "../storage";
-import {PROXER_API_BASE_URL, PROXER_BASE_URL, API_PATHS, PROXER_PATHS, LOGO_RELATIVE_PATH} from "../globals";
+import { API_PATHS, LOGO_RELATIVE_PATH, PROXER_API_BASE_URL, PROXER_BASE_URL, PROXER_PATHS } from "../globals";
 
-const returnMsg = (success, msg) => { return { success: success, msg: msg } };
+const returnMsg = (success, msg) => {
+    return { success: success, msg: msg }
+};
 
 function alterWatchlist(list) {
     const result = { anime: [], manga: [] };
@@ -107,17 +109,50 @@ export default class WatchlistHandler {
         }).then(() => returnMsg(true, "")).catch(() => returnMsg(false, "Not found"));
     }
 
-    markFinished(_category, id, ep) {
+    markFinished(category, id, ep, sub, entry) {
         const finishValue = parseInt(ep) + 1;
         Log.debug(`Marking anime with ID ${id} as finished. (Setting Episode value to ${finishValue})`);
+        return this._findEntryFor(category, id, sub).then(foundEntry => {
+            if(foundEntry == null) {
+                Log.debug("No comment entry found that's still on 'watching' so removing entry.");
+                return this.deleteEntry(entry).then(() => returnMsg(true, ""));
+            } else {
+                return this.session_handler.openApiRequest((request) => {
+                    return request.post({
+                        url: PROXER_API_BASE_URL + API_PATHS.UCP.SET_COMMENT_STATE,
+                        form: {
+                            id: foundEntry.cid,
+                            value: parseInt(ep) + 1
+                        }
+                    });
+                }).then(() => returnMsg(true, "")).catch(() => returnMsg(false, "Error?"));
+            }
+        })
+
+    }
+
+    _findEntryFor(category, id, ep, _sub, page = 0, limit = 100) {
         return this.session_handler.openApiRequest((request) => {
             return request.post({
-                url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.SET_EPISODE,
+                url: PROXER_API_BASE_URL + API_PATHS.UCP.ANIME_MANGA_LIST,
                 form: {
-                    id,
-                    value: parseInt(finishValue) + 1
+                    kat: category,
+                    p: page,
+                    filter: 'stateFilter2',
+                    limit
                 }
             });
+        }).then(result => result.data).then(entries => {
+            const foundEntry = entries.find(elem => elem.id == id && elem.episode == ep);
+            if(foundEntry == null) {
+                if(entries.length === limit) {
+                    return this._findEntryFor(category, id, ep, _sub, page + 1)
+                } else {
+                    return null;
+                }
+            } else {
+                return foundEntry;
+            }
         });
     }
 
@@ -137,7 +172,7 @@ export default class WatchlistHandler {
         setTimeout(() => {
             if(this.session_handler.hasSession()) {
                 const time = settings.getWatchlistSettings().check_interval;
-                if (new Date().getTime() - this.lastCheck > time * 60000 - 5000) {
+                if(new Date().getTime() - this.lastCheck > time * 60000 - 5000) {
                     this.checkUpdates();
                 }
 
