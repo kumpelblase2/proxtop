@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager', '$stateParams', '$sce', 'settings', '$state', '$mdToast', '$translate', 'SupportedProviderService', '$interval', function($scope, ipcManager, $stateParams, $sce, settings, $state, $mdToast, $translate, SupportedProviderService, $interval) {
     const ipc = ipcManager($scope);
     $scope.current = {
@@ -27,7 +25,7 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager',
 
     ipc.once('episode', (ev, result) => {
         $scope.current.info = result;
-        const supported = _.filter($scope.current.info.streams, SupportedProviderService.isSupported);
+        const supported = $scope.current.info.streams.filter(SupportedProviderService.isSupported);
         $scope.current.info.streams = supported;
         if(supported && supported.length === 0) {
             $translate('ERROR.NO_STREAM_AVAILABLE').then((translation) => {
@@ -37,7 +35,7 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager',
         } else if(supported && supported.length === 1) {
             $scope.select(supported[0]);
         } else {
-            const found = _.filter(supported, { type: preferredStream });
+            const found = supported.filter(stream => stream.type === preferredStream);
             if(found && found[0]) {
                 $scope.select(found[0]);
             }
@@ -117,15 +115,15 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager',
 
     // We have to pass over 'anime' below as it's expecting a category. Since we currently only support viewing anime and not manga, this can be static
     $scope.addToWatchlist = () => {
-        ipc.send('add-watchlist', 'anime', $stateParams.id, $stateParams.ep, $stateParams.sub);
+        ipc.send('add-watchlist', 'anime', $stateParams.id, $stateParams.ep, $stateParams.sub, $stateParams.entry);
     };
 
     $scope.addNextToWatchlist = () => {
-        ipc.send('add-watchlist', 'anime', $stateParams.id, $scope.current.info.next, $stateParams.sub);
+        ipc.send('add-watchlist', 'anime', $stateParams.id, $scope.current.info.next, $stateParams.sub, $stateParams.entry);
     };
 
     $scope.finishWatching = () => {
-        ipc.send('finish-watchlist', 'anime', $stateParams.id, $stateParams.ep, $stateParams.sub);
+        ipc.send('finish-watchlist', 'anime', $stateParams.id, $stateParams.ep, $stateParams.sub, $stateParams.entry);
     };
 
     $scope.timerPercentage = () => {

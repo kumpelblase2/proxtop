@@ -8,11 +8,11 @@ angular.module('proxtop').controller('WatchlistController', ['$scope', 'ipcManag
     });
 
     $scope.clickAnime = function(entry) {
-        open.openAnime(entry.id, entry.episode, entry.sub);
+        open.openAnime(entry.id, entry.episode, entry.sub, entry.entry);
     };
 
     $scope.clickManga = function(entry) {
-        open.openManga(entry.id, entry.episode, entry.sub);
+        open.openManga(entry.id, entry.episode, entry.sub, entry.entry);
     };
 
     $scope.deleteEntry = function(entry) {

@@ -2,7 +2,7 @@ angular.module('proxtop').service('open', ['ipc', 'settings', '$state', function
     const self = this;
     ['Anime', 'Manga'].forEach(function(name) {
         const lower = name.toLowerCase();
-        self['open' + name] = function(id, ep, sub) {
+        self['open' + name] = function(id, ep, sub, reminderEntry) {
             const actualSettings = settings.get(lower);
 
             // TODO refactor this, this looks hacky
@@ -10,7 +10,8 @@ angular.module('proxtop').service('open', ['ipc', 'settings', '$state', function
                 $state.go('watch', {
                     id: id,
                     ep: ep,
-                    sub: sub
+                    sub: sub,
+                    entry: reminderEntry
                 });
             } else {
                 ipc.send('open', lower, id, ep, sub);
