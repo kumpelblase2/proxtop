@@ -19,9 +19,9 @@ function alterWatchlist(list) {
             name: entry.name,
             status: entry.state,
             episode: entry.episode,
-            entry: entry.eid,
+            entry: entry.id,
             sub: entry.language,
-            id: entry.id
+            id: entry.eid
         };
     }).forEach((entry) => {
         if(entry.type === "anime") {

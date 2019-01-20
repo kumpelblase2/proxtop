@@ -11,7 +11,7 @@ export default class Watchlist extends IPCHandler {
     constructor(watchlistHandler: WatchlistHandler) {
         super();
         this.watchlist = watchlistHandler;
-        this.watchlistCache = new CacheControl(WATCHLIST_CACHE_TIME, this.watchlist.loadWatchlist.bind(this.watchlist));
+        this.watchlistCache = new CacheControl(WATCHLIST_CACHE_TIME, this.watchlist.apiLoadWatchlist.bind(this.watchlist));
     }
 
     register() {
