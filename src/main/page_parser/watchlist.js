@@ -92,14 +92,12 @@ parser.parseWatchlist = function(page) {
     });
 };
 
-parser.parseUpdateReponse = function(response) {
+parser.parseUpdateResponse = function(response) {
     return Promise.resolve(response).then(JSON.parse);
 };
 
 parser.parseFinishResponse = function(response) {
     return Promise.resolve(response).then(JSON.parse);
 };
-
-parser.parseDeleteResponse = parser.parseUpdateReponse;
 
 export default parser;
