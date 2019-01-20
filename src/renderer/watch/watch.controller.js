@@ -62,14 +62,23 @@ angular.module('proxtop').controller('WatchController', ['$scope', 'ipcManager',
     });
 
     $scope.updateTime = (currentTime, totalTime) => {
-        if(markNext && $scope.hasNext() && !$scope.current.markedNext && currentTime / totalTime >= markNextPercent / 100) {
-            console.debug("Marking next episode since we passed the watch percentage.");
-            $scope.markedNext = true;
-            $scope.addNextToWatchlist();
-        }
+        if($scope.hasNext()) {
+            if(markNext && !$scope.current.markedNext && (markNextPercent / 100 - currentTime / totalTime) <= 0.001) {
+                console.debug("Marking next episode since we passed the watch percentage.");
+                $scope.current.markedNext = true;
+                $scope.addNextToWatchlist();
+            }
 
-        if(autostartNext && totalTime - currentTime <= timeBeforeNext && !$scope.displayTimer) {
-            $scope.startTimerForNext();
+            if(autostartNext && totalTime - currentTime <= timeBeforeNext && !$scope.displayTimer) {
+                $scope.startTimerForNext();
+            }
+        } else {
+            // This should probably use the 'ended' event instead
+            if(markNext && !$scope.current.markedNext && (markNextPercent / 100 - currentTime / totalTime) <= 0.001) {
+                console.debug("Considering anime finished since we passed the watch percentage.");
+                $scope.current.markedNext = true;
+                $scope.finishWatching()
+            }
         }
     };
 
