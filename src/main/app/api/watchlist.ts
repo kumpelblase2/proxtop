@@ -1,17 +1,17 @@
 import IPCHandler from "../lib/ipc_handler";
 import CacheControl from "../lib/cache_control";
-import WatchlistHandler from "../proxerapi/watchlist_handler";
+import WatchlistHandler, {Watchlist as WatchlistData} from "../proxerapi/watchlist_handler";
 
 const WATCHLIST_CACHE_TIME = 60000; // 1 Minute
 
 export default class Watchlist extends IPCHandler {
     watchlist: WatchlistHandler;
-    watchlistCache: CacheControl;
+    watchlistCache: CacheControl<WatchlistData>;
 
     constructor(watchlistHandler: WatchlistHandler) {
         super();
         this.watchlist = watchlistHandler;
-        this.watchlistCache = new CacheControl(WATCHLIST_CACHE_TIME, this.watchlist.apiLoadWatchlist.bind(this.watchlist));
+        this.watchlistCache = new CacheControl<WatchlistData>(WATCHLIST_CACHE_TIME, this.watchlist.apiLoadWatchlist.bind(this.watchlist));
     }
 
     register() {

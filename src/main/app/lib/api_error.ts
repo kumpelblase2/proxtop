@@ -1,4 +1,4 @@
-function getMessageFromCode(code) {
+function getMessageFromCode(code: number) {
     switch(code) {
         case 1000: return "API version not existent";
         case 1001: return "API version was removed";
@@ -62,7 +62,10 @@ function getMessageFromCode(code) {
 }
 
 export default class APIError extends Error {
-    constructor(code, rawMessage) {
+    code: number;
+    raw: string;
+
+    constructor(code: number, rawMessage: string) {
         super(getMessageFromCode(code));
         this.code = code;
         this.raw = rawMessage;

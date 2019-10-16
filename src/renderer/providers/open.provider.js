@@ -1,4 +1,4 @@
-angular.module('proxtop').service('open', ['ipc', 'settings', '$state', function(ipc, settings, $state) {
+angular.module('proxtop').service('open', ['ipc', 'settings', '$state', 'shell', function(ipc, settings, $state, shell) {
     const self = this;
     ['Anime', 'Manga'].forEach(function(name) {
         const lower = name.toLowerCase();
@@ -20,6 +20,6 @@ angular.module('proxtop').service('open', ['ipc', 'settings', '$state', function
     });
 
     this.openLink = function(link) {
-        ipc.send('open-link', link);
+        shell.openExternal(link);
     };
 }]);

@@ -9,7 +9,7 @@ import { GithubLimit } from "./storage";
 
 const { autoUpdater, ipcMain, app } = require('electron');
 
-export interface VersionInformation {
+export type VersionInformation = {
     version: string,
     content: string,
     date: Date,
@@ -168,7 +168,7 @@ class AutoUpdater implements Updater {
     }
 }
 
-export default function updater() {
+export default function getUpdaterForCurrentSystem() {
     const platform = os.platform();
     switch(platform) {
         // case 'darwin': Currently not support since it requires code signing

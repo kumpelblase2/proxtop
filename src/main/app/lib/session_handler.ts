@@ -1,5 +1,5 @@
 import Cloudscraper from "../util/cloudscraper";
-import os from "os";
+import { platform, release } from "os";
 import { createIfNotExists } from "../util/utils";
 import { getHeaders } from "./page_utils";
 import IPCHandler from "./ipc_handler";
@@ -9,23 +9,30 @@ import windowManager from "../ui/window_manager";
 import settings from "../settings";
 import FileStore from "./filestore";
 import Log from "../util/log";
-import translate from "../translation";
+import translate, { Translation } from "../translation";
 import { Cache, SessionStorage } from "../storage";
 import { Errors as ERRORS } from "../globals";
-
-const request = require('request-promise');
+import { RequestAPI, RequiredUriUrl, jar, CookieJar } from 'request';
+import * as requestPromise from 'request-promise';
 
 export default class SessionHandler extends IPCHandler {
+    app;
+    apiKey: string;
+    cookiePath: string;
+    _online: boolean = true;
+    apiLimits: APILimiter = new APILimiter();
+    translation: Translation = translate();
+    request: RequestAPI<requestPromise.RequestPromise, requestPromise.RequestPromiseOptions, RequiredUriUrl>;
+    cookieJar: CookieJar;
+    cloudscraper: Cloudscraper;
+
     constructor(app, apiKey, cookiePath) {
         super();
         this.app = app;
         this.apiKey = apiKey;
         this.cookiePath = cookiePath;
-        this._online = true;
-        this.apiLimits = new APILimiter();
-        this.translation = translate();
 
-        this.provide('reload-request', ()  => {
+        this.provide('reload-request', () => {
             this.request = this.setupRequest();
         });
 
@@ -55,18 +62,18 @@ export default class SessionHandler extends IPCHandler {
         }
     }
 
-    loadState() {
+    loadState(): Promise<void> {
         return createIfNotExists(this.cookiePath).then(() => {
-            this.cookieJar = request.jar(new FileStore(this.cookiePath));
+            this.cookieJar = jar(new FileStore(this.cookiePath));
             Log.verbose('Loaded cookies from ' + this.cookiePath);
             this.request = this.setupRequest();
             this.cloudscraper = new Cloudscraper(this.request);
-        }).return(this);
+        });
     }
 
-    setupRequest() {
+    setupRequest(): RequestAPI<requestPromise.RequestPromise, requestPromise.RequestPromiseOptions, RequiredUriUrl> {
         const disableUserAgent = settings.getGeneralSettings().disable_user_agent;
-        const header = getHeaders(disableUserAgent, os.platform(), os.release(), this.apiKey);
+        const header = getHeaders(disableUserAgent, platform(), release(), this.apiKey);
         if(this.hasSession()) {
             const token = this.getSession().token;
             Log.debug("Setting session token to: " + token.substring(0, 6) + "...");
@@ -74,7 +81,7 @@ export default class SessionHandler extends IPCHandler {
         }
 
         Log.verbose('Setting useragent to: ' + header['User-Agent']);
-        return request.defaults({
+        return requestPromise.defaults({
             jar: this.cookieJar,
             headers: header,
             resolveWithFullResponse: true
@@ -84,7 +91,7 @@ export default class SessionHandler extends IPCHandler {
     openRequest(doRequest, cache = true) {
         const createRequest = () => {
             let promise;
-            if(typeof(doRequest) === 'string') {
+            if(typeof (doRequest) === 'string') {
                 Log.silly('Doing request for url ' + doRequest);
                 promise = this.request(doRequest);
             } else {
@@ -107,7 +114,7 @@ export default class SessionHandler extends IPCHandler {
             return response;
         });
 
-        if(cache){
+        if(cache) {
             request = request.then(Cache.cacheResponse.bind(Cache));
         } else {
             request = request.then(req => req.body);
@@ -121,7 +128,7 @@ export default class SessionHandler extends IPCHandler {
     }
 
     openApiRequest(doRequest, queryParams = {}, cache = true) {
-        if(typeof(doRequest) === 'string') {
+        if(typeof (doRequest) === 'string') {
             doRequest = doRequest + this._createParamsString(queryParams);
         }
 
@@ -139,7 +146,7 @@ export default class SessionHandler extends IPCHandler {
                     throw new Error("Invalid response")
                 }
 
-                if (parsed.error === 1) {
+                if(parsed.error === 1) {
                     throw new APIError(parsed.code, parsed.message);
                 } else {
                     return parsed;
@@ -214,7 +221,7 @@ export default class SessionHandler extends IPCHandler {
         return SessionStorage.getSession();
     }
 
-    _createParamsString(params) {
+    _createParamsString(params: {}): string {
         const keys = Object.keys(params);
         if(keys.length === 0) {
             return "";

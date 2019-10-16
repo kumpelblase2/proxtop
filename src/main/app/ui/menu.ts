@@ -1,9 +1,10 @@
 import windowManager from "./window_manager";
 import { Menu } from "electron";
 import { isOnOSX } from '../util/is_osx';
+import Proxtop from "../proxtop";
 
-export default function createMenu(proxtop) {
-    return Menu.buildFromTemplate([
+export default function createMenu(proxtop: Proxtop) {
+    const menu = Menu.buildFromTemplate([
         {
             label: 'Proxtop',
             submenu: [
@@ -15,11 +16,11 @@ export default function createMenu(proxtop) {
                     }
                 },
                 {
-                    label: 'Toggle Developer Tools',
+                    label: 'Open Developer Tools',
                     accelerator: useUnlessOnOsx('Ctrl+Shift+I', 'Alt+Command+I'),
                     click: function(item, focusedWindow) {
-                        if (focusedWindow) {
-                            focusedWindow.toggleDevTools();
+                        if(focusedWindow) {
+                            focusedWindow.webContents.openDevTools();
                         }
                     }
                 },
@@ -27,7 +28,7 @@ export default function createMenu(proxtop) {
                     label: 'Reload',
                     accelerator: useUnlessOnOsx('Ctrl+R', 'Command+R'),
                     click: function(item, focusedWindow) {
-                        if (focusedWindow) {
+                        if(focusedWindow) {
                             focusedWindow.reload();
                         }
                     }
@@ -46,6 +47,7 @@ export default function createMenu(proxtop) {
             ]
         }
     ]);
+    Menu.setApplicationMenu(menu);
 };
 
 function useUnlessOnOsx(normalShortcut, osxShortcut) {

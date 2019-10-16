@@ -3,7 +3,8 @@ export default interface NotificationProvider {
 }
 
 export interface NotificationDefinition {
-    id: number;
+    id?: number;
     title: string;
     message: string;
+    icon?: string;
 }

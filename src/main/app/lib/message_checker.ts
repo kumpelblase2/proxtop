@@ -1,15 +1,25 @@
 import settings from "../settings";
 import windowManager from "../ui/window_manager";
 import { Instance as Notification } from "../notification";
-import translate from "../translation";
+import translate, { Translation } from "../translation";
 import DelayTracker from "./delay_tracker";
 import Log from "../util/log";
 import { MessageReadCache } from "../storage";
-
+import MessagesHandler from "../proxerapi/message_handler";
+import Messages from "../api/messages";
 
 const LOGIN_ERROR = 3023;
 
 export default class MessageChecker {
+    messages: MessagesHandler;
+    messageService: Messages;
+
+    running: boolean;
+    lastCheck: number;
+    translation: Translation;
+    delayTracker: DelayTracker;
+    lastTimer: NodeJS.Timer;
+
     constructor(messageHandler, messageService) {
         this.messages = messageHandler;
         this.messageService = messageService;
@@ -79,8 +89,8 @@ export default class MessageChecker {
                 Log.debug("Seems like more messages are available, checking again.");
                 this._check();
             }
-        }).catch(function (error) {
-            if (!(error.code && error.code === LOGIN_ERROR)) {
+        }).catch(function(error) {
+            if(!(error.code && error.code === LOGIN_ERROR)) {
                 // rethrow since this is some general other error
                 throw error;
             }

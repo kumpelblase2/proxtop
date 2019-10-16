@@ -1,18 +1,14 @@
 import Log from "../util/log";
-import { PROXER_API_BASE_URL, API_PATHS } from "../globals";
-
-const Promise = require('bluebird');
+import { API_PATHS, PROXER_API_BASE_URL } from "../globals";
+import { join } from 'bluebird';
+import { constants } from "./constants";
+import SessionHandler from "../lib/session_handler";
 
 export default class MessagesHandler {
-    constructor(sessionHandler) {
+    session_handler: SessionHandler;
+
+    constructor(sessionHandler: SessionHandler) {
         this.session_handler = sessionHandler;
-        this.constants = {
-            maxTextLength: -1,
-            conferencePageSize: -1,
-            messagesPageSize: -1,
-            maxConferenceParticipants: -1,
-            maxTopicLength: -1
-        };
     }
 
     loadConversations(type = 'default', page = 0) {
@@ -82,18 +78,19 @@ export default class MessagesHandler {
 
     reportConversation(id, message) {
         return this.session_handler.openApiRequest((request) => {
-            return request.post({
-                url: PROXER_API_BASE_URL + API_PATHS.MESSAGES.REPORT,
-                form: {
-                    conversation_id: id,
-                    text: message
-                }
-            });
+            return request.post(
+                PROXER_API_BASE_URL + API_PATHS.MESSAGES.REPORT,
+                {
+                    form: {
+                        conversation_id: id,
+                        text: message
+                    }
+                });
         });
     }
 
     loadConversation(id, markRead = false) {
-        return Promise.join(this.loadConversationInfo(id), this.loadMessages(id, 0, markRead),
+        return join(this.loadConversationInfo(id), this.loadMessages(id, 0, markRead),
             (conv_info, messages) => {
                 conv_info.messages = messages;
                 return conv_info;
@@ -115,13 +112,14 @@ export default class MessagesHandler {
 
     sendMessage(id, content) {
         return this.session_handler.openApiRequest((req) => {
-            return req.post({
-                url: PROXER_API_BASE_URL + API_PATHS.MESSAGES.WRITE_MESSAGE,
-                form: {
-                    conference_id: id,
-                    text: content
-                }
-            });
+            return req.post(
+                PROXER_API_BASE_URL + API_PATHS.MESSAGES.WRITE_MESSAGE,
+                {
+                    form: {
+                        conference_id: id,
+                        text: content
+                    }
+                });
         }).then((full) => full.data);
     }
 
@@ -131,42 +129,45 @@ export default class MessagesHandler {
 
     newConference(conference) {
         return this.session_handler.openApiRequest((request) => {
-            return request.post({
-                url: PROXER_API_BASE_URL + API_PATHS.MESSAGES.NEW_CONFERENCE,
-                form: {
-                    users: conference.participants,
-                    topic: conference.title,
-                    text: conference.text
-                }
-            });
-        }).then((full) => { return { error: full.error, id: full.data }; });
+            return request.post(
+                PROXER_API_BASE_URL + API_PATHS.MESSAGES.NEW_CONFERENCE, {
+                    form: {
+                        users: conference.participants,
+                        topic: conference.title,
+                        text: conference.text
+                    }
+                });
+        }).then((full) => {
+            return { error: full.error, id: full.data };
+        });
     }
 
     newConversation(conversation) {
         return this.session_handler.openApiRequest((request) => {
-            return request.post({
-                url: PROXER_API_BASE_URL + API_PATHS.MESSAGES.NEW_CONVERSATION,
-                form: {
-                    username: conversation.recipient,
-                    text: conversation.text
-                }
-            });
-        }).then((full) => { return { error: full.error, id: full.data }; });
+            return request.post(
+                PROXER_API_BASE_URL + API_PATHS.MESSAGES.NEW_CONVERSATION, {
+                    form: {
+                        username: conversation.recipient,
+                        text: conversation.text
+                    }
+                });
+        }).then((full) => {
+            return { error: full.error, id: full.data };
+        });
     }
 
     retrieveConstants() {
         return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.MESSAGES.CONSTANTS)
             .then((full) => full.data)
             .then((officialConstants) => {
-                this.constants = {
-                    maxTextLength: officialConstants.textCount,
-                    conferencePageSize: officialConstants.conferenceLimit,
-                    messagesPageSize: officialConstants.messagesLimit,
-                    maxConferenceParticipants: officialConstants.userLimit,
-                    maxTopicLength: officialConstants.topicCount
-                };
+                constants.maxTextLength = officialConstants.textCount;
+                constants.conferencePageSize = officialConstants.conferenceLimit;
+                constants.messagesPageSize = officialConstants.messagesLimit;
+                constants.maxConferenceParticipants = officialConstants.userLimit;
+                constants.maxTopicLength = officialConstants.topicCount;
 
-                Log.info("Updating constants to: ", this.constants);
-            });
+                Log.info("Updating constants to: ", constants);
+            })
+            .catch(ex => Log.warn(`Could not get constants: ${ex.message}`));
     }
 }

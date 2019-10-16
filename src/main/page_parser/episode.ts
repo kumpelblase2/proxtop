@@ -42,13 +42,6 @@ export function parseMirrors(main): Array<StreamInfo> {
     return JSON.parse(match[1]);
 }
 
-export function parseEpisodeList(page: string) {
-    return Promise.resolve(page).then(cheerio.load)
-        .then(($) => {
-            throw "Not implemented.";
-        });
-}
-
 type NextPrevLinks = {
     next: string,
     prev: string

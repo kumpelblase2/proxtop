@@ -15,7 +15,7 @@ function iterateProperties(obj: object, cb) {
 export default class FileStore extends MemoryCookieStore {
     file: string;
     jsonData: any;
-    constructor(file) {
+    constructor(file: string) {
         super();
         this.file = file;
         this.load();

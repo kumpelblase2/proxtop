@@ -1,8 +1,8 @@
 import { get as getByPath } from "lodash";
-import settings from "./settings";
+import settings, { LanguageSetting } from "./settings";
 
-class Translation {
-    fixed_language?: string = null;
+export class Translation {
+    fixed_language?: LanguageSetting = null;
     translations: { [language: string]: object };
 
     constructor(translations) {
@@ -33,18 +33,18 @@ class Translation {
         return value;
     }
 
-    setLanguage(lang: string) {
+    setLanguage(lang: LanguageSetting) {
         this.fixed_language = lang;
     }
 
-    getLanguage(): string {
+    getLanguage(): LanguageSetting {
         return this.fixed_language || settings.getGeneralSettings().language;
     }
 }
 
-let latest;
+let latest: Translation;
 
-export default function get() {
+export default function get(): Translation {
     return latest;
 }
 

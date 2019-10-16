@@ -1,18 +1,22 @@
-import { getOnlineDiff } from "../util/utils";
+import { getOnlineDiff, OnlineEntry } from "../util/utils";
 import { Instance as Notification } from "../notification";
 import windowManager from "../ui/window_manager";
 import settings from "../settings";
 import Log from "../util/log";
-import translate from "../translation";
+import translate, { Translation } from "../translation";
 import watchlistParser from "../../page_parser/watchlist"
 import { WatchlistCache } from "../storage";
 import { API_PATHS, LOGO_RELATIVE_PATH, PROXER_API_BASE_URL, PROXER_BASE_URL, PROXER_PATHS } from "../globals";
+import { whenLogin } from './wait_login';
+import SessionHandler from "../lib/session_handler";
 
 const returnMsg = (success, msg) => {
     return { success: success, msg: msg }
 };
 
-function alterWatchlist(list) {
+export type Watchlist = { anime: OnlineEntry[], manga: OnlineEntry[] }
+
+function alterWatchlist(list): Watchlist {
     const result = { anime: [], manga: [] };
 
     list.map((entry) => {
@@ -36,21 +40,25 @@ function alterWatchlist(list) {
     return result;
 }
 
+const onlineFilter = entry => !!entry.status;
+
 export default class WatchlistHandler {
-    constructor(sessionHandler) {
+    session_handler: SessionHandler;
+    lastCheck = 0;
+    translation: Translation = translate();
+
+    constructor(sessionHandler: SessionHandler) {
         this.session_handler = sessionHandler;
-        this.lastCheck = 0;
-        this.translation = translate();
     }
 
-    apiLoadWatchlist() {
+    apiLoadWatchlist(): Promise<Watchlist> {
         return this.session_handler.openApiRequest(PROXER_API_BASE_URL + API_PATHS.WATCHLIST.GET)
             .then((data) => data.data).then(alterWatchlist);
     }
 
     loadWatchlist() {
         return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.WATCHLIST)
-            .then(watchlistParser.parseWatchlist);
+            .then(watchlistParser);
     }
 
     checkUpdates() {
@@ -61,15 +69,13 @@ export default class WatchlistHandler {
             if(!old) {
                 WatchlistCache.saveWatchlist(result);
 
-                const onlineFilter = entry => !!entry.status;
-
                 return {
                     anime: result.anime.filter(onlineFilter),
                     manga: result.manga.filter(onlineFilter)
                 };
             }
 
-            const updates = {};
+            const updates = { anime: null, manga: null };
             updates.anime = getOnlineDiff(old.anime, result.anime);
             updates.manga = getOnlineDiff(old.manga, result.manga);
             WatchlistCache.updateWatchlist(result);
@@ -97,34 +103,36 @@ export default class WatchlistHandler {
     updateEntry(kat, id, episode, language) {
         Log.debug(`Updating entry with ID ${id} to episode ${episode}.`);
         return this.session_handler.openApiRequest((request) => {
-            return request.post({
-                url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.SET,
-                form: {
-                    id,
-                    kat,
-                    episode,
-                    language
+            return request.post(
+                PROXER_API_BASE_URL + API_PATHS.WATCHLIST.SET, {
+                    form: {
+                        id,
+                        kat,
+                        episode,
+                        language
+                    }
                 }
-            });
+            )
+                ;
         }).then(() => returnMsg(true, "")).catch(() => returnMsg(false, "Not found"));
     }
 
     markFinished(category, id, ep, sub, entry) {
         const finishValue = parseInt(ep) + 1;
         Log.debug(`Marking anime with ID ${id} as finished. (Setting Episode value to ${finishValue})`);
-        return this._findEntryFor(category, id, sub).then(foundEntry => {
+        return this._findEntryFor(category, id, ep, sub).then(foundEntry => {
             if(foundEntry == null) {
                 Log.debug("No comment entry found that's still on 'watching' so removing entry.");
                 return this.deleteEntry(entry).then(() => returnMsg(true, ""));
             } else {
                 return this.session_handler.openApiRequest((request) => {
-                    return request.post({
-                        url: PROXER_API_BASE_URL + API_PATHS.UCP.SET_COMMENT_STATE,
-                        form: {
-                            id: foundEntry.cid,
-                            value: parseInt(ep) + 1
-                        }
-                    });
+                    return request.post(
+                        PROXER_API_BASE_URL + API_PATHS.UCP.SET_COMMENT_STATE, {
+                            form: {
+                                id: foundEntry.cid,
+                                value: parseInt(ep) + 1
+                            }
+                        });
                 }).then(() => returnMsg(true, "")).catch(() => returnMsg(false, "Error?"));
             }
         })
@@ -133,15 +141,15 @@ export default class WatchlistHandler {
 
     _findEntryFor(category, id, ep, _sub, page = 0, limit = 100) {
         return this.session_handler.openApiRequest((request) => {
-            return request.post({
-                url: PROXER_API_BASE_URL + API_PATHS.UCP.ANIME_MANGA_LIST,
-                form: {
-                    kat: category,
-                    p: page,
-                    filter: 'stateFilter2',
-                    limit
-                }
-            });
+            return request.post(
+                PROXER_API_BASE_URL + API_PATHS.UCP.ANIME_MANGA_LIST, {
+                    form: {
+                        kat: category,
+                        p: page,
+                        filter: 'stateFilter2',
+                        limit
+                    }
+                });
         }).then(result => result.data).then(entries => {
             const foundEntry = entries.find(elem => elem.id == id && elem.episode == ep);
             if(foundEntry == null) {
@@ -159,28 +167,26 @@ export default class WatchlistHandler {
     deleteEntry(entry) {
         Log.debug(`Removing reminder with id ${entry}.`);
         return this.session_handler.openApiRequest((request) => {
-            return request.post({
-                url: PROXER_API_BASE_URL + API_PATHS.WATCHLIST.REMOVE,
-                form: {
-                    id: entry
-                }
-            });
+            return request.post(
+                PROXER_API_BASE_URL + API_PATHS.WATCHLIST.REMOVE, {
+                    form: {
+                        id: entry
+                    }
+                });
         }).then(() => ({ entry: entry }));
     }
 
-    watchLoop(interval = 30000) {
-        setTimeout(() => {
-            if(this.session_handler.hasSession()) {
-                const time = settings.getWatchlistSettings().check_interval;
-                if(new Date().getTime() - this.lastCheck > time * 60000 - 5000) {
-                    this.checkUpdates();
-                }
-
-                this.watchLoop();
-            } else {
-                Log.verbose("Not logged in yet, skipping watchlist check.");
-                this.watchLoop(5000);
+    _startWatchLoop(interval) {
+        this.checkUpdates();
+        setInterval(() => {
+            const time = settings.getWatchlistSettings().check_interval;
+            if(new Date().getTime() - this.lastCheck > time * 60000 - 5000) {
+                this.checkUpdates();
             }
         }, interval);
+    }
+
+    watchLoop(interval = 30000) {
+        whenLogin().then(() => this._startWatchLoop(interval));
     }
 }

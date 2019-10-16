@@ -4,8 +4,9 @@ import WatchlistHandler from "./watchlist_handler";
 import NewsHandler from "./news_handler";
 import MessageHandler from "./message_handler";
 import EpisodeHandler from "./episode_handler";
+import SessionHandler from "../lib/session_handler";
 
-export default function setup(sessionHandler) {
+export default function setup(sessionHandler: SessionHandler) {
     return {
         session_handler: sessionHandler,
         login: new LoginHandler(sessionHandler),

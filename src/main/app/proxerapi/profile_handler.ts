@@ -1,4 +1,5 @@
 import { API_PATHS, PROXER_API_BASE_URL } from "../globals";
+import SessionHandler from "../lib/session_handler";
 
 function fixPoints(user) {
     ['points_uploads', 'points_anime', 'points_manga', 'points_info', 'points_forum', 'points_misc'].forEach(name => {
@@ -54,9 +55,9 @@ export type Profile = {
 }
 
 export default class ProfileHandler {
-    session_handler: any;
+    session_handler: SessionHandler;
 
-    constructor(sessionHandler) {
+    constructor(sessionHandler: SessionHandler) {
         this.session_handler = sessionHandler;
     }
 

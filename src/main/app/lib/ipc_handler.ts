@@ -9,10 +9,7 @@ function isGenerator(object) {
 }
 
 export default class IPCHandler {
-    handle(event, funct, binding) {
-        if(binding == null) {
-            binding = this;
-        }
+    handle(event: string, funct, binding: any = this) {
         const localFunc = funct.bind(binding);
         ipcMain.on(event, (ev, ...args) => {
             const localFuncResult = localFunc(...args);
@@ -36,10 +33,7 @@ export default class IPCHandler {
         });
     }
 
-    handleSync(event, funct, binding) {
-        if(binding == null) {
-            binding = this;
-        }
+    handleSync(event: string, funct, binding = this) {
         const localFunc = funct.bind(binding);
         ipcMain.on(event, (ev, ...args) => {
             const localFuncResult = localFunc(...args);

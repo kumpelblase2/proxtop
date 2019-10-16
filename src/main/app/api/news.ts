@@ -1,9 +1,13 @@
 import IPCHandler from "../lib/ipc_handler";
 import CacheControl from "../lib/cache_control";
+import NewsHandler from "../proxerapi/news_handler";
 
 const NEWS_CACHE_TIME = 300000; // 5 Minutes
 
 export default class News extends IPCHandler {
+    news: NewsHandler;
+    newsCache: CacheControl<News[]>;
+
     constructor(newsHandler) {
         super();
         this.news = newsHandler;

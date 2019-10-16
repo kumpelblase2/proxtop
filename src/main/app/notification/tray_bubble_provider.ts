@@ -3,9 +3,10 @@ import tray_manager from "../ui/tray_manager";
 
 export default class TrayBubbleProvider implements NotificationProvider {
     displayNotification(notification: NotificationDefinition, callback: Function) {
-        tray_manager.displayBaloon(notification.title, {
+        tray_manager.displayBaloon({
+            title: notification.title,
             content: notification.message,
-            onclick: callback
+            // onclick: callback // TODO
         })
     }
 }

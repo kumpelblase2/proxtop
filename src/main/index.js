@@ -6,7 +6,7 @@ import startup from "./app/squirrel_startup";
 import windowManager from "./app/ui/window_manager";
 import tray from "./app/ui/tray_manager";
 import Log from './app/util/log';
-import UpdaterProvider from "./app/updater";
+import getUpdaterForCurrentSystem from "./app/updater";
 import { APP_DIR, INDEX_LOCATION, LOGO_LOCATION } from "./app/globals";
 import Proxtop from "./app/proxtop";
 import { setup as setupTranslation } from "./app/translation";
@@ -24,7 +24,7 @@ setupTranslation({
 });
 
 Log.verbose('Initializing...');
-const updater = UpdaterProvider();
+const updater = getUpdaterForCurrentSystem();
 
 windowManager.setDirs({
     app: APP_DIR,

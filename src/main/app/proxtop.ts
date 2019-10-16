@@ -1,24 +1,37 @@
-import path from "path";
+import { join } from "path";
 import { areNotificationsNativelySupported } from "./notification";
-import { ipcMain, Menu } from "electron";
+import { ipcMain, App } from "electron";
 import SessionHandler from "./lib/session_handler";
 import API from "./api";
 import windowManager from "./ui/window_manager";
 import tray from "./ui/tray_manager";
 import createProxtopMenu from "./ui/menu";
 import createProxerApi from "./proxerapi";
+import { Updater } from "./updater";
+
+export type ProxtopOptions = {
+    api_key: string,
+    app_dir: string
+}
 
 export default class Proxtop {
-    constructor(app, updater, options) {
+    app: App;
+    app_dir: string;
+    updater: Updater;
+    session_handler: SessionHandler;
+    proxer_api;
+    api: API;
+
+    constructor(app: App, updater: Updater, options: ProxtopOptions) {
         this.app = app;
         this.app_dir = options.app_dir;
         this.updater = updater;
-        this.session_handler = new SessionHandler(this, options.api_key, path.join(this.app_dir, "cookies.json"));
+        this.session_handler = new SessionHandler(this, options.api_key, join(this.app_dir, "cookies.json"));
         this.proxer_api = createProxerApi(this.session_handler);
         this.api = new API(this.proxer_api);
     }
 
-    start() {
+    start(): Promise<void> {
         this.setupApp();
         this.updater.start((release) => windowManager.notifyWindow('update', release));
 
@@ -45,8 +58,7 @@ export default class Proxtop {
             }
         });
 
-        this.menu = createProxtopMenu(this);
-        Menu.setApplicationMenu(this.menu);
+        createProxtopMenu(this);
 
         ipcMain.on('open-about', () => {
             windowManager.createAboutWindow();

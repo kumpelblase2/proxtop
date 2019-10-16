@@ -1,5 +1,7 @@
 import { API_PATHS, PROXER_API_BASE_URL } from "../globals";
 import Log from "../util/log";
+import { finishLogin } from "./wait_login";
+import SessionHandler from "../lib/session_handler";
 
 export type LoginResult = {
     success: boolean,
@@ -7,9 +9,9 @@ export type LoginResult = {
 }
 
 export default class LoginHandler {
-    session_handler: any;
+    session_handler: SessionHandler;
 
-    constructor(sessionHandler) {
+    constructor(sessionHandler: SessionHandler) {
         this.session_handler = sessionHandler;
     }
 
@@ -28,13 +30,14 @@ export default class LoginHandler {
         }
 
         return this.session_handler.openApiRequest((request) => {
-            return request.post({
-                url: PROXER_API_BASE_URL + API_PATHS.USER.LOGIN,
-                form
-            });
+            return request.post(
+                PROXER_API_BASE_URL + API_PATHS.USER.LOGIN,
+                { form }
+            );
         }, {}, false).then((content) => {
             Log.verbose("Login success");
             this.session_handler.setSession(content.data);
+            finishLogin();
             return { success: true, reason: null }
         }).catch((ex) => {
             if(ex && ex.code === 3038) {
@@ -51,9 +54,7 @@ export default class LoginHandler {
 
     logout(): Promise<void> {
         return this.session_handler.openApiRequest((request) => {
-            return request.post({
-                url: PROXER_API_BASE_URL + API_PATHS.USER.LOGOUT
-            });
+            return request.post(PROXER_API_BASE_URL + API_PATHS.USER.LOGOUT);
         }, {}, false);
     }
 

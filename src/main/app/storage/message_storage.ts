@@ -1,18 +1,35 @@
 import Storage from "./storage";
-import _ from "lodash";
+import { differenceBy, uniqBy } from "lodash";
 
 const DB_NAME = 'messages';
 
-function filterNull(arr) {
+function filterNull<T>(arr: Array<T>): Array<T> {
     return arr ? arr.filter((elem) => elem != null) : [];
 }
+
+export type Message = {
+    message_id: number
+};
+
+export type Conversation = {
+    id: number,
+    messages: Message[],
+    topic: string,
+    participants: string[],
+    image: string,
+    favorite: boolean,
+    last_read: number,
+    has_more: boolean,
+    read_mid?: number,
+    read: boolean
+};
 
 export default class MessagesStorage extends Storage {
     constructor(db) {
         super(db, DB_NAME);
     }
 
-    saveNewConversation(id, messages = [], topic = "", read = false, participants = [], favorite = false, image = null, last_read = -1) {
+    saveNewConversation(id, messages: Message[] = [], topic = "", read = false, participants = [], favorite = false, image = null, last_read = -1) {
         messages = filterNull(messages);
 
         if(last_read < 0 && messages.length > 0 && read) {
@@ -24,7 +41,7 @@ export default class MessagesStorage extends Storage {
         this.storage.push({ id, messages, topic, read, participants, image, favorite, last_read, has_more: true }).write();
     }
 
-    addMessagesOrCreate(id, newMessages) {
+    addMessagesOrCreate(id, newMessages: Message[]) {
         if(!this._hasConversation(id)) {
             this.saveNewConversation(id, newMessages);
             return newMessages;
@@ -33,11 +50,11 @@ export default class MessagesStorage extends Storage {
         }
     }
 
-    addMessages(id, newMessages, has_more = null) {
+    addMessages(id, newMessages: Message[], has_more = null) {
         newMessages = filterNull(newMessages);
         const old = this.getConversation(id).messages;
-        const diff = _.differenceBy(newMessages, old, 'message_id');
-        const total = _.uniqBy(old.concat(newMessages), 'message_id').sort((a, b) => a.message_id - b.message_id);
+        const diff = differenceBy(newMessages, old, 'message_id');
+        const total = uniqBy(old.concat(newMessages), 'message_id').sort((a, b) => a.message_id - b.message_id);
         let update = this.storage.find({ id }).assign({ messages: total });
         if(has_more != null) {
             update = update.assign({ has_more: has_more });
@@ -53,6 +70,7 @@ export default class MessagesStorage extends Storage {
     markConversationRead(id, state = false) {
         this.storage.find({ id }).assign({ read: state }).write();
     }
+
     markConversationBlocked(id, state = false) {
         this.storage.find({ id }).assign({ blocked: state }).write();
     }
@@ -65,7 +83,7 @@ export default class MessagesStorage extends Storage {
         return this.storage.find({ id }).value().read;
     }
 
-    getConversation(id) {
+    getConversation(id: number): Conversation {
         return this.storage.find({ id }).value();
     }
 
@@ -111,7 +129,7 @@ export default class MessagesStorage extends Storage {
         query.write();
     }
 
-    addConversationsIfNotExists(conversations) {
+    addConversationsIfNotExists(conversations: Conversation[]) {
         conversations.forEach((conversation) => {
             if(!this._hasConversation(conversation.id)) {
                 this.saveNewConversation(conversation.id, [], conversation.topic, conversation.read, [], false, conversation.image, conversation.read_mid);

@@ -1,26 +1,21 @@
 import * as path from 'path';
 import { APP_DIR } from "../globals";
-import { Logger, transports } from "winston";
-import * as moment from "moment";
+import { createLogger, format, transports } from "winston";
 
 const logPath = path.join(APP_DIR, "app.log");
 console.log("Setting logfile to " + logPath);
-export default new Logger({
-    transports: [
-        new transports.Console({
-            level: 'silly',
-            timestamp: function() {
-                return new Date();
-            },
-            formatter: function(options) {
-                const timestamp = moment(options.timestamp()).format("DD.MM.YYYY HH:mm:ss:SS");
-                const message = (undefined !== options.message ? options.message : '');
-                const meta = (options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '');
-                return '[' + options.level.toLowerCase() + '][' + timestamp + '] ' + message + meta
-            }
-        }),
-        new transports.File({
-            filename: logPath
+
+export default createLogger({
+    format: format.combine(
+        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:SS' }),
+        format.metadata({ fillExcept: ['message', 'timestamp', 'level'] }),
+        format.printf(info => {
+            const meta = (info.metadata && Object.keys(info.metadata).length ? '\n\t' + JSON.stringify(info.metadata) : '');
+            return `[${info.level.toLowerCase()}][${info.timestamp}]: ${info.message}${meta}`;
         })
+    ),
+    transports: [
+        new transports.Console({ level: 'silly' }),
+        new transports.File({ filename: logPath })
     ]
 });

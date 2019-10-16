@@ -1,10 +1,8 @@
 import { app } from 'electron';
 
-type Platform = "darwin" | "linux" | "win32";
-
 type HeadersInformation = { [headerName: string]: string }
 
-export function getHeaders(customDisabled: boolean, platform: Platform, release: string, apiKey: string): HeadersInformation {
+export function getHeaders(customDisabled: boolean, platform: NodeJS.Platform, release: string, apiKey: string): HeadersInformation {
     let header;
     if(customDisabled) {
         let osInfo;

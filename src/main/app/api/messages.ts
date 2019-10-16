@@ -2,9 +2,11 @@ import IPCHandler from "../lib/ipc_handler";
 import DelayTracker from "../lib/delay_tracker";
 import MessageChecker from "../lib/message_checker";
 import { MessagesStorage } from "../storage";
-
-const _ = require('lodash');
-const Promise = require('bluebird');
+import { whenLogin } from "../proxerapi/wait_login";
+import { constants } from "../proxerapi/constants";
+import { Promise } from 'bluebird';
+import * as _ from 'lodash';
+import MessagesHandler from "../proxerapi/message_handler";
 
 const FAVORITE_MESSAGES = 'favour';
 
@@ -13,19 +15,22 @@ function sortMessages(messages) {
 }
 
 export default class Messages extends IPCHandler {
+    messages: MessagesHandler;
+    lastMessageId: number = 0;
+    messageChecker: MessageChecker;
+    trackingId: number = 0;
+    delayTracker: DelayTracker = new DelayTracker();
+    lastUpdate: number = 0;
+
     constructor(messagesHandler) {
         super();
         this.messages = messagesHandler;
-        this.lastMessageId = 0;
         this.messageChecker = new MessageChecker(this.messages, this);
-        this.trackingId = 0;
-        this.delayTracker = new DelayTracker();
         this.delayTracker.name = "-single message update-";
-        this.lastUpdate = 0;
     }
 
     register() {
-        this.messages.retrieveConstants();
+        whenLogin().then(() => this.messages.retrieveConstants());
         const self = this;
         this.handle('conversation-write', this.messages.sendMessage, this.messages);
         this.provide('conversation-update', (event, id) => {
@@ -88,7 +93,7 @@ export default class Messages extends IPCHandler {
             }
         });
 
-        this.handle('conversations', function*() {
+        this.handle('conversations', function* () {
             yield MessagesStorage.getAllConversations();
             yield self.messages.loadConversations().then((result) => {
                 MessagesStorage.addConversationsIfNotExists(result);
@@ -101,7 +106,7 @@ export default class Messages extends IPCHandler {
             });
         });
 
-        this.handle('conversation', function*(id) {
+        this.handle('conversation', function* (id) {
             id = parseInt(id);
             yield MessagesStorage.getConversation(id);
             yield this.refreshConversation(id).then(() => {
@@ -109,11 +114,11 @@ export default class Messages extends IPCHandler {
             });
         });
 
-        this.handleSync('message-constants', () => this.messages.constants);
+        this.handleSync('message-constants', () => constants);
 
-        setTimeout(() => {
+        whenLogin().then(() => {
             this.messageChecker.start();
-        }, 10000);
+        });
     }
 
     refreshConversation(id) {
@@ -185,6 +190,6 @@ export default class Messages extends IPCHandler {
     }
 
     isMaximumMessageAmount(messages) {
-        return messages.length >= this.messages.constants.messagesPageSize;
+        return messages.length >= constants.messagesPageSize;
     }
 }

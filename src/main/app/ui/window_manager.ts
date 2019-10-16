@@ -1,6 +1,6 @@
 import Logger from "../util/log";
 import { BrowserWindow, shell } from "electron";
-import WindowState from "electron-window-state";
+import * as stateKeeper from "electron-window-state";
 import openAboutWindow from "about-window";
 
 interface DirLocations {
@@ -31,9 +31,9 @@ export class WindowManager {
 
     createMainWindow() {
         Logger.verbose('Opening new window');
-        const windowState = WindowState({
+        const windowState = stateKeeper({
             defaultWidth: 800,
-            defaultHeigth: 600,
+            defaultHeight: 600,
             path: this.appDir
         });
 

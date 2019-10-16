@@ -1,6 +1,61 @@
 import { ipcMain } from "electron";
 import { capitalizeFirstLetter } from "./util/utils";
-import { Settings } from "./storage";
+import { Settings as SettingsStorage } from "./storage";
+
+export type Settings = {
+    getAccountSettings(): AccountSettings;
+    setAccountSettings(settings: AccountSettings);
+
+    getAnimeSettings(): AnimeSettings;
+    setAnimeSettings(settings: AnimeSettings);
+
+    getWatchlistSettings(): WatchlistSettings;
+    setWatchlistSettings(settings: WatchlistSettings);
+
+    getGeneralSettings(): GeneralSettings;
+    setGeneralSettings(settings: GeneralSettings);
+
+    getMangaSettings(): MangaSettings;
+    setMangaSettings(settings: MangaSettings);
+};
+
+export type AccountSettings = {
+    keep_login: boolean,
+    user: {
+        username: string,
+        password: string
+    }
+};
+
+export type AnimeSettings = {
+    open_with: string,
+    external_path: string,
+    pass_raw_url: boolean,
+    preferred_stream: string,
+    mark_next_episode: boolean,
+    mark_next_episode_percent: number,
+    automatically_start_next: boolean,
+    time_before_next: number
+};
+
+export type MangaSettings = {
+    open_with: string
+}
+
+export type WatchlistSettings = {
+    check_interval: number,
+    display_notification: boolean
+}
+
+export type LanguageSetting = 'de' | 'en'
+
+export type GeneralSettings = {
+    language: LanguageSetting,
+    disable_user_agent: boolean,
+    check_message_interval: number,
+    message_notification: boolean,
+    auto_update: boolean
+}
 
 const DEFAULTS = {
     DEFAULT_ACCOUNT_SETTINGS: {
@@ -28,8 +83,8 @@ const DEFAULTS = {
         display_notification: true
     },
     DEFAULT_GENERAL_SETTINGS: {
-        language: 'de',
         type: 'general',
+        language: 'de',
         disable_user_agent: false,
         check_message_interval: 30,
         message_notification: true,
@@ -42,7 +97,7 @@ const DEFAULTS = {
 };
 
 // Might wanna do this with a loop or something
-const settings = generateSettings([
+const settings: Settings = generateSettings([
     'account',
     'anime',
     'watchlist',
@@ -50,7 +105,7 @@ const settings = generateSettings([
     'manga'
 ]);
 
-function generateSettings(allSettings) {
+function generateSettings(allSettings): Settings {
     const result = {};
 
     allSettings.forEach((setting) => {
@@ -60,6 +115,7 @@ function generateSettings(allSettings) {
         result['set' + capitalized + 'Settings'] = getterSetter.setter;
     });
 
+    // @ts-ignore
     return result;
 }
 
@@ -68,10 +124,10 @@ function createGetterSetter(setting) {
     const globalVar = DEFAULTS['DEFAULT_' + uppercase + '_SETTINGS'];
     return {
         getter: function() {
-            return Settings.get(setting, globalVar);
+            return SettingsStorage.get(setting, globalVar);
         },
         setter: function(value) {
-            return Settings.set(setting, value);
+            return SettingsStorage.set(setting, value);
         }
     };
 }

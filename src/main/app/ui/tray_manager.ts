@@ -47,13 +47,12 @@ class ProxtopTray {
         return this.tray != null;
     }
 
-    displayBaloon(title: string, options) {
+    displayBaloon(options: DisplayBalloonOptions) {
         if(!this.exists()) {
             this.create();
         }
 
         options = _.defaults(options, { icon: this.icon, content: "" });
-        options.title = title;
         this.lastBalloon = options;
         this.tray.displayBalloon(options);
     }
