@@ -64,33 +64,36 @@ export default class WatchlistHandler {
                 WatchlistCache.saveWatchlist(result);
 
                 return {
+                    first_load: true,
                     anime: result.anime.filter(onlineFilter),
                     manga: result.manga.filter(onlineFilter)
                 };
             }
 
-            const updates = { anime: null, manga: null };
+            const updates = { anime: null, manga: null, first_load: false };
             updates.anime = getOnlineDiff(old.anime, result.anime);
             updates.manga = getOnlineDiff(old.manga, result.manga);
             WatchlistCache.updateWatchlist(result);
             return updates;
         }).then((updates) => {
-            Object.keys(updates).forEach((type) => {
-                updates[type].forEach((update) => {
-                    Log.verbose('Sending watchlist update for ' + update.name);
-                    Notification.displayNotification({
-                        title: 'Proxtop',
-                        message: this.translation.get(`WATCHLIST.NEW_${type.toUpperCase()}`, { episode: update.episode, name: update.name }),
-                        icon: LOGO_RELATIVE_PATH
-                    }, () => {
-                        windowManager.notifyWindow('state-change', 'watch', {
-                            id: update.id,
-                            ep: update.episode,
-                            sub: update.sub
+            if(!updates.first_load) {
+                Object.keys(updates).forEach((type) => {
+                    updates[type].forEach((update) => {
+                        Log.verbose('Sending watchlist update for ' + update.name);
+                        Notification.displayNotification({
+                            title: 'Proxtop',
+                            message: this.translation.get(`WATCHLIST.NEW_${type.toUpperCase()}`, { episode: update.episode, name: update.name }),
+                            icon: LOGO_RELATIVE_PATH
+                        }, () => {
+                            windowManager.notifyWindow('state-change', 'watch', {
+                                id: update.id,
+                                ep: update.episode,
+                                sub: update.sub
+                            });
                         });
                     });
                 });
-            });
+            }
         });
     }
 
