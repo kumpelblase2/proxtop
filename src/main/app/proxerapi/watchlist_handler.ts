@@ -4,9 +4,8 @@ import windowManager from "../ui/window_manager";
 import settings from "../settings";
 import Log from "../util/log";
 import translate, { Translation } from "../translation";
-import watchlistParser from "../../page_parser/watchlist"
 import { WatchlistCache } from "../storage";
-import { API_PATHS, LOGO_RELATIVE_PATH, PROXER_API_BASE_URL, PROXER_BASE_URL, PROXER_PATHS } from "../globals";
+import { API_PATHS, LOGO_RELATIVE_PATH, PROXER_API_BASE_URL } from "../globals";
 import { whenLogin } from './wait_login';
 import SessionHandler from "../lib/session_handler";
 
@@ -56,15 +55,10 @@ export default class WatchlistHandler {
             .then((data) => data.data).then(alterWatchlist);
     }
 
-    loadWatchlist() {
-        return this.session_handler.openRequest(PROXER_BASE_URL + PROXER_PATHS.WATCHLIST)
-            .then(watchlistParser);
-    }
-
     checkUpdates() {
         Log.info("Checking for new watchlist updates");
         this.lastCheck = new Date().getTime();
-        this.loadWatchlist().then((result) => {
+        this.apiLoadWatchlist().then((result) => {
             const old = WatchlistCache.getOldWatchlist();
             if(!old) {
                 WatchlistCache.saveWatchlist(result);
