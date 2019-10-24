@@ -5,7 +5,7 @@ import settings from "../settings";
 import Log from "../util/log";
 import translate, { Translation } from "../translation";
 import { WatchlistCache } from "../storage";
-import { API_PATHS, LOGO_RELATIVE_PATH, PROXER_API_BASE_URL } from "../globals";
+import { API_PATHS, LOGO_LOCATION, PROXER_API_BASE_URL } from "../globals";
 import { whenLogin } from './wait_login';
 import SessionHandler from "../lib/session_handler";
 
@@ -83,7 +83,7 @@ export default class WatchlistHandler {
                         Notification.displayNotification({
                             title: 'Proxtop',
                             message: this.translation.get(`WATCHLIST.NEW_${type.toUpperCase()}`, { episode: update.episode, name: update.name }),
-                            icon: LOGO_RELATIVE_PATH
+                            icon: LOGO_LOCATION
                         }, () => {
                             windowManager.notifyWindow('state-change', 'watch', {
                                 id: update.id,

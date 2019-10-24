@@ -7,6 +7,7 @@ import Log from "../util/log";
 import { MessageReadCache } from "../storage";
 import MessagesHandler from "../proxerapi/message_handler";
 import Messages from "../api/messages";
+import { LOGO_LOCATION } from "../globals";
 
 const LOGIN_ERROR = 3023;
 
@@ -69,7 +70,7 @@ export default class MessageChecker {
                     Notification.displayNotification({
                         title: 'Proxtop',
                         message: this.translation.get('MESSAGES.NEW_MESSAGE', { user: notification.username }),
-                        icon: 'assets/proxtop_logo_256.png'
+                        icon: LOGO_LOCATION
                     }, () => {
                         windowManager.notifyWindow('state-change', 'message', { id: notification.id });
                     });
