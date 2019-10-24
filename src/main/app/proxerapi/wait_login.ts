@@ -12,6 +12,9 @@ export function whenLogin(): Promise<void> {
 }
 
 export function finishLogin() {
-    this.loggedIn = true;
+    loggedIn = true;
     promiseCallbacks.forEach(callback => callback());
+    while(promiseCallbacks.length > 0) {
+        promiseCallbacks.pop();
+    }
 }
