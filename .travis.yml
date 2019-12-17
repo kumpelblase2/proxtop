@@ -23,7 +23,6 @@ matrix:
 cache:
   directories:
     - node_modules
-    - _dist/node_modules
     - $HOME/.electron
     - $HOME/.cache
 
@@ -41,14 +40,14 @@ before_install:
   - if [[ "$BUILD_TYPE" == "linux" ]]; then ./build/cidependencies_linux.sh; fi
 
 install:
-  - nvm install 6
+  - nvm install 10
   - npm install
   - npm prune
 
 script:
-  - if [[ "$BUILD_TYPE" == "linux" ]]; then make package-linux; fi
-  - if [[ "$BUILD_TYPE" == "osx" ]]; then make package-osx; fi
-  - if [[ "$BUILD_TYPE" == "win" ]]; then make package-win; fi
+  - if [[ "$BUILD_TYPE" == "linux" ]]; then npm build:linux; fi
+  - if [[ "$BUILD_TYPE" == "osx" ]]; then npm build:osx; fi
+  - if [[ "$BUILD_TYPE" == "win" ]]; then npm build:osx; fi
 
 branches:
   except:
@@ -61,10 +60,14 @@ deploy:
   skip_cleanup: true
   file_glob: true
   file:
-    - "_packaged/squirrel-windows/*"
-    - "_packaged/mac/*"
+    - "_packaged/*.exe"
+    - "_packaged/*.exe.blockmap"
     - "_packaged/*.zip"
-    - "_packaged/*.deb"
     - "_packaged/*.tar.gz"
+    - "_packaged/*.deb"
+    - "_packaged/*.AppImage"
+    - "_packaged/*.pacman"
+    - "_packaged/*.deb"
+    - "_packaged/*.snap"
   on:
     tags: true

@@ -2,13 +2,18 @@
   "name": "proxtop",
   "version": "1.1.0-beta",
   "description": "A desktop application for proxer.me",
-  "main": "src/main/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "electron-mocha --opts mocha.opts",
     "start": "./run.sh",
-    "dist": "make package",
+    "dist": "webpack-cli --mode=production",
+    "build:all": "electron-builder -mwl",
+    "build:windows": "electron-builder -w --x64 --ia32",
+    "build:osx": "electron-builder -m",
+    "build:linux": "electron-builder -l",
     "debug": "electron --inspect=5858 dist",
-    "webpack": "webpack-cli --mode=development --watch"
+    "webpack": "webpack-cli --mode=development --watch",
+    "clean": "(test -d _packaged && rm -r _packaged) || (test -d dist && rm -r dist)"
   },
   "repository": {
     "type": "git",
@@ -82,22 +87,41 @@
   },
   "build": {
     "appId": "de.eternalwings.proxtop",
+    "copyright": "Copyright © 2014-2019 Tim Hagemann",
+    "files": [
+      "dist/**/*",
+      "static/**/*",
+      "package.json"
+    ],
     "mac": {
       "category": "public.app-category.entertainment",
       "target": [
         "zip",
-        "tar.gz",
         "dmg"
       ]
     },
     "win": {
       "target": [
-        "squirrel",
+        "nsis",
         "zip"
       ]
     },
+    "nsis": {
+      "perMachine": true
+    },
+    "linux": {
+      "maintainer": "Tim Hagemann <tim+github at eternalwings.de>",
+      "synopsis": "A Proxer.me desktop client",
+      "desktop": "proxtop.desktop",
+      "target": [
+        "deb",
+        "pacman",
+        "tar.gz"
+      ]
+    },
+    "publish": null,
     "directories": {
-      "app": "_dist",
+      "buildResources": "build",
       "output": "_packaged"
     }
   }
