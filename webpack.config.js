@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const PATHS = {
@@ -33,7 +34,12 @@ module.exports = [
         },
         resolve: {
             extensions: ['.tsx', '.js', '.json', '.ts']
-        }
+        },
+        plugins: [
+            new webpack.DefinePlugin({
+                __PROXER_API_KEY__: "'" + (process.env['PROXTOP_API_KEY'] || 'my_api_key') + "'"
+            })
+        ]
     },
     {
         entry: PATHS.renderer,

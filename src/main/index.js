@@ -34,7 +34,7 @@ windowManager.setDirs({
 
 tray.icon = LOGO_LOCATION;
 
-const apiKey = process.env['PROXTOP_API_KEY'] || "api_key_here";
+const apiKey = __PROXER_API_KEY__;
 const proxtop = new Proxtop(app, updater, {
     app_dir: APP_DIR,
     api_key: apiKey

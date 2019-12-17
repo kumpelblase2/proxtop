@@ -44,8 +44,6 @@ prepare: update-build-package
 	./node_modules/.bin/webpack-cli --mode=production
 	cp -R $(SOURCE_FILES) $(TARGET_DIR)
 	mkdir -p $(BUILD_DIR)
-	@sed -i -e "s/api_key_here/$(PROXTOP_API_KEY)/" $(TARGET_DIR)/index.js
-
 
 
 
