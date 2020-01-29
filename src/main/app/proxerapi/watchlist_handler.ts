@@ -77,7 +77,7 @@ export default class WatchlistHandler {
             return updates;
         }).then((updates) => {
             if(!updates.first_load) {
-                Object.keys(updates).forEach((type) => {
+                ['anime', 'manga'].forEach((type) => {
                     updates[type].forEach((update) => {
                         Log.verbose('Sending watchlist update for ' + update.name);
                         Notification.displayNotification({
