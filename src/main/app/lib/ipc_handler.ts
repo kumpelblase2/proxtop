@@ -8,7 +8,7 @@ function isGenerator(object) {
     return object && object[Symbol.iterator] && typeof(object[Symbol.iterator]) === 'function';
 }
 
-export default class IPCHandler {
+export default abstract class IPCHandler {
     handle(event: string, funct, binding: any = this) {
         const localFunc = funct.bind(binding);
         ipcMain.on(event, (ev, ...args) => {
@@ -52,6 +52,5 @@ export default class IPCHandler {
         ipcMain.on(event, localFunc);
     }
 
-    register() {
-    }
+    abstract register();
 }

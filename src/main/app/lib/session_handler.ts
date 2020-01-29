@@ -31,7 +31,9 @@ export default class SessionHandler extends IPCHandler {
         this.app = app;
         this.apiKey = apiKey;
         this.cookiePath = cookiePath;
+    }
 
+    register() {
         this.provide('reload-request', () => {
             this.request = this.setupRequest();
         });
