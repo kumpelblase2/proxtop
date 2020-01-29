@@ -7,6 +7,7 @@
     "test": "electron-mocha --opts mocha.opts",
     "start": "./run.sh",
     "dist": "webpack-cli --mode=production",
+    "build": "electron-builder",
     "build:all": "electron-builder -mwl",
     "build:windows": "electron-builder -w --x64 --ia32",
     "build:osx": "electron-builder -m",
