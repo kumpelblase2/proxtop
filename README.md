@@ -49,9 +49,7 @@ To run this application from source you first need an API key from proxer. See
 
 First get all required dependencies (requires NPM to be installed):
 ```
-make
-# Or this:
-npm install
+npm ci
 ```
 
 Run tests via:
@@ -61,17 +59,17 @@ npm test
 
 Run the application via:
 ```
-PROXER_API_KEY=your_proxer_api_key npm start
+PROXER_API_KEY=your_proxer_api_key npm run start
 # Or
 PROXER_API_KEY=your_proxer_api_key ./run.sh
 ```
 
 Or if you want to build the application:
 ```
-make clean
-PROXER_API_KEY=your_proxer_api_key make build
+npm run clean
+PROXER_API_KEY=your_proxer_api_key npm run dist
 # And if you want to package it:
-PROXER_API_KEY=your_proxer_api_key make package
+PROXER_API_KEY=your_proxer_api_key npm run build:windows
 ```
 
 ## Debugging/Development
