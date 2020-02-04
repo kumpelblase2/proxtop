@@ -1,0 +1,41 @@
+name: CD
+
+on:
+  push:
+    tags:
+     - v*
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-release@77669bf751443994139ba3fb124c19364d82c3c7
+        name: Create draft release for tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: V${{ github.ref }}
+          draft: true
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
+    - uses: actions/setup-node@c35dd24c52f85b8c80fd1619f6bc7b9e82c840db
+      with:
+        node-version: '10.x'
+    - name: Install dependencies
+      run: npm ci
+    - name: Clean and build
+      run: npm run clean && npm run dist && npm run build
+    - uses: svenstaro/upload-release-action@14569a2d348419d066e34e5dfa65071ecd30b64b
+      name: Upload artifacts
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: _packaged/proxtop*
+        file_glob: true
+        tag: ${{ github.ref }}
