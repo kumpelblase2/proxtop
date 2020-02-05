@@ -41,13 +41,13 @@ before_install:
 
 install:
   - nvm install 10
-  - npm install
+  - npm ci
   - npm prune
 
 script:
-  - if [[ "$BUILD_TYPE" == "linux" ]]; then npm build:linux; fi
-  - if [[ "$BUILD_TYPE" == "osx" ]]; then npm build:osx; fi
-  - if [[ "$BUILD_TYPE" == "win" ]]; then npm build:osx; fi
+  - if [[ "$BUILD_TYPE" == "linux" ]]; then npm run build:linux; fi
+  - if [[ "$BUILD_TYPE" == "osx" ]]; then npm run build:osx; fi
+  - if [[ "$BUILD_TYPE" == "win" ]]; then npm run build:windows; fi
 
 branches:
   except:
@@ -60,14 +60,6 @@ deploy:
   skip_cleanup: true
   file_glob: true
   file:
-    - "_packaged/*.exe"
-    - "_packaged/*.exe.blockmap"
-    - "_packaged/*.zip"
-    - "_packaged/*.tar.gz"
-    - "_packaged/*.deb"
-    - "_packaged/*.AppImage"
-    - "_packaged/*.pacman"
-    - "_packaged/*.deb"
-    - "_packaged/*.snap"
+    - "_packaged/proxtop-*"
   on:
     tags: true
