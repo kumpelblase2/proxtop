@@ -45,6 +45,7 @@ install:
   - npm prune
 
 script:
+  - npm run dist
   - if [[ "$BUILD_TYPE" == "linux" ]]; then npm run build:linux; fi
   - if [[ "$BUILD_TYPE" == "osx" ]]; then npm run build:osx; fi
   - if [[ "$BUILD_TYPE" == "win" ]]; then npm run build:windows; fi
