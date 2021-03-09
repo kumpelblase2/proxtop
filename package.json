@@ -37,7 +37,7 @@
     "chai-as-promised": "7.1.1",
     "css-loader": "1.0.0",
     "devtron": "1.4.0",
-    "electron": "3.0.2",
+    "electron": "9.4.0",
     "electron-builder": "20.28.4",
     "electron-builder-lib": "20.23.1",
     "electron-builder-squirrel-windows": "20.28.3",
