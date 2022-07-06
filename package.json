@@ -79,7 +79,7 @@
     "font-awesome": "4.7.0",
     "lodash": "4.17.15",
     "lowdb": "1.0.0",
-    "moment": "2.22.2",
+    "moment": "2.29.4",
     "request": "2.88.0",
     "request-promise": "4.2.2",
     "semver": "5.5.1",
