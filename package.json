@@ -41,7 +41,7 @@
     "electron-builder": "20.28.4",
     "electron-builder-lib": "20.23.1",
     "electron-builder-squirrel-windows": "20.28.3",
-    "electron-mocha": "8.1.2",
+    "electron-mocha": "11.0.2",
     "electron-packager": "14.0.6",
     "file-loader": "2.0.0",
     "html-loader": "0.5.5",
